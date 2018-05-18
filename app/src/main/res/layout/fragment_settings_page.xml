@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:orientation="vertical">
+
+            <com.linka.lockapp.aos.module.widget.LinkaTextView
+                style="@style/section_header"
+                android:visibility="gone"
+                android:text="@string/linka_lock"
+                />
+            <LinearLayout
+                android:background="@color/linka_white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:id="@+id/row_phoneless_passcode"
+                    style="@style/settings_row"
+                    >
+                    <LinearLayout style="@style/settings_row_text_layout" android:orientation="vertical">
+                        <com.linka.lockapp.aos.module.widget.LinkaTextView style="@style/settings_row_text" android:text="@string/phoneless_passcode"/>
+                        <com.linka.lockapp.aos.module.widget.LinkaTextView style="@style/settings_row_text_desc" android:text="" android:id="@+id/field_pac"/>
+                    </LinearLayout>
+                    <ImageView
+                        android:id="@+id/settings_phoneless_pass_code"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:paddingRight="@dimen/activity_horizontal_margin_xsm"
+                        android:paddingLeft="@dimen/activity_horizontal_margin_xsm"
+                        android:src="@drawable/icon_forward_arrow"/>
+
+
+
+Ø
+                </LinearLayout>
+                <View style="@style/menu_divider"/>
+                <LinearLayout
+                    android:id="@+id/row_edit_name"
+                    style="@style/settings_row"
+                    >
+                    <LinearLayout style="@style/settings_row_text_layout" android:orientation="vertical">
+                        <com.linka.lockapp.aos.module.widget.LinkaTextView style="@style/settings_row_text" android:text="@string/edit_name"/>
+                        <com.linka.lockapp.aos.module.widget.LinkaTextView style="@style/settings_row_text_desc" android:text="@string/edit_name_desc" android:id="@+id/field_lock_name"/>
+                    </LinearLayout>
+                    <ImageView
+                        android:id="@+id/settings_edit_name"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:paddingRight="@dimen/activity_horizontal_margin_xsm"
+                        android:paddingLeft="@dimen/activity_horizontal_margin_xsm"
+                        android:src="@drawable/icon_forward_arrow"/>
+
+
+
+
+                </LinearLayout>
+
+                <View style="@style/menu_divider"/>
+                <LinearLayout
+                    android:id="@+id/row_tamper_sensitivity"
+                    style="@style/settings_row"
+                    >
+                    <LinearLayout style="@style/settings_row_text_layout" android:orientation="vertical">
+                        <com.linka.lockapp.aos.module.widget.LinkaTextView style="@style/settings_row_text" android:text="@string/tamper_sensitivity"/>
+                    </LinearLayout>
+                    <ImageView
+                        android:id="@+id/settings_tamper_sensitivity"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:paddingRight="@dimen/activity_horizontal_margin_xsm"
+                        android:paddingLeft="@dimen/activity_horizontal_margin_xsm"
+                        android:src="@drawable/icon_forward_arrow"/>
+
+
+
+
+                </LinearLayout>
+
+                <View style="@style/menu_divider"/>
+                <LinearLayout
+                    android:id="@+id/row_sleep_settings"
+                    style="@style/settings_row"
+                    >
+                    <LinearLayout style="@style/settings_row_text_layout" android:orientation="vertical">
+                        <com.linka.lockapp.aos.module.widget.LinkaTextView style="@style/settings_row_text" android:text="@string/sleep_settings"/>
+                    </LinearLayout>
+                    <ImageView
+                        android:id="@+id/settings_sleep_settings"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:paddingRight="@dimen/activity_horizontal_margin_xsm"
+                        android:paddingLeft="@dimen/activity_horizontal_margin_xsm"
+                        android:src="@drawable/icon_forward_arrow"/>
+
+
+
+
+                </LinearLayout>
+
+                <View style="@style/menu_divider"/>
+                <LinearLayout
+                    android:id="@+id/row_audible_locking_unlocking"
+                    style="@style/settings_row"
+                    >
+                    <LinearLayout style="@style/settings_row_text_layout" android:orientation="vertical">
+                        <com.linka.lockapp.aos.module.widget.LinkaTextView style="@style/settings_row_text" android:text="@string/audible_locking_unlocking"/>
+                        <com.linka.lockapp.aos.module.widget.LinkaTextView style="@style/settings_row_text_desc" android:text="@string/audible_locking_unlocking_desc"/>
+                    </LinearLayout>
+                    <include layout="@layout/widget_linka_switch" android:id="@+id/settings_audible_locking_unlocking" />
+
+
+
+                </LinearLayout>
+                <View style="@style/menu_divider"/>
+                <LinearLayout
+                    android:id="@+id/row_tamper_siren"
+                    style="@style/settings_row"
+                    >
+                    <LinearLayout style="@style/settings_row_text_layout" android:orientation="vertical">
+                        <com.linka.lockapp.aos.module.widget.LinkaTextView style="@style/settings_row_text" android:text="@string/tamper_siren"/>
+                        <com.linka.lockapp.aos.module.widget.LinkaTextView style="@style/settings_row_text_desc" android:text="@string/tamper_siren_desc"/>
+                    </LinearLayout>
+                    <include layout="@layout/widget_linka_switch" android:id="@+id/settings_tamper_siren" />
+
+
+
+                </LinearLayout>
+                <View style="@style/menu_divider"/>
+                <LinearLayout
+                    android:id="@+id/row_auto_unlocking"
+                    style="@style/settings_row"
+                    >
+                    <LinearLayout style="@style/settings_row_text_layout" android:orientation="vertical">
+                        <com.linka.lockapp.aos.module.widget.LinkaTextView style="@style/settings_row_text" android:text="@string/auto_unlocking"/>
+                        <com.linka.lockapp.aos.module.widget.LinkaTextView style="@style/settings_row_text_desc" android:text="@string/auto_unlocking_desc"/>
+                    </LinearLayout>
+                    <include layout="@layout/widget_linka_switch" android:id="@+id/settings_auto_unlocking" />
+
+                </LinearLayout>
+                <View style="@style/menu_divider"/>
+                <LinearLayout
+                    android:id="@+id/row_stall_override"
+                    style="@style/settings_row"
+                    >
+                    <LinearLayout style="@style/settings_row_text_layout" android:orientation="vertical">
+                        <com.linka.lockapp.aos.module.widget.LinkaTextView style="@style/settings_row_text" android:text="@string/stall_override"/>
+                        <com.linka.lockapp.aos.module.widget.LinkaTextView style="@style/settings_row_text_desc" android:text="@string/stall_override_desc"/>
+                    </LinearLayout>
+                    <include layout="@layout/widget_linka_switch" android:id="@+id/settings_stall_override" />
+
+
+
+                </LinearLayout>
+                <View style="@style/menu_divider"/><!--
+                <LinearLayout
+                    android:id="@+id/row_revoke"
+                    style="@style/settings_row"
+                    >
+                    <LinearLayout style="@style/settings_row_text_layout" android:orientation="vertical">
+                        <com.linka.lockapp.aos.module.widget.LinkaTextView style="@style/settings_row_text" android:text="@string/revoke"/>
+                        <com.linka.lockapp.aos.module.widget.LinkaTextView style="@style/settings_row_text_desc" android:text="@string/revoke_desc"/>
+                    </LinearLayout>
+                    <ImageView
+                        android:id="@+id/settings_revoke"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:paddingRight="@dimen/activity_horizontal_margin_xsm"
+                        android:paddingLeft="@dimen/activity_horizontal_margin_xsm"
+                        android:src="@drawable/icon_forward_arrow"/>
+
+
+
+                </LinearLayout>
+                <View style="@style/menu_divider"/>-->
+                <LinearLayout
+                    android:id="@+id/row_firmware_version"
+                    style="@style/settings_row"
+                    >
+                    <LinearLayout style="@style/settings_row_text_layout" android:orientation="vertical">
+                        <com.linka.lockapp.aos.module.widget.LinkaTextView style="@style/settings_row_text" android:text="@string/firmware_version"/>
+                        <com.linka.lockapp.aos.module.widget.LinkaTextView style="@style/settings_row_text_desc" android:id="@+id/firmware_version" android:text="@string/firmware_version_desc"/>
+                    </LinearLayout>
+
+                    <com.linka.lockapp.aos.module.widget.LinkaButton
+                        android:id="@+id/fw_update_button"
+                        android:layout_gravity="center"
+                        style="@style/linka_button_nomargin"
+                        android:text="Update"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+                <View style="@style/menu_divider"/>
+                <LinearLayout
+                    android:id="@+id/row_mac_id"
+                    style="@style/settings_row"
+                    >
+                    <LinearLayout style="@style/settings_row_text_layout" android:orientation="vertical">
+                        <com.linka.lockapp.aos.module.widget.LinkaTextView style="@style/settings_row_text" android:text="Mac Address"/>
+                        <com.linka.lockapp.aos.module.widget.LinkaTextView style="@style/settings_row_text_desc" android:id="@+id/mac_id" android:text="AA:AA:AA:AA:AA::AA"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+                <View style="@style/menu_divider"/>
+                <LinearLayout
+                    android:id="@+id/row_reset_to_factory_settings"
+                    style="@style/settings_row"
+                    >
+                    <LinearLayout style="@style/settings_row_text_layout" android:orientation="vertical">
+                        <com.linka.lockapp.aos.module.widget.LinkaTextView style="@style/settings_row_text" android:text="@string/reset_to_factory_settings"/>
+                        <com.linka.lockapp.aos.module.widget.LinkaTextView style="@style/settings_row_text_desc" android:text="@string/reset_to_factory_settings_desc"/>
+                    </LinearLayout>
+                    <ImageView
+                        android:id="@+id/settings_reset_factory_settings"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:paddingRight="@dimen/activity_horizontal_margin_xsm"
+                        android:paddingLeft="@dimen/activity_horizontal_margin_xsm"
+                        android:src="@drawable/icon_forward_arrow"/>
+
+
+
+                </LinearLayout>
+                <View style="@style/menu_divider"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

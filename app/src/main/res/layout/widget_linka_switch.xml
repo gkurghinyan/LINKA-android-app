@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.rey.material.widget.Switch xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:checked="false"
+    style="@style/settings_row_switch"
+    custom:sw_trackColor="@color/colorstate_switch"
+    custom:sw_thumbColor="@color/linka_white"
+    custom:sw_trackSize="33dp"
+    custom:sw_thumbElevation="2dp"
+    custom:sw_thumbRadius="17dp" />

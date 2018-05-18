@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/blue_gradient" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:isScrollContainer="true">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+
+            <android.support.constraint.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.35" />
+
+            <android.support.constraint.Guideline
+                android:id="@+id/guideline2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.15" />
+
+            <android.support.constraint.Guideline
+                android:id="@+id/guideline3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.85" />
+
+            <android.support.constraint.Guideline
+                android:id="@+id/guideline4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.52" />
+
+            <ImageView
+                android:id="@+id/sign_in_logo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/margin_ultra"
+                android:src="@drawable/logo_linka_white"
+                app:layout_constraintEnd_toEndOf="@id/guideline3"
+                app:layout_constraintStart_toStartOf="@id/guideline2"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/lock_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="LOCK SMARTER NOT HARDER"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:layout_marginTop="5dp"
+                android:textColor="#fff"
+                android:textSize="@dimen/text_size_x"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sign_in_logo" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin_big"
+                android:layout_marginTop="@dimen/margin"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="@id/lock_text"
+                app:layout_constraintStart_toStartOf="@id/lock_text"
+                app:layout_constraintTop_toBottomOf="@id/lock_text">
+
+                <EditText
+                    android:id="@+id/first_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/first_name"
+                    android:inputType="text"
+                    android:textColorHint="@android:color/white"
+                    android:textSize="@dimen/text_size_xm"
+                    android:textColor="@color/linka_white"
+                    android:layout_marginTop="@dimen/margin"/>
+
+                <EditText
+                    android:id="@+id/last_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/last_name"
+                    android:inputType="text"
+                    android:textColor="@color/linka_white"
+                    android:textColorHint="@android:color/white"
+                    android:textSize="@dimen/text_size_xm"
+                    android:layout_marginTop="@dimen/margin"/>
+
+                <EditText
+                    android:id="@+id/username"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/email"
+                    android:inputType="textEmailAddress"
+                    android:textColorHint="@android:color/white"
+                    android:textSize="@dimen/text_size_xm"
+                    android:textColor="@color/linka_white"
+                    android:layout_marginTop="@dimen/margin"/>
+
+                <EditText
+                    android:id="@+id/password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/password"
+                    android:inputType="textPassword"
+                    android:textColorHint="@android:color/white"
+                    android:textSize="@dimen/text_size_xm"
+                    android:textColor="@color/linka_white"
+                    android:layout_marginTop="@dimen/margin"/>
+
+                <EditText
+                    android:id="@+id/reenter_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/confirm_password"
+                    android:inputType="textPassword"
+                    android:textColorHint="@android:color/white"
+                    android:textSize="@dimen/text_size_xm"
+                    android:textColor="@color/linka_white"
+                    android:layout_marginTop="@dimen/margin"/>
+
+                <Button
+                    android:id="@+id/create_account"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:text="@string/submit"
+                    android:textAllCaps="true"
+                    android:textSize="@dimen/text_size_normal"
+                    android:paddingTop="@dimen/margin_xm"
+                    android:paddingBottom="@dimen/margin_xm"
+                    android:textColor="@color/bright_blue_color"
+                    android:background="@drawable/white_rounded_back"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/with_clicking_agree"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/text_size_mm"/>
+
+                <!--<LinearLayout-->
+                <!--android:layout_marginLeft="@dimen/activity_horizontal_margin_big"-->
+                <!--android:layout_marginRight="@dimen/activity_horizontal_margin_big"-->
+                <!--android:orientation="horizontal"-->
+                <!--android:id="@+id/i_agree_to_tos"-->
+                <!--android:gravity="center|left"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content">-->
+
+                <!--<ImageView-->
+                <!--android:id="@+id/i_agree_to_tos_checkbox"-->
+                <!--android:src="@drawable/tick_n"-->
+                <!--android:layout_width="24dp"-->
+                <!--android:layout_height="24dp" />-->
+
+                <!--<TextView-->
+                <!--android:textSize="@dimen/item_text_small_sp"-->
+                <!--android:textColor="@color/linka_white"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:background="@null"-->
+                <!--android:text="@string/i_agree_to_tos"-->
+                <!--android:id="@+id/i_agree_to_tos_text"-->
+                <!--android:paddingTop="@dimen/activity_horizontal_margin"-->
+                <!--android:paddingLeft="@dimen/activity_horizontal_margin"-->
+                <!--android:paddingBottom="@dimen/activity_horizontal_margin"-->
+                <!--android:paddingRight="0dp"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_weight="1"-->
+                <!--android:layout_height="wrap_content" />-->
+
+                <!--<TextView-->
+                <!--android:textSize="@dimen/item_text_small_sp"-->
+                <!--android:textColor="@color/linka_white"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:background="@null"-->
+                <!--android:text="@string/terms_link"-->
+                <!--android:id="@+id/tos_link"-->
+                <!--android:paddingTop="@dimen/activity_horizontal_margin"-->
+                <!--android:paddingRight="@dimen/activity_horizontal_margin"-->
+                <!--android:paddingBottom="@dimen/activity_horizontal_margin"-->
+                <!--android:paddingLeft="0dp"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_weight="1"-->
+                <!--android:layout_height="wrap_content" />-->
+
+                <!--</LinearLayout>-->
+
+            </LinearLayout>
+
+
+        </android.support.constraint.ConstraintLayout>
+
+    </ScrollView>
+
+</android.support.constraint.ConstraintLayout>

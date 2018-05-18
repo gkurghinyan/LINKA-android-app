@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:background="@color/linka_white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:orientation="vertical">
+                <LinearLayout
+                    style="@style/settings_row"
+                    >
+                    <LinearLayout style="@style/settings_row_text_layout" android:orientation="vertical" android:id="@+id/row_out_of_range_alert">
+                        <com.linka.lockapp.aos.module.widget.LinkaTextView style="@style/settings_row_text" android:text="@string/out_of_range_alert"/>
+                        <com.linka.lockapp.aos.module.widget.LinkaTextView style="@style/settings_row_text_desc" android:text=""/>
+                    </LinearLayout>
+                    <include layout="@layout/widget_linka_switch" android:id="@+id/settings_out_of_range_alert" />
+
+
+
+                </LinearLayout>
+                <View style="@style/menu_divider"/>
+                <LinearLayout
+                    style="@style/settings_row"
+                    >
+                    <LinearLayout style="@style/settings_row_text_layout" android:orientation="vertical" android:id="@+id/row_back_in_range_alert">
+                        <com.linka.lockapp.aos.module.widget.LinkaTextView style="@style/settings_row_text" android:text="@string/back_in_range_alert"/>
+                        <com.linka.lockapp.aos.module.widget.LinkaTextView style="@style/settings_row_text_desc" android:text=""/>
+                    </LinearLayout>
+                    <include layout="@layout/widget_linka_switch" android:id="@+id/settings_back_in_range_alert" />
+
+
+
+                </LinearLayout>
+                <View style="@style/menu_divider"/>
+                <LinearLayout
+                    style="@style/settings_row"
+                    >
+                    <LinearLayout style="@style/settings_row_text_layout" android:orientation="vertical" android:id="@+id/row_battery_low">
+                        <com.linka.lockapp.aos.module.widget.LinkaTextView style="@style/settings_row_text" android:text="@string/battery_low"/>
+                        <com.linka.lockapp.aos.module.widget.LinkaTextView style="@style/settings_row_text_desc" android:text=""/>
+                    </LinearLayout>
+                    <include layout="@layout/widget_linka_switch" android:id="@+id/settings_battery_low" />
+
+
+
+                </LinearLayout>
+                <View style="@style/menu_divider"/>
+                <LinearLayout
+                    style="@style/settings_row"
+                    >
+                    <LinearLayout style="@style/settings_row_text_layout" android:orientation="vertical" android:id="@+id/row_battery_critically_low">
+                        <com.linka.lockapp.aos.module.widget.LinkaTextView style="@style/settings_row_text" android:text="@string/battery_critically_low"/>
+                        <com.linka.lockapp.aos.module.widget.LinkaTextView style="@style/settings_row_text_desc" android:text=""/>
+                    </LinearLayout>
+                    <include layout="@layout/widget_linka_switch" android:id="@+id/settings_battery_critically_low" />
+
+
+
+                </LinearLayout>
+                <View style="@style/menu_divider"/>
+                <LinearLayout
+                    android:id="@+id/row_sleep_notification"
+                    style="@style/settings_row"
+                    >
+                    <LinearLayout style="@style/settings_row_text_layout" android:orientation="vertical">
+                        <com.linka.lockapp.aos.module.widget.LinkaTextView style="@style/settings_row_text" android:text="@string/sleep_notification"/>
+                        <com.linka.lockapp.aos.module.widget.LinkaTextView style="@style/settings_row_text_desc" android:text=""/>
+                    </LinearLayout>
+                    <include layout="@layout/widget_linka_switch" android:id="@+id/settings_sleep_notification" />
+
+
+
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

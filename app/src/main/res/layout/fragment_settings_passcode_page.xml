@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/blue_gradient">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:layout_weight=".6"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/enter_pac_caption"
+            android:textColor="#fff"
+            android:layout_margin="@dimen/activity_vertical_margin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/enter_pin_text"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"/>
+            <ImageView
+                android:id="@+id/pin_value_1"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:gravity="center"
+                android:background="@drawable/pac_digit_blue2"
+                />
+            <ImageView
+                android:id="@+id/pin_value_1_filled"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:visibility="gone"
+                android:gravity="center"
+                android:background="@drawable/pac_digit_white1"/>
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+            <ImageView
+                android:id="@+id/pin_value_2"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:gravity="center"
+                android:background="@drawable/pac_digit_blue2"/>
+            <ImageView
+                android:id="@+id/pin_value_2_filled"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:visibility="gone"
+                android:gravity="center"
+                android:background="@drawable/pac_digit_white1"/>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+            <ImageView
+                android:id="@+id/pin_value_3"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:gravity="center"
+                android:background="@drawable/pac_digit_blue2"/>
+            <ImageView
+                android:id="@+id/pin_value_3_filled"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:visibility="gone"
+                android:gravity="center"
+                android:background="@drawable/pac_digit_white1"/>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+            <ImageView
+                android:id="@+id/pin_value_4"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:gravity="center"
+                android:background="@drawable/pac_digit_blue2"/>
+            <ImageView
+                android:id="@+id/pin_value_4_filled"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:gravity="center"
+                android:visibility="gone"
+                android:background="@drawable/pac_digit_white1"/>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"/>
+
+
+        </LinearLayout>
+
+        <com.linka.lockapp.aos.module.widget.LinkaButton
+            android:id="@+id/save"
+            android:visibility="invisible"
+            style="@style/linka_blue_button_nomargin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin_big"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin_big"
+            android:layout_marginRight="@dimen/activity_horizontal_margin_big"
+            android:paddingLeft="@dimen/activity_horizontal_margin_big"
+            android:paddingRight="@dimen/activity_horizontal_margin_big"
+            android:text="@string/save" />
+
+    </LinearLayout>
+    <View
+        style="@style/key_pad_border_horizontal"/>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".4"
+        android:weightSum="4"
+        android:shrinkColumns="1">
+
+        <TableRow android:layout_weight="1"
+            android:layout_width="match_parent">
+
+            <com.linka.lockapp.aos.module.widget.LinkaTextView
+                android:id="@+id/pin_key_1"
+                style="@style/key_pad_cell"
+                android:text="1" />
+            <View
+                style="@style/key_pad_border_vertical"/>
+
+            <com.linka.lockapp.aos.module.widget.LinkaTextView
+                android:id="@+id/pin_key_2"
+                style="@style/key_pad_cell"
+                android:text="2" />
+            <View
+                style="@style/key_pad_border_vertical"/>
+
+            <com.linka.lockapp.aos.module.widget.LinkaTextView
+                android:id="@+id/pin_key_3"
+                style="@style/key_pad_cell"
+                android:text="3" />
+        </TableRow>
+        <View
+            style="@style/key_pad_border_horizontal"/>
+
+        <TableRow android:layout_weight="1"
+            android:layout_width="match_parent">
+
+            <com.linka.lockapp.aos.module.widget.LinkaTextView
+                android:id="@+id/pin_key_4"
+                style="@style/key_pad_cell"
+                android:text="4" />
+            <View
+                style="@style/key_pad_border_vertical"/>
+
+
+            <com.linka.lockapp.aos.module.widget.LinkaTextView
+                android:id="@+id/pin_key_5"
+                style="@style/key_pad_cell"
+                android:text="5" />
+            <View
+                style="@style/key_pad_border_vertical"/>
+
+
+            <com.linka.lockapp.aos.module.widget.LinkaTextView
+                android:id="@+id/pin_key_6"
+                style="@style/key_pad_cell"
+                android:text="6" />
+        </TableRow>
+        <View
+            style="@style/key_pad_border_horizontal"/>
+
+        <TableRow android:layout_weight="1"
+            android:layout_width="match_parent">
+
+            <com.linka.lockapp.aos.module.widget.LinkaTextView
+                android:id="@+id/pin_key_7"
+                style="@style/key_pad_cell"
+                android:text="7" />
+            <View
+                style="@style/key_pad_border_vertical"/>
+
+
+            <com.linka.lockapp.aos.module.widget.LinkaTextView
+                android:id="@+id/pin_key_8"
+                style="@style/key_pad_cell"
+                android:text="8" />
+            <View
+                style="@style/key_pad_border_vertical"/>
+
+
+            <com.linka.lockapp.aos.module.widget.LinkaTextView
+                android:id="@+id/pin_key_9"
+                style="@style/key_pad_cell"
+                android:text="9" />
+        </TableRow>
+
+        <View
+            style="@style/key_pad_border_horizontal"/>
+
+
+        <TableRow android:layout_weight="1"
+            android:layout_width="match_parent">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+
+                <com.linka.lockapp.aos.module.widget.LinkaTextView
+                    android:id="@+id/pin_key_cancel"
+                    style="@style/key_pad_cell"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:text="" />
+                <View
+                    style="@style/key_pad_border_vertical"/>
+
+
+                <com.linka.lockapp.aos.module.widget.LinkaTextView
+                    android:id="@+id/pin_key_0"
+                    style="@style/key_pad_cell"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:text="" />
+                <View
+                    style="@style/key_pad_border_vertical"/>
+
+
+                <ImageView
+                    android:id="@+id/pin_key_delete"
+                    style="@style/key_pad_cell"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/numpad_back" />
+
+            </LinearLayout>
+        </TableRow>
+    </TableLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/set_pac_success"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/blue_gradient">
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="200dp"
+            android:layout_centerInParent="true"
+            android:paddingBottom="120dp"
+            android:src="@drawable/check_mark"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Successfully Set Pac"
+            android:textColor="#fff"
+            android:layout_centerInParent="true"
+            android:textAllCaps="true"
+            android:textSize="20dp"/>
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/linka_light_bg"
+    android:orientation="vertical">
+<!--
+    <LinearLayout
+        android:id="@+id/blank_profile_block"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="280dp"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin_big"
+                android:layout_marginRight="@dimen/activity_horizontal_margin_big"
+                android:layout_marginTop="@dimen/activity_horizontal_margin_big"
+                android:src="@drawable/road_bike" />
+        </LinearLayout>
+
+        <com.linka.lockapp.aos.module.widget.LinkaButton
+            android:id="@+id/bike_create_profile"
+            style="@style/linka_blue_button_nomargin"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/create_new_bike_profile" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/display_profile_block"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+
+            <com.joooonho.SelectableRoundedImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/bike_image_preview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginTop="@dimen/activity_horizontal_margin_big"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin_big"
+                android:layout_marginRight="@dimen/activity_horizontal_margin_big"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:src="@drawable/example_bike"
+                android:scaleType="centerCrop"
+                app:sriv_left_top_corner_radius = "10dp"
+                app:sriv_right_top_corner_radius = "10dp"
+                app:sriv_left_bottom_corner_radius = "10dp"
+                app:sriv_right_bottom_corner_radius = "10dp"
+                app:sriv_border_width="2dip"
+                app:sriv_border_color="@color/linka_gray" />
+
+
+            <com.linka.lockapp.aos.module.widget.LinkaTextView
+                android:id="@+id/bike_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin_big"
+                android:gravity="center"
+                android:text="Revino 3.0"
+                android:textSize="@dimen/item_text_big_sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin_big"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin_big"
+                android:layout_marginRight="@dimen/activity_horizontal_margin_big"
+                android:layout_marginTop="@dimen/activity_horizontal_margin_big"
+                android:orientation="horizontal">
+
+                <com.linka.lockapp.aos.module.widget.LinkaButton
+                    android:id="@+id/bike_open_lock"
+                    style="@style/linka_gray_outline_button_nomargin"
+                    android:layout_marginRight="0dp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableLeft="@drawable/icon_lock"
+                    android:text="Silver Lock" />
+
+                <View
+                    android:layout_width="@dimen/activity_horizontal_margin"
+                    android:layout_height="match_parent" />
+
+                <com.linka.lockapp.aos.module.widget.LinkaButton
+                    android:id="@+id/bike_open_location"
+                    style="@style/linka_gray_outline_button_nomargin"
+                    android:layout_marginLeft="0dp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableLeft="@drawable/icon_location"
+                    android:text="@string/location" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+    -->
+</LinearLayout>

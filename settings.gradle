@@ -1,0 +1,1 @@
+include ':app', ':material_widget_library', ':lock_library', ':dfu'

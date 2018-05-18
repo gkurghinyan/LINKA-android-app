@@ -1,0 +1,67 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="status_bar_offset">0dp</dimen>
+    <dimen name="activity_horizontal_margin">12dp</dimen>
+    <dimen name="activity_vertical_margin">12dp</dimen>
+
+    <dimen name="activity_horizontal_margin_big">32dp</dimen>
+    <dimen name="activity_vertical_margin_big">32dp</dimen>
+
+    <dimen name="activity_horizontal_margin_xsm">4dp</dimen>
+    <dimen name="activity_vertical_margin_xsm">4dp</dimen>
+
+    <dimen name="activity_horizontal_margin_sm">8dp</dimen>
+    <dimen name="activity_vertical_margin_sm">8dp</dimen>
+
+    <dimen name="menu_width">260dp</dimen>
+    <dimen name="edit_text_sp">16sp</dimen>
+    <dimen name="item_text_small_sp">14sp</dimen>
+    <dimen name="item_text_smaller_sp">11sp</dimen>
+    <dimen name="item_text_sp">16sp</dimen>
+    <dimen name="item_text_big_sp">18sp</dimen>
+    <dimen name="item_text_large_sp">22sp</dimen>
+    <dimen name="item_text_vlarge_sp">26sp</dimen>
+    <dimen name="item_text_vlarger_sp">36sp</dimen>
+
+
+    <dimen name="generic_height">48dp</dimen>
+    <dimen name="generic_height_numpad_buttons">64dp</dimen>
+
+    <dimen name="generic_button_radius">8dp</dimen>
+
+    <dimen name="lock_notification_bar_height">70dp</dimen>
+    <dimen name="settings_row_height">70dp</dimen>
+    <dimen name="notification_row_height">70dp</dimen>
+    <dimen name="menu_item_large_height">60dp</dimen>
+    <dimen name="menu_item_small_height">35dp</dimen>
+    <dimen name="menu_icon_container_width">60dp</dimen>
+    <dimen name="menu_icon_large_size">30dp</dimen>
+    <dimen name="menu_icon_small_size">20dp</dimen>
+    <dimen name="divider_height">1dp</dimen>
+
+    <!--form elements-->
+    <dimen name="section_header_height">40dp</dimen>
+    <!--<dimen name="edittext_header_height">30dp</dimen>-->
+    <dimen name="edittext_height">50dp</dimen>
+    <dimen name="bike_linka_section_height">120dp</dimen>
+    <dimen name="bike_linka_icon_height">80dp</dimen>
+    <dimen name="bike_photo_section_height">300dp</dimen>
+    <dimen name="bike_color_section_height">70dp</dimen>
+
+    <dimen name="text_size_mm">12sp</dimen>
+    <dimen name="text_size_xm">14sp</dimen>
+    <dimen name="text_size_normal">17sp</dimen>
+    <dimen name="text_size_x">22sp</dimen>
+    <dimen name="text_size_title">17sp</dimen>
+
+    <dimen name="margin_mm">6dp</dimen>
+    <dimen name="margin_xm">8dp</dimen>
+    <dimen name="margin">10dp</dimen>
+    <dimen name="margin_x">20dp</dimen>
+    <dimen name="margin_px">30dp</dimen>
+    <dimen name="margin_dx">40dp</dimen>
+    <dimen name="margin_xl">70dp</dimen>
+    <dimen name="margin_ultra">130dp</dimen>
+    <dimen name="margin_xu">180dp</dimen>
+
+</resources>

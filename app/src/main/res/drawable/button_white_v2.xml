@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle" >
+            <corners
+                android:radius="8dp"
+                />
+            <gradient
+                android:angle="270"
+                android:centerX="35%"
+                android:centerColor="#DCDCDC"
+                android:startColor="#E5E6E6"
+                android:endColor="#D4D4D4"
+                android:type="linear"
+                />
+            <padding
+                android:left="10dp"
+                android:top="10dp"
+                android:right="10dp"
+                android:bottom="10dp"
+                />
+        </shape>
+    </item>
+    <item android:state_selected="true">
+        <shape android:shape="rectangle" >
+            <corners
+                android:radius="8dp"
+                />
+            <gradient
+                android:angle="270"
+                android:centerX="35%"
+                android:centerColor="#DCDCDC"
+                android:startColor="#E5E6E6"
+                android:endColor="#D4D4D4"
+                android:type="linear"
+                />
+            <padding
+                android:left="10dp"
+                android:top="10dp"
+                android:right="10dp"
+                android:bottom="10dp"
+                />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle" >
+            <corners
+                android:radius="8dp"
+                />
+            <gradient
+                android:angle="270"
+                android:centerX="35%"
+                android:centerColor="#E8E8E8"
+                android:startColor="#F5F6F6"
+                android:endColor="#DFDFDF"
+                android:type="linear"
+                />
+            <padding
+                android:left="10dp"
+                android:top="10dp"
+                android:right="10dp"
+                android:bottom="10dp"
+                />
+        </shape>
+    </item>
+</selector>

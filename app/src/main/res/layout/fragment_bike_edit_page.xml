@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/linka_light_bg"
+    android:gravity="top"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_marginTop="@dimen/activity_horizontal_margin_big"
+                android:layout_width="match_parent"
+                android:layout_height="200dp">
+
+                <ImageView
+                    android:id="@+id/bike_image_preview"
+                    android:src="@drawable/bg"
+                    android:scaleType="centerCrop"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp" />
+
+                <LinearLayout
+                    android:id="@+id/icon_add_photo"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:layout_centerVertical="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:src="@drawable/icon_add_photo"
+                        android:scaleType="centerCrop"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:textColor="@color/linka_white"
+                        android:layout_margin="@dimen/activity_horizontal_margin"
+                        android:text="@string/add_photo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/bike_image"
+                    android:scaleType="fitCenter"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp" />
+
+
+            </RelativeLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin_big"
+                android:layout_marginRight="@dimen/activity_horizontal_margin_big"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                >
+                <com.material.widget.FloatingEditText android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_margin="@dimen/activity_horizontal_margin_sm"
+                    app:floating_edit_text_color="@color/linka_gray" app:floating_edit_text_highlighted_color="@color/linka_gray" app:floating_edit_text_underline_height="1dp" app:floating_edit_text_underline_highlighted_height="1dp"
+                    android:id="@+id/bike_name"
+                    android:hint="@string/bike_name"
+                    android:textColor="@color/primary_text"
+                    android:inputType="text"
+                    android:imeOptions="actionNext"
+                    android:singleLine="true"/>
+
+                <com.material.widget.FloatingEditText android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_margin="@dimen/activity_horizontal_margin_sm"
+                    app:floating_edit_text_color="@color/linka_gray" app:floating_edit_text_highlighted_color="@color/linka_gray" app:floating_edit_text_underline_height="1dp" app:floating_edit_text_underline_highlighted_height="1dp"
+                    android:id="@+id/manufacturer"
+                    android:hint="@string/manufacturer"
+                    android:textColor="@color/primary_text"
+                    android:inputType="text"
+                    android:imeOptions="actionNext"
+                    android:singleLine="true"/>
+
+                <com.material.widget.FloatingEditText android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_margin="@dimen/activity_horizontal_margin_sm"
+                    app:floating_edit_text_color="@color/linka_gray" app:floating_edit_text_highlighted_color="@color/linka_gray" app:floating_edit_text_underline_height="1dp" app:floating_edit_text_underline_highlighted_height="1dp"
+                    android:id="@+id/model"
+                    android:hint="@string/model"
+                    android:textColor="@color/primary_text"
+                    android:inputType="text"
+                    android:imeOptions="actionNext"
+                    android:singleLine="true"/>
+
+                <com.material.widget.FloatingEditText android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_margin="@dimen/activity_horizontal_margin_sm"
+                    app:floating_edit_text_color="@color/linka_gray" app:floating_edit_text_highlighted_color="@color/linka_gray" app:floating_edit_text_underline_height="1dp" app:floating_edit_text_underline_highlighted_height="1dp"
+                    android:id="@+id/serial_number"
+                    android:hint="@string/serial_number"
+                    android:textColor="@color/primary_text"
+                    android:inputType="text"
+                    android:imeOptions="actionNext"
+                    android:singleLine="true"/>
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

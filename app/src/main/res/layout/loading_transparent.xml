@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/loading"
+    android:visibility="gone"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/linka_transparent">
+    <Button
+        android:text=""
+        android:background="@null"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <include layout="@layout/progress_layout" />
+
+</RelativeLayout>

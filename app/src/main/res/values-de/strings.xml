@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="location_access_required">Zugriff auf Standort erforderlich, damit LINKA ordnungsgemäß ausgeführt werden kann.</string>
+    <string name="location_access_required_desc">Wir verwenden Ihre Position, um Ihnen zu helfen Ihr LINKA Schloss und das zugehörige Fahrrad wiederzufinden.</string>
+    <string name="functionality_limited">Begrenzte Funktionalität</string>
+    <string name="not_able_to_discover_lock">Da der Zugriff auf Ihren Standort nicht erteilt wurde, ist die App wird nicht in der Lage LINKA Schlösser aufzufinden.</string>
+    <string name="not_support_google_play"> Dieses Gerät unterstützt den Google Play service nicht. Sie sind möglicherweise nicht in der Lage Push Mitteilungen mit diesem Gerät zu erhalten.</string>
+    <string name="sure_quit_fw_upgrade">Sind Sie sicher, dass Sie die Aktualisierung der Firmware unterbrechen möchten?</string>
+    <string name="exit_app">App beenden?</string>
+
+    <string name="select_language">Sprache auswählen</string>
+
+    <string name="no_records">Keine Aufzeichnungen</string>
+    <string name="back_to_top">Zurück nach oben</string>
+    <string name="crash_toast_text">Abgestürzt.</string>
+    <string name="google_maps_api_key">AIzaSyCngZA_dRwk5D1xkXA7nNdgFEFLNpHhUrc</string>
+    <string name="ble_not_supported">Bluetooth Low Energy nicht unterstützt</string>
+
+    <string name="turn_on_bluetooth">Aktivieren Sie Bluetooth</string>
+
+    <string name="dfu_unknown_name">Unbenanntes Gerät</string>
+
+    <string name="dfu_action_abort">Abbrechen</string>
+
+    <string name="dfu_status_initializing">Initialisierung wird durchgeführt&#8230;</string>
+    <string name="dfu_status_connecting">Verbindung wird hergestellt&#8230;</string>
+    <string name="dfu_status_starting">Firmware-Update wird gestartet&#8230;</string>
+    <string name="dfu_status_switching_to_dfu">Firmware-Installation wird vorbereitet&#8230;</string>
+    <string name="dfu_status_uploading">Installation wird durchgeführt&#8230;</string>
+    <string name="dfu_status_uploading_part" formatted="false">Hochladen von Teil %1$d/%1$d#8230;</string>
+    <string name="dfu_status_validating">Validierung wird durchgeführt&#8230;</string>
+    <string name="dfu_status_disconnecting">Verbindung wird getrennt&#8230;</string>
+    <string name="dfu_status_aborted">Abgebrochen</string>
+    <string name="dfu_status_error">Installation fehlgeschlagen</string>
+
+    <string name="dfu_status_connecting_msg">Anschließen an %s&#8230;</string>
+    <string name="dfu_status_starting_msg">Initialisierung des DFU-Prozesses&#8230;</string>
+    <string name="dfu_status_switching_to_dfu_msg">Warten auf Bootloader&#8230;</string>
+    <string name="dfu_status_uploading_components_msg">Übertragen von Komponenten zum %s&#8230;</string>
+    <string name="dfu_status_uploading_msg">Übertragung der Anwendung an %s&#8230;</string>
+    <string name="dfu_status_validating_msg">Validierung&#8230;</string>
+    <string name="dfu_status_completed_msg">Die Anwendung wurde erfolgreich gesendet.</string>
+    <string name="dfu_status_aborted_msg">Der Anwendungs-Upload wurde abgebrochen.</string>
+    <string name="dfu_status_disconnecting_msg">Trennung von %s&#8230;</string>
+    <string name="dfu_status_error_msg">DFU-Prozess fehlgeschlagen.</string>
+
+
+
+
+    <!--Links -->
+    <string name="faq_url">http://www.linkalock.com/faq</string>
+    <string name="email_support_url">support@linkalock.com</string>
+
+
+    <!-- Generic -->
+    <string name="save">Speichern</string>
+    <string name="edit">Bearbeiten</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="color">Farbe</string>
+    <string name="location">Standort</string>
+    <string name="yes">Ja</string>
+    <string name="no">Nein</string>
+    <string name="refresh">Aktualisieren</string>
+    <string name="scanning">scannen...</string>
+    <string name="stop">halt</string>
+    <string name="dismiss">Entlassen</string>
+    <string name="reset">zurückstellen</string>
+
+
+    <!-- Startup page-->
+    <string name="search_for_linka">Nach LINKA suchen</string>
+    <string name="setup_linka">LINKA einrichten</string>
+    <string name="setup_linka_text">Stellen Sie sicher, dass das LINKA-Schloss angeschaltet ist und sich im Such-Modus befindet (blinkendes blaues Licht)</string>
+    <string name="searching_for_linka">Suchen</string>
+
+    <!-- My Bikes -->
+    <string name="new_bike_profile">Neues Fahrrad-Profil</string>
+    <string name="create_new_bike_profile">Neues Fahrrad-Profil erstellen</string>
+    <string name="bike_name">Fahrrad-Name</string>
+    <string name="manufacturer">Hersteller</string>
+    <string name="model">Modell</string>
+    <string name="serial_number">Serien-Nummer</string>
+
+
+    <!-- Menu -->
+    <string name="my_linkas">Mein LINKA</string>
+    <string name="my_bikes">PROFIL</string>
+    <string name="notifications">Mitteilungen</string>
+    <string name="activities">Aktivitäten</string>
+    <string name="faqs">Häufig gestellte Fragen</string>
+    <string name="chat_support">Chat Support</string>
+    <string name="report_a_bug">Einen Fehler melden</string>
+    <string name="terms_and_conditions">Geschäftsbedingungen</string>
+    <string name="privacy_policy">Datenschutzrichtlinien</string>
+    <string name="managedevices">Gerät organisieren</string>
+
+    <!-- Locks -->
+    <string name="connect_to_a_new_linka">Mit einem neuen Linka verbinden</string>
+    <string name="new_linka">Neues LINKA</string>
+    <string name="new_linka_cap">Neues LINKA</string>
+    <string name="connected">VERBUNDEN</string>
+    <string name="disconnected">NICHT VERBUNDEN</string>
+    <string name="reconnect_to_linka">LINKA erneut verbinden</string>
+    <string name="no_connection">Keine Verbindung</string>
+    <string name="linka_lock">LINKA Lock</string>
+    <string name="battery_percent">%1$d%%</string>
+    <string name="battery_days_remaining">Ca. %1$d Tage</string>
+    <string name="delete_lock">Schloss löschen</string>
+    <string name="delete_lock_message">Sind Sie sicher, dass Sie dieses Schloss löschen möchten?</string>
+
+
+
+    <!-- Settings -->
+    <string name="audible_locking_unlocking">Töne</string>
+    <string name="auto_unlocking">Automatisches Aufschließen</string>
+    <string name="phoneless_passcode">LINKA-Zugangscode</string>
+    <string name="tamper_siren">Alarm-Ton</string>
+    <string name="battery_critically_low">Akku-Stand sehr niedrig</string>
+    <string name="battery_low">Akku-Stand niedrig</string>
+    <string name="back_in_range_alert">Wieder in Reichweite</string>
+    <string name="out_of_range_alert">Außer Reichweite</string>
+    <string name="edit_lock_name">Schloss-Name bearbeiten</string>
+    <string name="edit_name">Name bearbeiten</string>
+    <string name="your_lock_is">Ihr Schloss ist</string>
+    <string name="stall">Ihr Fahrrad wurde nicht abgesperrt. Bitte prüfen Sie Ihr Fahrrad!</string>
+    <string name="warning">Warnung</string>
+
+    <string name="audible_locking_unlocking_desc">Verschließen, Aufschließen, Fehlermeldung, Verbinden</string>
+    <string name="auto_unlocking_desc">Für automatisches Öffnen wenn Sie sich dem Schloss auf einen Meter nähern</string>
+    <string name="phoneless_passcode_desc">Für bequemes Entriegeln falls Sie Ihr Smart-Phone nicht zur Hand haben</string>
+    <string name="tamper_siren_desc">Sirene wenn sich das Fahrrad in Gefahr befindet</string>
+    <string name="battery_critically_low_desc">Akku-Stand sehr niedrig</string>
+    <string name="battery_low_desc">Akku-Stand niedrig</string>
+    <string name="back_in_range_alert_desc">Wieder in Reichweite</string>
+    <string name="out_of_range_alert_desc">Ausser Reichweite</string>
+
+
+    <!--pin -->
+    <string name="pin_empty_val"> </string>
+    <string name="pin_full_val">\u2022</string>
+    <string name="enter_pin_text">Bitte geben Sie Ihren Zugangscode für den Zugriff ohne Smartphone ein</string>
+    <string name="reenter_pin_text">Bitte geben Sie Ihren Zugangscode für den Zugriff ohne Smartphone erneut ein</string>
+    <string name="unknown_device">Unbekanntes Gerät</string>
+
+    <!-- prelogin -->
+    <string name="sign_in">Anmelden</string>
+    <string name="or">oder</string>
+    <string name="sign_up">Neu registrieren</string>
+    <string name="email">E-Mail-Adresse</string>
+    <string name="password">Passwort</string>
+    <string name="i_agree_to_tos">Ich stimme zu die </string>
+    <string name="terms_link"><u>Geschäftsbestimmungen gelesen</u></string>
+    <string name="create_account">Account erstellen</string>
+    <string name="is_forgot">Passwort vergessen?</string>
+    <string name="first_name">Vorname</string>
+    <string name="last_name">Nachname</string>
+    <string name="reenter_password">Passwort nochmals eingeben</string>
+    <string name="please_check_tos">Bitte überprüfen Sie die \'Ich habe die Geschäftsbestimmungen gelesen\' Box.</string>
+    <string name="password_not_match">Ihr Passwort und Bestätigungs-Passwort stimmen nicht überein.</string>
+    <string name="creating_account">Account erstellen</string>
+    <string name="logging_in">Einloggen</string>
+
+
+    <string name="locking">Versperren</string>
+    <string name="unlocking">Entsperren</string>
+
+    <!-- from SDK -->
+    <string name="error_bluetooth_not_supported">Bluetooth wird nicht unterstützt</string>
+
+    <string name="choose_image_source">Wählen Sie Image Source</string>
+    <string name="gallery">Galerie</string>
+    <string name="camera">Kamera</string>
+
+    <!-- DFU Firmware Update -->
+    <string name="screen1">Befolgen Sie die Anweisungen zur Aktualisierung der Firmware</string>
+    <string name="screen2">Start</string>
+    <string name="screen3">1. Klicken Sie auf die Schaltfläche unten, um LINKA auf den Firmware-Updatemodus zu setzen.</string>
+    <string name="screen4">2. Schalten Sie Bluetooth aus und wieder an. Klicken Sie danach auf die Schaltfläche unten</string>
+    <string name="screen5">Weiter</string>
+    <string name="screen6">Firmware-Update läuft. Bitte schalten Sie das Mobilgerät oder das LINKA-Schloss nicht aus.</string>
+    <string name="screen7">3. Das Firmware Update ist fertig! Bitte schalten Sie Bluetooth noch einmal aus und ein. Klicken Sie dann erneut auf diese Schaltfläche</string>
+    <string name="screen8">Fertig</string>
+
+    <!-- tabbar -->
+    <string name="tabbar_icon_text_activities">Aktivitäten</string>
+    <string name="tabbar_icon_text_location">Standort</string>
+    <string name="tabbar_icon_text_profile">Profil</string>
+    <string name="tabbar_icon_text_settings">Einstellungen</string>
+
+
+    <string name="open_in_maps">In Kartenansicht öffnen</string>
+
+    <string name="lock_instructions">Um LINKA zu verschließen, drücken Sie zweimal den Power-Knopf</string>
+    <string name="unlock_instructions">Um LINKA zu entsperren, tippen Sie einfach doppelt oben auf den Bügel oder drücken Sie doppelt auf die Power-Taste auf Ihrem LINKA-Gerät</string>
+
+    <string name="remove_device_instructions">Wenn Sie das Gerät entfernen, löschen Sie die Verbindung und müssen LINKA neu mit dem Gerät verbinden</string>
+    <string name="dont_allow">Nicht erlauben</string>
+    <string name="ok">OK</string>
+
+    <string name="setup_your_passcode_recommended">Einrichten des LINKA-Zugangscodes für Entriegelung ohne Smartphone (sehr zu empfehlen!)</string>
+    <string name="logout_question">Möchten Sie sich wirklich ausloggen?</string>
+    <string name="logout">Ausloggen</string>
+
+
+    <string name="error">Fehler</string>
+    <string name="error_invalid">Ungültiger Fehler.</string>
+
+
+    <string name="network_error">Netzwerkfehler</string>
+    <string name="please_check_network">Bitte prüfen Sie Ihre Netzwerkeinstellungen oder versuchen Sie es später noch einmal.</string>
+
+
+    <string name="app_new_version">Neue App-Version erkannt. Möchten Sie die LINKA-App jetzt aktualisieren?</string>
+    <string name="no_app_new_version">Die LINKA App ist auf dem neusten Stand.</string>
+
+    <string name="revoke">Passwort zurücksetzen</string>
+    <string name="revoke_desc">Löscht den Zugang zu allen existierenden Passwörtern außer dem Administratoren-Passwort</string>
+    <string name="firmware_version">Firmware-Version</string>
+    <string name="firmware_version_desc">" "</string>
+    <string name="reset_to_factory_settings">Zurücksetzen auf Werkseinstellungen</string>
+    <string name="reset_to_factory_settings_desc">Alle Daten und alle existierenden Verbindungen werden gelöscht</string>
+
+    <string name="check_app_updates">Nach App-Updates suchen</string>
+    <string name="lock_communication_failed">Kommunikation mit dem Schloss fehlgeschlagen. Bitte prüfen Sie die Verbindung mit dem Schloss und versuchen Sie es noch einmal.</string>
+    <string name="lock_connection_failed">Das LINKA-Schloss ist nicht verbunden. Bitte prüfen Sie die LINKA-Verbindung mit dem Schloss und versuchen Sie es noch einmal.</string>
+    <string name="firmware_update_failed">Firmware-Update fehlgeschlagen</string>
+    <string name="lock_still_paired">Das LINKA-Schloss ist noch gekoppelt. Bitte entkoppeln Sie Ihr LINKA-Schloss und versuchen Sie es noch einmal.</string>
+    <string name="update_firmware_aborted">Firmware-Update abgebrochen</string>
+
+    <string name="location_unavailable">Standort nicht verfügbar</string>
+    <string name="enable_location">Bitte aktivieren Sie die Standortservices</string>
+
+
+    <string name="act_unlocked">LINKA aufgeschlossen</string>
+    <string name="act_unlocked_after">LINKA aufgeschlossen nach</string>
+    <string name="days">Tage</string>
+    <string name="hrs">Std.</string>
+    <string name="mins">Min.</string>
+    <string name="secs">Sek.</string>
+    <string name="day">Tag</string>
+    <string name="hr">Std.</string>
+    <string name="min">Min.</string>
+    <string name="sec">Sek.</string>
+    <string name="act_tamper_alert">Alarm-Meldung</string>
+    <string name="act_battery_low">Niedriger Akku-Stand bei</string>
+    <string name="act_battery_low_critical">Akku-Stand sehr niedrig bei</string>
+    <string name="act_locked_at">Abgeschlossen am Standort</string>
+    <string name="act_locked">Versperrt</string>
+
+    <string name="add_photo">Foto hinzufügen</string>
+
+    <string name="notif_battery_low">Akku-Stand niedrig</string>
+    <string name="notif_below">Es verbleiben noch weniger als</string>
+    <string name="notif_battery_remaining">Akku-Ladung.</string>
+    <string name="notif_please_charge_soon">Bitte laden Sie bald.</string>
+    <string name="notif_tamper_alert">Alarm-Meldung</string>
+    <string name="notif_check_your_bike">Bitte überprüfen Sie Ihr Fahrrad</string>
+
+
+    <string name="permission_revocation_approved">Sperren der Berechtigung genehmigt</string>
+    <string name="permission_revocation_approved_desc">Sperren der Berechtigung erfolgreich genehmigt. Um die Zugriffssschlüssel Ihres LINKA-Schlosses vollständig zu sperren / zurückzusetzen, richten Sie Ihr LINKA-Schloss erneut auf der Seite Einstellungen ein.</string>
+    <string name="user_permission_granted">Benutzerberechtigung gewährt</string>
+    <string name="user_permission_granted_desc">Ihr Berechtigungsantrag wurde genehmigt. Sie können Ihre LINKA-Verbindung mit dem Schloss erneut einrichten.</string>
+    <string name="permission_request_rejected">Ihr Berechtigungsantrag wurde abgelehnt. Die Anwendung wird jetzt aktualisiert.</string>
+    <string name="unable_to_pair">Das LINKA-Schloss kann nicht richtig gekoppelt werden. Bitte öffnen Sie den Bereich \"Einstellungen > Bluetooth\" und löschen Sie das Gerät. Anschließend starten Sie die LINKA-Anwendung neu.</string>
+
+    <string name="failed_to_pair_up_connection">Koppeln fehlgeschlagen. Prüfen Sie bitte, ob das LINKA-Schloss eingeschaltet und zum Verbinden verfügbar ist, dann versuchen Sie es später noch einmal. \n\nSollte das Problem weiterhin bestehen, versuchen Sie, den Bereich \"Einstellungen > Bluetooth\" zu öffnen, dieses Gerät zu löschen und das Gerät dann erneut zu verbinden.</string>
+    <string name="failed_to_pair_up_internet">Koppeln fehlgeschlagen. Vergewissern Sie sich bitte, dass Ihr Smartphone mit dem Internet verbunden ist, bevor Sie fortfahren.</string>
+
+    <string name="missing_lockcontroller">Fehlender LINKA-Kopplungseintrag. Vergewissern Sie sich, dass bei Ihrem Gerät die Bluetooth-Funktion eingeschaltet ist. \nSollte das Problem weiterhin bestehen, \n1. Deinstallieren Sie die App, installieren Sie sie erneut und versuchen Sie es noch einmal oder \n2. Kontaktieren Sie das technische Team von LINKA.</string>
+
+    <string name="failed_to_pair_up">Koppeln fehlgeschlagen. Versuchen Sie es noch einmal.</string>
+
+    <string name="almost_done">Beinahe fertig!</string>
+    <string name="permission_being_approved">Ihre Berechtigung wird für die Administratorgenehmigung angefordert. Sie erhalten eine Bestätigungs-E-Mail, nachdem Ihre Anfrage bearbeitet wurde.</string>
+    <string name="permission_being_processed">Ihre Berechtigung wird angefordert und eine Reaktivierungs-E-Mail wird an Ihre E-Mail-Adresse gesendet. Bitte rufen Sie Ihre E-Mail ab und befolgen Sie die Anweisungen.</string>
+
+    <string name="wish_to_request_user_permission">Dieses Schloss wird derzeit unter einem bestehenden Konto geführt. Möchten Sie eine Benutzerberechtigung anfordern?</string>
+    <string name="reactivate_access_keys">Zugriffsschlüssel reaktivieren</string>
+    <string name="wish_to_reactivate_access_keys">Ihr Gerät verfügt anscheinend nicht über die bestehenden Zugriffsschlüssel. Möchten Sie die Zugriffsschlüssel Ihres Kontos reaktivieren? Wir senden die Bestätigung Ihrer Zugriffsschlüsselreaktivierung an Ihre E-Mail-Adresse.</string>
+
+    <string name="preparing_to_pair_up">Vorbereiten zum Koppeln</string>
+    <string name="pairing_up">Koppelung im Gange</string>
+    <string name="requesting_permission">Berechtigung wird angefordert</string>
+
+    <string name="valid_email_password">Geben Sie bitte eine gültige E-Mail-Adresse und Ihr Konto-Passwort ein.</string>
+    <string name="wrong_email_password">Falsche Benutzername- / Passwortkombination.</string>
+    <string name="signing_in">Anmelden</string>
+    <string name="invalid_account">Ungültiges Konto.</string>
+
+    <string name="please_check_tc">Kreuzen Sie bitte das Kästchen \"Ich habe die allgemeinen Geschäftsbedingungen gelesen\" an.</string>
+    <string name="not_match_pwd">Ihr Kennwort und Ihr Bestätigungskennwort stimmen nicht überein.</string>
+
+    <string name="creating_acc">Konto wird erstellt</string>
+    <string name="access_code_pair_not_match">Das von Ihnen eingegebene Zugriffscode-Paar stimmt nicht überein. Bitte versuchen Sie es noch einmal.</string>
+    <string name="wrong_access_code">Falscher Zugriffscode</string>
+    <string name="fail_to_communicate">Kommunikation fehlgeschlagen</string>
+    <string name="check_connection">Bitte prüfen Sie Ihre LINKA-Verbindung mit dem Schloss oder versuchen Sie es noch einmal.</string>
+    <string name="success">Erfolg</string>
+    <string name="access_code_set">Ihr neuer Zugriffscode ohne Telefon wurde erfolgreich in Ihrem LINKA-Schloss eingerichtet.</string>
+    <string name="random_code_set">Bitte erinnern Sie sich an diesen Telefonlosen Zugangscode</string>
+    <string name="random_code_popup">ZUFÄLLIGER TELEFONLOSER ZUGANGSCODE GENERIERT</string>
+    <string name="invalid_passcode">Ungültige Kennung</string>
+    <string name="passcode_format">Die Kennung darf nicht \"1234\" sein oder aus 4 identischen Ziffern (z. B. \"1111\" ~ \"9999\") bestehen. Geben Sie bitte eine andere Kennung ein.</string>
+    <string name="pac_digits">" "</string>
+
+    <string name="verifying_access">Zugriff wird verifiziert</string>
+    <string name="access_denied">Zugriff verweigert</string>
+    <string name="account_no_valid_admin_access">Ihr Konto verfügt nicht über gültige Admin-Zugriffsrechte, um diese Aktion an diesem Schloss auszuführen. Bitte kontaktieren Sie unser LINKA-Team</string>
+    <string name="sure_revoke">Die App verlangt eine Berechtigung zum Sperren der Zugriffsschlüssel. \n\nWenn Sie gemeinsamen Zugriff mit anderen Benutzern haben, verlieren diese ihren Zugriff auf das Schloss. \n\nWirklich fortfahren?</string>
+    <string name="send_revoke">Anfrage zum Sperren der Zugriffsschlüssel wird gesendet</string>
+    <string name="confirmation_email_revoke">Eine E-Mail-Bestätigung wurde an Ihre E-Mail-Adresse gesendet. Bitte rufen Sie die E-Mail ab und bestätigen Sie sie, um mit der Sperrung des Benutzerzugriffs fortzufahren.</string>
+    <string name="cancelled">Abgebrochen</string>
+    <string name="revocation_cancelled">Die Zugriffsschlüsselreaktivierung Ihres LINKA-Schlosses wurde abgebrochen.</string>
+    <string name="revoking">Zugriffsschlüssel werden reaktiviert</string>
+    <string name="revoked">Die Zugriffsschlüssel für Ihr LINKA-Schloss sind gesperrt. Fahren Sie bitte fort, und nutzen Sie dieses Schloss wie gewöhnlich.</string>
+    <string name="sure_reset_factory">Die App verlangt eine Berechtigung, um das LINKA-Schloss auf die Werkseinstellungen zurückzusetzen. Beim Zurücksetzen auf die Werkseinstellungen wird der Zugriff aller Benutzer (einschließlich Admins) gesperrt und die Daten dieses LINKA-Schlosses werden von allen Ihren Konten gelöscht. \n\nWenn Sie gemeinsamen Zugriff mit anderen Benutzern haben, verlieren diese ihren Zugriff auf das Schloss. \n\nWirklich fortfahren?</string>
+    <string name="send_reset_factory">Anfrage zum Zurücksetzen des Geräts wird gesendet</string>
+    <string name="confirmation_email_reset_factory">Eine E-Mail-Bestätigung wurde an Ihre E-Mail-Adresse gesendet. Bitte rufen Sie die E-Mail ab und bestätigen Sie sie, um mit dem Zurücksetzen dieses Schlosses auf die Werkseinstellungen fortzufahren.</string>
+    <string name="reset_factory_cancelled">Das Zurücksetzen Ihres LINKA-Schlosses auf die Werkseinstellungen wurde abgebrochen.</string>
+    <string name="final_warning">Letzte Warnung</string>
+    <string name="final_warning_reset_factory">Die App fährt jetzt damit fort, die Zugriffsschlüssel dieses LINKA-Schlosses zu sperren. Bitte das Schloss oder die Internetverbindung während dieses Vorgangs nicht trennen. Möchten Sie Ihr LINKA-Schloss wirklich komplett auf die Werkseinstellungen zurücksetzen? (Kann nicht rückgängig gemacht werden)</string>
+    <string name="resetting_factory">Zurücksetzen auf Werkseinstellungen</string>
+    <string name="reset_factory_done">Ihr LINKA-Schloss wurde auf die Werkseinstellungen zurückgesetzt und ist in einen Standbymodus gewechselt. Um das Schloss wieder ordnungsgemäß steuern zu können, wählen Sie bitte "Einstellungen > Bluetooth", löschen Sie dieses Gerät, schalten Sie Ihr LINKA-Schloss ein und fügen Sie dann das Schloss erneut hinzu und richten Sie es ein.</string>
+    <string name="close">Schließen</string>
+    <string name="cancel_revocation">Sperrung abbrechen</string>
+    <string name="cancel_factory_reset">Zurücksetzen auf Werkseinstellungen abbrechen</string>
+
+    <string name="tap_name_connect">Tippen Sie auf den Namen des LINKA-Geräts, das unten angezeigt wird, um eine Verbindung herzustellen</string>
+    <string name="please_enter_email">Bitte tragen Sie hier Ihre E-Mail-Adresse ein</string>
+    <string name="reset_password_an_email_sent">Eine E-Mail mit zurückgesetztem Passwort wurde an folgende Adresse gesendet: </string>
+    <string name="proceed_with_code">Mit der Kennung fortfahren</string>
+    <string name="code">Kennung</string>
+    <string name="new_password">Neues Passwort</string>
+    <string name="confirm_new_password">Neues Passwort bestätigen</string>
+    <string name="password_changed_success">Passwort wurde geändert. Loggen Sie sich bitte mit dem neuen Passwort ein.</string>
+
+    <string name="reset_password">Passwort zurücksetzen</string>
+
+    <string name="firmware_update">Firmware-Update</string>
+    <string name="critical_firmware_update">Für Ihr LINKA-Schloss ist ein wichtiges Firmware-Update verfügbar. Möchten Sie die Firmware jetzt aktualisieren? (Dringend empfohlen)</string>
+    <string name="maybe_later">Vielleicht später</string>
+    <string name="edit_name_desc">Name bearbeiten</string>
+    <string name="settings">Einstellungen</string>
+    <string name="dfu_status_completed">Installation abgeschlossen!</string>
+    <string name="remaining">verbleiben</string>
+    <string name="charging">Aufladen</string>
+    <string name="charged">Aufladen</string>
+    <string name="app_version">Version</string>
+    <string name="app_name">LINKA</string>
+    <string name="dfu_status_aborting">Abbrechen&#8230;</string>
+    <string name="tamper_sensitivity">Alarmempfindlichkeit</string>
+    <string name="tamper_sensitivity_set">Die Alarmempfindlichkeit wurde erfolgreich in Ihr LINKA Schloss integriert.</string>
+    <string name="reset_default">Zurücksetzen</string>
+    <string name="sleep_notification">Ruhemodus</string>
+    <string name="sleep_notification_desc">Ihr LINKA Schloss hat in den Ruhemodues gewechselt, um Batterie zu sparen</string>
+    <string name="sleep_settings">Batterieeinstellungen</string>
+    <string name="sleeping_set">Ihre Batterieeinstellungen wurden gespeichert.</string>
+    <string name="default_passcode_title">Beachten</string>
+    <string name="default_passcode_desc">Für Ihre LINKA-Sperre wurde ein Standardpasswort eingerichtet -</string>
+    <string name="stall_override">Fehlermeldung Überschreiben</string>
+    <string name="stall_override_desc">Bei Hindernis trotzdem Schließen erzwingen</string>
+    <string name="stall_override_warning">Wenn “Fehlermeldung Überschreiben” aktiv ist, wird der Verschlussbügel im Falle eines Hindernisses nicht zurückziehen</string>
+    <string name="fw_1.4.3_post_update_desc">Sie sind alle mit der neuesten LINKA Firmware eingestellt!\nHINWEIS: Alle aktuellen Benutzer deines Schlosses müssen die neueste LINKA App herunterladen, um auf dein Schloss zuzugreifen.</string>
+    <string name="connecting_to_linka">Verbindung zum LINKA...</string>
+
+    <string name="sleep_settings_desc">Richten Sie den Ruhemodus Ihres LINKAs abhängig von Ihren Bedürfnissen ein.</string>
+    <string name="sleep_unlock_desc">Wenn LINKA entriegelt ist, in den Ruhemodus versetzen nach&#8230;</string>
+    <string name="sleep_unlock_hint">Drücken Sie die Power-Taste um LINKA zu aktivieren</string>
+    <string name="sleep_lock_desc">Wenn LINKA gesperrt ist, in den Ruhemodus versetzen nach&#8230;</string>
+    <string name="sleep_lock_hint">Drücken Sie die Power-Taste um LINKA zu aktivieren</string>
+    <string name="sleep_note">HINWEIS: Die automatische Entriegelung wird nur funktionieren, wenn sich LINKA nicht im Ruhemodus befindet.</string>
+    <string name="estimated">geschätzt</string>
+    <string name="tamper_sensitivity_desc">Passen Sie die Empfindlichkeit Ihres Alarms an Ihre Umgebung an</string>
+    <string name="metro">Innenstadt</string>
+    <string name="suburbs">Vorstädte</string>
+    <string name="garage">Garage</string>
+    <string name="metro_desc">Hohe Bevölkerungsdichte und Verkehr; \n niedrige Alarmempfindlichkeit</string>
+    <string name="suburbs_desc">Ruhige Stadt / Nachbarschaft mit weniger Verkehr; \n mittlere Alarmepfindlichkeit</string>
+    <string name="garage_desc">Niedriger oder kein Verkehr; wenig Aktivität; Hohe Alarmepfindlichkeit</string>
+    <string name="lock_warning_desc">Versuche nicht, das Fahrrad beim Fahren zu sperren. Das Aktivieren des Schlosses beim Fahren kann zu schweren Verletzungen führen.</string>
+    <string name="lock_warning_title">VORSICHT</string>
+    <string name="screen0">Auf Android 7.0 verursacht Spotify einige Probleme beim Aktualisieren der Firmware auf Ihr LINKA. Während wir an einer Lösung arbeiten, folgen Sie bitte diesen schnellen Schritten, um Ihr Update abzuschließen!\n\nGehen Sie zu Einstellungen> Apps> Spotify> Force Stop</string>
+    <string name="screen0_0">Hiermit bestätige ich, dass Spotify nicht installiert ist oder das Beenden der App erzwungen wurde.</string>
+    <string name="screen0_1">Spotify scheint noch zu laufen!</string>
+    <string name="screen0_2">Weiter</string>
+
+    <string name="led_display_when_locked">LED-Anzeige bei Verriegelung</string>
+    <string name="search">Suche</string>
+    <string name="refresh_heat_map">Erneuern</string>
+    <string name="tamper_warning">Sicherheitswarnung!</string>
+    <string name="temperature_warning">Temperaturwarnung!</string>
+    <string name="tamper_text">Überprüfe dein Fahrrad! Es kann in Gefahr sein!</string>
+    <string name="temperature_text">Überprüfe dein LINKA. Es ist überhitzt!</string>
+    <string name="lock_is_taken_message">Dieses Schloss ist bereits mit einem Fahrrad verbunden: %s! Möchten Sie es von diesem Fahrrad entfernen und es mit dem neuen verbinden?</string>
+    <string name="unknown_characteristic">Unbekannte Eigenschaft</string>
+    <string name="unknown_service">Unbekannter Dienst</string>
+    <string name="cant_search_linka">Kann nicht nach LINKA suchen. Bitte schließen Sie die App und versuchen Sie es erneut.</string>
+    <string name="panic">Panik</string>
+
+    <string name="no_agents_title">Live Chat momentan offline</string>
+    <string name="no_agents_message">Bitte hinterlassen Sie eine Nachricht und wir melden uns umgehend bei Ihnen.</string>
+    <string name="offline_message_button">Hinterlass eine Nachricht</string>
+
+
+    <string name="unlock_to_continue">Bitte freischalten, um fortzufahren.</string>
+
+    <string name="firmware_recovery">Firmware-Wiederherstellungsmodus</string>
+    <string name="firmware_recovery_question">Möchten Sie den Firmware Recovery Mode eingeben?</string>
+    <string name="try_firmware_again">Bitte versuchen Sie es erneut.</string>
+    <string name="fw_contact_linka_support">Es scheint, dass wir immer noch Probleme mit der Aktualisierung Ihrer Firmware haben. Bitte kontaktieren Sie uns und wir melden uns innerhalb von 24 Stunden zurück.</string>
+    <string name="fw_restart_phone">Es scheint, dass wir Schwierigkeiten haben, Ihre Firmware zu aktualisieren. Bitte starten Sie Ihr Telefon neu und versuchen Sie es erneut.</string>
+    <string name="oops">Ups!</string>
+    <string name="uhoh">Uh Oh!</string>
+    <string name="send_email">E-Mail senden</string>
+    <string name="linka_support">LINKA Support</string>
+
+    <string name="blod_popup">Es scheint, dass das Firmware Update nicht ordnungsgemäß installiert wurde. Blinkt die LED auf Ihrem LINKA Schloss beständig blau oder grün?</string>
+    <string name="blod_popup_no">Nein, es leuchtet nicht beständig blau / grün</string>
+    <string name="blod_popup_yes">Ja, es leuchtet beständig blau / grün</string>
+    <string name="blod_popup_contact_linka">It looks like we\'re still having trouble updating your firmware. If the LINKA LED is still solid blue or solid green, please contact LINKA customer support.</string>
+    <string name="alright">Okay</string>
+    <string name="blod_try_again_popup">Let\'s try updating your firmware one more time. Please read the instructions carefully, and make sure you press \"Force Stop\"</string>
+
+
+
+</resources>

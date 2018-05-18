@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <ImageView
+        android:id="@+id/lock_ring_mechanism"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_centerInParent="true"
+
+        android:src="@drawable/linka_model_mech" />
+
+    <ImageView
+        android:id="@+id/lock_ring"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_centerInParent="true"
+        android:src="@drawable/linka_model" />
+
+    <RelativeLayout
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.linka.lockapp.aos.module.widget.ArcProgress
+            android:id="@+id/arc_progress"
+            android:background="@android:color/transparent"
+            android:layout_width="0px"
+            android:layout_height="0px"
+            custom:arc_progress="100"
+            custom:arc_stroke_width="2dp"
+            custom:arc_angle="264"
+            custom:arc_unfinished_color="@color/linka_gray"
+            custom:arc_finished_color="@color/linka_blue"
+            custom:arc_text_color="@android:color/transparent"
+            android:layout_centerInParent="true"/>
+
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:id="@+id/center_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerInParent="true">
+
+        <LinearLayout
+            android:visibility="invisible"
+            style="@style/linka_gray_outline_button_nomargin"
+            android:layout_margin="@dimen/activity_horizontal_margin_sm"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <include layout="@layout/progress_layout" android:id="@+id/loading" />
+            <com.linka.lockapp.aos.module.widget.LinkaTextView
+                android:padding="@dimen/activity_horizontal_margin_sm"
+                android:textSize="@dimen/item_text_sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Locking"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_centerInParent="true">
+            <com.linka.lockapp.aos.module.widget.LinkaTextView
+                android:id="@+id/lock_battery_percent_remaining"
+                style="@style/linka_red_text"
+                android:layout_width="wrap_content"
+                android:textSize="@dimen/item_text_vlarger_sp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="64%"/>
+            <ImageView
+                android:id="@+id/lock_low_battery_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="@dimen/activity_horizontal_margin_sm"
+                android:src="@drawable/icon_low_battery" />
+        </LinearLayout>
+
+        <com.linka.lockapp.aos.module.widget.LinkaTextView
+            android:id="@+id/lock_battery_days_remaining"
+            style="@style/linka_gray_text"
+            android:layout_width="match_parent"
+            android:textSize="@dimen/item_text_sp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="approx. 233 Days"/>
+
+        <LinearLayout
+            android:id="@+id/locking_status_layout"
+            style="@style/linka_gray_outline_button_nomargin"
+            android:layout_margin="@dimen/activity_horizontal_margin_sm"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <include layout="@layout/progress_layout" />
+            <com.linka.lockapp.aos.module.widget.LinkaTextView
+                android:id="@+id/locking_status_text"
+                android:padding="@dimen/activity_horizontal_margin_sm"
+                android:textSize="@dimen/item_text_sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Locking"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

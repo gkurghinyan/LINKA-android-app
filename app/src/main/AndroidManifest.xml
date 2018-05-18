@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.linka.lockapp.aos">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <!-- BLE -->
+    <uses-feature
+        android:name="android.hardware.bluetooth_le"
+        android:required="true" />
+
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
+    <permission
+        android:name="com.linka.lockapp.aos.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.linka.lockapp.aos.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:name=".AppDelegate"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".AppSplashActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".AppMainActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden"></activity>
+        <activity
+            android:name=".AppLanguagePickerActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".module.pages.walkthrough.WalkthroughActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".AppDeepLinkActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="linka" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name="com.linka.Lock.FirmwareAPI.LINKA_BLE_Service"
+            android:enabled="true" />
+
+        <meta-data
+            android:name="AA_DB_NAME"
+            android:value="Linkas.db" />
+        <meta-data
+            android:name="AA_DB_VERSION"
+            android:value="13" />
+        <meta-data
+            android:name="AA_MODELS"
+            android:value="                     com.linka.lockapp.aos.module.model.Linka,                     com.linka.lockapp.aos.module.model.LinkaActivity,                     com.linka.lockapp.aos.module.model.LinkaAccessKey,                     com.linka.lockapp.aos.module.model.LinkaAddress,                     com.linka.lockapp.aos.module.model.LinkaName,                     com.linka.lockapp.aos.module.model.User,                     com.linka.lockapp.aos.module.model.LinkaNotificationSettings" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCduhMP-0xDAYdfbWro2wi3NmmiLkjix9w" />
+
+        <receiver
+            android:name=".module.helpers.BootupReceiver"
+            android:enabled="true"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".module.helpers.AppBluetoothService"
+            android:enabled="true"
+            android:exported="true"></service>
+        <service
+            android:name=".module.helpers.AppLocationService"
+            android:enabled="true"
+            android:exported="true"></service>
+        <service
+            android:name=".module.helpers.GeofencingService"
+            android:enabled="true"
+            android:exported="true"></service>
+        <service
+            android:name=".module.helpers.GeofencingIntentService"
+            android:exported="false" />
+
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name" />
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
+        <service android:name=".module.gcm.MyFirebaseInstanceIdService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".module.gcm.myFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <!-- DFU -->
+
+        <activity
+            android:name=".module.pages.dfu.NotificationActivity"
+            android:label="NotificationActivity" />
+
+        <service
+            android:name=".module.pages.dfu.DfuService"
+            android:exported="true"
+            android:label="DfuService">
+            <intent-filter>
+                <action android:name="no.nordicsemi.android.action.DFU_UPLOAD" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="dfd7bc331ef26e3925fc8f49976fac87dbad2696" />
+    </application>
+
+</manifest>

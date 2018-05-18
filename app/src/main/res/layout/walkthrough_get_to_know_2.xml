@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:gravity="center_vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Now, double press the power button to unlock! "
+            android:textColor="#fff"
+            android:textSize="14sp"
+            android:paddingEnd="50dp"
+            android:layout_margin="10dp"
+            android:maxWidth="250dp"
+            android:layout_gravity="end"
+            android:gravity="end"
+            android:textAllCaps="true"/>
+
+        <ImageView
+            android:id="@+id/pac_picture1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/walkthrough_pac_green_lock"
+            android:layout_gravity="center_horizontal"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>

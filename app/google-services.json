@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "435654660586",
+    "firebase_url": "https://linkalock-app-666fb.firebaseio.com",
+    "project_id": "linkalock-app-666fb",
+    "storage_bucket": "linkalock-app-666fb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:435654660586:android:a26988846495413f",
+        "android_client_info": {
+          "package_name": "com.linka.lockapp.aos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "435654660586-gf5o9bkjh4b0vmsc1ntuk59k3igcta0g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDarwsio0irFBROHcYxJLB1Oj2ubci3EGI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

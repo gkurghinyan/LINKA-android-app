@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/blue_gradient"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="@dimen/margin_dx"
+                android:layout_marginStart="@dimen/margin_dx"
+                android:layout_marginTop="@dimen/margin_xu"
+                android:src="@drawable/logo_linka_white" />
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/lock_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/margin"
+                    android:text="LOCK SMARTER NOT HARDER"
+                    android:textAlignment="center"
+                    android:textAllCaps="true"
+                    android:textColor="#fff"
+                    android:textSize="@dimen/text_size_x"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <EditText
+                    android:id="@+id/username"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_dx"
+                    android:hint="@string/email"
+                    android:inputType="textEmailAddress"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="@android:color/white"
+                    android:textSize="@dimen/text_size_normal"
+                    app:layout_constraintEnd_toEndOf="@id/lock_text"
+                    app:layout_constraintStart_toStartOf="@id/lock_text"
+                    app:layout_constraintTop_toBottomOf="@id/lock_text" />
+
+                <EditText
+                    android:id="@+id/password"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin"
+                    android:hint="@string/password"
+                    android:inputType="textPassword"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="@android:color/white"
+                    android:textSize="@dimen/text_size_normal"
+                    app:layout_constraintEnd_toEndOf="@id/lock_text"
+                    app:layout_constraintStart_toStartOf="@id/lock_text"
+                    app:layout_constraintTop_toBottomOf="@id/username" />
+
+                <Button
+                    android:id="@+id/sign_in"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_px"
+                    android:background="@drawable/white_rounded_back"
+                    android:text="@string/submit"
+                    android:textColor="@color/bright_blue_color"
+                    android:textSize="@dimen/text_size_normal"
+                    android:paddingTop="@dimen/margin_xm"
+                    android:paddingBottom="@dimen/margin_xm"
+                    app:layout_constraintEnd_toEndOf="@id/lock_text"
+                    app:layout_constraintStart_toStartOf="@id/lock_text"
+                    app:layout_constraintTop_toBottomOf="@id/password" />
+
+                <TextView
+                    android:id="@+id/forgot_password"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:padding="@dimen/activity_horizontal_margin"
+                    android:text="@string/is_forgot"
+                    android:textColor="@color/linka_white"
+                    android:textSize="@dimen/text_size_xm"
+                    app:layout_constraintEnd_toEndOf="@id/lock_text"
+                    app:layout_constraintStart_toStartOf="@id/lock_text"
+                    app:layout_constraintTop_toBottomOf="@id/sign_in" />
+
+            </android.support.constraint.ConstraintLayout>
+
+            <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:gravity="center"-->
+            <!--android:orientation="horizontal">-->
+
+            <!--<View-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="1dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:background="@color/linka_white"></View>-->
+
+            <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="@dimen/activity_horizontal_margin"-->
+            <!--android:text="@string/or"-->
+            <!--android:textColor="@color/linka_white" />-->
+
+            <!--<View-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="1dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:background="@color/linka_white"></View>-->
+
+            <!--<Button-->
+            <!--android:id="@+id/sign_in_fb"-->
+            <!--style="@style/linka_white_outline_black_button_nomargin"-->
+            <!--android:layout_width="150dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="@dimen/activity_horizontal_margin_sm"-->
+            <!--android:text="Facebook Sign In" />-->
+
+            <!--<Button-->
+            <!--android:id="@+id/google_sign_in"-->
+            <!--style="@style/linka_white_outline_black_button_nomargin"-->
+            <!--android:layout_width="150dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="@dimen/activity_horizontal_margin_sm"-->
+            <!--android:text="Google Sign In" />-->
+
+
+            <!--</LinearLayout>-->
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</FrameLayout>

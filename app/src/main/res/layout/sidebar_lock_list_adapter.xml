@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+    <com.linka.lockapp.aos.module.widget.LinkaTouchableLinearLayout android:layout_marginLeft="50dp" android:orientation="horizontal" android:id="@+id/layout" android:layout_width="match_parent" android:layout_height="wrap_content">
+        <ImageView android:padding="@dimen/activity_horizontal_margin_sm" android:layout_width="48dp" android:layout_height="48dp" android:src="@drawable/sidebar_icon_managedevices" android:id="@+id/item_1_delete"/>
+        <com.linka.lockapp.aos.module.widget.LinkaTextView android:text="" android:textColor="@color/linka_blue" android:textSize="@dimen/item_text_big_sp" android:id="@+id/item_text"
+                                                           android:singleLine="true" android:layout_gravity="center" android:gravity="left|center" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_marginRight="10dp" />
+    </com.linka.lockapp.aos.module.widget.LinkaTouchableLinearLayout>
+
+
+</LinearLayout>

@@ -1,0 +1,474 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/menu_light_bg"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.linka.lockapp.aos.module.widget.LinkaTouchableLinearLayout
+                android:id="@+id/row_profile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/menu_dark_bg"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="35dp"
+                        android:layout_centerInParent="true"
+                        android:layout_margin="7dp"
+                        android:contentDescription="logo"
+                        android:padding="8dp"
+                        android:src="@drawable/sidebar_logo_linka" />
+                </RelativeLayout>
+
+            </com.linka.lockapp.aos.module.widget.LinkaTouchableLinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/menu_divider"></View>
+
+
+            <com.linka.lockapp.aos.module.widget.LinkaTouchableLinearLayout
+                android:id="@+id/sidebar_lock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_margin="@dimen/activity_horizontal_margin"
+                    android:padding="@dimen/activity_horizontal_margin_sm"
+                    android:src="@drawable/sidebar_icon_mylinka" />
+
+                <com.linka.lockapp.aos.module.widget.LinkaTextView
+                    android:id="@+id/sidebar_text_lock"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="left|center"
+                    android:text="@string/my_linkas"
+                    android:textColor="@color/linka_blue"
+                    android:textSize="@dimen/item_text_big_sp" />
+            </com.linka.lockapp.aos.module.widget.LinkaTouchableLinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="80dp"
+                android:layout_marginRight="20dp"
+                android:background="@color/menu_divider"></View>
+
+            <com.linka.lockapp.aos.module.widget.LinkaTouchableLinearLayout
+                android:id="@+id/sidebar_managedevices"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_margin="@dimen/activity_horizontal_margin"
+                    android:padding="@dimen/activity_horizontal_margin_sm"
+                    android:src="@drawable/sidebar_icon_managedevices" />
+
+                <com.linka.lockapp.aos.module.widget.LinkaTextView
+                    android:id="@+id/sidebar_text_managedevices"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="left|center"
+                    android:text="@string/managedevices"
+                    android:textColor="@color/linka_blue"
+                    android:textSize="@dimen/item_text_big_sp" />
+            </com.linka.lockapp.aos.module.widget.LinkaTouchableLinearLayout>
+            <!--
+
+                        <com.linka.lockapp.aos.module.widget.LinkaTouchableLinearLayout android:layout_marginLeft="50dp" android:orientation="horizontal" android:id="@+id/item_1" android:layout_width="match_parent" android:layout_height="wrap_content">
+                            <ImageView android:padding="@dimen/activity_horizontal_margin_sm" android:layout_width="48dp" android:layout_height="48dp" android:src="@drawable/sidebar_icon_managedevices" android:id="@+id/item_1_delete"/>
+                            <com.linka.lockapp.aos.module.widget.LinkaTextView android:text="" android:textColor="@color/menu_gray_text" android:textSize="@dimen/item_text_big_sp" android:id="@+id/item_1_text"
+                                android:singleLine="true" android:layout_gravity="center" android:gravity="left|center" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_marginRight="10dp" />
+                        </com.linka.lockapp.aos.module.widget.LinkaTouchableLinearLayout>
+
+                        <com.linka.lockapp.aos.module.widget.LinkaTouchableLinearLayout android:layout_marginLeft="50dp" android:orientation="horizontal" android:id="@+id/item_2" android:layout_width="match_parent" android:layout_height="wrap_content">
+                            <ImageView android:padding="@dimen/activity_horizontal_margin_sm" android:layout_width="48dp" android:layout_height="48dp" android:src="@drawable/sidebar_icon_managedevices" android:id="@+id/item_2_delete"/>
+                            <com.linka.lockapp.aos.module.widget.LinkaTextView android:text="" android:textColor="@color/menu_gray_text" android:textSize="@dimen/item_text_big_sp" android:id="@+id/item_2_text"
+                                android:singleLine="true" android:layout_gravity="center" android:gravity="left|center" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_marginRight="10dp" />
+                        </com.linka.lockapp.aos.module.widget.LinkaTouchableLinearLayout>
+
+                        <com.linka.lockapp.aos.module.widget.LinkaTouchableLinearLayout android:layout_marginLeft="50dp" android:orientation="horizontal" android:id="@+id/item_3" android:layout_width="match_parent" android:layout_height="wrap_content">
+                            <ImageView android:padding="@dimen/activity_horizontal_margin_sm" android:layout_width="48dp" android:layout_height="48dp" android:src="@drawable/sidebar_icon_managedevices" android:id="@+id/item_3_delete"/>
+                            <com.linka.lockapp.aos.module.widget.LinkaTextView android:text="" android:textColor="@color/menu_gray_text" android:textSize="@dimen/item_text_big_sp" android:id="@+id/item_3_text"
+                                android:singleLine="true" android:layout_gravity="center" android:gravity="left|center" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_marginRight="10dp" />
+                        </com.linka.lockapp.aos.module.widget.LinkaTouchableLinearLayout>
+
+                        <com.linka.lockapp.aos.module.widget.LinkaTouchableLinearLayout android:layout_marginLeft="50dp" android:orientation="horizontal" android:id="@+id/item_4" android:layout_width="match_parent" android:layout_height="wrap_content">
+                            <ImageView android:padding="@dimen/activity_horizontal_margin_sm" android:layout_width="48dp" android:layout_height="48dp" android:src="@drawable/sidebar_icon_managedevices" android:id="@+id/item_4_delete"/>
+                            <com.linka.lockapp.aos.module.widget.LinkaTextView android:text="" android:textColor="@color/menu_gray_text" android:textSize="@dimen/item_text_big_sp" android:id="@+id/item_4_text"
+                                android:singleLine="true" android:layout_gravity="center" android:gravity="left|center" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_marginRight="10dp" />
+                        </com.linka.lockapp.aos.module.widget.LinkaTouchableLinearLayout>-->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                </android.support.v7.widget.RecyclerView>
+            </LinearLayout>
+
+            <com.linka.lockapp.aos.module.widget.LinkaTouchableLinearLayout
+                android:id="@+id/item_add"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:padding="@dimen/activity_horizontal_margin_sm"
+                    android:src="@drawable/icon_add" />
+
+                <com.linka.lockapp.aos.module.widget.LinkaTextView
+                    android:id="@+id/item_text_add"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:gravity="left|center"
+                    android:text="@string/new_linka_cap"
+                    android:textColor="@color/menu_gray_text"
+                    android:textSize="@dimen/item_text_big_sp" />
+            </com.linka.lockapp.aos.module.widget.LinkaTouchableLinearLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="80dp"
+                android:layout_marginRight="20dp"
+                android:background="@color/menu_divider"></View>
+
+            <com.linka.lockapp.aos.module.widget.LinkaTouchableLinearLayout
+                android:id="@+id/sidebar_notifications"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_margin="@dimen/activity_horizontal_margin"
+                    android:padding="@dimen/activity_horizontal_margin_sm"
+                    android:src="@drawable/sidebar_icon_notifications" />
+
+                <com.linka.lockapp.aos.module.widget.LinkaTextView
+                    android:id="@+id/sidebar_text_notifications"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="left|center"
+                    android:text="@string/notifications"
+                    android:textColor="@color/linka_blue"
+                    android:textSize="@dimen/item_text_big_sp" />
+            </com.linka.lockapp.aos.module.widget.LinkaTouchableLinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="80dp"
+                android:layout_marginRight="20dp"
+                android:background="@color/menu_divider"></View>
+
+
+            <com.linka.lockapp.aos.module.widget.LinkaTouchableLinearLayout
+                android:id="@+id/sidebar_icon_faq"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:padding="@dimen/activity_horizontal_margin"
+                    android:src="@drawable/sidebar_icon_faq" />
+
+                <com.linka.lockapp.aos.module.widget.LinkaTextView
+                    android:id="@+id/sidebar_text_faq"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="left|center"
+                    android:text="@string/faqs"
+                    android:textColor="@color/menu_gray_text"
+                    android:textSize="@dimen/item_text_sp" />
+            </com.linka.lockapp.aos.module.widget.LinkaTouchableLinearLayout>
+
+            <com.linka.lockapp.aos.module.widget.LinkaTouchableLinearLayout
+                android:id="@+id/sidebar_icon_chat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:padding="@dimen/activity_horizontal_margin"
+                    android:src="@drawable/chat" />
+
+                <com.linka.lockapp.aos.module.widget.LinkaTextView
+                    android:id="@+id/sidebar_text_chat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="left|center"
+                    android:text="@string/chat_support"
+                    android:textColor="@color/menu_gray_text"
+                    android:textSize="@dimen/item_text_sp" />
+            </com.linka.lockapp.aos.module.widget.LinkaTouchableLinearLayout>
+
+            <com.linka.lockapp.aos.module.widget.LinkaTouchableLinearLayout
+                android:id="@+id/sidebar_icon_reportbug"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:padding="@dimen/activity_horizontal_margin"
+                    android:src="@drawable/sidebar_icon_reportbug" />
+
+                <com.linka.lockapp.aos.module.widget.LinkaTextView
+                    android:id="@+id/sidebar_text_reportbug"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="left|center"
+                    android:text="@string/report_a_bug"
+                    android:textColor="@color/menu_gray_text"
+                    android:textSize="@dimen/item_text_sp" />
+            </com.linka.lockapp.aos.module.widget.LinkaTouchableLinearLayout>
+
+            <com.linka.lockapp.aos.module.widget.LinkaTouchableLinearLayout
+                android:id="@+id/sidebar_icon_tc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:padding="@dimen/activity_horizontal_margin"
+                    android:src="@drawable/sidebar_icon_tc" />
+
+                <com.linka.lockapp.aos.module.widget.LinkaTextView
+                    android:id="@+id/sidebar_text_tc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="left|center"
+                    android:text="@string/terms_and_conditions"
+                    android:textColor="@color/menu_gray_text"
+                    android:textSize="@dimen/item_text_sp" />
+            </com.linka.lockapp.aos.module.widget.LinkaTouchableLinearLayout>
+
+            <com.linka.lockapp.aos.module.widget.LinkaTouchableLinearLayout
+                android:id="@+id/sidebar_icon_privacy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:padding="@dimen/activity_horizontal_margin"
+                    android:src="@drawable/sidebar_icon_privacy" />
+
+                <com.linka.lockapp.aos.module.widget.LinkaTextView
+                    android:id="@+id/sidebar_text_privacy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="left|center"
+                    android:text="@string/privacy_policy"
+                    android:textColor="@color/menu_gray_text"
+                    android:textSize="@dimen/item_text_sp" />
+            </com.linka.lockapp.aos.module.widget.LinkaTouchableLinearLayout>
+
+
+            <com.linka.lockapp.aos.module.widget.LinkaTouchableLinearLayout
+                android:id="@+id/sidebar_icon_select_language"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:padding="@dimen/activity_horizontal_margin"
+                    android:src="@drawable/language" />
+
+                <com.linka.lockapp.aos.module.widget.LinkaTextView
+                    android:id="@+id/sidebar_text_select_language"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="left|center"
+                    android:text="@string/select_language"
+                    android:textColor="@color/menu_gray_text"
+                    android:textSize="@dimen/item_text_sp" />
+            </com.linka.lockapp.aos.module.widget.LinkaTouchableLinearLayout>
+
+
+            <com.linka.lockapp.aos.module.widget.LinkaTouchableLinearLayout
+                android:id="@+id/sidebar_icon_user_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:padding="@dimen/activity_horizontal_margin"
+                    android:src="@drawable/person" />
+
+                <com.linka.lockapp.aos.module.widget.LinkaTextView
+                    android:id="@+id/sidebar_text_user_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="left|center"
+                    android:textColor="@color/menu_gray_text"
+                    android:textSize="@dimen/item_text_sp" />
+            </com.linka.lockapp.aos.module.widget.LinkaTouchableLinearLayout>
+
+
+            <com.linka.lockapp.aos.module.widget.LinkaTouchableLinearLayout
+                android:id="@+id/sidebar_icon_logout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:padding="@dimen/activity_horizontal_margin"
+                    android:src="@drawable/logout" />
+
+                <com.linka.lockapp.aos.module.widget.LinkaTextView
+                    android:id="@+id/sidebar_text_logout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="left|center"
+                    android:text="@string/logout"
+                    android:textColor="@color/menu_gray_text"
+                    android:textSize="@dimen/item_text_sp" />
+            </com.linka.lockapp.aos.module.widget.LinkaTouchableLinearLayout>
+
+            <com.linka.lockapp.aos.module.widget.LinkaTouchableLinearLayout
+                android:id="@+id/sidebar_icon_check_app_updates"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:padding="@dimen/activity_horizontal_margin"
+                    android:src="@null" />
+
+                <com.linka.lockapp.aos.module.widget.LinkaTextView
+                    android:id="@+id/sidebar_text_check_app_updates"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="left|center"
+                    android:text="@string/check_app_updates"
+                    android:textColor="@color/menu_gray_text"
+                    android:textSize="@dimen/item_text_sp" />
+            </com.linka.lockapp.aos.module.widget.LinkaTouchableLinearLayout>
+
+
+            <com.linka.lockapp.aos.module.widget.LinkaTouchableLinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:padding="@dimen/activity_horizontal_margin"
+                    android:src="@null" />
+
+                <com.linka.lockapp.aos.module.widget.LinkaTextView
+                    android:id="@+id/sidebar_app_version"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="left|center"
+                    android:text="@string/app_version"
+                    android:textColor="@color/menu_gray_text"
+                    android:textSize="@dimen/item_text_sp" />
+            </com.linka.lockapp.aos.module.widget.LinkaTouchableLinearLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

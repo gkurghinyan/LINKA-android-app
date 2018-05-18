@@ -1,0 +1,1 @@
+ALTER TABLE Linkas ADD COLUMN settings_stall_override INTEGER;

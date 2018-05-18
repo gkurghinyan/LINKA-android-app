@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/linka_light_bg"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/blank_profile_block"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="280dp"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin_big"
+                android:layout_marginRight="@dimen/activity_horizontal_margin_big"
+                android:layout_marginTop="@dimen/activity_horizontal_margin_big"
+                android:src="@drawable/linka_empty" />
+        </LinearLayout>
+
+        <com.linka.lockapp.aos.module.widget.LinkaButton
+            android:id="@+id/lock_connect_new_lock"
+            style="@style/linka_blue_button_nomargin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/activity_horizontal_margin_big"
+            android:paddingRight="@dimen/activity_horizontal_margin_big"
+            android:text="@string/connect_to_a_new_linka"
+            android:layout_marginBottom="@dimen/activity_vertical_margin_big"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/display_profile_block"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_margin="@dimen/activity_horizontal_margin"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <com.linka.lockapp.aos.module.widget.LinkaTextView
+                    android:id="@+id/lock_connection_title"
+                    style="@style/linka_red_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/no_connection"
+                    android:textAllCaps="true"
+                    android:textSize="@dimen/item_text_sp"/>
+
+                <ImageView
+                    android:id="@+id/lock_connection_title_icon"
+                    android:layout_width="48dp"
+                    android:layout_height="32dp"
+                    android:layout_margin="4dp"
+                    android:src="@drawable/icon_wireless_disconnected"/>
+            </LinearLayout>
+
+            <!--<com.linka.lockapp.aos.module.widget.LinkaButton
+                android:id="@+id/panic_button"
+                style="@style/linka_red_button_nomargin"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:text="@string/panic"
+                android:layout_centerVertical="true"
+                android:layout_alignEnd="@+id/linearLayout" />-->
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <com.linka.lockapp.aos.module.widget.LockWidget
+                android:id="@+id/lock_widget"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin_big"
+                android:layout_marginRight="@dimen/activity_horizontal_margin_big"
+                android:layout_weight="1"
+                />
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp">
+
+                <com.linka.lockapp.aos.module.widget.LinkaTextView
+                    android:id="@+id/notice"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:gravity="center|top"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:text="@string/lock_instructions"
+                    android:visibility="gone"/>
+
+
+                <com.linka.lockapp.aos.module.widget.LinkaButton
+                    android:id="@+id/lock_reconnect_linka"
+                    style="@style/linka_blue_button_nomargin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="@dimen/activity_horizontal_margin_big"
+                    android:paddingLeft="@dimen/activity_horizontal_margin_big"
+                    android:paddingRight="@dimen/activity_horizontal_margin_big"
+                    android:text="@string/reconnect_to_linka"
+                    android:visibility="gone"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+</LinearLayout>

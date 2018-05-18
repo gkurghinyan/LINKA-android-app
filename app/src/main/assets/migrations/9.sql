@@ -1,0 +1,11 @@
+ALTER TABLE Linkas ADD COLUMN settings_alarm_delay INTEGER;
+ALTER TABLE Linkas ADD COLUMN settings_alarm_time INTEGER;
+ALTER TABLE Linkas ADD COLUMN settings_bump_threshold INTEGER;
+ALTER TABLE Linkas ADD COLUMN settings_pulse_tap INTEGER;
+ALTER TABLE Linkas ADD COLUMN settings_jostle_ms INTEGER;
+ALTER TABLE Linkas ADD COLUMN settings_roll_alrm_deg INTEGER;
+ALTER TABLE Linkas ADD COLUMN settings_pitch_alrm_deg INTEGER;
+ALTER TABLE Linkas ADD COLUMN settings_accel_datarate INTEGER;
+ALTER TABLE Linkas ADD COLUMN settings_unlocked_sleep INTEGER;
+ALTER TABLE Linkas ADD COLUMN settings_locked_sleep INTEGER;
+ALTER TABLE LinkaNotificationSettings ADD COLUMN settings_sleep_notification BOOLEAN;
