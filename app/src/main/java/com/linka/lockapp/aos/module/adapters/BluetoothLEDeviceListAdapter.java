@@ -51,7 +51,7 @@ public class BluetoothLEDeviceListAdapter extends RecyclerView.Adapter<Bluetooth
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(
-                parent.getContext()).inflate(R.layout.list_item_ble_device, parent, false);
+                parent.getContext()).inflate(R.layout.search_result_linka_card, parent, false);
         ViewHolder viewHolder = new ViewHolder(v);
         return viewHolder;
     }
@@ -66,7 +66,8 @@ public class BluetoothLEDeviceListAdapter extends RecyclerView.Adapter<Bluetooth
         final String deviceName = device.getName();
         final String deviceMAC  = device.getMACAddress();
         if (deviceName != null && deviceName.length() > 0) {
-            holder.deviceName.setText(deviceName + "\n" + deviceMAC);
+            holder.deviceName.setText(deviceName);
+            holder.deviceAddress.setText(deviceMAC);
         }
         else
         {
@@ -103,8 +104,10 @@ public class BluetoothLEDeviceListAdapter extends RecyclerView.Adapter<Bluetooth
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.device_name)
+        @BindView(R.id.linka_name)
         TextView deviceName;
+        @BindView(R.id.linka_address)
+        TextView deviceAddress;
         @BindView(R.id.layout)
         View layout;
 

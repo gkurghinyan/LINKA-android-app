@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2013 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2013 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,25 +13,29 @@
      limitations under the License.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:padding="@dimen/activity_horizontal_margin"
-    android:background="@drawable/button_transparent_blue"
+    android:id="@+id/layout"
     android:layout_width="match_parent"
-    android:layout_marginBottom="@dimen/activity_horizontal_margin"
     android:layout_height="wrap_content"
-    android:id="@+id/layout">
-    <TextView android:id="@+id/device_name"
+    android:layout_marginBottom="@dimen/activity_horizontal_margin"
+    android:background="@drawable/button_transparent_blue"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="@dimen/activity_horizontal_margin">
+
+    <TextView
+        android:id="@+id/device_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="24dp"/>
+        android:textSize="24dp" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#DD167EC2"/>
+        android:background="#DD167EC2" />
+
     <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
         android:layout_marginBottom="@dimen/activity_horizontal_margin_sm"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#DD3FB4F2"/>
+        android:background="#DD3FB4F2" />
 </LinearLayout>

@@ -95,6 +95,11 @@ public class WalkthroughFragment extends CoreFragment {
 
     }
 
+    public void updateLayouts(int layout){
+        this.layouts[1] = layout;
+        myViewPagerAdapter.notifyDataSetChanged();
+    }
+
     private int getItem(int i) {
         return viewPager.getCurrentItem() + i;
     }
@@ -203,6 +208,11 @@ public class WalkthroughFragment extends CoreFragment {
 
             return view;
         }
+
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
+        }
+
 
         @Override
         public int getCount() {

@@ -5,18 +5,18 @@
               android:layout_height="match_parent"
               android:background="@drawable/blue_gradient">
 
-    <TextView
-        android:id="@+id/walkthrough_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="How to use your phoneless access code"
-        android:textColor="#fff"
-        android:textSize="20sp"
-        android:layout_marginRight="50dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="70dp"
-        android:textAlignment="center"
-        android:textAllCaps="true"/>
+    <!--<TextView-->
+        <!--android:id="@+id/walkthrough_title"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="How to use your phoneless access code"-->
+        <!--android:textColor="#fff"-->
+        <!--android:textSize="20sp"-->
+        <!--android:layout_marginRight="50dp"-->
+        <!--android:layout_marginLeft="50dp"-->
+        <!--android:layout_marginTop="70dp"-->
+        <!--android:textAlignment="center"-->
+        <!--android:textAllCaps="true"/>-->
 
     <android.support.v4.view.ViewPager
         android:id="@+id/walkthrough_view_pager"

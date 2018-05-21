@@ -4,6 +4,6 @@
     android:gravity="center"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:background="@drawable/bg_blue_new">
+    android:background="@drawable/blue_gradient">
 
 </RelativeLayout>

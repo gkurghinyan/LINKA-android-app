@@ -18,6 +18,7 @@ import com.linka.lockapp.aos.module.api.LinkaAPIServiceResponse.GenMasterKeyResp
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceResponse.GetEmailResponse;
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceResponse.LocksResponse;
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceResponse.LoginResponse;
+import com.linka.lockapp.aos.module.eventbus.WrongCredentialsBusEventMessage;
 import com.linka.lockapp.aos.module.helpers.Helpers;
 import com.linka.lockapp.aos.module.helpers.LogHelper;
 import com.linka.lockapp.aos.module.model.Linka;
@@ -25,7 +26,6 @@ import com.linka.lockapp.aos.module.model.LinkaAccessKey;
 import com.linka.lockapp.aos.module.model.LinkaActivity;
 import com.linka.lockapp.aos.module.model.LinkaAddress;
 import com.linka.lockapp.aos.module.model.LinkaName;
-import com.linka.lockapp.aos.module.pages.prelogin.SignInPage;
 import com.pixplicity.easyprefs.library.Prefs;
 
 import org.greenrobot.eventbus.EventBus;
@@ -123,8 +123,8 @@ public class LinkaAPIServiceImpl {
             }
 
             if (responseData.message != null) {
-                if(responseData.message.equals("Wrong username or password")){
-                    EventBus.getDefault().post(new SignInPage());
+                if(responseData.message.equals("Wrong username or password.")){
+                    EventBus.getDefault().post(new WrongCredentialsBusEventMessage(WrongCredentialsBusEventMessage.SHOW));
                 }else {
                     new AlertDialog.Builder(context)
                             .setTitle(R.string.error)

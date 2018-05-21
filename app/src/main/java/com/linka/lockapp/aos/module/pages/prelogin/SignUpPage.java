@@ -16,9 +16,13 @@ import com.linka.lockapp.aos.module.api.LinkaAPIServiceImpl;
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceJSON;
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceResponse;
 import com.linka.lockapp.aos.module.core.CoreFragment;
+import com.linka.lockapp.aos.module.eventbus.WrongCredentialsBusEventMessage;
 import com.linka.lockapp.aos.module.gcm.MyFirebaseInstanceIdService;
 import com.linka.lockapp.aos.module.helpers.FontHelpers;
 import com.linka.lockapp.aos.module.helpers.Helpers;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -105,6 +109,17 @@ public class SignUpPage extends CoreFragment {
 
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
 
     @OnClick(R.id.create_account)
     void onCreateAccount() {
@@ -156,6 +171,16 @@ public class SignUpPage extends CoreFragment {
     }
 
 
+    @Subscribe
+    public void onWrongCredentialsDialog(WrongCredentialsBusEventMessage eventMessage){
+        if(eventMessage.getAction() == WrongCredentialsBusEventMessage.SHOW) {
+            new AlertDialog.Builder(getActivity())
+                    .setTitle(R.string.error)
+                    .setMessage("Wrong username or password.")
+                    .setNegativeButton(R.string.ok, null)
+                    .show();
+        }
+    }
 
 
     void login() {

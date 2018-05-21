@@ -125,10 +125,10 @@ public class SignInPage extends CoreFragment {
             public void onResponse(Call<LinkaAPIServiceResponse.LoginResponse> call, Response<LinkaAPIServiceResponse.LoginResponse> response) {
                 hideLoading();
                 if (LinkaAPIServiceImpl.check(response, false, getAppMainActivity())) {
-                    Blurry.delete(frameLayout);
                     getAppMainActivity().didSignIn();
                 }
 
+                Blurry.delete(frameLayout);
                 //Now that we've signed in, we should send the push token immediately
                 MyFirebaseInstanceIdService.getFcmToken();
             }
@@ -144,6 +144,7 @@ public class SignInPage extends CoreFragment {
     @Subscribe
     public void onWrongCredentialsDialog(WrongCredentialsBusEventMessage eventMessage){
         if(eventMessage.getAction() == WrongCredentialsBusEventMessage.SHOW) {
+            Blurry.with(getActivity()).radius(25).sampling(2).onto(frameLayout);
             WrongCredentialsDialogFragment.newInstance().show(getActivity().getFragmentManager(), null);
         }else if(eventMessage.getAction() == WrongCredentialsBusEventMessage.CLOSE){
             Blurry.delete(frameLayout);

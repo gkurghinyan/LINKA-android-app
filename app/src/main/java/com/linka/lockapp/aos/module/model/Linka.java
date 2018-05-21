@@ -210,6 +210,10 @@ public class Linka extends Model implements Serializable {
         return lock_address;
     }
 
+    public void setLock_mac_address(String lock_mac_address){
+        this.lock_mac_address = lock_mac_address;
+    }
+
 
     public String getName() {
         String name = lock_name;
