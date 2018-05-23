@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.linka.lockapp.aos.R;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -100,6 +101,7 @@ public class BadgeIconView extends RelativeLayout {
         super.onDetachedFromWindow();
     }
 
+    @Subscribe
     public void onEvent(Object object)
     {
         if (object instanceof String)

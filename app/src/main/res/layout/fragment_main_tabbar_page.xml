@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <com.linka.lockapp.aos.module.widget.ToggleSwipeableViewPager
         android:id="@+id/viewPager"
@@ -12,30 +13,78 @@
     </com.linka.lockapp.aos.module.widget.ToggleSwipeableViewPager>
 
     <LinearLayout
-        android:background="@color/linka_blue_tabbar"
-        android:orientation="horizontal"
         android:id="@+id/tab_bar"
-        android:layout_marginBottom="0dp"
         android:layout_width="match_parent"
-        android:layout_height="59dp">
+        android:layout_height="59dp"
+        android:layout_marginBottom="0dp"
+        android:background="@color/linka_blue_tabbar"
+        android:orientation="horizontal">
 
-        <LinearLayout android:background="@drawable/tabbar_icon_state" android:id="@+id/t1" android:gravity="center" android:orientation="vertical" android:layout_weight="1" android:layout_width="0dp" android:layout_height="match_parent">
-            <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/bottom_icon_activity" />
+        <LinearLayout
+            android:id="@+id/t1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/tabbar_icon_state"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/t1_img"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/tab_user" />
         </LinearLayout>
 
 
-        <LinearLayout android:background="@drawable/tabbar_icon_state" android:id="@+id/t2" android:gravity="center" android:orientation="vertical" android:layout_weight="1" android:layout_width="0dp" android:layout_height="match_parent">
-            <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/bottom_icon_location" />
+        <LinearLayout
+            android:id="@+id/t2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/tabbar_icon_state"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/t2_img"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/tab_linka" />
         </LinearLayout>
 
 
-        <LinearLayout android:background="@drawable/tabbar_icon_state" android:id="@+id/t3" android:gravity="center" android:orientation="vertical" android:layout_weight="1" android:layout_width="0dp" android:layout_height="match_parent">
-            <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/bottom_icon_profile" />
+        <LinearLayout
+            android:id="@+id/t3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/tabbar_icon_state"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/t3_img"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/tab_notif" />
         </LinearLayout>
 
 
-        <LinearLayout android:background="@drawable/tabbar_icon_state" android:id="@+id/t4" android:gravity="center" android:orientation="vertical" android:layout_weight="1" android:layout_width="0dp" android:layout_height="match_parent">
-            <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/bottom_icon_settings" />
+        <LinearLayout
+            android:id="@+id/t4"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/tabbar_icon_state"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/t4_img"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/tab_setting" />
         </LinearLayout>
 
     </LinearLayout>

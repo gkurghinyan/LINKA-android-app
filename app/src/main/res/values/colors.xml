@@ -67,5 +67,6 @@
 
     <color name="bright_blue_color">#2FA8E9</color>
     <color name="red">#E86362</color>
+    <color name="dark_white">#FAFAFA</color>
 
 </resources>

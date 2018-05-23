@@ -64,4 +64,6 @@
     <dimen name="margin_ultra">130dp</dimen>
     <dimen name="margin_xu">180dp</dimen>
 
+    <dimen name="user_avatar_size">90dp</dimen>
+
 </resources>
