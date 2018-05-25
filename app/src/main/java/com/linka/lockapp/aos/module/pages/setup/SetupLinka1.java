@@ -53,7 +53,6 @@ public class SetupLinka1 extends CoreFragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_setup_linka_intro_page, container, false);
         unbinder = ButterKnife.bind(this, rootView);
-
         return rootView;
     }
 

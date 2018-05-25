@@ -31,7 +31,7 @@ public class SetPac2 extends WalkthroughFragment {
 
         setLayoutView(new LayoutView() {
             @Override
-            public void onViewCreated(View view) {
+            public void onViewCreated(View view,int position) {
                 setPacButton(view);
             }
             @Override

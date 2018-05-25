@@ -30,7 +30,7 @@ public class WalkthroughGetToKnow extends WalkthroughFragment {
 
         setLayoutView(new WalkthroughFragment.LayoutView() {
             @Override
-            public void onViewCreated(View view) {
+            public void onViewCreated(View view,int position) {
                 setTonesSwitch(view);
             }
             @Override

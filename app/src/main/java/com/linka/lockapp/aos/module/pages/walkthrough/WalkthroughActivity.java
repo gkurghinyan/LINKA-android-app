@@ -22,9 +22,10 @@ import com.linka.lockapp.aos.module.pages.pac.SetPac3;
 public class WalkthroughActivity extends CoreActivity {
 
     FrameLayout frameLayout;
+    private static int fragmentsCount = 0;
 
     @Override
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.walkthrough_activity);
@@ -36,7 +37,8 @@ public class WalkthroughActivity extends CoreActivity {
 
         changeStatusBarColor();
 
-        init();
+//        init();
+        startTutorial();
     }
 
 
@@ -53,13 +55,21 @@ public class WalkthroughActivity extends CoreActivity {
 
     @Override
     public void onBackPressed() {
+        if (fragmentsCount > 1) {
+            getSupportFragmentManager().popBackStack();
+            fragmentsCount --;
+        } else {
+           this.finish();
+        }
+    }
 
-        finish();
+    public void popFragment(){
+        getSupportFragmentManager().popBackStack();
+        fragmentsCount --;
     }
 
 
-    public void init(){
-
+    public void init() {
         Fragment fragment = new SetPac2();
 
         getSupportFragmentManager().beginTransaction()
@@ -69,7 +79,22 @@ public class WalkthroughActivity extends CoreActivity {
 
     }
 
-    public void setPacFragment(){
+    private void startTutorial() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.walkthrough_frame, new AutoUpdateFragment())
+                .commit();
+    }
+
+    public void nextTutorial(Fragment fragment){
+        getSupportFragmentManager().beginTransaction()
+                .addToBackStack(null)
+                .setCustomAnimations(R.anim.anim_fragment_in,R.anim.anim_fragment_out,R.anim.anim_fragment_pop_in,R.anim.anim_fragment_pop_out)
+                .replace(R.id.walkthrough_frame, fragment)
+                .commit();
+        fragmentsCount ++;
+    }
+
+    public void setPacFragment() {
         LogHelper.e("Set pac button clicked", "2");
 
         Fragment fragment = new SetPac3();

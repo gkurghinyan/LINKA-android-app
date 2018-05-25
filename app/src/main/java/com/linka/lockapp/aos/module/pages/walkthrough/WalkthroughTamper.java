@@ -6,8 +6,6 @@ import android.widget.Button;
 
 import com.linka.lockapp.aos.AppMainActivity;
 import com.linka.lockapp.aos.R;
-import com.linka.lockapp.aos.module.model.LinkaNotificationSettings;
-import com.linka.lockapp.aos.module.pages.pac.SetPac3;
 import com.rey.material.widget.Switch;
 
 /**
@@ -30,7 +28,7 @@ public class WalkthroughTamper extends WalkthroughFragment {
 
         setLayoutView(new WalkthroughFragment.LayoutView() {
             @Override
-            public void onViewCreated(View view) {
+            public void onViewCreated(View view,int position) {
                 setTonesSwitch(view);
             }
             @Override

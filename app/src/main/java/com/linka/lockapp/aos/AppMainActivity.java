@@ -689,9 +689,7 @@ public class AppMainActivity extends CoreActivity {
                 || fragment instanceof NotificationsPageFragment
                 || fragment instanceof LocationPageFragment
                 || fragment instanceof MyLinkasPageFragmentPage
-                || fragment instanceof WebPageFragment
-                || fragment instanceof SetupLinka1
-                || fragment instanceof SetupLinka2) {
+                || fragment instanceof WebPageFragment) {
             toolbar.setVisibility(View.VISIBLE);
             toolbarSpace.setVisibility(View.VISIBLE);
             toolbar.setBackgroundColor(getResources().getColor(R.color.linka_blue_tabbar));
@@ -705,6 +703,14 @@ public class AppMainActivity extends CoreActivity {
             title.setTextColor(getResources().getColor(R.color.linka_white));
             back.icon.setImageResource(R.drawable.icon_back_arrow);
             disableDrawer();
+        }else if (fragment instanceof SetupLinka1
+                || fragment instanceof SetupLinka2){
+            toolbar.setVisibility(View.GONE);
+            toolbarSpace.setVisibility(View.GONE);
+            toolbar.setBackgroundColor(getResources().getColor(R.color.linka_blue_tabbar_transparent));
+            title.setTextColor(getResources().getColor(R.color.linka_white));
+            back.icon.setImageResource(R.drawable.icon_back_arrow);
+            menu.setVisibility(View.GONE);
         }
 
 
@@ -754,9 +760,6 @@ public class AppMainActivity extends CoreActivity {
             AppBluetoothService.getInstance().enableFixedTimeScanning(true);
         }
     }
-
-
-
 
 
     /* MENU */
@@ -943,6 +946,7 @@ public class AppMainActivity extends CoreActivity {
 
     @OnClick(R.id.item_add)
     void onClick_item_add() {
+        toolbar.setVisibility(View.INVISIBLE);
         SetupLinka1 fragment = SetupLinka1.newInstance();
         pushFragment(fragment);
         drawerLayout.closeDrawers();

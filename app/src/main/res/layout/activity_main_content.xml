@@ -1,49 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <View
+        android:id="@+id/toolbar_space"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/toolbar"
         android:layout_alignLeft="@+id/toolbar"
         android:layout_alignRight="@+id/toolbar"
         android:layout_alignTop="@+id/toolbar"
-        android:layout_alignBottom="@+id/toolbar"
-        android:id="@+id/toolbar_space"
-        android:background="@null"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"></View>
+        android:background="@null"></View>
 
     <FrameLayout
-        android:layout_below="@+id/toolbar_space"
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar_space" />
 
     <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
-        android:background="@color/linka_blue"
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:contentInsetStart="0dp"
+        android:background="@color/linka_blue"
         android:contentInsetLeft="0dp"
         android:contentInsetRight="0dp"
+        android:contentInsetStart="0dp"
         app:contentInsetLeft="0dp"
-        app:contentInsetStart="0dp"
         app:contentInsetRight="0dp"
-        android:id="@+id/toolbar">
-        <include android:id="@+id/navbar" layout="@layout/component_generic_navbar" ></include>
+        app:contentInsetStart="0dp">
+
+        <include
+            android:id="@+id/navbar"
+            layout="@layout/component_generic_navbar"></include>
     </android.support.v7.widget.Toolbar>
 
     <TextView
-        android:visibility="gone"
-        android:text=""
         android:id="@+id/log"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:maxLines="24"
         android:singleLine="false"
+        android:text=""
         android:textSize="11sp"
-        android:layout_alignParentBottom="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:visibility="gone" />
 
 </RelativeLayout>

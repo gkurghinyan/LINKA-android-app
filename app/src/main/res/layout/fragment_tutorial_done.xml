@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/blue_gradient"
+    tools:context=".module.pages.walkthrough.TutorialDoneFragment">
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.3" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.17" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.83"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:src="@drawable/simple_linka"
+        app:layout_constraintBottom_toBottomOf="@id/guideline1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/guideline" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/great_connect"
+        android:textColor="@color/linka_white"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/margin_x"
+        android:textSize="@dimen/text_size_normal"
+        app:layout_constraintEnd_toEndOf="@id/guideline3"
+        app:layout_constraintStart_toStartOf="@id/guideline2"
+        app:layout_constraintTop_toTopOf="@id/guideline1" />
+
+    <TextView
+        android:id="@+id/take_app"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintStart_toStartOf="@id/guideline2"
+        app:layout_constraintEnd_toEndOf="@id/guideline3"
+        android:layout_marginTop="@dimen/margin_px"
+        android:background="@drawable/white_rounded_full_back"
+        android:paddingTop="@dimen/margin_xm"
+        android:paddingBottom="@dimen/margin_xm"
+        android:text="TAKE ME TO THE APP"
+        android:gravity="center"
+        android:textColor="@color/linka_blue"/>
+
+    <TextView
+        android:id="@+id/settings"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/take_app"
+        app:layout_constraintStart_toStartOf="@id/guideline2"
+        app:layout_constraintEnd_toEndOf="@id/guideline3"
+        android:layout_marginTop="@dimen/margin"
+        android:background="@drawable/white_rounded_empty_back"
+        android:paddingTop="@dimen/margin_xm"
+        android:paddingBottom="@dimen/margin_xm"
+        android:text="SETTINGS"
+        android:gravity="center"
+        android:textColor="@color/linka_white"/>
+
+    <TextView
+        android:id="@+id/mount_lock"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/settings"
+        app:layout_constraintStart_toStartOf="@id/guideline2"
+        app:layout_constraintEnd_toEndOf="@id/guideline3"
+        android:layout_marginTop="@dimen/margin"
+        android:background="@drawable/white_rounded_empty_back"
+        android:paddingTop="@dimen/margin_xm"
+        android:paddingBottom="@dimen/margin_xm"
+        android:text="MOUNT LOCK"
+        android:gravity="center"
+        android:textColor="@color/linka_white"/>
+
+</android.support.constraint.ConstraintLayout>

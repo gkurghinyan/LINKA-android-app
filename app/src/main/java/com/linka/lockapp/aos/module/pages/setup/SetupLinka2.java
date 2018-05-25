@@ -9,6 +9,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
@@ -22,12 +24,19 @@ import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.adapters.BluetoothLEDeviceListAdapter;
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceImpl;
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceResponse;
+import com.linka.lockapp.aos.module.eventbus.SuccessConnectBusEventMessage;
 import com.linka.lockapp.aos.module.helpers.BLEHelpers;
 import com.linka.lockapp.aos.module.helpers.LogHelper;
 import com.linka.lockapp.aos.module.i18n._;
 import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.model.LinkaAccessKey;
+import com.linka.lockapp.aos.module.pages.dialogs.SuccessConnectionDialogFragment;
+import com.linka.lockapp.aos.module.pages.dialogs.ThreeDotsDialogFragment;
+import com.linka.lockapp.aos.module.pages.walkthrough.WalkthroughActivity;
 import com.linka.lockapp.aos.module.pages.walkthrough.WalkthroughFragment;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +54,8 @@ public class SetupLinka2 extends WalkthroughFragment {
     private static final int NO_BLUETOOTH = 0;
     private static final int SEARCH_WITH_BLUETOOTH = 1;
     private static final int SCAN_RESULT = 2;
+    private static final int TURN_ON_LINKA = 3;
+    private static final int NO_INTERNET = 4;
 
     boolean hasReceivedScanCallback;
     ScanCallback scanCallback;
@@ -59,6 +70,7 @@ public class SetupLinka2 extends WalkthroughFragment {
     }
 
     ImageView lockImage;
+    private boolean isInternet = false;
 
     public SetupLinka2() {
     }
@@ -71,7 +83,7 @@ public class SetupLinka2 extends WalkthroughFragment {
 
             if (action != null && action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
                 final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
-                switch(state) {
+                switch (state) {
                     case BluetoothAdapter.STATE_OFF:
                         updateLayouts(R.layout.fragment_no_bluetooth_connectivity);
                         break;
@@ -84,10 +96,28 @@ public class SetupLinka2 extends WalkthroughFragment {
         }
     };
 
+    private final BroadcastReceiver internetReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(getInternetConnectivity()){
+                if(!isInternet){
+                    isInternet = true;
+                    updateLayouts(R.layout.fragment_searching_linka_with_bluetooth);
+                }else {
+                    if(isInternet){
+                        isInternet = false;
+                        currentFragment = NO_INTERNET;
+                        updateLayouts(R.layout.fragment_no_internet_connectivity);
+                    }
+                }
+            }
+        }
+    };
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
 
         int[] layouts = new int[]{
                 R.layout.fragment_setup_turn_bluetooth_on,
@@ -95,32 +125,89 @@ public class SetupLinka2 extends WalkthroughFragment {
                 R.layout.fragment_no_bluetooth_connectivity
         };
 
-        currentFragment = NO_BLUETOOTH;
+        isInternet = getInternetConnectivity();
+        currentFragment = TURN_ON_LINKA;
         setLayouts(layouts);
+        if(!isInternet){
+            updateLayouts(R.layout.fragment_no_internet_connectivity);
+        }
 
         setLayoutView(new LayoutView() {
             @Override
-            public void onViewCreated(View view) {
-
+            public void onViewCreated(View view, int position) {
                 setView(view);
             }
+
             @Override
-            public void onViewChanged(int position){
-                if(position == 1){
-                    bluetoothAdapter = BLEHelpers.checkBLESupportForAdapter(getContext());
-                    if (bluetoothAdapter != null) {
-                        if (!bluetoothAdapter.isEnabled()) {
-                            updateLayouts(R.layout.fragment_no_bluetooth_connectivity);
+            public void onViewChanged(int position) {
+                if (position == 3) {
+                    ///////////
+                    if (currentFragment == NO_BLUETOOTH) {
+
+                        updateLayouts(R.layout.fragment_searching_linka_with_bluetooth);
+                        currentFragment = SEARCH_WITH_BLUETOOTH;
+                    } else if (currentFragment == SEARCH_WITH_BLUETOOTH) {
+
+                        if (currentFragment != SCAN_RESULT) {
+                            updateLayouts(R.layout.fragment_setup_search_for_linkas_page);
+                            currentFragment = SCAN_RESULT;
+                            adapter = new BluetoothLEDeviceListAdapter(getContext());
+                            List<Linka> linkas = new ArrayList<>();
+                            Linka linka = new Linka();
+                            linka.saveName("John's Linka");
+                            linka.setLock_mac_address("AB:CB:37:DH");
+                            linkas.add(linka);
+                            linkas.add(linka);
+                            adapter.setList(linkas);
+                            adapter.setOnClickDeviceItemListener(new BluetoothLEDeviceListAdapter.OnClickDeviceItemListener() {
+                                @Override
+                                public void onClickDeviceItem(Linka item, int position) {
+                                    setBlur(true);
+                                    final ThreeDotsDialogFragment threeDotsDialogFragment = ThreeDotsDialogFragment.newInstance();
+                                    threeDotsDialogFragment.show(getFragmentManager(), null);
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            threeDotsDialogFragment.dismiss();
+                                            SuccessConnectionDialogFragment.newInstance().show(getFragmentManager(), null);
+                                        }
+                                    }, 2000);
+                                }
+                            });
+
+                            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+                            recyclerView.setAdapter(adapter);
+                        }
+                    }
+                    ///////////
+                }
+                if (position == 1) {
+                    registerReceivers(true);
+//                    if (!getInternetConnectivity()) {
+//                        currentFragment = NO_INTERNET;
+//                        updateLayouts(R.layout.fragment_no_internet_connectivity);
+//                    } else {
+                        currentFragment = NO_BLUETOOTH;
+                        bluetoothAdapter = BLEHelpers.checkBLESupportForAdapter(getContext());
+                        if (bluetoothAdapter != null) {
+                            if (!bluetoothAdapter.isEnabled()) {
+                                updateLayouts(R.layout.fragment_no_bluetooth_connectivity);
 //                            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 //                            getAppMainActivity().startActivityForResult(enableBtIntent, BLEHelpers.REQUEST_ENABLE_BT);
 
-                            //Close this fragment to avoid crash if bluetooth denied
+                                //Close this fragment to avoid crash if bluetooth denied
+                            } else {
+                                currentFragment = SEARCH_WITH_BLUETOOTH;
+                                updateLayouts(R.layout.fragment_searching_linka_with_bluetooth);
+                                scanLeDevice();
+                            }
                         }else {
-                            currentFragment = SEARCH_WITH_BLUETOOTH;
-                            updateLayouts(R.layout.fragment_searching_linka_with_bluetooth);
-                            scanLeDevice();
+                            updateLayouts(R.layout.fragment_no_bluetooth_connectivity);
                         }
-                    }
+//                    }
+                } else if (position == 0) {
+                    registerReceivers(false);
+                    currentFragment = TURN_ON_LINKA;
                 }
             }
         });
@@ -132,28 +219,33 @@ public class SetupLinka2 extends WalkthroughFragment {
 
     }
 
-    void setView(View view){
+    private boolean getInternetConnectivity() {
+        boolean connected;
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        connected = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED;
+        return connected;
+    }
 
+    void setView(View view) {
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
 
-        if(recyclerView != null){
+        if (recyclerView != null) {
             this.recyclerView = recyclerView;
         }
 
-        if(recyclerView != null) {
-            init();
+        if (recyclerView != null) {
+//            init();
         }
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (adapter != null)
-        {
+        if (adapter != null) {
             adapter.context = null;
         }
-        if (recyclerView != null)
-        {
+        if (recyclerView != null) {
             recyclerView.setAdapter(null);
         }
     }
@@ -166,8 +258,10 @@ public class SetupLinka2 extends WalkthroughFragment {
         //scanHandler.postDelayed(scanRunnable, 1000); //Why wait 1 second? Disabled.
 
 //        scanHandler.post(scanRunnable);
-        IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
-        getActivity().registerReceiver(blueToothReceiver, filter);
+        if(currentFragment != TURN_ON_LINKA) {
+            registerReceivers(true);
+        }
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -178,7 +272,14 @@ public class SetupLinka2 extends WalkthroughFragment {
 
         //Set to true to stop all callbacks
         hasReceivedScanCallback = true;
-        getActivity().unregisterReceiver(blueToothReceiver);
+        registerReceivers(false);
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    void dialogClosed(SuccessConnectBusEventMessage connectBusEventMessage) {
+        setBlur(false);
+        startActivity(new Intent(getActivity(), WalkthroughActivity.class));
     }
 
 
@@ -197,18 +298,16 @@ public class SetupLinka2 extends WalkthroughFragment {
     BluetoothLEDeviceListAdapter adapter;
 
 
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if(outState != null && recyclerView != null && recyclerView.getLayoutManager() != null) {
+        if (outState != null && recyclerView != null && recyclerView.getLayoutManager() != null) {
             outState.putParcelable("ss", recyclerView.getLayoutManager().onSaveInstanceState());
         }
     }
 
 
     void init() {
-
 
 
         //Need to set to null, or else sometimes the callback won't work
@@ -258,6 +357,17 @@ public class SetupLinka2 extends WalkthroughFragment {
         refresh();
     }
 
+    private void registerReceivers(boolean register){
+        if(register){
+            IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+            getActivity().registerReceiver(blueToothReceiver, filter);
+//            IntentFilter filter1 = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
+//            getActivity().registerReceiver(internetReceiver,filter1);
+        }else {
+            getActivity().unregisterReceiver(blueToothReceiver);
+//            getActivity().unregisterReceiver(internetReceiver);
+        }
+    }
 
     void refresh() {
         if (!isAdded()) return;
@@ -293,7 +403,7 @@ public class SetupLinka2 extends WalkthroughFragment {
 //        refresh();
     }
 
-    void stopLeScan(){
+    void stopLeScan() {
         LogHelper.e("SCAN", "stopping Scan");
         if (handler != null) {
             handler.post(runnableStopLeDevice);
@@ -311,7 +421,7 @@ public class SetupLinka2 extends WalkthroughFragment {
                 public void run() {
                     if (!isAdded()) return;
 
-                    if(device != null) {
+                    if (device != null) {
                         LogHelper.e("SCAN", "Got Device " + device.getName() + device.getAddress());
                     }
 
@@ -320,9 +430,8 @@ public class SetupLinka2 extends WalkthroughFragment {
                         return;
                     }
 
-                    if (BLEHelpers.upsertBluetoothLEDeviceList(devices, linkaList, device, rssi, scanRecord))
-                    {
-                        if(currentFragment != SCAN_RESULT) {
+                    if (BLEHelpers.upsertBluetoothLEDeviceList(devices, linkaList, device, rssi, scanRecord)) {
+                        if (currentFragment != SCAN_RESULT) {
                             updateLayouts(R.layout.fragment_setup_search_for_linkas_page);
                             currentFragment = SCAN_RESULT;
                         }
@@ -357,8 +466,7 @@ public class SetupLinka2 extends WalkthroughFragment {
                     return;
                 }
 
-                if (accessKey == null)
-                {
+                if (accessKey == null) {
                     return;
                 }
 
@@ -440,7 +548,6 @@ public class SetupLinka2 extends WalkthroughFragment {
             }
         });
     }
-
 
 
     void tryPairup(final BluetoothLEDevice item) {

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/blue_gradient">
 
 
     <android.support.constraint.Guideline
@@ -22,7 +24,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:src="@drawable/bluetooth_in_phone"
+        android:src="@drawable/no_internet"
         app:layout_constraintBottom_toBottomOf="@id/guideline1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,7 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin"
-        android:text="SWITCH ON BLUETOOTH"
+        android:text="NO NETWORK DETECTED"
         android:textColor="@color/linka_white"
         android:textSize="@dimen/text_size_xm"
         app:layout_constraintBottom_toBottomOf="@id/guideline"
@@ -41,14 +43,16 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin"
         android:gravity="center"
-        android:text="@string/this_allows_your_smart_device"
+        android:text="A NETWORK IS REQUIRED TO PAIR WITH YOUR LINKA"
         android:textColor="@color/linka_white"
         android:textSize="@dimen/text_size_xm"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="@dimen/margin_dx"
+        android:layout_marginEnd="@dimen/margin_dx"
         app:layout_constraintTop_toTopOf="@id/guideline1" />
 </android.support.constraint.ConstraintLayout>

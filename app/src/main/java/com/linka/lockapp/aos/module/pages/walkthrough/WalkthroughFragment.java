@@ -7,22 +7,24 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.RelativeLayout;
 
 import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.core.CoreFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import jp.wasabeef.blurry.Blurry;
 
 /**
  * Created by kyle on 3/8/18.
  */
 
 public class WalkthroughFragment extends CoreFragment {
-
 
     private WalkthroughFragment.MyViewPagerAdapter myViewPagerAdapter;
     private int[] layouts;
@@ -51,12 +53,18 @@ public class WalkthroughFragment extends CoreFragment {
     ImageView dot5;
     @BindView(R.id.dot5_selected)
     ImageView dot5selected;
+    @BindView(R.id.back_button)
+    ImageView backButton;
+    @BindView(R.id.button2)
+    Button button;
+    @BindView(R.id.relative)
+    RelativeLayout relativeLayout;
 
     @BindView(R.id.walkthrough_view_pager)
     ViewPager viewPager;
 
-    @BindView(R.id.skip_button)
-    TextView skipButton;
+//    @BindView(R.id.skip_button)
+//    TextView skipButton;
     public WalkthroughFragment(){
 
     }
@@ -68,19 +76,27 @@ public class WalkthroughFragment extends CoreFragment {
         View rootView = inflater.inflate(R.layout.walkthrough_layout, container, false);
         ButterKnife.bind(this, rootView);
 
-        skipButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int current = getItem(+1);
-                if (current < layouts.length) {
-                    viewPager.setCurrentItem(current);
-                } else {
-                    launchHomeScreen();
-                }
-            }
-        });
+//        skipButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                int current = getItem(+1);
+//                if (current < layouts.length) {
+//                    viewPager.setCurrentItem(current);
+//                } else {
+//                    launchHomeScreen();
+//                }
+//            }
+//        });
 
         return rootView;
+    }
+
+    public void setBlur(boolean isBlur){
+        if(isBlur){
+            Blurry.with(getActivity()).radius(25).sampling(2).onto(relativeLayout);
+        }else {
+            Blurry.delete(relativeLayout);
+        }
     }
 
     public void setLayouts(int[] layouts){
@@ -98,6 +114,22 @@ public class WalkthroughFragment extends CoreFragment {
     public void updateLayouts(int layout){
         this.layouts[1] = layout;
         myViewPagerAdapter.notifyDataSetChanged();
+    }
+
+    @OnClick(R.id.button2)
+    void onButtonClicked(){
+        if(viewPager.getCurrentItem() == 1) {
+            layoutView.onViewChanged(3);
+        }
+    }
+
+    @OnClick(R.id.back_button)
+    void onBackClicked(){
+        if(getActivity() instanceof WalkthroughActivity){
+            ((WalkthroughActivity) getActivity()).popFragment();
+        }else {
+            getFragmentManager().popBackStack();
+        }
     }
 
     private int getItem(int i) {
@@ -203,7 +235,7 @@ public class WalkthroughFragment extends CoreFragment {
 
             //This will be called once per slide in the view
             if(layoutView != null) {
-                layoutView.onViewCreated(view);
+                layoutView.onViewCreated(view,position);
             }
 
             return view;
@@ -237,7 +269,7 @@ public class WalkthroughFragment extends CoreFragment {
     }
 
     public interface LayoutView{
-        void onViewCreated(View view);
+        void onViewCreated(View view,int position);
         void onViewChanged(int position);
     }
 }

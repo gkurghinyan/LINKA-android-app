@@ -2,10 +2,11 @@ package com.linka.lockapp.aos.module.pages.dialogs;
 
 
 import android.app.Dialog;
-import android.app.DialogFragment;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.DialogFragment;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,21 +14,21 @@ import android.view.ViewGroup;
 import android.view.Window;
 
 import com.linka.lockapp.aos.R;
-import com.linka.lockapp.aos.module.eventbus.WrongCredentialsBusEventMessage;
+import com.linka.lockapp.aos.module.eventbus.SuccessConnectBusEventMessage;
 
 import org.greenrobot.eventbus.EventBus;
 
-public class WrongCredentialsDialogFragment extends DialogFragment {
+public class SuccessConnectionDialogFragment extends DialogFragment {
 
-    public static WrongCredentialsDialogFragment newInstance() {
-        return new WrongCredentialsDialogFragment();
+    public static SuccessConnectionDialogFragment newInstance() {
+        return new SuccessConnectionDialogFragment();
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_wrong_credentials_dialog, container, false);
+        return inflater.inflate(R.layout.fragment_success_connection_dialog, container, false);
     }
 
     @Override
@@ -36,7 +37,6 @@ public class WrongCredentialsDialogFragment extends DialogFragment {
         view.findViewById(R.id.root).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EventBus.getDefault().post(new WrongCredentialsBusEventMessage(WrongCredentialsBusEventMessage.CLOSE));
                 getDialog().dismiss();
             }
         });
@@ -49,6 +49,7 @@ public class WrongCredentialsDialogFragment extends DialogFragment {
         final Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(root);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
         return dialog;
     }
@@ -60,6 +61,12 @@ public class WrongCredentialsDialogFragment extends DialogFragment {
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int width = displayMetrics.widthPixels;
         int height = displayMetrics.heightPixels;
-        getDialog().getWindow().setLayout(width-width/4,height-height/2);
+        getDialog().getWindow().setLayout(width - width / 3, height - height / 2);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().post(new SuccessConnectBusEventMessage());
     }
 }

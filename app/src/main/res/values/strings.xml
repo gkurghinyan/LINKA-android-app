@@ -444,4 +444,20 @@
     <string name="this_allows_your_smart_device">THIS ALLOWS YOUR SMART DEVICE TO\nPAIR WITH LINKA</string>
     <string name="tap_the_name_of_the_linka">Tap the name of the LINKA device that\nappears below the connect</string>
 
+    <string name="skip">(<u>SKIP</u>)</string>
+    <string name="share_bike">SHARE YOUR BIKE</string>
+    <string name="share_access">SHARE ACCESS TO LINKA AND YOUR BIKE WITH FRIENDS AND FAMILY</string>
+    <string name="great_connect">Great! Now you\'re familiar with your new lock!</string>
+    <string name="tamper_alerts_tones">TAMPER ALERTS &amp; TONES</string>
+    <string name="when_your_bike_is_tampered">WHEN YOUR BIKE IS TAMPERED WITH,\nLINKA RINGS AND ALARM</string>
+    <string name="you_can_set_your_lock">YOU CAN SET YOUR LOCK\'S TAMPER SENSITIVITY AND VOLUME IN THE SETTINGS SECTION</string>
+    <string name="next">NEXT</string>
+    <string name="checking_for_firmware_updates">CHECKING FOR\nFIRMWARE UPDATES...</string>
+    <string name="recommended">RECOMMENDED(MOST SECURE)</string>
+    <string name="determine_whether">DETERMINE WHETHER YOR LOCK WILL FIT WITHIN THE SEAT STAYS OF YOUR BIKE</string>
+    <string name="you_can_mount_linka">YOU CAN ALSO MOUNT LINKA OUTSIDE THE SEAT STAYS</string>
+    <string name="use_provided_screws">USE PROVIDED SCREWS TO SECURE LINKA THROUGH THE HOLES IN YOUR BIKE\'S SEAT STAYS</string>
+    <string name="if_no_holes">IF THERE ARE NO HOLES, USE THE PROVIDED</string>
+    <string name="two_press">TWO PRESS LOCK/UNLOCK</string>
+    <string name="press_power_button">YOU CAN ALSO PRESS THE POWER BUTTON TWICE TO LOCK AND UNLOCK IF YOUR PHONE IS CONNECTED TO LINKA</string>
 </resources>
