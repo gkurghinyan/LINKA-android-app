@@ -10,11 +10,10 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.linka.lockapp.aos.R;
@@ -22,9 +21,11 @@ import com.linka.lockapp.aos.module.adapters.SharingAdapter;
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceImpl;
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceResponse;
 import com.linka.lockapp.aos.module.core.CoreFragment;
+import com.linka.lockapp.aos.module.eventbus.InviteUserBusEvent;
 import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.model.User;
 import com.linka.lockapp.aos.module.other.RecyclerItemTouchHelper;
+import com.linka.lockapp.aos.module.pages.dialogs.InviteUserDialogFragment;
 import com.linka.lockapp.aos.module.widget.LockController;
 
 import org.greenrobot.eventbus.EventBus;
@@ -33,6 +34,7 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import retrofit2.Call;
@@ -57,9 +59,12 @@ public class SharingPageFragment extends CoreFragment implements RecyclerItemTou
 //    LinkaTextView ownerEmail;
 //    @BindView(R.id.owner_name)
 //    LinkaTextView ownerName;
+    @BindView(R.id.title)
+    TextView title;
+
+    private Unbinder unbinder;
 
     SharingAdapter adapter;
-    Unbinder unbinder;
 
     List<User> userList = new ArrayList<>();
 
@@ -129,7 +134,6 @@ public class SharingPageFragment extends CoreFragment implements RecyclerItemTou
 
 
     void init() {
-
         getLockPermissions();
 
         adapter = new SharingAdapter(getContext());
@@ -215,26 +219,10 @@ public class SharingPageFragment extends CoreFragment implements RecyclerItemTou
 
             @Override
             public void onAddButtonClicked() {
-                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getAppMainActivity());
-                builder.setTitle("Enter email address of the person you are inviting");
-
-                final EditText input = new EditText(getAppMainActivity());
-
-                input.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-                builder.setView(input);
-
-                // Set up the buttons
-                builder.setPositiveButton("Invite", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String email = input.getText().toString();
-
-                        inviteUser(email);
-                    }
-                });
-                builder.setNegativeButton("Cancel", null);
-
-                builder.show();
+                getFragmentManager().beginTransaction()
+                        .addToBackStack(null)
+                        .replace(R.id.users_page_root, InviteUserDialogFragment.newInstance())
+                        .commit();
             }
         });
 
@@ -260,6 +248,11 @@ public class SharingPageFragment extends CoreFragment implements RecyclerItemTou
 //        userList.add(user);
 //        userList.add(user);
 //        adapter.setList(userList);
+//        if(userList.isEmpty()){
+//            title.setText(R.string.no_one_to_access_your_bike);
+//        }else {
+//            title.setText(R.string.tap_to_modify_details);
+//        }
 
     }
 
@@ -303,6 +296,11 @@ public class SharingPageFragment extends CoreFragment implements RecyclerItemTou
 
                     if (adapter == null) return;
                     adapter.setList(userList);
+                    if(userList.isEmpty()){
+                        title.setText(R.string.no_one_to_access_your_bike);
+                    }else {
+                        title.setText(R.string.tap_to_modify_details);
+                    }
                     adapter.notifyDataSetChanged();
                 }
             }
@@ -400,6 +398,9 @@ public class SharingPageFragment extends CoreFragment implements RecyclerItemTou
                 linka = newLinka;
             }*/
         }
+        if(object instanceof InviteUserBusEvent){
+            inviteUser(((InviteUserBusEvent) object).getEmail());
+        }
     }
 
     @Override
@@ -414,6 +415,9 @@ public class SharingPageFragment extends CoreFragment implements RecyclerItemTou
 
             // remove the item from recycler view
             adapter.removeUser(viewHolder.getAdapterPosition());
+            if(adapter.getItemCount() <= 1){
+                title.setText(R.string.no_one_to_access_your_bike);
+            }
 
             // showing snack bar with Undo option
             Snackbar snackbar = Snackbar
@@ -424,6 +428,7 @@ public class SharingPageFragment extends CoreFragment implements RecyclerItemTou
 
                     // undo is selected, restore the deleted item
                     adapter.restoreUser(deletedItem, deletedIndex);
+                    title.setText(R.string.tap_to_modify_details);
                 }
             });
             snackbar.setActionTextColor(Color.YELLOW);

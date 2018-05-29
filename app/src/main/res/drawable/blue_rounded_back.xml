@@ -3,14 +3,12 @@
     android:shape="rectangle">
 
     <solid
-        android:color="@android:color/white" />
+        android:color="@color/linka_blue"/>
 
     <corners
-        android:radius="30dp"/>
+        android:radius="20dp"/>
 
     <padding
-        android:top="7dp"
-        android:bottom="7dp"
         android:left="10dp"
         android:right="10dp"/>
 

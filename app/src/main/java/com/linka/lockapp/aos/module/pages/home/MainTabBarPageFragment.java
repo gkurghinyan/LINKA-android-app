@@ -169,7 +169,6 @@ public class MainTabBarPageFragment extends CoreFragment {
         viewPager.isSwipable = false;
 
         // INIT VIEWPAGER
-
         if (linka != null) {
             if (adapter == null) {
                 adapter = new MainTabBarPageFragmentAdapter(getChildFragmentManager(), linka);

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/linka_light_bg"
+    android:focusableInTouchMode="true"
     android:orientation="vertical"
     android:id="@+id/users_page_root">
 
@@ -46,7 +48,8 @@
         app:layout_constraintStart_toStartOf="@id/guideline"
         app:layout_constraintEnd_toEndOf="@id/guideline1"
         android:layout_marginTop="@dimen/margin"
-        android:text="Tap to modify details.Swipe right to delete"
+        android:gravity="center"
+        android:text="@string/tap_to_modify_details"
         android:textColor="@color/menu_gray_text"
         android:textSize="@dimen/text_size_mm"/>
 

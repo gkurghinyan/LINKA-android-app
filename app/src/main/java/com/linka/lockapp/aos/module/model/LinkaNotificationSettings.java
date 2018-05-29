@@ -6,9 +6,6 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
-import com.linka.lockapp.aos.AppDelegate;
-import com.linka.lockapp.aos.module.helpers.AppBluetoothService;
-import com.linka.lockapp.aos.module.widget.LockController;
 import com.linka.lockapp.aos.module.widget.LocksController;
 
 import java.io.Serializable;
@@ -91,7 +88,9 @@ public class LinkaNotificationSettings extends Model implements Serializable {
     }
 
     public static boolean save_as_latest_linka(Linka linka) {
-        long linka_id = linka.getId();
+        //////////////////////////////////////////////
+//        long linka_id = linka.getId();
+        long linka_id = 7777;
         LinkaNotificationSettings settings = getSettings();
         settings.status_linka_active_id = linka_id;
         return settings.saveSettings();

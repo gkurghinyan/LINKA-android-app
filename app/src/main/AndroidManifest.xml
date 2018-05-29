@@ -53,14 +53,14 @@
             android:name=".AppMainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateHidden"></activity>
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".AppLanguagePickerActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".module.pages.walkthrough.WalkthroughActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".AppDeepLinkActivity"
             android:launchMode="singleTask"
