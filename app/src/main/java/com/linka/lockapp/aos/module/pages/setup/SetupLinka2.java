@@ -272,7 +272,9 @@ public class SetupLinka2 extends WalkthroughFragment {
 
         //Set to true to stop all callbacks
         hasReceivedScanCallback = true;
-        registerReceivers(false);
+        if(currentFragment != TURN_ON_LINKA) {
+            registerReceivers(false);
+        }
         EventBus.getDefault().unregister(this);
     }
 
