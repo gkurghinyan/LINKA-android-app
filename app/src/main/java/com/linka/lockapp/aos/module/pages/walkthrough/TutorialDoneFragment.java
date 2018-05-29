@@ -39,6 +39,7 @@ public class TutorialDoneFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        view.setBackgroundResource(R.drawable.blue_gradient);
         ButterKnife.bind(this,view);
     }
 

@@ -6,19 +6,16 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.linka.lockapp.aos.R;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class TutorialTamperFragment extends Fragment {
     private static final String NUMBER = "Number";
 
-    @BindView(R.id.next)
-    TextView next;
+//    @BindView(R.id.next)
+//    TextView next;
 
     public static TutorialTamperFragment newInstance(int number) {
         Bundle args = new Bundle();
@@ -41,12 +38,12 @@ public class TutorialTamperFragment extends Fragment {
         ButterKnife.bind(this, view);
     }
 
-    @OnClick(R.id.next)
-    void onNextClicked() {
-
-        ((WalkthroughActivity) getActivity()).nextTutorial(TutorialShareFragment.newInstance(getString(R.string.share_bike),
-                getString(R.string.share_access),
-                R.drawable.wi_fi_connection,
-                TutorialShareFragment.EMPTY_FRAGMENT));
-    }
+//    @OnClick(R.id.next)
+//    void onNextClicked() {
+//
+//        ((WalkthroughActivity) getActivity()).nextTutorial(TutorialShareFragment.newInstance(getString(R.string.share_bike),
+//                getString(R.string.share_access),
+//                R.drawable.wi_fi_connection,
+//                TutorialShareFragment.EMPTY_FRAGMENT));
+//    }
 }

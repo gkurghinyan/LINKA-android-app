@@ -13,7 +13,6 @@ import com.linka.lockapp.aos.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
 import pl.droidsonroids.gif.GifImageView;
 
@@ -31,8 +30,8 @@ public class TutorialShareFragment extends Fragment {
     GifImageView image;
     @BindView(R.id.footer)
     TextView footer;
-    @BindView(R.id.skip)
-    TextView skip;
+//    @BindView(R.id.skip)
+//    TextView skip;
 
     private Unbinder unbinder;
 
@@ -73,15 +72,15 @@ public class TutorialShareFragment extends Fragment {
         unbinder.unbind();
     }
 
-    @OnClick(R.id.skip)
-    void onSkipClicked() {
-        switch (getArguments().getInt(OPEN_FRAGMENT)) {
-            case EMPTY_FRAGMENT:
-                ((WalkthroughActivity) getActivity()).nextTutorial(EmptyFragment.newInstance(2));
-                break;
-            case DONE_FRAGMENT:
-                ((WalkthroughActivity) getActivity()).nextTutorial(TutorialDoneFragment.newInstance());
-                break;
-        }
-    }
+//    @OnClick(R.id.skip)
+//    void onSkipClicked() {
+//        switch (getArguments().getInt(OPEN_FRAGMENT)) {
+//            case EMPTY_FRAGMENT:
+//                ((WalkthroughActivity) getActivity()).nextTutorial(EmptyFragment.newInstance(2));
+//                break;
+//            case DONE_FRAGMENT:
+//                ((WalkthroughActivity) getActivity()).nextTutorial(TutorialDoneFragment.newInstance());
+//                break;
+//        }
+//    }
 }

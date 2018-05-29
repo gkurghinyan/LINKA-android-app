@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.linka.lockapp.aos.R;
+import com.linka.lockapp.aos.module.other.Constants;
+import com.pixplicity.easyprefs.library.Prefs;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,7 +30,14 @@ public class EmptyFragment extends Fragment {
         if (getArguments().getInt(NUMBER) == 0) {
             ((WalkthroughActivity) getActivity()).nextTutorial(EmptyFragment.newInstance(1));
         } else if (getArguments().getInt(NUMBER) == 1) {
-            ((WalkthroughActivity) getActivity()).nextTutorial(TutorialTamperFragment.newInstance(0));
+
+            if(Prefs.getBoolean(Constants.IS_FIRST_TIME_AFTER_LOGIN,false)){
+                ((WalkthroughActivity) getActivity()).nextTutorial(TutorialsPagerFragment.newInstance());
+            }else {
+                ((WalkthroughActivity) getActivity()).nextTutorial(TutorialDoneFragment.newInstance());
+            }
+
+
         } else if (getArguments().getInt(NUMBER) == 2) {
 //            ((WalkthroughActivity) getActivity()).nextTutorial(EmptyFragment.newInstance(3));
             ((WalkthroughActivity) getActivity()).nextTutorial(TutorialShareFragment.newInstance(getString(R.string.two_press),
@@ -36,7 +45,7 @@ public class EmptyFragment extends Fragment {
                     R.drawable.wi_fi_connection,
                     TutorialShareFragment.DONE_FRAGMENT));
         } else if (getArguments().getInt(NUMBER) == 3) {
-            ((WalkthroughActivity) getActivity()).nextTutorial(TutorialDoneFragment.newInstance());
+//            ((WalkthroughActivity) getActivity()).nextTutorial(TutorialDoneFragment.newInstance());
 
         }
     }

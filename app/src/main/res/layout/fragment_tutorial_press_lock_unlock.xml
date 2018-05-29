@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".module.pages.walkthrough.TutorialShareFragment">
+    android:layout_height="match_parent">
 
 
     <android.support.constraint.Guideline
@@ -33,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="@string/share_bike"
+        android:text="@string/two_press"
         android:textColor="@color/linka_white"
         android:textSize="@dimen/text_size_xm"
         app:layout_constraintBottom_toBottomOf="@id/guideline"
@@ -61,7 +60,7 @@
         android:layout_marginEnd="@dimen/margin_px"
         android:layout_marginStart="@dimen/margin_px"
         android:gravity="center"
-        android:text="@string/share_access"
+        android:text="@string/press_power_button"
         android:textColor="@color/linka_white"
         android:textSize="@dimen/text_size_xm"
         app:layout_constraintEnd_toEndOf="parent"
@@ -69,14 +68,14 @@
         app:layout_constraintTop_toTopOf="@id/guideline1" />
 
     <!--<TextView-->
-        <!--android:id="@+id/skip"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginTop="@dimen/margin_x"-->
-        <!--android:text="@string/skip"-->
-        <!--android:textColor="@color/linka_white"-->
-        <!--android:textSize="@dimen/text_size_xm"-->
-        <!--app:layout_constraintEnd_toEndOf="parent"-->
-        <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--app:layout_constraintTop_toTopOf="@id/guideline2"/>-->
+    <!--android:id="@+id/skip"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginTop="@dimen/margin_x"-->
+    <!--android:text="@string/skip"-->
+    <!--android:textColor="@color/linka_white"-->
+    <!--android:textSize="@dimen/text_size_xm"-->
+    <!--app:layout_constraintEnd_toEndOf="parent"-->
+    <!--app:layout_constraintStart_toStartOf="parent"-->
+    <!--app:layout_constraintTop_toTopOf="@id/guideline2"/>-->
 </android.support.constraint.ConstraintLayout>

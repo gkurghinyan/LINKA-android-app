@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/blue_gradient"
     tools:context=".module.pages.walkthrough.TutorialTamperFragment">
 
     <android.support.constraint.Guideline
@@ -12,14 +11,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.25" />
+        app:layout_constraintGuide_percent="0.2" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.6" />
+        app:layout_constraintGuide_percent="0.55" />
 
     <TextView
         android:id="@+id/header"
@@ -71,19 +70,19 @@
         android:layout_marginStart="@dimen/margin"
         android:layout_marginEnd="@dimen/margin"/>
 
-    <TextView
-        android:id="@+id/next"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/footer2"
-        app:layout_constraintStart_toStartOf="@id/header"
-        app:layout_constraintEnd_toEndOf="@id/header"
-        android:layout_marginTop="@dimen/margin_px"
-        android:background="@drawable/white_rounded_full_back"
-        android:text="@string/next"
-        android:gravity="center"
-        android:textSize="@dimen/text_size_xm"
-        android:textColor="@color/linka_blue"/>
+    <!--<TextView-->
+        <!--android:id="@+id/next"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--app:layout_constraintTop_toBottomOf="@id/footer2"-->
+        <!--app:layout_constraintStart_toStartOf="@id/header"-->
+        <!--app:layout_constraintEnd_toEndOf="@id/header"-->
+        <!--android:layout_marginTop="@dimen/margin_px"-->
+        <!--android:background="@drawable/white_rounded_full_back"-->
+        <!--android:text="@string/next"-->
+        <!--android:gravity="center"-->
+        <!--android:textSize="@dimen/text_size_xm"-->
+        <!--android:textColor="@color/linka_blue"/>-->
 
 
 </android.support.constraint.ConstraintLayout>
