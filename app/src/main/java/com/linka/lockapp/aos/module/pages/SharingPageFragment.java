@@ -24,6 +24,7 @@ import com.linka.lockapp.aos.module.widget.LinkaTextView;
 import com.linka.lockapp.aos.module.widget.LockController;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -368,6 +369,7 @@ public class SharingPageFragment extends CoreFragment {
         EventBus.getDefault().unregister(this);
     }
 
+    @Subscribe
     public void onEvent(Object object) {
         if (!isAdded()) return;
         if (object instanceof String && ((String) object).equals(LOCKSCONTROLLER_NOTIFY_REFRESHED)) {

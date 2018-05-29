@@ -40,6 +40,7 @@ import com.linka.lockapp.aos.module.widget.ToggleSwipeableViewPager;
 import com.pixplicity.easyprefs.library.Prefs;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -375,6 +376,7 @@ public class MainTabBarPageFragment extends CoreFragment {
         EventBus.getDefault().unregister(this);
     }
 
+    @Subscribe
     public void onEvent(Object object) {
         if (object != null && object instanceof String && object.equals(LocksController.LOCKSCONTROLLER_NOTIFY_REFRESHED)) {
             LockController lockController = LocksController.getInstance().getLockController();
