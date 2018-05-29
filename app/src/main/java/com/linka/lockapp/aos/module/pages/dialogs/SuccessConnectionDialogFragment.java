@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 
 import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.eventbus.SuccessConnectBusEventMessage;
@@ -49,6 +50,7 @@ public class SuccessConnectionDialogFragment extends DialogFragment {
         final Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(root);
+        dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
         return dialog;
@@ -61,7 +63,7 @@ public class SuccessConnectionDialogFragment extends DialogFragment {
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int width = displayMetrics.widthPixels;
         int height = displayMetrics.heightPixels;
-        getDialog().getWindow().setLayout(width - width / 3, height - height / 2);
+        getDialog().getWindow().setLayout(width - width / 3 - height/20, height - height / 2 - height/12);
     }
 
     @Override
