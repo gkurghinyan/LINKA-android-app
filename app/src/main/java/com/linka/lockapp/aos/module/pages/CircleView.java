@@ -27,6 +27,7 @@ import com.linka.lockapp.aos.module.widget.LockGattUpdateReceiver;
 import com.linka.lockapp.aos.module.widget.LocksController;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -274,6 +275,7 @@ public class CircleView extends CoreFragment {
         }
     }
 
+    @Subscribe
     public void onEvent(Object object) {
         if (!isAdded()) return;
         if (object instanceof String && ((String) object).equals(LOCKSCONTROLLER_NOTIFY_REFRESHED)) {
