@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.linka.lockapp.aos.R;
-import com.linka.lockapp.aos.module.other.Constants;
 import com.pixplicity.easyprefs.library.Prefs;
 
 
@@ -46,9 +45,9 @@ public class TutorialsPagerFragment extends WalkthroughFragment {
                     mount.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            if(Prefs.getBoolean(Constants.IS_FIRST_TIME_AFTER_LOGIN,false)){
+                            if(Prefs.getBoolean("show-walkthrough",false)){
                                 SharedPreferences.Editor editor = Prefs.edit();
-                                editor.putBoolean(Constants.IS_FIRST_TIME_AFTER_LOGIN,false);
+                                editor.putBoolean("show-walkthrough",false);
                                 editor.apply();
                             }
                             ((WalkthroughActivity) getActivity()).nextTutorial(MountingFragment.newInstance());

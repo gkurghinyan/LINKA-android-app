@@ -67,6 +67,10 @@ public class LinkaAPIServiceResponse {
             public String authToken;
             public String userId;
             public String userEmail;
+            public String first_name;
+            public String last_name;
+            public String name;
+            public boolean showWalkthrough;
         }
         public Data data;
     }

@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -48,7 +47,6 @@ import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.model.LinkaAccessKey;
 import com.linka.lockapp.aos.module.model.LinkaActivity;
 import com.linka.lockapp.aos.module.model.LinkaNotificationSettings;
-import com.linka.lockapp.aos.module.other.Constants;
 import com.linka.lockapp.aos.module.pages.dfu.DfuManagerPageFragment;
 import com.linka.lockapp.aos.module.pages.home.MainTabBarPageFragment;
 import com.linka.lockapp.aos.module.pages.location.LocationPageFragment;
@@ -77,7 +75,6 @@ import com.linka.lockapp.aos.module.widget.BadgeIconView;
 import com.linka.lockapp.aos.module.widget.LinkaTextView;
 import com.linka.lockapp.aos.module.widget.LinkaTouchableLinearLayout;
 import com.linka.lockapp.aos.module.widget.LocksController;
-import com.pixplicity.easyprefs.library.Prefs;
 import com.zopim.android.sdk.api.ZopimChat;
 import com.zopim.android.sdk.model.VisitorInfo;
 import com.zopim.android.sdk.prechat.ZopimChatActivity;
@@ -340,9 +337,6 @@ public class AppMainActivity extends CoreActivity {
 
     public void didSignIn() {
 
-        SharedPreferences.Editor editor = Prefs.edit();
-        editor.putBoolean(Constants.IS_FIRST_TIME_AFTER_LOGIN,true);
-        editor.apply();
         LocksHelper.get_locks(AppMainActivity.this, new LocksHelper.LocksCallback() {
             @Override
             public void onNext() {

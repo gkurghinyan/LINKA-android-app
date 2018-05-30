@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.linka.lockapp.aos.R;
-import com.linka.lockapp.aos.module.other.Constants;
 import com.pixplicity.easyprefs.library.Prefs;
 
 import butterknife.BindView;
@@ -31,7 +30,7 @@ public class EmptyFragment extends Fragment {
             ((WalkthroughActivity) getActivity()).nextTutorial(EmptyFragment.newInstance(1));
         } else if (getArguments().getInt(NUMBER) == 1) {
 
-            if(Prefs.getBoolean(Constants.IS_FIRST_TIME_AFTER_LOGIN,false)){
+            if(Prefs.getBoolean("show-walkthrough",false)){
                 ((WalkthroughActivity) getActivity()).nextTutorial(TutorialsPagerFragment.newInstance());
             }else {
                 ((WalkthroughActivity) getActivity()).nextTutorial(TutorialDoneFragment.newInstance());

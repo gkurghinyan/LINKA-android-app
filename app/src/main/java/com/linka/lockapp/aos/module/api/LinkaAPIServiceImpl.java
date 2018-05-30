@@ -41,21 +41,23 @@ public class LinkaAPIServiceImpl {
 
     static final String URLImageBase = "https://app.linkalock.com/cfs/files/images/";
 
-    public static String URLImage(String picture)
-    {
-        if (picture == null)
-        {
+    public static String URLImage(String picture) {
+        if (picture == null) {
             return null;
         }
         return LinkaAPIServiceImpl.URLImageBase + picture + "/?store=size640";
     }
 
 
-    public static void saveAuth(String authToken, String userId, String userEmail) {
+    public static void saveAuth(String authToken, String userId, String userEmail, String userFirstName, String userLastName, String userName, boolean showWalkthrough) {
         SharedPreferences.Editor edit = Prefs.edit();
         edit.putString("x-auth-token", authToken);
         edit.putString("x-user-id", userId);
         edit.putString("user-email", userEmail);
+        edit.putString("user-first-name", userFirstName);
+        edit.putString("user-last-name", userLastName);
+        edit.putString("user-name", userName);
+        edit.putBoolean("show-walkthrough", showWalkthrough);
         edit.commit();
     }
 
@@ -64,7 +66,10 @@ public class LinkaAPIServiceImpl {
         edit.remove("x-auth-token");
         edit.remove("x-user-id");
         edit.remove("user-email");
-
+        edit.remove("user-first-name");
+        edit.remove("user-last-name");
+        edit.remove("user-name");
+        edit.remove("show-walkthrough");
         edit.remove("fcm-token");
         edit.commit();
     }
@@ -98,23 +103,22 @@ public class LinkaAPIServiceImpl {
         return Prefs.getString("x-user-id", null);
     }
 
-    public static String getFcmToken(){
+    public static String getFcmToken() {
         return Prefs.getString("fcm-token", null);
     }
 
-    public static void saveFcmToken(String token){
+    public static void saveFcmToken(String token) {
         Prefs.putString("fcm-token", token);
     }
 
 
     public static boolean doErrors(LinkaAPIServiceResponse responseData, Context context) {
-        if (context == null)
-        {
+        if (context == null) {
             return false;
         }
         try {
             if (responseData == null) {
-                LogHelper.e("Error:","Network Error Popup");
+                LogHelper.e("Error:", "Network Error Popup");
                 new AlertDialog.Builder(context)
                         .setTitle(R.string.network_error)
                         .setMessage(R.string.please_check_network)
@@ -123,9 +127,9 @@ public class LinkaAPIServiceImpl {
             }
 
             if (responseData.message != null) {
-                if(responseData.message.equals("Wrong username or password.")){
+                if (responseData.message.equals("Wrong username or password.")) {
                     EventBus.getDefault().post(new WrongCredentialsBusEventMessage(WrongCredentialsBusEventMessage.SHOW));
-                }else {
+                } else {
                     new AlertDialog.Builder(context)
                             .setTitle(R.string.error)
                             .setMessage(responseData.message)
@@ -148,7 +152,6 @@ public class LinkaAPIServiceImpl {
         }
         return true;
     }
-
 
 
     public static boolean check(Response response, boolean shouldShowError, Context context) {
@@ -174,8 +177,7 @@ public class LinkaAPIServiceImpl {
         }
 
         if (LinkaAPIServiceResponse.isNetworkError(responseData)
-                && LinkaAPIServiceResponse.isNetworkError(errorData))
-        {
+                && LinkaAPIServiceResponse.isNetworkError(errorData)) {
             if (shouldShowError) {
                 doErrors(responseData, context);
             }
@@ -265,7 +267,13 @@ public class LinkaAPIServiceImpl {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if (check(response, true, context)) {
-                    saveAuth(response.body().data.authToken, response.body().data.userId, response.body().data.userEmail);
+                    saveAuth(response.body().data.authToken,
+                            response.body().data.userId,
+                            response.body().data.userEmail,
+                            response.body().data.first_name,
+                            response.body().data.last_name,
+                            response.body().data.name,
+                            response.body().data.showWalkthrough);
                     callback.onResponse(call, response);
                 } else {
                     callback.onResponse(call, response);
@@ -298,7 +306,13 @@ public class LinkaAPIServiceImpl {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if (check(response, true, context)) {
-                    saveAuth(response.body().data.authToken, response.body().data.userId, " ");
+                    saveAuth(response.body().data.authToken,
+                            response.body().data.userId,
+                            response.body().data.userEmail,
+                            response.body().data.first_name,
+                            response.body().data.last_name,
+                            response.body().data.name,
+                            response.body().data.showWalkthrough);
                     callback.onResponse(call, response);
                 } else {
                     callback.onResponse(call, response);
@@ -339,15 +353,15 @@ public class LinkaAPIServiceImpl {
                     }
                     callback.onResponse(call, response);
 
-                }else {
-                        callback.onResponse(call, response);
+                } else {
+                    callback.onResponse(call, response);
                 }
 
             }
 
             @Override
             public void onFailure(Call<GetEmailResponse> call, Throwable t) {
-                LogHelper.e("Couldn't get Email response:","Probably no network connection");
+                LogHelper.e("Couldn't get Email response:", "Probably no network connection");
                 doErrors(null, context);
                 callback.onFailure(call, t);
             }
@@ -364,9 +378,6 @@ public class LinkaAPIServiceImpl {
     /* LOCKS */
 
 
-
-
-
     public static Call<LocksResponse> get_lock_single(
             final Context context,
             final Linka linka,
@@ -375,7 +386,7 @@ public class LinkaAPIServiceImpl {
 
         Call<LocksResponse> call = null;
 
-        call = LinkaAPIServiceManager.getInstance().get_lock_single("{\"serial_no\":\""+linka.getMACAddress()+"\"}");
+        call = LinkaAPIServiceManager.getInstance().get_lock_single("{\"serial_no\":\"" + linka.getMACAddress() + "\"}");
 
         LinkaAPIServiceConfig.log("get_lock_single: " + linka.getMACAddress());
         call.enqueue(new Callback<LocksResponse>() {
@@ -383,22 +394,18 @@ public class LinkaAPIServiceImpl {
             public void onResponse(Call<LocksResponse> call, Response<LocksResponse> response) {
                 if (check(response, true, context)) {
                     LocksResponse locksResponse = response.body();
-                    if (locksResponse != null)
-                    {
-                        if (locksResponse.data.size() > 0)
-                        {
+                    if (locksResponse != null) {
+                        if (locksResponse.data.size() > 0) {
                             LocksResponse.Data data = locksResponse.data.get(0);
 
-                            if (linka != null && data.name != null)
-                            {
+                            if (linka != null && data.name != null) {
                                 LinkaName.saveLinkaNameForMacAddress(
                                         linka.getMACAddress(),
                                         data.name
                                 );
                             }
 
-                            if (linka != null && data.latitude != 0 && data.longitude != 0)
-                            {
+                            if (linka != null && data.latitude != 0 && data.longitude != 0) {
                                 linka.saveLatLng(data.latitude, data.longitude);
                             }
                         }
@@ -419,8 +426,6 @@ public class LinkaAPIServiceImpl {
     }
 
 
-
-
     public static Call<LinkaAPIServiceResponse> upsert_lock(
             final Context context,
             Linka linka,
@@ -429,8 +434,7 @@ public class LinkaAPIServiceImpl {
 
         Call<LinkaAPIServiceResponse> call = null;
 
-        if (linka.latitude != null && linka.longitude != null && !linka.latitude.equals("") && !linka.longitude.equals(""))
-        {
+        if (linka.latitude != null && linka.longitude != null && !linka.latitude.equals("") && !linka.longitude.equals("")) {
             call = LinkaAPIServiceManager.getInstance().upsert_lock(
                     linka.getName(),
                     linka.getMACAddress(),
@@ -438,9 +442,7 @@ public class LinkaAPIServiceImpl {
                     linka.longitude,
                     linka.isLocked
             );
-        }
-        else
-        {
+        } else {
             call = LinkaAPIServiceManager.getInstance().upsert_lock(
                     linka.getName(),
                     linka.getMACAddress(),
@@ -561,7 +563,6 @@ public class LinkaAPIServiceImpl {
     }
 
 
-
     public static Call<ActivitiesResponse> fetch_activities(
             final Context context,
             Linka linka,
@@ -589,8 +590,6 @@ public class LinkaAPIServiceImpl {
         });
         return call;
     }
-
-
 
 
     // MARK: - KEYS V2
@@ -636,15 +635,14 @@ public class LinkaAPIServiceImpl {
         }
 
 
-
         Call<CheckKeyStatusForUserResponse> call = LinkaAPIServiceManager.getInstance().check_key_status_for_user(
                 lock_serial_no,
                 token
-                );
+        );
         call.enqueue(new Callback<CheckKeyStatusForUserResponse>() {
             @Override
             public void onResponse(Call<CheckKeyStatusForUserResponse> call, Response<CheckKeyStatusForUserResponse> response) {
-                    callback.onResponse(call, response);
+                callback.onResponse(call, response);
             }
 
             @Override
@@ -654,8 +652,6 @@ public class LinkaAPIServiceImpl {
         });
         return call;
     }
-
-
 
 
     public static Call<AccessKeysResponse> register_lock_with_master_keys(
@@ -674,8 +670,7 @@ public class LinkaAPIServiceImpl {
 
         String master = "";
         String master_2 = "";
-        if (accessKey != null)
-        {
+        if (accessKey != null) {
             master = accessKey.access_key_master;
             master_2 = accessKey.access_key_master_2;
         }
@@ -706,8 +701,6 @@ public class LinkaAPIServiceImpl {
     }
 
 
-
-
     public static Call<LinkaAPIServiceResponse> send_request_for_user_permission(
             final Context context,
             Linka linka,
@@ -723,7 +716,7 @@ public class LinkaAPIServiceImpl {
 
         Call<LinkaAPIServiceResponse> call = LinkaAPIServiceManager.getInstance().send_request_for_user_permission(
                 linka.getMACAddress()
-                );
+        );
         call.enqueue(new Callback<LinkaAPIServiceResponse>() {
             @Override
             public void onResponse(Call<LinkaAPIServiceResponse> call, Response<LinkaAPIServiceResponse> response) {
@@ -742,8 +735,6 @@ public class LinkaAPIServiceImpl {
         });
         return call;
     }
-
-
 
 
     public static Call<LinkaAPIServiceResponse> reset_all_lock_information_and_keys(
@@ -783,7 +774,6 @@ public class LinkaAPIServiceImpl {
     }
 
 
-
     //Sends the push token to the server.
     //If response is successful, saves the new token
     public static Call<LinkaAPIServiceResponse> update_push_token(
@@ -797,7 +787,7 @@ public class LinkaAPIServiceImpl {
         call.enqueue(new Callback<LinkaAPIServiceResponse>() {
             @Override
             public void onResponse(Call<LinkaAPIServiceResponse> call, Response<LinkaAPIServiceResponse> response) {
-                if(check(response, false, null)){
+                if (check(response, false, null)) {
                     saveFcmToken(push_token);
                 }
             }
@@ -809,14 +799,6 @@ public class LinkaAPIServiceImpl {
         });
         return call;
     }
-
-
-
-
-
-
-
-
 
 
     // MARK: - GET APP VERSION + UPDATE
@@ -853,8 +835,7 @@ public class LinkaAPIServiceImpl {
                                     .setNegativeButton(R.string.no, null)
                                     .show();
                         } else {
-                            if (alwaysShowMessage)
-                            {
+                            if (alwaysShowMessage) {
                                 new AlertDialog.Builder(context)
                                         .setTitle("")
                                         .setMessage(R.string.no_app_new_version)
@@ -875,7 +856,6 @@ public class LinkaAPIServiceImpl {
         });
         return call;
     }
-
 
 
     public static Call<LinkaAPIServiceResponse.AssociatedLocksResponse> associated_locks(
@@ -967,8 +947,6 @@ public class LinkaAPIServiceImpl {
     }
 
 
-
-
     public static Call<LinkaAPIServiceResponse> transfer_ownership(
             final Context context,
             Linka linka,
@@ -1005,7 +983,6 @@ public class LinkaAPIServiceImpl {
         });
         return call;
     }
-
 
 
     public static Call<LinkaAPIServiceResponse> revoke_access(
@@ -1084,7 +1061,6 @@ public class LinkaAPIServiceImpl {
     }
 
 
-
     public static Call<LinkaAPIServiceResponse> transfer_device_tokens(
             final Context context,
             String oldToken,
@@ -1113,8 +1089,6 @@ public class LinkaAPIServiceImpl {
         });
         return call;
     }
-
-
 
 
     // MARK: - POST ERRORS
@@ -1157,14 +1131,6 @@ public class LinkaAPIServiceImpl {
     }
 
 
-
-
-
-
-
-
-
-
     // MARK: - REQUEST EMAIL PASSWORD CODE
 
     public static Call<LinkaAPIServiceResponse> request_reset_password_code(
@@ -1194,9 +1160,6 @@ public class LinkaAPIServiceImpl {
         });
         return call;
     }
-
-
-
 
 
     // MARK: - REQUEST PASSWORD CHANGE
