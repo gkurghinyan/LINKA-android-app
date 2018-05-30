@@ -1,6 +1,7 @@
 package com.linka.lockapp.aos.module.pages.walkthrough;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.linka.lockapp.aos.AppMainActivity;
 import com.linka.lockapp.aos.R;
 
 import butterknife.BindView;
@@ -18,6 +20,8 @@ import butterknife.OnClick;
 public class TutorialDoneFragment extends Fragment {
     @BindView(R.id.mount_lock)
     TextView mountLock;
+    @BindView(R.id.take_app)
+    TextView takeApp;
 
     public static TutorialDoneFragment newInstance() {
         
@@ -46,6 +50,14 @@ public class TutorialDoneFragment extends Fragment {
     @OnClick(R.id.mount_lock)
     void onMountClicked(){
         ((WalkthroughActivity) getActivity()).nextTutorial(MountingFragment.newInstance());
+    }
+
+    @OnClick(R.id.take_app)
+    void onTakeAppClicked(){
+        Intent intent = new Intent(getActivity(), AppMainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        getActivity().finish();
+        startActivity(intent);
     }
 
 }

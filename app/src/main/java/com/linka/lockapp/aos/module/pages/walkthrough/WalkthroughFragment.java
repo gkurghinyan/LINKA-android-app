@@ -7,7 +7,6 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -55,8 +54,8 @@ public class WalkthroughFragment extends CoreFragment {
     ImageView dot5selected;
     @BindView(R.id.back_button)
     ImageView backButton;
-    @BindView(R.id.button2)
-    Button button;
+//    @BindView(R.id.button2)
+//    Button button;
     @BindView(R.id.relative)
     RelativeLayout relativeLayout;
 
@@ -111,17 +110,17 @@ public class WalkthroughFragment extends CoreFragment {
 
     }
 
-    public void updateLayouts(int layout){
-        this.layouts[1] = layout;
+    public void updateLayouts(int layout,int position){
+        this.layouts[position] = layout;
         myViewPagerAdapter.notifyDataSetChanged();
     }
 
-    @OnClick(R.id.button2)
-    void onButtonClicked(){
-        if(viewPager.getCurrentItem() == 1) {
-            layoutView.onViewChanged(3);
-        }
-    }
+//    @OnClick(R.id.button2)
+//    void onButtonClicked(){
+//        if(viewPager.getCurrentItem() == 1) {
+//            layoutView.onViewChanged(3);
+//        }
+//    }
 
     @OnClick(R.id.back_button)
     void onBackClicked(){
