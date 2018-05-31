@@ -19,6 +19,8 @@ public class User extends Model {
     public String last_name = "";
     @Column(name = "name")
     public String name = "";
+    @Column(name = "userId")
+    public String userId = "";
     @Column(name = "isOwner")
     public boolean isOwner = false;
     @Column(name = "isPendingApproval")
@@ -29,7 +31,7 @@ public class User extends Model {
         return user;
     }
 
-    public static User saveUserForEmail(String email, String first_name, String last_name, String name, boolean isOwner, boolean isPendingApproval) {
+    public static User saveUserForEmail(String email, String first_name, String last_name, String name,String userId, boolean isOwner, boolean isPendingApproval) {
         User user = User.getUserForEmail(email);
         if (user == null) {
             User newUser = new User();
@@ -38,6 +40,7 @@ public class User extends Model {
             newUser.isOwner = isOwner;
             newUser.last_name = last_name;
             newUser.name = name;
+            newUser.userId = userId;
             newUser.isPendingApproval = isPendingApproval;
             newUser.save();
             return newUser;
@@ -45,6 +48,7 @@ public class User extends Model {
             user.name = name;
             user.first_name = first_name;
             user.last_name = last_name;
+            user.userId = userId;
             user.isPendingApproval = isPendingApproval;
             user.isOwner = isOwner;
             user.save();

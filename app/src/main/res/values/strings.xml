@@ -460,4 +460,7 @@
     <string name="if_no_holes">IF THERE ARE NO HOLES, USE THE PROVIDED</string>
     <string name="two_press">TWO PRESS LOCK/UNLOCK</string>
     <string name="press_power_button">YOU CAN ALSO PRESS THE POWER BUTTON TWICE TO LOCK AND UNLOCK IF YOUR PHONE IS CONNECTED TO LINKA</string>
+    <string name="this_lock_is_owned_by_someone_else">This lock is owned by someone else.\nWould you like to request access to it?</string>
+    <string name="connected_lower">Connected</string>
+    <string name="request_sent">Request Sent</string>
 </resources>

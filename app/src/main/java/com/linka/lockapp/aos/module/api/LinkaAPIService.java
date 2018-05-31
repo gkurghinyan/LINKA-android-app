@@ -1,15 +1,12 @@
 package com.linka.lockapp.aos.module.api;
 
-import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
-import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
-import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -198,7 +195,7 @@ public interface LinkaAPIService {
     @FormUrlEncoded
     @PUT("/api/keys/revoke_access")
     Call<LinkaAPIServiceResponse> revoke_access(
-            @Field("email") String email,
+            @Field("userId") String userId,
             @Field("lock_serial_no") String lock_serial_no
     );
 

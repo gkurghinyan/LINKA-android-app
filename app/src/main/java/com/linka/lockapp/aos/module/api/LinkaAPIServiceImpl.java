@@ -988,7 +988,7 @@ public class LinkaAPIServiceImpl {
     public static Call<LinkaAPIServiceResponse> revoke_access(
             final Context context,
             Linka linka,
-            String email,
+            String userId,
             final Callback<LinkaAPIServiceResponse> callback
     ) {
         LinkaAPIServiceConfig.log("send_request_for_user_permission");
@@ -1000,7 +1000,7 @@ public class LinkaAPIServiceImpl {
         String appName = "Android";
 
         Call<LinkaAPIServiceResponse> call = LinkaAPIServiceManager.getInstance().revoke_access(
-                email,
+                userId,
                 linka.lock_mac_address
         );
         call.enqueue(new Callback<LinkaAPIServiceResponse>() {

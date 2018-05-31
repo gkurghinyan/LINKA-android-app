@@ -29,6 +29,9 @@ import com.linka.lockapp.aos.module.helpers.LogHelper;
 import com.linka.lockapp.aos.module.i18n._;
 import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.model.LinkaAccessKey;
+import com.linka.lockapp.aos.module.pages.dialogs.SuccessConnectionDialogFragment;
+import com.linka.lockapp.aos.module.pages.dialogs.ThreeDotsDialogFragment;
+import com.linka.lockapp.aos.module.pages.walkthrough.AccessLockFragment;
 import com.linka.lockapp.aos.module.pages.walkthrough.WalkthroughActivity;
 import com.linka.lockapp.aos.module.pages.walkthrough.WalkthroughFragment;
 
@@ -64,6 +67,7 @@ public class SetupLinka2 extends WalkthroughFragment {
     List<BluetoothLEDevice> devices = new ArrayList<>();
     List<Linka> linkaList = new ArrayList<>();
     BluetoothLEDeviceListAdapter adapter;
+    private ThreeDotsDialogFragment threeDotsDialogFragment;
 
     Handler scanHandler = new Handler();
     Runnable scanRunnable = new Runnable() {
@@ -498,12 +502,15 @@ public class SetupLinka2 extends WalkthroughFragment {
 
 
     void tryPreparePairingUp(final BluetoothLEDevice item) {
-        showLoading(_.i(R.string.preparing_to_pair_up));
+        setBlur(true);
+        threeDotsDialogFragment = ThreeDotsDialogFragment.newInstance();
+        threeDotsDialogFragment.show(getFragmentManager(),null);
         final Linka linka = Linka.makeLinka(item);
         LinkaAccessKey.tryRegisterLock(getAppMainActivity(), linka, new LinkaAccessKey.LinkaAccessKeyDetailedErrorCallback() {
             @Override
             public void onObtain(LinkaAccessKey accessKey, boolean isValid, boolean showError, int code, String error) {
-                hideLoading();
+                setBlur(false);
+                threeDotsDialogFragment.dismiss();
 
                 if (accessKey == null && showError) {
                     if (!isAdded()) return;
@@ -527,19 +534,14 @@ public class SetupLinka2 extends WalkthroughFragment {
                 if (!isValid) {
                     if (!isAdded()) return;
                     if (accessKey.access_key_admin.equals("")) {
-                        new AlertDialog.Builder(getActivity())
-                                .setTitle("")
-                                .setMessage(_.i(R.string.wish_to_request_user_permission))
-                                .setNegativeButton(R.string.no, null)
-                                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        trySendUserPermissionRequest(linka);
-                                    }
-                                })
-                                .show();
+                        setBlur(false);
+                        threeDotsDialogFragment.dismiss();
+                        getAppMainActivity().pushFragment(AccessLockFragment.newInstance(linka));
+
                         return;
                     } else {
+                        setBlur(false);
+                        threeDotsDialogFragment.dismiss();
                         new AlertDialog.Builder(getActivity())
                                 .setTitle(_.i(R.string.reactivate_access_keys))
                                 .setMessage(_.i(R.string.wish_to_reactivate_access_keys))
@@ -557,27 +559,6 @@ public class SetupLinka2 extends WalkthroughFragment {
                     tryPairup(item);
                     return;
                 }
-            }
-        });
-    }
-
-
-    void trySendUserPermissionRequest(Linka linka) {
-        showLoading(_.i(R.string.requesting_permission));
-        LinkaAPIServiceImpl.send_request_for_user_permission(getActivity(), linka, new Callback<LinkaAPIServiceResponse>() {
-            @Override
-            public void onResponse(Call<LinkaAPIServiceResponse> call, Response<LinkaAPIServiceResponse> response) {
-                hideLoading();
-                if (!isAdded()) return;
-                if (LinkaAPIServiceImpl.check(response, false, getActivity())) {
-                    showAlert(_.i(R.string.almost_done), _.i(R.string.permission_being_approved));
-                    return;
-                }
-            }
-
-            @Override
-            public void onFailure(Call<LinkaAPIServiceResponse> call, Throwable t) {
-                hideLoading();
             }
         });
     }
@@ -606,7 +587,7 @@ public class SetupLinka2 extends WalkthroughFragment {
 
     void tryPairup(final BluetoothLEDevice item) {
 
-        showLoading(_.i(R.string.pairing_up));
+//        showLoading(_.i(R.string.pairing_up));
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -615,8 +596,8 @@ public class SetupLinka2 extends WalkthroughFragment {
                 getAppMainActivity().saveLatestLinka(linka);
 
 //                getAppMainActivity().pushFragment(SetupLinka3.newInstance());
-
-                startActivity(new Intent(getActivity(),WalkthroughActivity.class));
+                threeDotsDialogFragment.dismiss();
+                SuccessConnectionDialogFragment.newInstance(getString(R.string.connected_lower)).show(getFragmentManager(),null);
 
             }
         }, 500);

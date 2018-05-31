@@ -36,7 +36,7 @@ public class ThreeDotsDialogFragment extends DialogFragment {
         dialog.setContentView(root);
         dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        dialog.setCancelable(false);
+        setCancelable(false);
 
         return dialog;
     }

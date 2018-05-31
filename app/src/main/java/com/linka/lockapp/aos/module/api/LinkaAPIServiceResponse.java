@@ -235,6 +235,7 @@ public class LinkaAPIServiceResponse {
             public String first_name;
             public String last_name;
             public String email;
+            public String userId;
             public boolean owner;
             public boolean isPendingApproval;
         }

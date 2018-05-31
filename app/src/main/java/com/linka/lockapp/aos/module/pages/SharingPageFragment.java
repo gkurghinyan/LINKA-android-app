@@ -151,7 +151,7 @@ public class SharingPageFragment extends CoreFragment {
                                         switch (which) {
                                             case 0:
                                                 Toast.makeText(getAppMainActivity(), "Revoking Access", Toast.LENGTH_SHORT).show();
-                                                revokeAccess(item.email);
+                                                revokeAccess(item.userId);
                                                 break;
                                             case 1:
                                                 break;
@@ -177,7 +177,7 @@ public class SharingPageFragment extends CoreFragment {
                                     switch (which) {
                                         case 0:
                                             Toast.makeText(getAppMainActivity(), "Revoking access", Toast.LENGTH_SHORT).show();
-                                            revokeAccess(item.email);
+                                            revokeAccess(item.userId);
                                             break;
                                         case 1:
                                             confirmTransferOwnership(item.email);
@@ -257,7 +257,7 @@ public class SharingPageFragment extends CoreFragment {
                 if(LinkaAPIServiceImpl.check(response, false, null)) {
 
                     for (LinkaAPIServiceResponse.LockPermissionsResponse.Data userData : response.body().data) {
-                        User newUser = User.saveUserForEmail(userData.email, userData.first_name, userData.last_name, userData.name, userData.owner, userData.isPendingApproval);
+                        User newUser = User.saveUserForEmail(userData.email, userData.first_name, userData.last_name, userData.name, userData.userId, userData.owner, userData.isPendingApproval);
 
                         if(ownerEmail == null || ownerName == null){
                             return;
@@ -326,8 +326,8 @@ public class SharingPageFragment extends CoreFragment {
             }
         });
     }
-    void revokeAccess(String email){
-        LinkaAPIServiceImpl.revoke_access(getAppMainActivity(), linka, email, new Callback<LinkaAPIServiceResponse>() {
+    void revokeAccess(String userId){
+        LinkaAPIServiceImpl.revoke_access(getAppMainActivity(), linka, userId, new Callback<LinkaAPIServiceResponse>() {
             @Override
             public void onResponse(Call<LinkaAPIServiceResponse> call, Response<LinkaAPIServiceResponse> response) {
                 if(LinkaAPIServiceImpl.check(response, false, null)){

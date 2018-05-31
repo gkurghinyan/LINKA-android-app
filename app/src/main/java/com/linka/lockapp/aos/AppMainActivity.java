@@ -66,6 +66,7 @@ import com.linka.lockapp.aos.module.pages.settings.SettingsSleepSettingsFragment
 import com.linka.lockapp.aos.module.pages.settings.SettingsTamperSensitivityFragment;
 import com.linka.lockapp.aos.module.pages.setup.SetupLinka1;
 import com.linka.lockapp.aos.module.pages.setup.SetupLinka2;
+import com.linka.lockapp.aos.module.pages.walkthrough.AccessLockFragment;
 import com.linka.lockapp.aos.module.pages.walkthrough.WalkthroughActivity;
 import com.linka.lockapp.aos.module.pages.walkthrough.WalkthroughGeofencing;
 import com.linka.lockapp.aos.module.pages.walkthrough.WalkthroughGetToKnow;
@@ -706,7 +707,8 @@ public class AppMainActivity extends CoreActivity {
             back.icon.setImageResource(R.drawable.icon_back_arrow);
             disableDrawer();
         }else if (fragment instanceof SetupLinka1
-                || fragment instanceof SetupLinka2){
+                || fragment instanceof SetupLinka2
+                || fragment instanceof AccessLockFragment){
             toolbar.setVisibility(View.GONE);
             toolbarSpace.setVisibility(View.GONE);
             toolbar.setBackgroundColor(getResources().getColor(R.color.linka_blue_tabbar_transparent));

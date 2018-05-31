@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/blue_gradient"
+    android:id="@+id/root"
+    tools:context=".module.pages.walkthrough.AccessLockFragment">
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="Request Access To Lock"
+        android:textSize="@dimen/text_size_normal"
+        android:textColor="@color/linka_white"
+        android:layout_marginBottom="@dimen/margin_px"/>
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/this_lock_is_owned_by_someone_else"
+        android:gravity="center"
+        android:textSize="@dimen/text_size_xm"
+        android:textColor="@color/linka_white"
+        android:layout_marginBottom="@dimen/margin_px"/>
+
+
+    <TextView
+        android:id="@+id/send_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/white_rounded_back"
+        android:layout_marginTop="@dimen/margin_px"
+        android:textSize="@dimen/text_size_xm"
+        android:textColor="@color/linka_blue"
+        android:paddingTop="@dimen/margin"
+        android:paddingBottom="@dimen/margin"
+        android:paddingStart="@dimen/margin_px"
+        android:paddingEnd="@dimen/margin_px"
+        android:text="Send request"/>
+
+    <ImageView
+        android:id="@+id/back_button"
+        android:layout_width="@dimen/margin_px"
+        android:layout_height="@dimen/margin_px"
+        android:layout_marginStart="@dimen/margin"
+        android:layout_marginTop="@dimen/margin_dx"
+        android:src="@drawable/arrow_left"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+</android.support.constraint.ConstraintLayout>

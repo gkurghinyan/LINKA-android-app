@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.eventbus.SuccessConnectBusEventMessage;
@@ -20,9 +21,15 @@ import com.linka.lockapp.aos.module.eventbus.SuccessConnectBusEventMessage;
 import org.greenrobot.eventbus.EventBus;
 
 public class SuccessConnectionDialogFragment extends DialogFragment {
+    private static final String DIALOG_MESSAGE = "DialogMessage";
 
-    public static SuccessConnectionDialogFragment newInstance() {
-        return new SuccessConnectionDialogFragment();
+    public static SuccessConnectionDialogFragment newInstance(String message) {
+
+        Bundle args = new Bundle();
+        args.putString(DIALOG_MESSAGE,message);
+        SuccessConnectionDialogFragment fragment = new SuccessConnectionDialogFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 
 
@@ -35,6 +42,8 @@ public class SuccessConnectionDialogFragment extends DialogFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ((TextView) view.findViewById(R.id.text)).setText(getArguments().getString(DIALOG_MESSAGE));
+
         view.findViewById(R.id.root).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
