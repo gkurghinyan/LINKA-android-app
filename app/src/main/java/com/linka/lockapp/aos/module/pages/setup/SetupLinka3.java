@@ -1,14 +1,19 @@
 package com.linka.lockapp.aos.module.pages.setup;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.core.CoreFragment;
+import com.linka.lockapp.aos.module.model.Linka;
+import com.linka.lockapp.aos.module.model.LinkaNotificationSettings;
+import com.linka.lockapp.aos.module.pages.walkthrough.WalkthroughActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,11 +26,10 @@ import butterknife.Unbinder;
 public class SetupLinka3 extends CoreFragment {
 
 
-    @BindView(R.id.setup3_next)
-    Button searchForLinka;
-
-    @BindView(R.id.setup3_name)
-    EditText name;
+    @BindView(R.id.next_button)
+    Button next;
+    @BindView(R.id.edit_name)
+    EditText editName;
 
     private Unbinder unbinder;
 
@@ -36,39 +40,32 @@ public class SetupLinka3 extends CoreFragment {
         return fragment;
     }
 
-
-    public SetupLinka3() {
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_setup_name_linka, container, false);
+        getAppMainActivity().setBackAviable(false);
         unbinder = ButterKnife.bind(this, rootView);
 
         return rootView;
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        if (getArguments() != null) {
-            Bundle bundle = getArguments();
-        }
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
+        getAppMainActivity().setBackAviable(true);
         unbinder.unbind();
     }
 
-    @OnClick(R.id.setup3_next)
+    @OnClick(R.id.next_button)
     void onSearchForLinka() {
+        String linkaName = editName.getText().toString();
+        if (!linkaName.equals("")) {
+            Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).saveName(linkaName);
+           startActivity(new Intent(getActivity(), WalkthroughActivity.class));
+        } else {
+            Toast.makeText(getActivity(), "No valid name", Toast.LENGTH_SHORT).show();
+        }
 
-        String linkaName = name.getText().toString();
-
-        getAppMainActivity().resetActivity();
     }
 }

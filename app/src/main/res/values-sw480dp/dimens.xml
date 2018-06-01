@@ -3,6 +3,7 @@
     <dimen name="text_size_mm">15sp</dimen>
     <dimen name="text_size_xm">19sp</dimen>
     <dimen name="text_size_normal">22sp</dimen>
+    <dimen name="text_size_xl">25sp</dimen>
     <dimen name="text_size_x">27sp</dimen>
     <dimen name="text_size_title">22sp</dimen>
 

@@ -32,7 +32,6 @@ import com.linka.lockapp.aos.module.model.LinkaAccessKey;
 import com.linka.lockapp.aos.module.pages.dialogs.SuccessConnectionDialogFragment;
 import com.linka.lockapp.aos.module.pages.dialogs.ThreeDotsDialogFragment;
 import com.linka.lockapp.aos.module.pages.walkthrough.AccessLockFragment;
-import com.linka.lockapp.aos.module.pages.walkthrough.WalkthroughActivity;
 import com.linka.lockapp.aos.module.pages.walkthrough.WalkthroughFragment;
 
 import org.greenrobot.eventbus.EventBus;
@@ -352,7 +351,7 @@ public class SetupLinka2 extends WalkthroughFragment {
     @Subscribe
     void dialogClosed(SuccessConnectBusEventMessage connectBusEventMessage) {
         setBlur(false);
-        startActivity(new Intent(getActivity(), WalkthroughActivity.class));
+        getAppMainActivity().pushFragment(AutoUpdateFragment.newInstance());
     }
 
 
@@ -477,20 +476,20 @@ public class SetupLinka2 extends WalkthroughFragment {
 
                     if (device != null) {
 //                        scanHandler.removeCallbacks(scanRunnable);
-                        currentFragment = SCAN_RESULT;
-                        updateLayouts(R.layout.fragment_setup_search_for_linkas_page,1);
+//                        currentFragment = SCAN_RESULT;
+//                        updateLayouts(R.layout.fragment_setup_search_for_linkas_page,1);
                         LogHelper.e("SCAN", "Got Device " + device.getName() + device.getAddress());
                     }
 
-                    if (adapter == null) {
-                        LogHelper.e("Bluetooth Adapter", "is NULL!!!");
-                        return;
-                    }
+//                    if (adapter == null) {
+//                        LogHelper.e("Bluetooth Adapter", "is NULL!!!");
+//                        return;
+//                    }
 
                     if (BLEHelpers.upsertBluetoothLEDeviceList(devices, linkaList, device, rssi, scanRecord)) {
                         if (currentFragment != SCAN_RESULT) {
-                            updateLayouts(R.layout.fragment_setup_search_for_linkas_page,1);
                             currentFragment = SCAN_RESULT;
+                            updateLayouts(R.layout.fragment_setup_search_for_linkas_page,1);
                         }
                         refresh();
 //                        scanHandler.postDelayed(scanRunnable,3000);
@@ -509,8 +508,8 @@ public class SetupLinka2 extends WalkthroughFragment {
         LinkaAccessKey.tryRegisterLock(getAppMainActivity(), linka, new LinkaAccessKey.LinkaAccessKeyDetailedErrorCallback() {
             @Override
             public void onObtain(LinkaAccessKey accessKey, boolean isValid, boolean showError, int code, String error) {
-                setBlur(false);
-                threeDotsDialogFragment.dismiss();
+//                setBlur(false);
+//                threeDotsDialogFragment.dismiss();
 
                 if (accessKey == null && showError) {
                     if (!isAdded()) return;

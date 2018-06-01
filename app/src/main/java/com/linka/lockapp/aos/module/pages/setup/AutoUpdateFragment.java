@@ -1,18 +1,25 @@
-package com.linka.lockapp.aos.module.pages.walkthrough;
+package com.linka.lockapp.aos.module.pages.setup;
 
 
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.linka.lockapp.aos.R;
+import com.linka.lockapp.aos.module.core.CoreFragment;
 
-public class AutoUpdateFragment extends Fragment {
+public class AutoUpdateFragment extends CoreFragment {
 
+    public static AutoUpdateFragment newInstance() {
+
+        Bundle args = new Bundle();
+        AutoUpdateFragment fragment = new AutoUpdateFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -27,10 +34,7 @@ public class AutoUpdateFragment extends Fragment {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                getFragmentManager().beginTransaction()
-                        .addToBackStack(null)
-                        .replace(R.id.walkthrough_frame, EmptyFragment.newInstance(0))
-                        .commit();
+                getAppMainActivity().pushFragment(SetupLinka3.newInstance());
             }
         },2000);
     }

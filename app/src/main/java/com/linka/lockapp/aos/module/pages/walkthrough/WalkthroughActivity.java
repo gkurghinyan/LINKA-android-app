@@ -81,7 +81,7 @@ public class WalkthroughActivity extends CoreActivity {
 
     private void startTutorial() {
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.walkthrough_frame, new AutoUpdateFragment())
+                .replace(R.id.walkthrough_frame, EmptyFragment.newInstance(0))
                 .commit();
     }
 

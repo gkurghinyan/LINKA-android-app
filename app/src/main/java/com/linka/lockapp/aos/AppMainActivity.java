@@ -64,8 +64,10 @@ import com.linka.lockapp.aos.module.pages.settings.SettingsEditNamePageFragment;
 import com.linka.lockapp.aos.module.pages.settings.SettingsPageFragment;
 import com.linka.lockapp.aos.module.pages.settings.SettingsSleepSettingsFragment;
 import com.linka.lockapp.aos.module.pages.settings.SettingsTamperSensitivityFragment;
+import com.linka.lockapp.aos.module.pages.setup.AutoUpdateFragment;
 import com.linka.lockapp.aos.module.pages.setup.SetupLinka1;
 import com.linka.lockapp.aos.module.pages.setup.SetupLinka2;
+import com.linka.lockapp.aos.module.pages.setup.SetupLinka3;
 import com.linka.lockapp.aos.module.pages.walkthrough.AccessLockFragment;
 import com.linka.lockapp.aos.module.pages.walkthrough.WalkthroughActivity;
 import com.linka.lockapp.aos.module.pages.walkthrough.WalkthroughGeofencing;
@@ -216,6 +218,8 @@ public class AppMainActivity extends CoreActivity {
     LinkaTextView sidebarTextLogout;
     @BindView(R.id.sidebar_app_version)
     LinkaTextView sidebarTextAppVersion;
+
+    private boolean isBackAviable = true;
 
     public enum WalkthroughOrder{
         SETUP,
@@ -600,12 +604,13 @@ public class AppMainActivity extends CoreActivity {
 
     @Override
     public void onBackPressed() {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-        if (fragment instanceof DfuManagerPageFragment) {
-            final DfuManagerPageFragment f = (DfuManagerPageFragment) fragment;
-            //Never disable the back button
-            //Until we can ensure that the firmware update will go through
-            //Sometimes they will be stuck in the firmware update process with no way of exiting.
+        if (isBackAviable) {
+            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+            if (fragment instanceof DfuManagerPageFragment) {
+                final DfuManagerPageFragment f = (DfuManagerPageFragment) fragment;
+                //Never disable the back button
+                //Until we can ensure that the firmware update will go through
+                //Sometimes they will be stuck in the firmware update process with no way of exiting.
             /*if (f.isBusy()) {
                 return;
             } else {*/
@@ -621,17 +626,26 @@ public class AppMainActivity extends CoreActivity {
                         .show();
 
                 return;
-            //}
-        }
-        if (curFragmentCount <= 0) {
-            super.onBackPressed();
+                //}
+            }
+            if (curFragmentCount <= 0) {
+                super.onBackPressed();
 //            if (fragment instanceof StartupFragment) {
 //            } else {
 //                setFragment(StartupFragment.newInstance(true));
 //            }
-        } else {
-            super.onBackPressed();
+            } else {
+                super.onBackPressed();
+            }
         }
+    }
+
+    public boolean isBackAviable() {
+        return isBackAviable;
+    }
+
+    public void setBackAviable(boolean backAviable) {
+        isBackAviable = backAviable;
     }
 
     @Override
@@ -678,7 +692,9 @@ public class AppMainActivity extends CoreActivity {
         } else if (fragment instanceof SignUpPage
                 || fragment instanceof SignInPage
                 || fragment instanceof ForgotPasswordPage1
-                || fragment instanceof ForgotPasswordPage2) {
+                || fragment instanceof ForgotPasswordPage2
+                || fragment instanceof SetupLinka3
+                || fragment instanceof AutoUpdateFragment) {
             toolbar.setVisibility(View.GONE);
             toolbarSpace.setVisibility(View.GONE);
             toolbar.setBackgroundColor(getResources().getColor(R.color.linka_blue_tabbar_transparent));
