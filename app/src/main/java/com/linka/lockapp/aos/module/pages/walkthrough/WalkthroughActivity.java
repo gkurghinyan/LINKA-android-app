@@ -12,6 +12,7 @@ import android.widget.FrameLayout;
 import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.core.CoreActivity;
 import com.linka.lockapp.aos.module.helpers.LogHelper;
+import com.linka.lockapp.aos.module.pages.pac.PacTutorialFragment;
 import com.linka.lockapp.aos.module.pages.pac.SetPac2;
 import com.linka.lockapp.aos.module.pages.pac.SetPac3;
 
@@ -81,7 +82,7 @@ public class WalkthroughActivity extends CoreActivity {
 
     private void startTutorial() {
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.walkthrough_frame, EmptyFragment.newInstance(0))
+                .replace(R.id.walkthrough_frame, PacTutorialFragment.newInstance())
                 .commit();
     }
 

@@ -463,4 +463,5 @@
     <string name="this_lock_is_owned_by_someone_else">This lock is owned by someone else.\nWould you like to request access to it?</string>
     <string name="connected_lower">Connected</string>
     <string name="request_sent">Request Sent</string>
+    <string name="great_time_to_set_up">GREAT!TIME TO SET UP\nYOUR PHONELESS ACCESS CODE</string>
 </resources>
