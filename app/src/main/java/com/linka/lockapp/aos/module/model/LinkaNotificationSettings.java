@@ -88,9 +88,7 @@ public class LinkaNotificationSettings extends Model implements Serializable {
     }
 
     public static boolean save_as_latest_linka(Linka linka) {
-        //////////////////////////////////////////////
-//        long linka_id = linka.getId();
-        long linka_id = 7777;
+        long linka_id = linka.getId();
         LinkaNotificationSettings settings = getSettings();
         settings.status_linka_active_id = linka_id;
         return settings.saveSettings();

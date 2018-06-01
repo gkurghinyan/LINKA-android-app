@@ -264,8 +264,6 @@ public class AppMainActivity extends CoreActivity {
         }
 
         // Listen to bluetooth to detect state changes
-        IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
-        registerReceiver(mReceiver, filter);
 
         startService(new Intent(this, AppBluetoothService.class));
 
@@ -284,6 +282,8 @@ public class AppMainActivity extends CoreActivity {
     protected void onResume() {
         super.onResume();
         AppDelegate.activityResumed();
+        IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+        registerReceiver(mReceiver, filter);
         EventBus.getDefault().register(this);
     }
 
@@ -291,6 +291,7 @@ public class AppMainActivity extends CoreActivity {
     protected void onPause() {
         super.onPause();
         AppDelegate.activityPaused();
+        unregisterReceiver(mReceiver);
         EventBus.getDefault().unregister(this);
     }
 

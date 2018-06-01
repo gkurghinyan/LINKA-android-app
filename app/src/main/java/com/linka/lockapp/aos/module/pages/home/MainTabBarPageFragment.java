@@ -290,16 +290,16 @@ public class MainTabBarPageFragment extends CoreFragment {
 
     class MainTabBarPageFragmentAdapter extends FragmentPagerAdapter {
         public SharingPageFragment f1;
-        public NotificationsPageFragment f2;
-        public CircleView f3;
+        public CircleView f2;
+        public NotificationsPageFragment f3;
         public SettingsPageFragment f4;
 
         public MainTabBarPageFragmentAdapter(FragmentManager fragmentManager, Linka linka) {
             super(fragmentManager);
 
             f1 = SharingPageFragment.newInstance(linka);
-            f2 = NotificationsPageFragment.newInstance(linka);
-            f3 = CircleView.newInstance(linka);// TODO
+            f2 = CircleView.newInstance(linka);
+            f3 = NotificationsPageFragment.newInstance(linka);// TODO
             f4 = SettingsPageFragment.newInstance(linka);
         }
 

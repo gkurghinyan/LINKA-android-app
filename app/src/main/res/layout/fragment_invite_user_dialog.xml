@@ -139,7 +139,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin"
             android:layout_marginTop="@dimen/margin_px"
-            android:background="@drawable/white_rounded_back"
+            android:background="@drawable/white_rounded_full_back"
             android:gravity="center"
             android:text="INVITE"
             android:textColor="@color/linka_blue"
