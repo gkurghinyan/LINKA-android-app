@@ -1,37 +1,46 @@
 package com.linka.lockapp.aos.module.pages.pac;
 
-import android.app.AlertDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.linka.lockapp.aos.AppMainActivity;
 import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.core.CoreFragment;
-import com.linka.lockapp.aos.module.i18n._;
 import com.linka.lockapp.aos.module.model.Linka;
-import com.linka.lockapp.aos.module.widget.LinkaButton;
+import com.linka.lockapp.aos.module.pages.dialogs.ThreeDotsDialogFragment;
+import com.linka.lockapp.aos.module.pages.walkthrough.TutorialDoneFragment;
+import com.linka.lockapp.aos.module.pages.walkthrough.TutorialsPagerFragment;
+import com.linka.lockapp.aos.module.pages.walkthrough.WalkthroughActivity;
 import com.linka.lockapp.aos.module.widget.LinkaTextView;
 import com.linka.lockapp.aos.module.widget.LockController;
 import com.linka.lockapp.aos.module.widget.LocksController;
+import com.pixplicity.easyprefs.library.Prefs;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
 import butterknife.Unbinder;
+import jp.wasabeef.blurry.Blurry;
 
 /**
  * Created by Vanson on 17/2/16.
  */
 public class SetPac3 extends CoreFragment {
+    private static final String NEXT_FRAGMENT = "NextFragment";
+    public static final int WALKTHROUGH = 1;
+    public static final int SETTINGS = 2;
+    private ThreeDotsDialogFragment threeDotsDialogFragment;
 
     @BindView(R.id.pin_value_1)
     protected ImageView pinVal1;
@@ -49,13 +58,13 @@ public class SetPac3 extends CoreFragment {
     protected ImageView pinVal3_filled;
     @BindView(R.id.pin_value_4_filled)
     protected ImageView pinVal4_filled;
-    @BindView(R.id.save)
-    LinkaButton save;
-    @BindView(R.id.enter_pac_caption)
+    @BindView(R.id.title_text)
     TextView caption;
+    @BindView(R.id.view)
+    View view;
+    @BindView(R.id.root)
+    ConstraintLayout root;
 
-    @BindView(R.id.set_pac_success)
-    RelativeLayout setPacSuccess;
     Unbinder unbinder;
 
     int nextPinToEdit = 1;
@@ -65,10 +74,11 @@ public class SetPac3 extends CoreFragment {
     boolean isEnteredPinValue;
     boolean isReEnteredPinValue;
 
-    public static SetPac3 newInstance(Linka linka) {
+    public static SetPac3 newInstance(Linka linka, int nextFragment) {
         Bundle bundle = new Bundle();
         SetPac3 fragment = new SetPac3();
         bundle.putSerializable("linka", linka);
+        bundle.putInt(NEXT_FRAGMENT, nextFragment);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -123,7 +133,6 @@ public class SetPac3 extends CoreFragment {
         pinVal3_filled.setVisibility(View.GONE);
         pinVal4_filled.setVisibility(View.GONE);
 
-        setPacSuccess.setVisibility(View.GONE);
 
         caption.setText(R.string.enter_pin_text);
     }
@@ -144,7 +153,7 @@ public class SetPac3 extends CoreFragment {
     }
 
 
-    public void setPinBackgroundColor(LinkaTextView view, MotionEvent event){
+    public void setPinBackgroundColor(LinkaTextView view, MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 view.setBackgroundColor(Color.parseColor("#efefef"));
@@ -154,48 +163,57 @@ public class SetPac3 extends CoreFragment {
                 break;
         }
     }
+
     @OnTouch(R.id.pin_key_1)
-    public boolean pin1clicked(LinkaTextView view, MotionEvent event){
+    public boolean pin1clicked(LinkaTextView view, MotionEvent event) {
         setPinBackgroundColor(view, event);
         return false;
     }
+
     @OnTouch(R.id.pin_key_2)
-    public boolean pin2clicked(LinkaTextView view, MotionEvent event){
+    public boolean pin2clicked(LinkaTextView view, MotionEvent event) {
         setPinBackgroundColor(view, event);
         return false;
     }
+
     @OnTouch(R.id.pin_key_3)
-    public boolean pin3clicked(LinkaTextView view, MotionEvent event){
+    public boolean pin3clicked(LinkaTextView view, MotionEvent event) {
         setPinBackgroundColor(view, event);
         return false;
     }
+
     @OnTouch(R.id.pin_key_4)
-    public boolean pin4clicked(LinkaTextView view, MotionEvent event){
+    public boolean pin4clicked(LinkaTextView view, MotionEvent event) {
         setPinBackgroundColor(view, event);
         return false;
     }
+
     @OnTouch(R.id.pin_key_5)
-    public boolean pin5clicked(LinkaTextView view, MotionEvent event){
+    public boolean pin5clicked(LinkaTextView view, MotionEvent event) {
         setPinBackgroundColor(view, event);
         return false;
     }
+
     @OnTouch(R.id.pin_key_6)
-    public boolean pin6clicked(LinkaTextView view, MotionEvent event){
+    public boolean pin6clicked(LinkaTextView view, MotionEvent event) {
         setPinBackgroundColor(view, event);
         return false;
     }
+
     @OnTouch(R.id.pin_key_7)
-    public boolean pin7clicked(LinkaTextView view, MotionEvent event){
+    public boolean pin7clicked(LinkaTextView view, MotionEvent event) {
         setPinBackgroundColor(view, event);
         return false;
     }
+
     @OnTouch(R.id.pin_key_8)
-    public boolean pin8clicked(LinkaTextView view, MotionEvent event){
+    public boolean pin8clicked(LinkaTextView view, MotionEvent event) {
         setPinBackgroundColor(view, event);
         return false;
     }
+
     @OnTouch(R.id.pin_key_9)
-    public boolean pin9clicked(LinkaTextView view, MotionEvent event){
+    public boolean pin9clicked(LinkaTextView view, MotionEvent event) {
         setPinBackgroundColor(view, event);
         return false;
     }
@@ -321,28 +339,21 @@ public class SetPac3 extends CoreFragment {
     }
 
     public boolean refreshSaveButton() {
-        save.setVisibility(View.INVISIBLE);  // Not sure what this button is even for, disable it
         if (nextPinToEdit == 4) {
 //            save.setVisibility(View.VISIBLE);
 
             if (!isEnteredPinValue) {
                 initReenter();
                 return false;
-            }
-
-            else {
+            } else {
                 onSave();
                 return false;
             }
 
-        } else {
-            save.setVisibility(View.INVISIBLE);
         }
         return true;
     }
 
-
-    @OnClick(R.id.save)
     void onSave() {
         if (!isEnteredPinValue) {
             initReenter();
@@ -365,54 +376,65 @@ public class SetPac3 extends CoreFragment {
                         || pinValue_enter.equals("7777")
                         || pinValue_enter.equals("8888")
                         || pinValue_enter.equals("9999")
-                        )
-                {
+                        ) {
                     init();
-                    new AlertDialog.Builder(getAppMainActivity())
-                            .setTitle(_.i(R.string.invalid_passcode))
-                            .setMessage(_.i(R.string.passcode_format))
-                            .setNegativeButton(_.i(R.string.ok), null)
-                            .show();
+                    Toast.makeText(getActivity(), getString(R.string.passcode_format), Toast.LENGTH_SHORT).show();
 
                     return;
                 }
 
                 // set lock settings
                 LockController lockController = LocksController.getInstance().getLockController();
-                if(lockController == null){
+                if (lockController == null) {
                     return;
                 }
                 if (lockController.doSetPasscode(pinValue_enter)) {
 
-                    linka.pac= Integer.parseInt(pinValue_enter);
+                    linka.pac = Integer.parseInt(pinValue_enter);
                     linka.pacIsSet = true;
                     linka.saveSettings();
 
-                    setPacSuccess.setVisibility(View.VISIBLE);
                     Handler handler = new Handler();
+                    setBlur(true);
+                    threeDotsDialogFragment = ThreeDotsDialogFragment.newInstance();
+                    threeDotsDialogFragment.show(getFragmentManager(),null);
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            getAppMainActivity().setFragment(AppMainActivity.WalkthroughOrder.PAC);
+                            if (getArguments().getInt(NEXT_FRAGMENT) == WALKTHROUGH) {
+                                if (Prefs.getBoolean("show-walkthrough", false)) {
+                                    ((WalkthroughActivity) getActivity()).nextTutorial(TutorialsPagerFragment.newInstance());
+                                } else {
+                                    ((WalkthroughActivity) getActivity()).nextTutorial(TutorialDoneFragment.newInstance());
+                                }
+                            } else {
+                                getAppMainActivity().setFragment(AppMainActivity.WalkthroughOrder.PAC);
+                            }
+                            setBlur(false);
+                            threeDotsDialogFragment.dismiss();
+                            Toast.makeText(getActivity(), "Success Pac", Toast.LENGTH_SHORT).show();
+
                         }
                     }, 2000);
 
                 } else {
-                    new AlertDialog.Builder(getAppMainActivity())
-                            .setTitle(_.i(R.string.fail_to_communicate))
-                            .setMessage(_.i(R.string.check_connection))
-                            .setNegativeButton(_.i(R.string.ok), null)
-                            .show();
+                    Toast.makeText(getActivity(), getString(R.string.check_connection), Toast.LENGTH_SHORT).show();
                 }
 
             } else {
                 init();
-                new AlertDialog.Builder(getAppMainActivity())
-                        .setTitle(_.i(R.string.wrong_access_code))
-                        .setMessage(_.i(R.string.access_code_pair_not_match))
-                        .setNegativeButton(_.i(R.string.ok), null)
-                        .show();
+                Snackbar snackbar = Snackbar
+                        .make(view, "Re-entered PAC doesn't match", Snackbar.LENGTH_LONG);
+                snackbar.show();
             }
+        }
+    }
+
+    public void setBlur(boolean isBlur){
+        if(isBlur){
+            Blurry.with(getActivity()).radius(25).sampling(2).onto(root);
+        }else {
+            Blurry.delete(root);
         }
     }
 }

@@ -464,4 +464,6 @@
     <string name="connected_lower">Connected</string>
     <string name="request_sent">Request Sent</string>
     <string name="great_time_to_set_up">GREAT!TIME TO SET UP\nYOUR PHONELESS ACCESS CODE</string>
+    <string name="set_your_phoneless_access_code">SET YOUR PHONELESS ACCESS CODE</string>
+    <string name="reenter_your_phoneless_access_code">RE_ENTER YOUR PHONELESS ACCESS CODE</string>
 </resources>

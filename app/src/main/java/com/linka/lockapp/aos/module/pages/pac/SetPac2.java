@@ -49,7 +49,7 @@ public class SetPac2 extends WalkthroughFragment {
             setPacButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    getAppMainActivity().pushFragment(SetPac3.newInstance(LinkaNotificationSettings.get_latest_linka()));
+                    getAppMainActivity().pushFragment(SetPac3.newInstance(LinkaNotificationSettings.get_latest_linka(),SetPac3.SETTINGS));
                 }
             });
         }

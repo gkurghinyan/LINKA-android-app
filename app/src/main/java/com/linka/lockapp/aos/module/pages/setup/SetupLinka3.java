@@ -1,6 +1,7 @@
 package com.linka.lockapp.aos.module.pages.setup;
 
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,6 +49,12 @@ public class SetupLinka3 extends CoreFragment {
         unbinder = ButterKnife.bind(this, rootView);
 
         return rootView;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        editName.getBackground().setColorFilter(getResources().getColor(R.color.linka_white), PorterDuff.Mode.SRC_IN);
     }
 
     @Override

@@ -51,19 +51,19 @@ public class LockGattUpdateReceiver {
     }
 
     public void onResume() {
-        if (mGattUpdateReceiver != null) {
-            context.unregisterReceiver(mGattUpdateReceiver);
-            mGattUpdateReceiver = null;
-        }
+//        if (mGattUpdateReceiver != null) {
+//            context.unregisterReceiver(mGattUpdateReceiver);
+//            mGattUpdateReceiver = null;
+//        }
         mGattUpdateReceiver = makeGattUpdateReceiver();
         context.registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
     }
 
     public void onPause() {
-        if (mGattUpdateReceiver != null) {
+//        if (mGattUpdateReceiver != null) {
             context.unregisterReceiver(mGattUpdateReceiver);
-            mGattUpdateReceiver = null;
-        }
+//            mGattUpdateReceiver = null;
+//        }
     }
 
 

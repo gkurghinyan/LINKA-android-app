@@ -113,8 +113,10 @@ public class SetupLinka2 extends WalkthroughFragment {
                         }
                         break;
                     case BluetoothAdapter.STATE_ON:
-                        currentFragment = SEARCH_WITH_BLUETOOTH;
-                        updateLayouts(R.layout.fragment_searching_linka_with_bluetooth,1);
+                        if(getInternetConnectivity()) {
+                            currentFragment = SEARCH_WITH_BLUETOOTH;
+                            updateLayouts(R.layout.fragment_searching_linka_with_bluetooth, 1);
+                        }
                         break;
                 }
 

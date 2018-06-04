@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.linka.lockapp.aos.R;
-import com.linka.lockapp.aos.module.pages.walkthrough.EmptyFragment;
+import com.linka.lockapp.aos.module.model.LinkaNotificationSettings;
 import com.linka.lockapp.aos.module.pages.walkthrough.WalkthroughActivity;
 
 public class PacTutorialFragment extends Fragment {
@@ -36,7 +36,7 @@ public class PacTutorialFragment extends Fragment {
         view.findViewById(R.id.set_pac_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((WalkthroughActivity) getActivity()).nextTutorial(EmptyFragment.newInstance(1));
+                ((WalkthroughActivity) getActivity()).nextTutorial(SetPac3.newInstance(LinkaNotificationSettings.get_latest_linka(),SetPac3.WALKTHROUGH));
             }
         });
     }

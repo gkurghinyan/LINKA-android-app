@@ -54,6 +54,7 @@ import com.linka.lockapp.aos.module.pages.mylinkas.MyLinkasPageFragmentPage;
 import com.linka.lockapp.aos.module.pages.notifications.NotificationSettingsPageFragment;
 import com.linka.lockapp.aos.module.pages.notifications.NotificationsPageFragment;
 import com.linka.lockapp.aos.module.pages.others.WebPageFragment;
+import com.linka.lockapp.aos.module.pages.pac.PacTutorialFragment;
 import com.linka.lockapp.aos.module.pages.pac.SetPac3;
 import com.linka.lockapp.aos.module.pages.prelogin.ForgotPasswordPage1;
 import com.linka.lockapp.aos.module.pages.prelogin.ForgotPasswordPage2;
@@ -693,6 +694,7 @@ public class AppMainActivity extends CoreActivity {
                 || fragment instanceof SignInPage
                 || fragment instanceof ForgotPasswordPage1
                 || fragment instanceof ForgotPasswordPage2
+                || fragment instanceof PacTutorialFragment
                 || fragment instanceof SetupLinka3
                 || fragment instanceof AutoUpdateFragment) {
             toolbar.setVisibility(View.GONE);
@@ -703,7 +705,6 @@ public class AppMainActivity extends CoreActivity {
             menu.setVisibility(View.GONE);
             disableDrawer();
         } else if (fragment instanceof SettingsPageFragment
-                || fragment instanceof SetPac3
                 || fragment instanceof SettingsEditNamePageFragment
                 || fragment instanceof NotificationsPageFragment
                 || fragment instanceof LocationPageFragment
