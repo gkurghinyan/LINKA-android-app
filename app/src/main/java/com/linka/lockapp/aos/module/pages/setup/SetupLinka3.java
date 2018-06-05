@@ -1,6 +1,7 @@
 package com.linka.lockapp.aos.module.pages.setup;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,9 +13,11 @@ import android.widget.Toast;
 
 import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.core.CoreFragment;
+import com.linka.lockapp.aos.module.helpers.Constants;
 import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.model.LinkaNotificationSettings;
 import com.linka.lockapp.aos.module.pages.walkthrough.WalkthroughActivity;
+import com.pixplicity.easyprefs.library.Prefs;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,6 +50,9 @@ public class SetupLinka3 extends CoreFragment {
         View rootView = inflater.inflate(R.layout.fragment_setup_name_linka, container, false);
         getAppMainActivity().setBackAviable(false);
         unbinder = ButterKnife.bind(this, rootView);
+        SharedPreferences.Editor editor = Prefs.edit();
+        editor.putInt(Constants.SHOWING_FRAGMENT,Constants.SET_NAME_FRAGMENT);
+        editor.apply();
 
         return rootView;
     }
@@ -69,7 +75,8 @@ public class SetupLinka3 extends CoreFragment {
         String linkaName = editName.getText().toString();
         if (!linkaName.equals("")) {
             Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).saveName(linkaName);
-           startActivity(new Intent(getActivity(), WalkthroughActivity.class));
+            getActivity().finish();
+            startActivity(new Intent(getActivity(), WalkthroughActivity.class));
         } else {
             Toast.makeText(getActivity(), "No valid name", Toast.LENGTH_SHORT).show();
         }

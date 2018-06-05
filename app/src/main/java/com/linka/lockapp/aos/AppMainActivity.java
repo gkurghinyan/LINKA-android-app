@@ -37,6 +37,7 @@ import com.linka.lockapp.aos.module.core.CoreActivity;
 import com.linka.lockapp.aos.module.gcm.MyFirebaseInstanceIdService;
 import com.linka.lockapp.aos.module.helpers.AppBluetoothService;
 import com.linka.lockapp.aos.module.helpers.AppLocationService;
+import com.linka.lockapp.aos.module.helpers.Constants;
 import com.linka.lockapp.aos.module.helpers.FontHelpers;
 import com.linka.lockapp.aos.module.helpers.GeofencingService;
 import com.linka.lockapp.aos.module.helpers.Helpers;
@@ -79,6 +80,7 @@ import com.linka.lockapp.aos.module.widget.BadgeIconView;
 import com.linka.lockapp.aos.module.widget.LinkaTextView;
 import com.linka.lockapp.aos.module.widget.LinkaTouchableLinearLayout;
 import com.linka.lockapp.aos.module.widget.LocksController;
+import com.pixplicity.easyprefs.library.Prefs;
 import com.zopim.android.sdk.api.ZopimChat;
 import com.zopim.android.sdk.model.VisitorInfo;
 import com.zopim.android.sdk.prechat.ZopimChatActivity;
@@ -222,7 +224,7 @@ public class AppMainActivity extends CoreActivity {
 
     private boolean isBackAviable = true;
 
-    public enum WalkthroughOrder{
+    public enum WalkthroughOrder {
         SETUP,
         PAC,
         TAMPER,
@@ -252,12 +254,30 @@ public class AppMainActivity extends CoreActivity {
         initDrawer();
         initNavBar();
 
-        setFragment(decide());
+        switch (Prefs.getInt(Constants.SHOWING_FRAGMENT, Constants.LAUNCHER_FRAGMENT)) {
+            case Constants.LAUNCHER_FRAGMENT:
+                setFragment(decide());
+                break;
+            case Constants.SET_NAME_FRAGMENT:
+                pushFragment(SetupLinka3.newInstance());
+                break;
+            case Constants.SET_PAC_FRAGMENT:
+                this.finish();
+                startActivity(new Intent(AppMainActivity.this, WalkthroughActivity.class));
+                break;
+            case Constants.TUTORIAL_FRAGMENT:
+                this.finish();
+                startActivity(new Intent(AppMainActivity.this, WalkthroughActivity.class));
+                break;
+            case Constants.DONE_FRAGMENT:
+                this.finish();
+                startActivity(new Intent(AppMainActivity.this, WalkthroughActivity.class));
+                break;
+        }
 
         MyFirebaseInstanceIdService.getFcmToken();
 
-        if (!AppDelegate.shouldShowSelectLanguage)
-        {
+        if (!AppDelegate.shouldShowSelectLanguage) {
             AppLanguagePickerActivity.forceSelectLanguageEnglish(getBaseContext());
 
             sidebarTextSelectLanguage.setVisibility(View.GONE);
@@ -307,8 +327,8 @@ public class AppMainActivity extends CoreActivity {
         super.onDestroy();
     }
 
-    public void setFragment(WalkthroughOrder step){
-        switch(step){
+    public void setFragment(WalkthroughOrder step) {
+        switch (step) {
             case SETUP:
                 break;
             case PAC:
@@ -354,9 +374,7 @@ public class AppMainActivity extends CoreActivity {
     }
 
 
-
-    public void resetActivity()
-    {
+    public void resetActivity() {
 //        Intent intent = getIntent();
         Intent intent = new Intent(this, AppMainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -376,9 +394,11 @@ public class AppMainActivity extends CoreActivity {
                 refreshDevices();
 
                 //Only start bluetooth scanning if not dfu mode
-                if(!AppBluetoothService.getInstance().dfu) {
+                if (!AppBluetoothService.getInstance().dfu) {
                     AppBluetoothService.getInstance().enableFixedTimeScanning(true);
                 }
+
+                LocksController.init(this);
                 Fragment fragment = MainTabBarPageFragment.newInstance(LinkaNotificationSettings.get_latest_linka());
                 return fragment;
 
@@ -397,7 +417,7 @@ public class AppMainActivity extends CoreActivity {
         }
     }
 
-/*Function to detect changes to bluetooth state */
+    /*Function to detect changes to bluetooth state */
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -410,7 +430,6 @@ public class AppMainActivity extends CoreActivity {
                 switch (state) {
                     case BluetoothAdapter.STATE_OFF:
                         LogHelper.e("BLUETOOTH", "Bluetooth off");
-
 
 
                         //Turn off bluetooth scanning
@@ -427,7 +446,7 @@ public class AppMainActivity extends CoreActivity {
 
 
                         //Only enable bluetooth scanning if dfu mode is off
-                        if(!AppBluetoothService.getInstance().dfu) {
+                        if (!AppBluetoothService.getInstance().dfu) {
                             //Turn on Bluetooth scanning, and immediatly try to pair up
                             AppBluetoothService.getInstance().enableFixedTimeScanning(true);
                         }
@@ -469,15 +488,11 @@ public class AppMainActivity extends CoreActivity {
 
 
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (bluetoothAdapter != null)
-        {
+        if (bluetoothAdapter != null) {
             Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
-            for (BluetoothDevice _device : pairedDevices)
-            {
-                if (_device.getAddress().equals(linka.lock_address))
-                {
-                    if (_device.getBondState() == BluetoothDevice.BOND_BONDED)
-                    {
+            for (BluetoothDevice _device : pairedDevices) {
+                if (_device.getAddress().equals(linka.lock_address)) {
+                    if (_device.getBondState() == BluetoothDevice.BOND_BONDED) {
                         try {
                             Method m = null;
                             m = _device.getClass().getMethod("removeBond", (Class[]) null);
@@ -525,21 +540,21 @@ public class AppMainActivity extends CoreActivity {
         sidebarTextSelectLanguage.setText(R.string.select_language);
         sidebarTextLogout.setText(R.string.logout);
 
-        if (LinkaAPIServiceImpl.isLoggedIn()){
+        if (LinkaAPIServiceImpl.isLoggedIn()) {
             String userEmail = LinkaAPIServiceImpl.getUserEmail();
-            if (userEmail != null){
-                if(userEmail.equals(" ")){
+            if (userEmail != null) {
+                if (userEmail.equals(" ")) {
                     sidebarIconUserEmail.setVisibility(View.INVISIBLE);
-                }else {
+                } else {
                     sidebarTextUserEmail.setText(userEmail);
                     sidebarIconUserEmail.setVisibility(View.VISIBLE);
                 }
-            }else {
-                if(isNetworkAvailable()) {
+            } else {
+                if (isNetworkAvailable()) {
                     LinkaAPIServiceImpl.get_email(AppMainActivity.this, new Callback<GetEmailResponse>() {
                         @Override
                         public void onResponse(Call<GetEmailResponse> call, Response<GetEmailResponse> response) {
-                            if(response.body() != null) {
+                            if (response.body() != null) {
                                 if (response.body().data != null) {
                                     sidebarTextUserEmail.setText(response.body().data.userEmail);
                                     sidebarIconUserEmail.setVisibility(View.VISIBLE);
@@ -723,9 +738,9 @@ public class AppMainActivity extends CoreActivity {
             title.setTextColor(getResources().getColor(R.color.linka_white));
             back.icon.setImageResource(R.drawable.icon_back_arrow);
             disableDrawer();
-        }else if (fragment instanceof SetupLinka1
+        } else if (fragment instanceof SetupLinka1
                 || fragment instanceof SetupLinka2
-                || fragment instanceof AccessLockFragment){
+                || fragment instanceof AccessLockFragment) {
             toolbar.setVisibility(View.GONE);
             toolbarSpace.setVisibility(View.GONE);
             toolbar.setBackgroundColor(getResources().getColor(R.color.linka_blue_tabbar_transparent));
@@ -789,10 +804,10 @@ public class AppMainActivity extends CoreActivity {
     void onClick_sidebar_lock() {
         drawerLayout.closeDrawers();
 
-        if(Linka.getLinkas().size() == 0){
+        if (Linka.getLinkas().size() == 0) {
             SetupLinka1 fragment = SetupLinka1.newInstance();
             pushFragment(fragment);
-        }else {
+        } else {
             setFragment(MainTabBarPageFragment.newInstance(LinkaNotificationSettings.get_latest_linka()));
         }
     }
@@ -832,7 +847,7 @@ public class AppMainActivity extends CoreActivity {
         //Enable firmware recovery mode if it is pressed 10 times
         firmwareMode += 1;
 
-        if(firmwareMode >= 10) {
+        if (firmwareMode >= 10) {
             firmwareMode = 0;
             LogHelper.e("FIRMWARE", "Firmware recovery mode engaged");
 
@@ -1068,10 +1083,10 @@ public class AppMainActivity extends CoreActivity {
         LocksController.getInstance().refresh();
 
         adapter = new LockListAdapter(AppMainActivity.this);
-        adapter.setOnClickDeviceItemListener(new LockListAdapter.OnClickDeviceItemListener(){
+        adapter.setOnClickDeviceItemListener(new LockListAdapter.OnClickDeviceItemListener() {
             @Override
             public void onClickDeviceItem(final Linka linka, int position) {
-                LogHelper.e("Linka List","LINKA clicked " + linka.lock_mac_address + " " + linka.getName());
+                LogHelper.e("Linka List", "LINKA clicked " + linka.lock_mac_address + " " + linka.getName());
 
                 gotoLinka(linka);
                 drawerLayout.closeDrawers();
@@ -1090,7 +1105,7 @@ public class AppMainActivity extends CoreActivity {
     }
 
 
-    public void getLocks(){
+    public void getLocks() {
         LogHelper.e("App Main Activity", "Getting Locks");
         LocksHelper.get_locks(AppMainActivity.this, new LocksHelper.LocksCallback() {
             @Override

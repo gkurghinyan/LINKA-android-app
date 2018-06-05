@@ -11,10 +11,12 @@ import android.widget.FrameLayout;
 
 import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.core.CoreActivity;
+import com.linka.lockapp.aos.module.helpers.Constants;
 import com.linka.lockapp.aos.module.helpers.LogHelper;
 import com.linka.lockapp.aos.module.pages.pac.PacTutorialFragment;
 import com.linka.lockapp.aos.module.pages.pac.SetPac2;
 import com.linka.lockapp.aos.module.pages.pac.SetPac3;
+import com.pixplicity.easyprefs.library.Prefs;
 
 /**
  * Created by kyle on 3/6/18.
@@ -39,7 +41,13 @@ public class WalkthroughActivity extends CoreActivity {
         changeStatusBarColor();
 
 //        init();
-        startTutorial();
+        if(Prefs.getInt(Constants.SHOWING_FRAGMENT,0) == Constants.SET_NAME_FRAGMENT || Prefs.getInt(Constants.SHOWING_FRAGMENT,0) == Constants.SET_PAC_FRAGMENT){
+            startTutorial();
+        }else if(Prefs.getInt(Constants.SHOWING_FRAGMENT,0) == Constants.TUTORIAL_FRAGMENT){
+            startTutorial2();
+        }else if(Prefs.getInt(Constants.SHOWING_FRAGMENT,0) == Constants.DONE_FRAGMENT){
+            nextTutorial(TutorialDoneFragment.newInstance());
+        }
     }
 
 
@@ -83,6 +91,12 @@ public class WalkthroughActivity extends CoreActivity {
     private void startTutorial() {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.walkthrough_frame, PacTutorialFragment.newInstance())
+                .commit();
+    }
+
+    private void startTutorial2(){
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.walkthrough_frame, TutorialsPagerFragment.newInstance())
                 .commit();
     }
 

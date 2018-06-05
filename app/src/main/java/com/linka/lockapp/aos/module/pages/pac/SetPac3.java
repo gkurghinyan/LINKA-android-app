@@ -164,6 +164,12 @@ public class SetPac3 extends CoreFragment {
         }
     }
 
+    @OnTouch(R.id.pin_key_0)
+    public boolean pin0clicked(LinkaTextView view, MotionEvent event){
+        setPinBackgroundColor(view, event);
+        return false;
+    }
+
     @OnTouch(R.id.pin_key_1)
     public boolean pin1clicked(LinkaTextView view, MotionEvent event) {
         setPinBackgroundColor(view, event);
@@ -216,6 +222,11 @@ public class SetPac3 extends CoreFragment {
     public boolean pin9clicked(LinkaTextView view, MotionEvent event) {
         setPinBackgroundColor(view, event);
         return false;
+    }
+
+    @OnClick(R.id.pin_key_0)
+    void onPin0Click(){
+        setLastPinValue("0");
     }
 
     @OnClick(R.id.pin_key_1)

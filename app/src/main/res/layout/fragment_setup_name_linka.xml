@@ -64,6 +64,8 @@
         android:layout_marginTop="@dimen/margin_dx"
         android:hint="Enter Name"
         android:textColor="@color/linka_white"
+        android:singleLine="true"
+        android:maxLength="20"
         android:textColorHint="@color/linka_white"
         app:layout_constraintEnd_toEndOf="@id/guideline3"
         app:layout_constraintStart_toStartOf="@id/guideline2"
