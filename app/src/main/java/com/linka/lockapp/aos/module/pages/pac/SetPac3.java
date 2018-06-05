@@ -62,6 +62,8 @@ public class SetPac3 extends CoreFragment {
     TextView caption;
     @BindView(R.id.view)
     View view;
+    @BindView(R.id.back_button)
+    ImageView back;
     @BindView(R.id.root)
     ConstraintLayout root;
 
@@ -132,6 +134,7 @@ public class SetPac3 extends CoreFragment {
         pinVal2_filled.setVisibility(View.GONE);
         pinVal3_filled.setVisibility(View.GONE);
         pinVal4_filled.setVisibility(View.GONE);
+        back.setVisibility(View.INVISIBLE);
 
 
         caption.setText(R.string.enter_pin_text);
@@ -148,6 +151,7 @@ public class SetPac3 extends CoreFragment {
         pinVal2_filled.setVisibility(View.GONE);
         pinVal3_filled.setVisibility(View.GONE);
         pinVal4_filled.setVisibility(View.GONE);
+        back.setVisibility(View.VISIBLE);
 
         caption.setText(R.string.reenter_pin_text);
     }
@@ -277,6 +281,11 @@ public class SetPac3 extends CoreFragment {
     @OnClick(R.id.pin_key_delete)
     void onDeleteClick() {
         removeLastPinValue();
+    }
+
+    @OnClick(R.id.back_button)
+    void onBackClick(){
+        init();
     }
 
     public void setLastPinValue(String value) {

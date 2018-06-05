@@ -36,6 +36,6 @@ public class AutoUpdateFragment extends CoreFragment {
             public void run() {
                 getAppMainActivity().pushFragment(SetupLinka3.newInstance());
             }
-        },2000);
+        },3000);
     }
 }

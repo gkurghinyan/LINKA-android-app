@@ -353,4 +353,10 @@
     <!--Customize chat colors-->
     <color name="chat_bubble_visitor">@color/linka_blue</color>
 
+    <declare-styleable name="MyHorizontalProgress">
+        <attr name="animationDuration" format="integer"/>
+        <attr name="gradientStartColor" format="color"/>
+        <attr name="gradientEndColor" format="color"/>
+    </declare-styleable>
+
 </resources>

@@ -37,6 +37,17 @@
         app:layout_constraintGuide_percent="0.95" />
 
     <ImageView
+        android:id="@+id/back_button"
+        android:layout_width="@dimen/margin_px"
+        android:layout_height="@dimen/margin_px"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="@dimen/margin"
+        android:layout_marginTop="@dimen/margin_dx"
+        android:src="@drawable/arrow_left"
+        android:visibility="invisible"/>
+
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:src="@drawable/purple_linka"
