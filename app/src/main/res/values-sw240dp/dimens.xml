@@ -12,6 +12,8 @@
     <dimen name="margin_x">18dp</dimen>
     <dimen name="margin_px">28dp</dimen>
     <dimen name="margin_dx">36dp</dimen>
+    <dimen name="margin_l">46dp</dimen>
+    <dimen name="margin_ml">56dp</dimen>
     <dimen name="margin_xl">66dp</dimen>
     <dimen name="margin_ultra">100dp</dimen>
     <dimen name="margin_xu">150dp</dimen>
