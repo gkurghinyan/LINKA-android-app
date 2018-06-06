@@ -351,7 +351,7 @@ public class SetupLinka2 extends WalkthroughFragment {
     }
 
     @Subscribe
-    void dialogClosed(SuccessConnectBusEventMessage connectBusEventMessage) {
+    public void dialogClosed(SuccessConnectBusEventMessage connectBusEventMessage) {
         setBlur(false);
         getAppMainActivity().pushFragment(AutoUpdateFragment.newInstance());
     }

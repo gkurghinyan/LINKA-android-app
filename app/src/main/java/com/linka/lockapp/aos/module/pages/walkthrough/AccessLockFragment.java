@@ -126,7 +126,7 @@ public class AccessLockFragment extends CoreFragment {
     }
 
     @Subscribe
-    void dialogClosed(SuccessConnectBusEventMessage connectBusEventMessage) {
+    public void dialogClosed(SuccessConnectBusEventMessage connectBusEventMessage) {
         setBlur(false);
         getAppMainActivity().popFragment();
     }
