@@ -6,12 +6,11 @@ package com.linka.lockapp.aos.module.pages.prelogin;
 
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.linka.lockapp.aos.R;
@@ -39,13 +38,13 @@ import retrofit2.Response;
 public class SignInPage extends CoreFragment {
 
     @BindView(R.id.background)
-    FrameLayout frameLayout;
+    ConstraintLayout constraintLayout;
     @BindView(R.id.username)
     EditText username;
     @BindView(R.id.password)
     EditText password;
     @BindView(R.id.sign_in)
-    Button signIn;
+    TextView signIn;
     @BindView(R.id.forgot_password)
     TextView forgotPassword;
 
@@ -115,7 +114,7 @@ public class SignInPage extends CoreFragment {
 
     @OnClick(R.id.sign_in)
     void onSignIn() {
-        Blurry.with(getActivity()).radius(25).sampling(2).onto(frameLayout);
+        Blurry.with(getActivity()).radius(25).sampling(2).onto(constraintLayout);
 
         getAppMainActivity().hideKeyboard();
         showLoading(getString(R.string.logging_in));
@@ -128,14 +127,14 @@ public class SignInPage extends CoreFragment {
                     getAppMainActivity().didSignIn();
                 }
 
-                Blurry.delete(frameLayout);
+                Blurry.delete(constraintLayout);
                 //Now that we've signed in, we should send the push token immediately
                 MyFirebaseInstanceIdService.getFcmToken();
             }
 
             @Override
             public void onFailure(Call<LinkaAPIServiceResponse.LoginResponse> call, Throwable t) {
-                Blurry.delete(frameLayout);
+                Blurry.delete(constraintLayout);
                 hideLoading();
             }
         });
@@ -144,10 +143,10 @@ public class SignInPage extends CoreFragment {
     @Subscribe
     public void onWrongCredentialsDialog(WrongCredentialsBusEventMessage eventMessage){
         if(eventMessage.getAction() == WrongCredentialsBusEventMessage.SHOW) {
-            Blurry.with(getActivity()).radius(25).sampling(2).onto(frameLayout);
+            Blurry.with(getActivity()).radius(25).sampling(2).onto(constraintLayout);
             WrongCredentialsDialogFragment.newInstance().show(getActivity().getFragmentManager(), null);
         }else if(eventMessage.getAction() == WrongCredentialsBusEventMessage.CLOSE){
-            Blurry.delete(frameLayout);
+            Blurry.delete(constraintLayout);
         }
     }
 

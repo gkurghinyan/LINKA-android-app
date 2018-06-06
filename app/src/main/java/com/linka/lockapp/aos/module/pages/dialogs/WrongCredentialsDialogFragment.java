@@ -38,7 +38,6 @@ public class WrongCredentialsDialogFragment extends DialogFragment {
         view.findViewById(R.id.root).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EventBus.getDefault().post(new WrongCredentialsBusEventMessage(WrongCredentialsBusEventMessage.CLOSE));
                 getDialog().dismiss();
             }
         });
@@ -67,4 +66,9 @@ public class WrongCredentialsDialogFragment extends DialogFragment {
         getDialog().getWindow().setLayout(width - width / 3 - height/20, height - height / 2 - height/12);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().post(new WrongCredentialsBusEventMessage(WrongCredentialsBusEventMessage.CLOSE));
+    }
 }
