@@ -208,7 +208,10 @@ public class AppBluetoothService extends Service {
                         LockController targetLockController;
                         if (targetLinka != null) {
                             targetLockController = LocksController.getInstance().getLockController(); //Get the Latest LINKA (the linka that is displayed)
-                            targetLockController.doConnectDevice();
+
+                            if(targetLockController != null){
+                                targetLockController.doConnectDevice();
+                            }
                         }
 
 

@@ -144,7 +144,7 @@ public class BluetoothLeQueuedService extends Service {
                         }
                         for(BluetoothGattCharacteristic characteristic : service.getCharacteristics()){
                             //If we check that the service matches the firmware dfu mode service, then we need to refresh the cache.
-                            Log.e("E/LK", "LINKA Gatt Characteristic UUID = " + characteristic.getUuid().toString());
+                            //Log.e("E/LK", "LINKA Gatt Characteristic UUID = " + characteristic.getUuid().toString());
                         }
                     }
 

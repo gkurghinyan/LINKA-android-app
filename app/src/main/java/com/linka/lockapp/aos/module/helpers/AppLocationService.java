@@ -45,7 +45,6 @@ public class AppLocationService extends Service {
         if (context != null) {
             this.context = context;
         }
-        LocksController.init(context);
 
         startLocation();
 

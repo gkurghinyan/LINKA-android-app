@@ -6,6 +6,7 @@ import com.linka.Lock.BLE.BluetoothLeQueuedService.BluetoothGattQueuedActions;
 import com.linka.Lock.FirmwareAPI.Comms.LockContextPacket;
 import com.linka.Lock.FirmwareAPI.Comms.LockEncV1;
 import com.linka.Lock.FirmwareAPI.LINKA_BLE_Service.BluetoothGattCharacteristicBundle;
+import com.linka.lockapp.aos.module.helpers.LogHelper;
 import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.model.LinkaAccessKey;
 
@@ -26,6 +27,10 @@ public class LockControllerBundle {
     // Redesign for v3
     public boolean isV2Lock = false;
     protected boolean bondingRequired = true;
+
+    //If we get 3 context packets, and the counter is still not incremented, that means that the queue is not being processed, possibly due to a connection error
+    //So we need to make the encryption queue valid again, so that we can process the next packet in the queue
+    public int packetsSinceCounterUpdated = 0;
 
     public void setFwVersion(String fwVersion)
     {
@@ -71,6 +76,18 @@ public class LockControllerBundle {
             }
         }
         this.mLockContextData = lockContextData;
+
+        if(isCounterChanged){
+            packetsSinceCounterUpdated = 0;
+        }else{
+            packetsSinceCounterUpdated ++;
+        }
+
+        if(packetsSinceCounterUpdated >= 3){
+            LogHelper.i("Bundle", "Counter has not been updated in 3 packets, making queue valid");
+            packetsSinceCounterUpdated = 0;
+            return true;
+        }
         return isCounterChanged;
     }
 

@@ -605,4 +605,10 @@ public class SetupLinka2 extends WalkthroughFragment {
 
     }
 
+    /* ON EVENT */
+
+    @Subscribe
+    public void onEvent(Object object) {
+    }
+
 }

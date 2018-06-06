@@ -30,11 +30,13 @@ import com.linka.lockapp.aos.module.helpers.SleepNotificationService;
 import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.model.LinkaAccessKey;
 import com.linka.lockapp.aos.module.model.LinkaActivity;
+import com.linka.lockapp.aos.module.pages.settings.RevocationControllerV2;
 import com.pixplicity.easyprefs.library.Prefs;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.Serializable;
+import java.util.Random;
 import java.util.Set;
 
 import retrofit2.Call;
@@ -71,6 +73,8 @@ public class LockController implements Serializable {
     int is_device_is_just_auth_none_count = 0;
     int is_device_is_just_auth_paired_count = 0;
     boolean is_device_is_just_auth_none_warning_shown = false;
+
+    int hashCode = new Random().nextInt();
 
     //If this is true, then we will display a BLOD popup
     public boolean shouldDisplayBLODPopup = false;
@@ -217,6 +221,7 @@ public class LockController implements Serializable {
 
         if(linka == null){return;}
 
+        clearSettingsQueue();
         doDisconnectedState();
 
         if (lockBLEServiceProxy != null && getBluetoothGatt() != null) {
@@ -338,7 +343,7 @@ public class LockController implements Serializable {
             value = 0;
         }
 
-        boolean isOK = lockBLEServiceProxy.doAction_WriteSetting("LockController->doSetAudibility", LockSettingPacket.VLSO_SETTING_AUDIO, value, lockControllerBundle);
+        boolean isOK = lockBLEServiceProxy.doAction_WriteSetting("LockController->doSetAudibility" + hashCode, LockSettingPacket.VLSO_SETTING_AUDIO, value, lockControllerBundle);
         return isOK;
     }
 
@@ -357,7 +362,7 @@ public class LockController implements Serializable {
             value = 0;
         }
 
-        boolean isOK = lockBLEServiceProxy.doAction_WriteSetting("LockController->doSetTamperAlert", LockSettingPacket.VLSO_SETTING_AUDIO, value, lockControllerBundle);
+        boolean isOK = lockBLEServiceProxy.doAction_WriteSetting("LockController->doSetTamperAlert" + hashCode, LockSettingPacket.VLSO_SETTING_AUDIO, value, lockControllerBundle);
         return isOK;
     }
 
@@ -472,7 +477,7 @@ public class LockController implements Serializable {
 
 //Do activate is called after connection to read 
     public void doActivate(){
-        LogHelper.e("doAction", "READING SETTING");
+        LogHelper.e("doAction", "READING SETTING" + hashCode);
         // Keep it simple, send a read command to the queue
 
         //Read stall delay first to set settings
@@ -742,6 +747,7 @@ public class LockController implements Serializable {
                         {
                             if (lockBLEServiceProxy.mLINKA_BLE_Service.SearchAndReadCharacteristic(LINKAGattAttributes.UUID_VLSO_DATA_TX, getBluetoothGatt(), getBluetoothGattBundle(), getBluetoothGattQueuedActions()))
                             {
+                                LogHelper.e("Lock Controller"," Updating Bundle for lock controller " + hashCode);
                                 // VALID , CONNECTED!
                                 lockControllerBundle.gatt = getBluetoothGatt();
                                 lockControllerBundle.bundle = getBluetoothGattBundle();
@@ -917,7 +923,7 @@ public class LockController implements Serializable {
                     boolean tamperAlert = false;
 
                     // Lock is now settled, as this indicates doActivate() was called successfully
-                    LogHelper.e("LockController", "Lock is now settled");
+                    LogHelper.e("LockController" + hashCode, "Lock is now settled");
                     linka.isConnected = true;
                     linka.isLockSettled = true;
                     //receivedStallDelay = true; //No stall delay setting in 0.83
@@ -955,6 +961,10 @@ public class LockController implements Serializable {
                     }
 
                     if (index == LockSettingPacket.VLSO_SETTING_LOCK_ACTUATIONS){
+
+                        //When we do factory reset, we usually read actuations, and when it is successfully returned, then we can start
+                        EventBus.getDefault().post(RevocationControllerV2.CAN_START_FACTORY_RESET);
+
                         linka.actuations = value;
                         linka.saveSettings();
                     }
@@ -1204,7 +1214,7 @@ public class LockController implements Serializable {
                     if (lockControllerBundle.setLockContextData(lockContextPacket))
                     {
                         is_device_is_just_auth_complete_can_respond = true;
-                        LogHelper.e("ContextPacket", "Counter: " + lockContextPacket.getCounter() + ", Can Respond: " + (is_device_is_just_auth_complete_can_respond ? "true" : "false") + ", Responded: " + (is_device_is_just_auth_complete_responded ? "true" : "false"));
+                        LogHelper.i("ContextPacket " + hashCode, "Counter: " + lockContextPacket.getCounter() + ", Can Respond: " + (is_device_is_just_auth_complete_can_respond ? "true" : "false") + ", Responded: " + (is_device_is_just_auth_complete_responded ? "true" : "false"));
                         lockBLEServiceProxy.processEncryptionSettingsQueue(lockControllerBundle, "onGattUpdateContextPacketUpdated"); // Update packet counter and process queue
                     }
 
@@ -1272,6 +1282,8 @@ public class LockController implements Serializable {
 
                 @Override
                 public void onGattUpdateAck(LockGattUpdateReceiver lockGattUpdateReceiver, LockAckNakPacket ack) {
+
+                    LogHelper.e("Ack Received ", "Counter: " + ack.getCounter() + "Command = " + ack.getmLockCommand() + " Orig Command = " + ack.getAckNakedCommand());
 
                     // Update the counter value
                     if (lockControllerBundle != null && lockControllerBundle.mLockContextData != null)
@@ -1342,6 +1354,9 @@ public class LockController implements Serializable {
         }
     }
 
+    public void clearSettingsQueue(){
+        lockBLEServiceProxy.clearEncryptedSettingsQueue();
+    }
 
     void tryRespondOnAuthComplete()
     {

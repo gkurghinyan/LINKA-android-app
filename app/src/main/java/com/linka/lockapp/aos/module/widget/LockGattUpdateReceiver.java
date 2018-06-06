@@ -188,13 +188,13 @@ public class LockGattUpdateReceiver {
                     } else if (intent.getStringExtra(LINKA_BLE_Service.EXTRA_CHARACTERISTIC).equalsIgnoreCase(LINKAGattAttributes.VLSO_MAIN_DATA_TX)) {
                         if (!deviceAddress.equals(getDeviceAddress())) return;
                         // This is where we receive data packets (the UUID name is from the perspective of the firmware
-                        LogHelper.i(TAG, "VLSO TX data: " + DebugHelper.dumpByteArray(intent.getByteArrayExtra(LINKA_BLE_Service.EXTRA_DATA)));
+                        //LogHelper.i(TAG, "VLSO TX data: " + DebugHelper.dumpByteArray(intent.getByteArrayExtra(LINKA_BLE_Service.EXTRA_DATA)));
                         LockDataPacket packet = new LockDataPacket(intent.getByteArrayExtra(LINKA_BLE_Service.EXTRA_DATA));
-                        LogHelper.i(TAG, packet.toString());
+                        //LogHelper.i(TAG, packet.toString());
                         switch (packet.getCmdType().GetValue()) {
                             case LockCommand.VCMD_STATUS:
                                 mLockStatusData = new LockStatusPacket(intent.getByteArrayExtra(LINKA_BLE_Service.EXTRA_DATA));
-                                LogHelper.i(TAG, mLockStatusData.toString());
+                                //LogHelper.i(TAG, mLockStatusData.toString());
 
                                 if (lockBLEGenericListener != null) {
                                     lockBLEGenericListener.onGattUpdateStatusPacketUpdated(LockGattUpdateReceiver.this, mLockStatusData);
@@ -266,9 +266,9 @@ public class LockGattUpdateReceiver {
                         // Show the lock status
 //                    mLockStatusData = new LockAdV1(intent.getByteArrayExtra(BluetoothLeService.EXTRA_DATA), 2); // Data starts 2 bytes in to the data
 //                    mLockStatus.setText(mLockStatusData.toString());
-                        LogHelper.i(TAG, "VLSO RX data: " + DebugHelper.dumpByteArray(intent.getByteArrayExtra(LINKA_BLE_Service.EXTRA_DATA)));
+                        //LogHelper.i(TAG, "VLSO RX data: " + DebugHelper.dumpByteArray(intent.getByteArrayExtra(LINKA_BLE_Service.EXTRA_DATA)));
                         LockDataPacket packet = new LockDataPacket(intent.getByteArrayExtra(LINKA_BLE_Service.EXTRA_DATA));
-                        LogHelper.i(TAG, packet.toString());
+                        //LogHelper.i(TAG, packet.toString());
                     } else if (intent.getStringExtra(LINKA_BLE_Service.EXTRA_CHARACTERISTIC).equalsIgnoreCase(LINKAGattAttributes.FIRMWARE_VER_CHAR)) {
                         if (!deviceAddress.equals(getDeviceAddress())) return;
                         // This is the string firmware version info

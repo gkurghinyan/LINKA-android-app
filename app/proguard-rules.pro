@@ -85,6 +85,12 @@
     public <init>(java.lang.Throwable);
 }
 
+-keepattributes *Annotation*
+-keepclassmembers class ** {
+    @org.greenrobot.eventbus.Subscribe <methods>;
+}
+-keep enum org.greenrobot.eventbus.ThreadMode { *; }
+
 # Don't warn for missing support classes
 -dontwarn de.greenrobot.event.util.*$Support
 -dontwarn de.greenrobot.event.util.*$SupportManagerFragment

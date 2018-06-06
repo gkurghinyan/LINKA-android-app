@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.os.IBinder;
 
+import com.linka.lockapp.aos.module.helpers.LogHelper;
 import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.model.LinkaNotificationSettings;
 
@@ -57,6 +58,7 @@ public class LocksController {
         instance.lockBLEServiceProxy.onCreate();
 
         lockController = new LockController(context, LinkaNotificationSettings.get_latest_linka(), instance.onRefreshListener, instance.lockBLEServiceProxy);
+        LogHelper.e("LocksController" ,"Creating new Lock Controller... " + lockController.hashCode);
         return instance;
     }
 
