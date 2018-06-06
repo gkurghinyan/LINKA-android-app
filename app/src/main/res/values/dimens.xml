@@ -65,4 +65,7 @@
     <dimen name="margin_ultra">130dp</dimen>
     <dimen name="margin_xu">180dp</dimen>
 
+    <dimen name="logo_height">100dp</dimen>
+    <dimen name="logo_width">300dp</dimen>
+
 </resources>

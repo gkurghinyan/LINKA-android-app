@@ -52,12 +52,12 @@
             <ImageView
                 android:id="@+id/sign_in_logo"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="100dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/margin_ultra"
                 android:src="@drawable/logo_linka_white"
-                app:layout_constraintEnd_toEndOf="@id/guideline3"
-                app:layout_constraintStart_toStartOf="@id/guideline2"
+                app:layout_constraintEnd_toEndOf="@+id/lock_text"
+                app:layout_constraintStart_toStartOf="@+id/lock_text"
                 app:layout_constraintTop_toTopOf="parent" />
 
 
