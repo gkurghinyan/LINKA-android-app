@@ -29,6 +29,10 @@ public class LockAckNakPacket {
     public LockCommand getAckNakedCommand() { return mOriginalCommand; }
     public int getAssociatedData () { return mAssociatedData; }
 
+    public LockCommand getmLockCommand() {
+        return mLockCommand;
+    }
+
     public LockAckNakPacket(byte[] data) {
         if (data.length >= MIN_ACKNAK_PKTLEN)
         {

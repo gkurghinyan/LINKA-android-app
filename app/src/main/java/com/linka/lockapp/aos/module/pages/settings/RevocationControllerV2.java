@@ -1,7 +1,9 @@
 package com.linka.lockapp.aos.module.pages.settings;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Handler;
+import android.widget.Toast;
 
 import com.linka.lockapp.aos.AppMainActivity;
 import com.linka.lockapp.aos.R;
@@ -27,6 +29,8 @@ import static com.linka.lockapp.aos.module.widget.LocksController.LOCKSCONTROLLE
  */
 public class RevocationControllerV2 extends RevocationController {
 
+    public static String CAN_START_FACTORY_RESET = "can_start_factory_reset";
+
     @Override
     public void implement(Context context, Linka linka, LockController lockController) {
         super.implement(context, linka, lockController);
@@ -36,17 +40,39 @@ public class RevocationControllerV2 extends RevocationController {
         void onCallback(LinkaAccessKey key, boolean ownsMasterKey);
     }
 
+    Handler revocationTimeoutHandler = new Handler();
 
     boolean canStartFactoryReset = false;
+    boolean canClearKeysFromServer = false;
     void startReadSettingsTimeout(){
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                canStartFactoryReset = false;
-            }
-        }, 3000);
+        revocationTimeoutHandler.postDelayed(resetTimeout, 3000);
     }
+
+    Runnable resetTimeout = new Runnable() {
+        @Override
+        public void run() {
+
+            LogHelper.e("REVOCATION", "Timeout !!");
+
+            //If they have cleared keys from lock, but for some reason disconnected, then they are in a bad state
+            //Need them to contact LINKA support to help clear keys from server manually
+            if(canClearKeysFromServer){
+                new AlertDialog.Builder(context)
+                        .setTitle("Error")
+                        .setMessage("Unable to connect. Please contact LINKA support. Error code 989")
+                        .setCancelable(false)
+                        .show();
+            }else{
+                Toast.makeText(context, "Unable to connect to device", Toast.LENGTH_LONG).show();
+            }
+
+            canStartFactoryReset = false;
+            canClearKeysFromServer = false;
+            lockController.clearSettingsQueue();
+            hideLoading();
+
+        }
+    };
 
     // generic check key function
     public void genericCheckKeyStatusForUser(final GenericCheckKeyStatusForUserCallback callback)
@@ -92,16 +118,17 @@ public class RevocationControllerV2 extends RevocationController {
         );
     }
 
-
-    boolean shouldReceiveRevokeAccessKeyNotification = false;
-    boolean shouldReceiveResetFactorySettingsNotification = false;
-
-
     public void startResetMaster()
     {
-        startResetMasterCallback();
-
         lockController.doDefaultSettings();
+        canClearKeysFromServer = true;
+
+        //Read a setting
+        lockController.doReadActuations();
+
+        //Start timer to cancel revocation after 3 seconds if setting not read
+        startReadSettingsTimeout();
+
         showLoading("", _.i(R.string.resetting_factory));
 
     }
@@ -115,7 +142,7 @@ public class RevocationControllerV2 extends RevocationController {
             @Override
             public void onCallback(LinkaAccessKey key, boolean ownsMasterKey) {
                 if (key != null && ownsMasterKey) {
-                    showLoading("", _.i(R.string.revoking));
+                    showLoading("", "Confirming connection...");
 
                     //Read a setting
                     lockController.doReadActuations();
@@ -143,35 +170,19 @@ public class RevocationControllerV2 extends RevocationController {
 
                         if (LinkaAPIServiceImpl.check(response, false, context)) {
 
-                            Handler handler = new Handler();
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
+                            lockController.doSleep();
 
-                                    lockController.lockControllerPacketCallback = null;
-                                    lockController.doSleep();
+                            hideLoading();
 
+                            Toast.makeText(context, "Successfully Reset Device", Toast.LENGTH_LONG).show();
 
-                                    hideLoading();
-
-                                    showAlert(
-                                            _.i(R.string.success),
-                                            _.i(R.string.reset_factory_done),
-                                            _.i(R.string.close),
-                                            null);
-
-                                    AppMainActivity.getInstance().removeLinka(linka);
-
-                                }
-                            }, 1500);
+                            AppMainActivity.getInstance().removeLinka(linka);
                         }
                     }
 
                     @Override
                     public void onFailure(Call<LinkaAPIServiceResponse> call, Throwable t) {
-
                         hideLoading();
-
                     }
                 }
         );
@@ -183,12 +194,21 @@ public class RevocationControllerV2 extends RevocationController {
     public void onEvent(Object object) {
 
         //If we've successfully read settings, then we'll get a notification here, and then we can proceed to do the factory reset
-        if (object instanceof String && ((String) object).equals(LOCKSCONTROLLER_NOTIFY_REFRESHED_SETTINGS)) {
+        if (object instanceof String && ((String) object).equals(CAN_START_FACTORY_RESET)) {
             LogHelper.e("REVOCATION", "Read Setting");
             if(canStartFactoryReset){
+                revocationTimeoutHandler.removeCallbacks(resetTimeout);
+
                 LogHelper.e("REVOCATION", "STARTING RESET MASTER");
                 canStartFactoryReset = false;
                 startResetMaster();
+            }else if(canClearKeysFromServer){
+
+                revocationTimeoutHandler.removeCallbacks(resetTimeout);
+
+                LogHelper.e("REVOCATION", "Clearing Keys from server");
+                canClearKeysFromServer = false;
+                startResetMasterCallback();
             }
         }
     }
