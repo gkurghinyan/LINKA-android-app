@@ -6,9 +6,6 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
-import com.linka.lockapp.aos.AppDelegate;
-import com.linka.lockapp.aos.module.helpers.AppBluetoothService;
-import com.linka.lockapp.aos.module.widget.LockController;
 import com.linka.lockapp.aos.module.widget.LocksController;
 
 import java.io.Serializable;

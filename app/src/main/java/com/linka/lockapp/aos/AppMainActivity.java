@@ -291,7 +291,6 @@ public class AppMainActivity extends CoreActivity {
 
         // Listen to bluetooth to detect state changes
 
-
         startService(new Intent(this, AppBluetoothService.class));
 
         //Start Location Service
@@ -309,17 +308,17 @@ public class AppMainActivity extends CoreActivity {
     protected void onResume() {
         super.onResume();
         AppDelegate.activityResumed();
-        EventBus.getDefault().register(this);
         IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(mReceiver, filter);
+        EventBus.getDefault().register(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         AppDelegate.activityPaused();
-        EventBus.getDefault().unregister(this);
         unregisterReceiver(mReceiver);
+        EventBus.getDefault().unregister(this);
     }
 
     @Override

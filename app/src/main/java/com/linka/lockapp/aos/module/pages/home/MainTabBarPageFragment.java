@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.linka.lockapp.aos.AppDelegate;
@@ -71,6 +72,14 @@ public class MainTabBarPageFragment extends CoreFragment {
     LinearLayout t4;
     @BindView(R.id.tab_bar)
     LinearLayout tabBar;
+    @BindView(R.id.t1_img)
+    ImageView t1Img;
+    @BindView(R.id.t2_img)
+    ImageView t2Img;
+    @BindView(R.id.t3_img)
+    ImageView t3Img;
+    @BindView(R.id.t4_img)
+    ImageView t4Img;
 
     Linka linka;
     Unbinder unbinder;
@@ -104,33 +113,27 @@ public class MainTabBarPageFragment extends CoreFragment {
 
         if (getArguments() != null) {
             Bundle bundle = getArguments();
-            if (bundle.get("linka") != null)
-            {
+            if (bundle.get("linka") != null) {
                 linka = (Linka) bundle.getSerializable("linka");
-                if (linka != null && linka.getId() != null)
-                {
+                if (linka != null && linka.getId() != null) {
                     linka = Linka.getLinkaById(linka.getId());
                     init(savedInstanceState);
-                }
-                else
-                {
+                } else {
                     init(savedInstanceState);
                 }
-            }
-            else if (savedInstanceState != null && savedInstanceState.getLong("linka_id", 0) != 0)
-            {
+            } else if (savedInstanceState != null && savedInstanceState.getLong("linka_id", 0) != 0) {
                 linka = Linka.getLinkaById(savedInstanceState.getLong("linka_id", 0));
                 init(savedInstanceState);
             }
         }
+        changeButtonsState(true,false,false,false);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         viewPager.clearOnPageChangeListeners();
-        if (adapter != null)
-        {
+        if (adapter != null) {
             adapter.f1 = null;
             adapter.f2 = null;
             adapter.f3 = null;
@@ -142,12 +145,10 @@ public class MainTabBarPageFragment extends CoreFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (viewPager != null)
-        {
+        if (viewPager != null) {
             outState.putParcelable("ss", viewPager.onSaveInstanceState());
         }
-        if (linka != null)
-        {
+        if (linka != null) {
             outState.putLong("linka_id", linka.getId());
         }
     }
@@ -168,7 +169,6 @@ public class MainTabBarPageFragment extends CoreFragment {
         viewPager.isSwipable = false;
 
         // INIT VIEWPAGER
-
         if (linka != null) {
             if (adapter == null) {
                 adapter = new MainTabBarPageFragmentAdapter(getChildFragmentManager(), linka);
@@ -184,8 +184,7 @@ public class MainTabBarPageFragment extends CoreFragment {
             }
         }
 
-        if (adapter != null)
-        {
+        if (adapter != null) {
             viewPager.setAdapter(adapter);
             viewPager.setCurrentItem(0, false); //Circle view is default
             t1.setSelected(true);
@@ -207,10 +206,18 @@ public class MainTabBarPageFragment extends CoreFragment {
                     t3.setSelected(false);
                     t4.setSelected(false);
 
-                    if (position == 0) { t1.setSelected(true); }
-                    if (position == 1) { t2.setSelected(true); }
-                    if (position == 2) { t3.setSelected(true); }
-                    if (position == 3) { t4.setSelected(true); }
+                    if (position == 0) {
+                        t1.setSelected(true);
+                    }
+                    if (position == 1) {
+                        t2.setSelected(true);
+                    }
+                    if (position == 2) {
+                        t3.setSelected(true);
+                    }
+                    if (position == 3) {
+                        t4.setSelected(true);
+                    }
                 }
 
                 @Override
@@ -229,40 +236,70 @@ public class MainTabBarPageFragment extends CoreFragment {
         return fragment;
     }
 
+    private void changeButtonsState(boolean first, boolean second, boolean third, boolean fourth) {
+        if (first) {
+            t1Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_user_select));
+        } else {
+            t1Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_user));
+        }
+        if (second) {
+            t2Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_linka_select));
+        } else {
+            t2Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_linka));
+        }
+        if(third){
+            t3Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_notif_select));
+        }else {
+            t3Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_notif));
+        }
+        if(fourth){
+            t4Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_setting_select));
+        }else {
+            t4Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_setting));
+        }
+    }
+
 
     @OnClick(R.id.t1)
     void on_t1() {
         viewPager.setCurrentItem(0, true);
+        changeButtonsState(true,false,false,false);
     }
+
     @OnClick(R.id.t2)
     void on_t2() {
         viewPager.setCurrentItem(1, true);
+        changeButtonsState(false,true,false,false);
     }
+
     @OnClick(R.id.t3)
     void on_t3() {
         viewPager.setCurrentItem(2, true);
+        changeButtonsState(false,false,true,false);
     }
+
     @OnClick(R.id.t4)
     void on_t4() {
         //Refresh the settings page
         EventBus.getDefault().post(LinkaActivity.LINKA_ACTIVITY_ON_CHANGE);
 
         viewPager.setCurrentItem(3, true);
+        changeButtonsState(false,false,false,true);
     }
 
 
     class MainTabBarPageFragmentAdapter extends FragmentPagerAdapter {
-        public CircleView f1;
-        public NotificationsPageFragment f2;
-        public SharingPageFragment f3;
+        public SharingPageFragment f1;
+        public CircleView f2;
+        public NotificationsPageFragment f3;
         public SettingsPageFragment f4;
 
         public MainTabBarPageFragmentAdapter(FragmentManager fragmentManager, Linka linka) {
             super(fragmentManager);
 
-            f1 = CircleView.newInstance(linka);
-            f2 = NotificationsPageFragment.newInstance(linka);
-            f3 = SharingPageFragment.newInstance(linka); // TODO
+            f1 = SharingPageFragment.newInstance(linka);
+            f2 = CircleView.newInstance(linka);
+            f3 = NotificationsPageFragment.newInstance(linka);// TODO
             f4 = SettingsPageFragment.newInstance(linka);
         }
 
@@ -305,21 +342,18 @@ public class MainTabBarPageFragment extends CoreFragment {
         super.onResume();
         EventBus.getDefault().register(this);
 
-        if (linka != null)
-        {
+        if (linka != null) {
             LinkaAPIServiceImpl.get_lock_single(
                     getAppMainActivity(),
                     linka,
                     new Callback<LinkaAPIServiceResponse.LocksResponse>() {
                         @Override
                         public void onResponse(Call<LinkaAPIServiceResponse.LocksResponse> call, Response<LinkaAPIServiceResponse.LocksResponse> response) {
-                            if (linka == null)
-                            {
+                            if (linka == null) {
                                 return;
                             }
 
-                            if (!isAdded())
-                            {
+                            if (!isAdded()) {
                                 return;
                             }
 
@@ -334,7 +368,7 @@ public class MainTabBarPageFragment extends CoreFragment {
         }
     }
 
-// DELETE FUNCTION BELOW ??
+    // DELETE FUNCTION BELOW ??
     // If the user declines to set the PAC
     // Set it to 1212
     private void setDefaultPasscode(final Linka linka) {
@@ -362,11 +396,11 @@ public class MainTabBarPageFragment extends CoreFragment {
     }
 
 
-    public void hideTabBar(){
+    public void hideTabBar() {
         tabBar.setVisibility(View.INVISIBLE);
     }
 
-    public void showTabBar(){
+    public void showTabBar() {
         tabBar.setVisibility(View.VISIBLE);
     }
 
@@ -390,8 +424,7 @@ public class MainTabBarPageFragment extends CoreFragment {
                 if (_linka.isConnected && !linka.pacIsSet && lockController.hasReadPac) {
                     if (awaitsForLinkaSetPasscode) {
                         awaitsForLinkaSetPasscode = false;
-                        if (accessKey != null && accessKey.isAdmin())
-                        {
+                        if (accessKey != null && accessKey.isAdmin()) {
                             new AlertDialog.Builder(getAppMainActivity())
                                     .setMessage(R.string.setup_your_passcode_recommended)
                                     .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
@@ -451,7 +484,7 @@ public class MainTabBarPageFragment extends CoreFragment {
                                                         .show();
                                             }
 
-                                       }
+                                        }
                                     })
                                     .show();
                         }
@@ -460,22 +493,17 @@ public class MainTabBarPageFragment extends CoreFragment {
             }
             // Make sure PAC is set before any attempts to update firmware
             // TODO: This is becoming spaghetti, need to be completely reworked in the future
-            if  (linka != null && lockController != null &&
+            if (linka != null && lockController != null &&
                     linka.isLockSettled && linka.pacIsSet &&
-                    linka.canAlertCriticalFirmwareUpdate)
-            {
-                if (lockController.lockControllerBundle != null)
-                {
+                    linka.canAlertCriticalFirmwareUpdate) {
+                if (lockController.lockControllerBundle != null) {
                     String ver = lockController.lockControllerBundle.getFwVersionNumber();
-                    if (!ver.equals(""))
-                    {
+                    if (!ver.equals("")) {
                         linka.canAlertCriticalFirmwareUpdate = false;
-                        if (!ver.equals(AppDelegate.linkaMinRequiredFirmwareVersion) && !ver.equals("1.5.9") && AppDelegate.linkaMinRequiredFirmwareVersionIsCriticalUpdate)
-                        {
+                        if (!ver.equals(AppDelegate.linkaMinRequiredFirmwareVersion) && !ver.equals("1.5.9") && AppDelegate.linkaMinRequiredFirmwareVersionIsCriticalUpdate) {
                             LogHelper.e("MainTabBarPageFrag", "FW version of " + ver + " does not equal " + AppDelegate.linkaMinRequiredFirmwareVersion);
                             LinkaAccessKey accessKey = LinkaAccessKey.getKeyFromLinka(linka);
-                            if (accessKey != null && accessKey.isAdmin())
-                            {
+                            if (accessKey != null && accessKey.isAdmin()) {
                                 new AlertDialog.Builder(getAppMainActivity())
                                         .setMessage(R.string.critical_firmware_update)
                                         .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
@@ -493,11 +521,10 @@ public class MainTabBarPageFragment extends CoreFragment {
             }
 
 
-
             //Check if there was a possible BLOD, and if so, display a popup
             //We decided that we can only show the solid blue popup once.
             //After it is shown once, then we show the message to contact LINKA Support
-            if(lockController.shouldDisplayBLODPopup){
+            if (lockController.shouldDisplayBLODPopup) {
 
                 //To determine the number of times we can show the BLOD popup, we need a counter in prefs
                 SharedPreferences.Editor edit = Prefs.edit();
@@ -505,20 +532,20 @@ public class MainTabBarPageFragment extends CoreFragment {
                     case 0:
 
                         new AlertDialog.Builder(getAppMainActivity())
-                            .setTitle(R.string.oops)
-                            .setMessage(R.string.blod_popup)
-                            .setNegativeButton(R.string.blod_popup_no, null)
-                            .setPositiveButton(R.string.blod_popup_yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int id) {
-                                    //Start DFU fragment, make LINKA parameter null because we don't initialize it
-                                    DfuManagerPageFragment fragment = DfuManagerPageFragment.newInstance(null);
-                                    fragment.blod_firmware_mode = true;
-                                    fragment.blod_firmware_try_again = true;
-                                    AppMainActivity.getInstance().pushFragment(fragment);
-                                }
-                            })
-                            .show();
+                                .setTitle(R.string.oops)
+                                .setMessage(R.string.blod_popup)
+                                .setNegativeButton(R.string.blod_popup_no, null)
+                                .setPositiveButton(R.string.blod_popup_yes, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        //Start DFU fragment, make LINKA parameter null because we don't initialize it
+                                        DfuManagerPageFragment fragment = DfuManagerPageFragment.newInstance(null);
+                                        fragment.blod_firmware_mode = true;
+                                        fragment.blod_firmware_try_again = true;
+                                        AppMainActivity.getInstance().pushFragment(fragment);
+                                    }
+                                })
+                                .show();
 
                         edit.putInt("numberTimesDetectLinkaFuBlod", 1).commit();
 

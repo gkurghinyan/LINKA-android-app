@@ -69,5 +69,6 @@
     <color name="red">#E86362</color>
     <color name="green">#2D9926</color>
     <color name="keyboard_color">#B7D4E5</color>
+    <color name="dark_white">#FAFAFA</color>
 
 </resources>

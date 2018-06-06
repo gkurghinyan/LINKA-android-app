@@ -30,9 +30,10 @@
             android:orientation="vertical">
 
             <ImageView
+                android:id="@+id/t1_img"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:src="@drawable/bottom_icon_activity" />
+                android:src="@drawable/tab_user" />
         </LinearLayout>
 
 
@@ -46,9 +47,10 @@
             android:orientation="vertical">
 
             <ImageView
+                android:id="@+id/t2_img"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:src="@drawable/bottom_icon_location" />
+                android:src="@drawable/tab_linka" />
         </LinearLayout>
 
 
@@ -62,9 +64,10 @@
             android:orientation="vertical">
 
             <ImageView
+                android:id="@+id/t3_img"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:src="@drawable/bottom_icon_profile" />
+                android:src="@drawable/tab_notif" />
         </LinearLayout>
 
 
@@ -78,9 +81,10 @@
             android:orientation="vertical">
 
             <ImageView
+                android:id="@+id/t4_img"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:src="@drawable/bottom_icon_settings" />
+                android:src="@drawable/tab_setting" />
         </LinearLayout>
 
     </LinearLayout>

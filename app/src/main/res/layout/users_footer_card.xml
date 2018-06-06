@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/margin"
+    android:layout_marginBottom="@dimen/margin"
+    android:background="@color/linka_light_bg">
+
+    <ImageView
+        android:layout_width="@dimen/margin_dx"
+        android:layout_height="@dimen/margin_dx"
+        android:src="@drawable/plus"
+        android:id="@+id/plus_button"
+        android:layout_gravity="center"/>
+</FrameLayout>

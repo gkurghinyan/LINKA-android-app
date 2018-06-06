@@ -1,80 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:custom="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/linka_light_bg"
-              android:orientation="vertical">
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/linka_light_bg"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    android:id="@+id/users_page_root">
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.07" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.93" />
 
     <android.support.v4.widget.Space
+        android:id="@+id/space"
         android:layout_width="match_parent"
         android:layout_height="20dp"/>
 
-    <com.linka.lockapp.aos.module.widget.LinkaTextView
-        android:layout_width="match_parent"
+    <EditText
+        android:id="@+id/search_friends"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="12pt"
-        android:background="#dfdfdf"
-        android:text="Owner"/>
+        android:layout_marginTop="@dimen/margin"
+        android:background="@drawable/rounded_edit_text_back"
+        app:layout_constraintTop_toBottomOf="@id/space"
+        app:layout_constraintStart_toStartOf="@id/guideline"
+        app:layout_constraintEnd_toEndOf="@id/guideline1"
+        android:hint="SEARCH FRIENDS"
+        android:textSize="@dimen/text_size_xm"/>
 
-    <com.linka.lockapp.aos.module.widget.LinkaTextView android:id="@+id/owner_name"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:text="Name Name"
-              android:textColor="@color/linka_blue"
-              android:textSize="24dp"/>
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/search_friends"
+        app:layout_constraintStart_toStartOf="@id/guideline"
+        app:layout_constraintEnd_toEndOf="@id/guideline1"
+        android:layout_marginTop="@dimen/margin"
+        android:gravity="center"
+        android:text="@string/tap_to_modify_details"
+        android:textColor="@color/menu_gray_text"
+        android:textSize="@dimen/text_size_mm"/>
 
-    <com.linka.lockapp.aos.module.widget.LinkaTextView android:id="@+id/owner_email"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:text="email@email.email"
-              android:textColor="@color/linka_blue"
-              android:textSize="20dp"/>
-
-    <LinearLayout
-        android:id="@+id/display_profile_block"
-        android:layout_width="match_parent"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="15dp"
-        android:layout_weight="9"
-        android:orientation="vertical">
+        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="@dimen/margin_x" />
 
-        <com.linka.lockapp.aos.module.widget.LinkaTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#dfdfdf"
-            android:text="Users"
-            android:textSize="12pt"/>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="30dp"
-            android:layout_marginLeft="0dp"
-            android:layout_marginRight="0dp"
-            android:layout_marginTop="40dp">
-
-        </android.support.v7.widget.RecyclerView>
-
-
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#DD167EC2"/>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:gravity="center_horizontal"
-        android:layout_weight="1">
-        <com.linka.lockapp.aos.module.widget.LinkaButton
-            android:id="@+id/add_user"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add User"/>
-    </LinearLayout>
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>
