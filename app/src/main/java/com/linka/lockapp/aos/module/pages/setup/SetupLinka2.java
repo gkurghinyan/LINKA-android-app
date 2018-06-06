@@ -525,6 +525,8 @@ public class SetupLinka2 extends WalkthroughFragment {
                     );
 
                     showAlert("", error);
+                    setBlur(false);
+                    threeDotsDialogFragment.dismiss();
                     return;
                 }
 

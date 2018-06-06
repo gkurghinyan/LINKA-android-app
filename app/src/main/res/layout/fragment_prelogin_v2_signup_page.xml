@@ -52,7 +52,7 @@
             <ImageView
                 android:id="@+id/sign_in_logo"
                 android:layout_width="0dp"
-                android:layout_height="100dp"
+                android:layout_height="@dimen/logo_height"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/margin_ultra"
                 android:src="@drawable/logo_linka_white"
