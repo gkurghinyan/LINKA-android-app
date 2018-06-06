@@ -1,6 +1,7 @@
 package com.linka.lockapp.aos.module.adapters;
 
 import android.content.Context;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -100,8 +101,8 @@ public class NotificationListAdapter extends GenericLoadMoreAdapter<Notification
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.container)
-        View container;
+        @BindView(R.id.root)
+        ConstraintLayout container;
         @BindView(R.id.notification_icon)
         ImageView notificationIcon;
         @BindView(R.id.notification)
