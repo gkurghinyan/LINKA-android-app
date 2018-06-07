@@ -97,7 +97,7 @@
     <string name="i_agree_to_tos">Acepto los </string>
     <string name="terms_link"><u>términos y condiciones</u></string>
     <string name="create_account">Crear una cuenta</string>
-    <string name="is_forgot">¿Olvidó su contraseña?</string>
+    <string name="is_forgot"><u>Olvidó su contraseña</u></string>
 
     <string name="first_name">Nombre</string>
     <string name="last_name">Apellidos</string>

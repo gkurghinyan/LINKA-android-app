@@ -30,6 +30,7 @@
         app:layout_constraintGuide_percent="0.5" />
 
     <ImageView
+        android:id="@+id/title_image"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:contentDescription="logo"
@@ -38,5 +39,18 @@
         app:layout_constraintEnd_toEndOf="@id/guideline1"
         app:layout_constraintTop_toTopOf="@id/guideline2"
         app:layout_constraintBottom_toBottomOf="@id/guideline2"/>
+
+    <TextView
+        android:id="@+id/title_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_xm"
+        android:text="@string/splash_title"
+        android:textColor="@color/linka_white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="invisible"/>
 
 </android.support.constraint.ConstraintLayout>

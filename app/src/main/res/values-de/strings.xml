@@ -151,7 +151,7 @@
     <string name="i_agree_to_tos">Ich stimme zu die </string>
     <string name="terms_link"><u>Geschäftsbestimmungen gelesen</u></string>
     <string name="create_account">Account erstellen</string>
-    <string name="is_forgot">Passwort vergessen?</string>
+    <string name="is_forgot"><u>Passwort vergessen</u></string>
     <string name="first_name">Vorname</string>
     <string name="last_name">Nachname</string>
     <string name="reenter_password">Passwort nochmals eingeben</string>

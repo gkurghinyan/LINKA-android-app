@@ -5,29 +5,27 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceImpl;
-import com.linka.lockapp.aos.module.api.LinkaAPIServiceManager;
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceResponse;
 import com.linka.lockapp.aos.module.helpers.Helpers;
 import com.linka.lockapp.aos.module.helpers.LocksHelper;
 import com.linka.lockapp.aos.module.helpers.LogHelper;
 import com.linka.lockapp.aos.module.i18n._;
-import com.linka.lockapp.aos.module.model.Linka;
-import com.linka.lockapp.aos.module.model.LinkaAccessKey;
-import com.linka.lockapp.aos.module.widget.LocksController;
 import com.pixplicity.easyprefs.library.Prefs;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -38,33 +36,47 @@ import retrofit2.Response;
  */
 public class AppSplashActivity extends Activity {
 
+    @BindView(R.id.title_image)
+    ImageView image;
+    @BindView(R.id.title_text)
+    TextView title;
+
+    private Unbinder unbinder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        unbinder = ButterKnife.bind(this);
     }
 
 
-    static  boolean isAdded;
+    static boolean isAdded;
+
     @Override
-    protected  void onStop(){
+    protected void onStop() {
         super.onStop();
-     isAdded = false;
+        isAdded = false;
     }
+
     @Override
-    protected  void onStart(){
+    protected void onStart() {
         super.onStart();
         isAdded = true;
     }
+
     @Override
     protected void onPause() {
         super.onPause();
 
 
-        if (handler != null)
-        {
+        if (handler != null) {
             handler.removeCallbacks(runnable);
             handler = null;
+        }
+        if (secondSplash != null){
+            handler.removeCallbacks(startRunnable);
+            secondSplash = null;
         }
     }
 
@@ -72,8 +84,7 @@ public class AppSplashActivity extends Activity {
     protected void onResume() {
         super.onResume();
 
-        if (handler != null)
-        {
+        if (handler != null) {
             handler.removeCallbacks(runnable);
             handler = null;
         }
@@ -82,8 +93,14 @@ public class AppSplashActivity extends Activity {
         handler.post(runnable);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbinder.unbind();
+    }
 
     Handler handler = null;
+    Handler secondSplash = null;
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
@@ -99,15 +116,19 @@ public class AppSplashActivity extends Activity {
         }
     };
 
-
-
+    Runnable startRunnable = new Runnable() {
+        @Override
+        public void run() {
+            startApp();
+            secondSplash = null;
+        }
+    };
 
 
     private static final int PERMISSION_REQUEST_COARSE_LOCATION = 1;
     private static String android_id = "";
 
-    void askForPermission()
-    {
+    void askForPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             // Android M Permission check 
             if (this.checkSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -163,18 +184,14 @@ public class AppSplashActivity extends Activity {
     }
 
 
-
-    void startApp()
-    {
-
+    void startApp() {
         Intent intent = new Intent(AppSplashActivity.this, AppMainActivity.class);
         startActivity(intent);
         finish();
     }
 
 
-    void setupApp()
-    {
+    void setupApp() {
 
         //Test TEST TEST
         android_id = Settings.Secure.getString(AppDelegate.getInstance().getContentResolver(), Settings.Secure.ANDROID_ID);
@@ -184,32 +201,31 @@ public class AppSplashActivity extends Activity {
 
         //For transitioning from pre-elise to elise
         //We need to call this api the first time we open the app after elise is downloaded
-        if(LinkaAPIServiceImpl.isLoggedIn()){
-            if(!Prefs.getBoolean("tokens-transferred", false)) {
+        if (LinkaAPIServiceImpl.isLoggedIn()) {
+            if (!Prefs.getBoolean("tokens-transferred", false)) {
                 transfer_tokens();
                 gettingTokens = true;
             }
-        }else{
+        } else {
             Prefs.putBoolean("tokens-transferred", true);
         }
 
-        if(!gettingTokens){
+        if (!gettingTokens) {
             getLocks();
         }
     }
 
 
-
     //Calls the api to get the list of associated locks
-    void transfer_tokens(){
+    void transfer_tokens() {
 
-        LogHelper.e("Transfer tokens","Transferring device token " + Helpers.device_token + " to new token " + android_id);
+        LogHelper.e("Transfer tokens", "Transferring device token " + Helpers.device_token + " to new token " + android_id);
 
         LinkaAPIServiceImpl.transfer_device_tokens(AppSplashActivity.this, Helpers.device_token, android_id, new Callback<LinkaAPIServiceResponse>() {
             @Override
             public void onResponse(Call<LinkaAPIServiceResponse> call, Response<LinkaAPIServiceResponse> response) {
 
-                if(LinkaAPIServiceImpl.check(response, false, null)){
+                if (LinkaAPIServiceImpl.check(response, false, null)) {
                     Prefs.putString("device_token", android_id);
                     Prefs.putBoolean("tokens-transferred", true);
                     Helpers.load_device_token();
@@ -225,11 +241,18 @@ public class AppSplashActivity extends Activity {
     }
 
 
-    void getLocks(){
+    void getLocks() {
         LocksHelper.get_locks(AppSplashActivity.this, new LocksHelper.LocksCallback() {
             @Override
             public void onNext() {
-                startApp();
+                image.setVisibility(View.INVISIBLE);
+                title.setVisibility(View.VISIBLE);
+                if(secondSplash != null){
+                    secondSplash.removeCallbacks(startRunnable);
+                    secondSplash = null;
+                }
+                secondSplash = new Handler();
+                secondSplash.postDelayed(startRunnable,2000);
             }
         });
 

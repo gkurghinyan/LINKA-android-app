@@ -202,7 +202,7 @@
     <string name="your_lock_is">Votre cadenas est</string>
     <string name="revoke">Révoquer les accès</string>
     <string name="revoke_desc">Supprimer toutes les accès existants sauf administrateur</string>
-    <string name="is_forgot">Mot de passe oublié ?</string>
+    <string name="is_forgot"><u>Mot de passe oublié</u></string>
     <string name="reenter_password">Entrer à nouveau le mot de passe</string>
     <string name="firmware_update_failed">La mise à jour logicielle a échoué</string>
     <string name="no_app_new_version">Votre version de l\'appli est la plus récente</string>
