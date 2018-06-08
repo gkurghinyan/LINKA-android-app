@@ -342,7 +342,7 @@ public class LockPairingController {
                 }
 
                 LogHelper.e("PAIRING Ack", "Counter: " + ack.getCounter() + ", Can Respond: " + (is_device_is_just_auth_complete_can_respond ? "true" : "false"));
-                LogHelper.e("PAIRING Ack", "Counter Updated: " + (isUpdated ? "true" : "false") + " " + getBluetoothGatt().getDevice().getBondState());
+//                LogHelper.e("PAIRING Ack", "Counter Updated: " + (isUpdated ? "true" : "false") + " " + getBluetoothGatt().getDevice().getBondState());
 
 
                 // If we are awaiting a key operation, do it now
@@ -356,7 +356,9 @@ public class LockPairingController {
                 }
                 else
                 {
-                    lockControllerSetEncryptionKeyLogic.tryAction_SetEncryptionKeyRunCallback(true);
+                    if (lockControllerSetEncryptionKeyLogic != null) {
+                        lockControllerSetEncryptionKeyLogic.tryAction_SetEncryptionKeyRunCallback(true);
+                    }
                 }
 
                 checkifReady();

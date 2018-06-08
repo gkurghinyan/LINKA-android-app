@@ -17,7 +17,6 @@ import com.linka.Lock.FirmwareAPI.Comms.LockSettingPacket;
 import com.linka.Lock.FirmwareAPI.Comms.LockStatusPacket;
 import com.linka.Lock.FirmwareAPI.Debug.NrfUartService;
 import com.linka.Lock.FirmwareAPI.LINKA_BLE_Service;
-import com.linka.Lock.Utility.DebugHelper;
 import com.linka.lockapp.aos.module.helpers.LogHelper;
 import com.linka.lockapp.aos.module.model.Linka;
 
@@ -51,19 +50,19 @@ public class LockGattUpdateReceiver {
     }
 
     public void onResume() {
-//        if (mGattUpdateReceiver != null) {
-//            context.unregisterReceiver(mGattUpdateReceiver);
-//            mGattUpdateReceiver = null;
-//        }
+        if (mGattUpdateReceiver != null) {
+            context.unregisterReceiver(mGattUpdateReceiver);
+            mGattUpdateReceiver = null;
+        }
         mGattUpdateReceiver = makeGattUpdateReceiver();
         context.registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
     }
 
     public void onPause() {
-//        if (mGattUpdateReceiver != null) {
+        if (mGattUpdateReceiver != null) {
             context.unregisterReceiver(mGattUpdateReceiver);
-//            mGattUpdateReceiver = null;
-//        }
+            mGattUpdateReceiver = null;
+        }
     }
 
 

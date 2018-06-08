@@ -1,5 +1,6 @@
 package com.linka.lockapp.aos.module.core;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -233,6 +234,10 @@ public class CoreActivity extends AppCompatActivity implements FragmentManager.O
     public static CoreActivity instance;
     public static AppMainActivity getInstance() {
         return (AppMainActivity) instance;
+    }
+
+    public static Activity getInstanceActivity(){
+        return instance;
     }
     @Override
     protected void onResume() {

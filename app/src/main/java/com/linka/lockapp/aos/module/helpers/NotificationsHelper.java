@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Notification;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 
@@ -15,8 +14,6 @@ import com.linka.lockapp.aos.module.i18n._;
 import com.linka.lockapp.aos.module.model.LinkaActivity;
 import com.linka.lockapp.aos.module.model.LinkaActivity.LinkaActivityType;
 import com.linka.lockapp.aos.module.model.LinkaNotificationSettings;
-
-import org.androidannotations.annotations.App;
 
 import br.com.goncalves.pugnotification.notification.Load;
 import br.com.goncalves.pugnotification.notification.PugNotification;
@@ -43,7 +40,7 @@ public class NotificationsHelper {
     }
 
     public boolean CreateLinkaNotificationMessage(LinkaActivity activity) {
-        return CreateLinkaNotificationMessage(activity, AppMainActivity.getInstance());
+        return CreateLinkaNotificationMessage(activity, AppMainActivity.getInstanceActivity());
     }
 
     public boolean CreateLinkaNotificationMessage(LinkaActivity activity, Activity context) {
