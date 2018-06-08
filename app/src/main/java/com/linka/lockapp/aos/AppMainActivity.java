@@ -1151,6 +1151,16 @@ public class AppMainActivity extends CoreActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        if (requestCode == SetupLinka1.REQUEST_CHECK_SETTINGS) {
+            if (resultCode == RESULT_OK) {
+                EventBus.getDefault().post("GPSConnected");
+                Toast.makeText(this, "GPS enabled", Toast.LENGTH_LONG).show();
+            } else {
+                EventBus.getDefault().post("GPSNotConnected");
+                Toast.makeText(this, "GPS is not enabled", Toast.LENGTH_LONG).show();
+            }
+        }
+
         if (FacebookSdk.isFacebookRequestCode(requestCode)) {
             callbackManager.onActivityResult(requestCode, resultCode, data);
 
