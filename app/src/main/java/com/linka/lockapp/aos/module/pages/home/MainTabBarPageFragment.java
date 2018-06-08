@@ -190,6 +190,23 @@ public class MainTabBarPageFragment extends CoreFragment {
             t1.setSelected(true);
             viewPager.setOffscreenPageLimit(4);
 
+            viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                    EventBus.getDefault().post("closeInvite");
+                }
+
+                @Override
+                public void onPageSelected(int position) {
+
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+
+                }
+            });
+
             getAppMainActivity().onChangeFragment(getSelectedPageFragment(viewPager, adapter));
 
             viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {

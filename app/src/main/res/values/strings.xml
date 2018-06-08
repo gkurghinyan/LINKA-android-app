@@ -471,4 +471,5 @@
     <string name="no_one_to_access_your_bike">No one else has access to your bike.\nTap \'+\' below to add a friend!</string>
     <string name="tap_to_modify_details">Tap to modify details.Swipe right to delete</string>
     <string name="splash_title">LOCK SMARTER NOT HARDER</string>
+    <string name="invite_a_friend">INVITE A FRIEND\nTO ACCESS YOUR BIKE</string>
 </resources>

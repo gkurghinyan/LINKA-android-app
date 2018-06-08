@@ -403,6 +403,12 @@ public class SharingPageFragment extends CoreFragment implements RecyclerItemTou
         if(object instanceof InviteUserBusEvent){
             inviteUser(((InviteUserBusEvent) object).getEmail());
         }
+        if(object instanceof String && object.equals("closeInvite")){
+            if(getFragmentManager().findFragmentById(R.id.users_page_root) != null &&
+                    getFragmentManager().findFragmentById(R.id.users_page_root) instanceof InviteUserDialogFragment) {
+                getFragmentManager().popBackStack();
+            }
+        }
     }
 
     @Override
