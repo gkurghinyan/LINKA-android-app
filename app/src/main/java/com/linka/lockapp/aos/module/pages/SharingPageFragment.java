@@ -380,6 +380,7 @@ public class SharingPageFragment extends CoreFragment implements RecyclerItemTou
     @Override
     public void onResume() {
         super.onResume();
+        getAppMainActivity().setTitle("USERS");
         EventBus.getDefault().register(this);
     }
 

@@ -2,7 +2,6 @@ package com.linka.lockapp.aos.module.pages.pac;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
@@ -414,28 +413,16 @@ public class SetPac3 extends CoreFragment {
                     linka.pacIsSet = true;
                     linka.saveSettings();
 
-                    Handler handler = new Handler();
-                    setBlur(true);
-                    threeDotsDialogFragment = ThreeDotsDialogFragment.newInstance();
-                    threeDotsDialogFragment.show(getFragmentManager(),null);
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (getArguments().getInt(NEXT_FRAGMENT) == WALKTHROUGH) {
-                                if (Prefs.getBoolean("show-walkthrough", false)) {
-                                    ((WalkthroughActivity) getActivity()).nextTutorial(TutorialsPagerFragment.newInstance());
-                                } else {
-                                    ((WalkthroughActivity) getActivity()).nextTutorial(TutorialDoneFragment.newInstance());
-                                }
-                            } else {
-                                getAppMainActivity().setFragment(AppMainActivity.WalkthroughOrder.PAC);
-                            }
-                            setBlur(false);
-                            threeDotsDialogFragment.dismiss();
-                            Toast.makeText(getActivity(), "Success Pac", Toast.LENGTH_SHORT).show();
-
+                    if (getArguments().getInt(NEXT_FRAGMENT) == WALKTHROUGH) {
+                        if (Prefs.getBoolean("show-walkthrough", false)) {
+                            ((WalkthroughActivity) getActivity()).nextTutorial(TutorialsPagerFragment.newInstance());
+                        } else {
+                            ((WalkthroughActivity) getActivity()).nextTutorial(TutorialDoneFragment.newInstance());
                         }
-                    }, 2000);
+                    } else {
+                        Toast.makeText(getActivity(), "Success Pac", Toast.LENGTH_SHORT).show();
+                        getAppMainActivity().setFragment(AppMainActivity.WalkthroughOrder.PAC);
+                    }
 
                 } else {
                     Toast.makeText(getActivity(), getString(R.string.check_connection), Toast.LENGTH_SHORT).show();

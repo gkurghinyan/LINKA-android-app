@@ -17,11 +17,13 @@ import android.os.Parcelable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Toast;
 
 import com.linka.Lock.BLE.BluetoothLEDevice;
 import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.adapters.BluetoothLEDeviceListAdapter;
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceImpl;
+import com.linka.lockapp.aos.module.api.LinkaAPIServiceManager;
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceResponse;
 import com.linka.lockapp.aos.module.eventbus.SuccessConnectBusEventMessage;
 import com.linka.lockapp.aos.module.helpers.BLEHelpers;
@@ -86,6 +88,17 @@ public class SetupLinka2 extends WalkthroughFragment {
                 bluetoothAdapter.stopLeScan(mLeScanCallback);
             }
             refresh();
+        }
+    };
+
+    private Handler closeLoadingHandler = null;
+    private Runnable closeLoadingRunnable = new Runnable() {
+        @Override
+        public void run() {
+            setBlur(false);
+            threeDotsDialogFragment.dismiss();
+            LinkaAPIServiceManager.getClient().dispatcher().cancelAll();
+            Toast.makeText(getActivity(), "Fail pairing.Try again", Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -223,6 +236,8 @@ public class SetupLinka2 extends WalkthroughFragment {
 
                                 //Close this fragment to avoid crash if bluetooth denied
                             } else {
+                                devices = new ArrayList<>();
+                                linkaList = new ArrayList<>();
                                 currentFragment = SEARCH_WITH_BLUETOOTH;
                                 updateLayouts(R.layout.fragment_searching_linka_with_bluetooth, 1);
                                 scanLeDevice();
@@ -333,6 +348,9 @@ public class SetupLinka2 extends WalkthroughFragment {
         if (currentFragment != TURN_ON_LINKA) {
             registerReceivers(true);
         }
+        if(closeLoadingHandler != null){
+            closeLoadingHandler.postDelayed(closeLoadingRunnable,30000);
+        }
         EventBus.getDefault().register(this);
     }
 
@@ -346,6 +364,9 @@ public class SetupLinka2 extends WalkthroughFragment {
         hasReceivedScanCallback = true;
         if (currentFragment != TURN_ON_LINKA) {
             registerReceivers(false);
+        }
+        if(closeLoadingHandler != null){
+            closeLoadingHandler.removeCallbacks(closeLoadingRunnable);
         }
         EventBus.getDefault().unregister(this);
     }
@@ -503,6 +524,8 @@ public class SetupLinka2 extends WalkthroughFragment {
 
 
     void tryPreparePairingUp(final BluetoothLEDevice item) {
+        closeLoadingHandler = new Handler();
+        closeLoadingHandler.postDelayed(closeLoadingRunnable,30000);
         setBlur(true);
         threeDotsDialogFragment = ThreeDotsDialogFragment.newInstance();
         threeDotsDialogFragment.show(getFragmentManager(),null);
@@ -527,6 +550,10 @@ public class SetupLinka2 extends WalkthroughFragment {
                     showAlert("", error);
                     setBlur(false);
                     threeDotsDialogFragment.dismiss();
+                    if(closeLoadingHandler != null){
+                        closeLoadingHandler.removeCallbacks(closeLoadingRunnable);
+                        closeLoadingHandler = null;
+                    }
                     return;
                 }
 
@@ -539,12 +566,20 @@ public class SetupLinka2 extends WalkthroughFragment {
                     if (accessKey.access_key_admin.equals("")) {
                         setBlur(false);
                         threeDotsDialogFragment.dismiss();
+                        if(closeLoadingHandler != null){
+                            closeLoadingHandler.removeCallbacks(closeLoadingRunnable);
+                            closeLoadingHandler = null;
+                        }
                         getAppMainActivity().pushFragment(AccessLockFragment.newInstance(linka));
 
                         return;
                     } else {
                         setBlur(false);
                         threeDotsDialogFragment.dismiss();
+                        if(closeLoadingHandler != null){
+                            closeLoadingHandler.removeCallbacks(closeLoadingRunnable);
+                            closeLoadingHandler = null;
+                        }
                         new AlertDialog.Builder(getActivity())
                                 .setTitle(_.i(R.string.reactivate_access_keys))
                                 .setMessage(_.i(R.string.wish_to_reactivate_access_keys))
@@ -600,6 +635,10 @@ public class SetupLinka2 extends WalkthroughFragment {
 
 //                getAppMainActivity().pushFragment(SetupLinka3.newInstance());
                 threeDotsDialogFragment.dismiss();
+                if(closeLoadingHandler != null){
+                    closeLoadingHandler.removeCallbacks(closeLoadingRunnable);
+                    closeLoadingHandler = null;
+                }
                 SuccessConnectionDialogFragment.newInstance(getString(R.string.connected_lower)).show(getFragmentManager(),null);
 
             }

@@ -38,9 +38,14 @@ public class LinkaAPIServiceManager {
 
     static LinkaAPIService service;
     static Retrofit retrofit;
+    static OkHttpClient client;
 
     public static Retrofit getRetrofit() {
         return retrofit;
+    }
+
+    public static OkHttpClient getClient(){
+        return client;
     }
 
     public static LinkaAPIServiceResponse extractErrorFromResponse(retrofit2.Response response) {
@@ -126,7 +131,7 @@ public class LinkaAPIServiceManager {
                                       }
                                   });
 
-        OkHttpClient client = httpClient.build();
+        client = httpClient.build();
         retrofit = new Retrofit.Builder()
                 .baseUrl(LinkaAPIServiceConfig.URL)
                 .addConverterFactory(GsonConverterFactory.create())

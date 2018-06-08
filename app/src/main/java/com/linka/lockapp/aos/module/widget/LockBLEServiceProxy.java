@@ -243,7 +243,7 @@ public class LockBLEServiceProxy {
     public synchronized void processEncryptionSettingsQueue(LockControllerBundle bundle, String callingFunction) {
         isEncryptionCounterValid = false; // disable the queue while we're processing
 
-        LogHelper.i("[QUEUE]", callingFunction + " [Counter]" + Integer.toString(bundle.mLockContextData.getCounter()) + "Size = " + encryptedPacketQueue.size());  // Let's us know which callback is initiating the process
+//        LogHelper.i("[QUEUE]", callingFunction + " [Counter]" + Integer.toString(bundle.mLockContextData.getCounter()) + "Size = " + encryptedPacketQueue.size());  // Let's us know which callback is initiating the process
 
         // Let's first check to make sure there is an existing access key set
         // It's possible that upon first connecting to the lock we haven't set it yet
@@ -291,7 +291,7 @@ public class LockBLEServiceProxy {
             }
 
             if (encPkt != null) {
-                LogHelper.i("Counter", new Integer(bundle.mLockContextData.getCounter()).toString());
+//                LogHelper.i("Counter", new Integer(bundle.mLockContextData.getCounter()).toString());
                 mLINKA_BLE_Service.WriteDataPacket(encPkt, bundle.gatt, bundle.bundle, bundle.actions);
             }
         } else {

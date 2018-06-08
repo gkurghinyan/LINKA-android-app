@@ -254,26 +254,7 @@ public class AppMainActivity extends CoreActivity {
         initDrawer();
         initNavBar();
 
-        switch (Prefs.getInt(Constants.SHOWING_FRAGMENT, Constants.LAUNCHER_FRAGMENT)) {
-            case Constants.LAUNCHER_FRAGMENT:
-                setFragment(decide());
-                break;
-            case Constants.SET_NAME_FRAGMENT:
-                pushFragment(SetupLinka3.newInstance());
-                break;
-            case Constants.SET_PAC_FRAGMENT:
-                this.finish();
-                startActivity(new Intent(AppMainActivity.this, WalkthroughActivity.class));
-                break;
-            case Constants.TUTORIAL_FRAGMENT:
-                this.finish();
-                startActivity(new Intent(AppMainActivity.this, WalkthroughActivity.class));
-                break;
-            case Constants.DONE_FRAGMENT:
-                this.finish();
-                startActivity(new Intent(AppMainActivity.this, WalkthroughActivity.class));
-                break;
-        }
+        setFragment(decide());
 
         MyFirebaseInstanceIdService.getFcmToken();
 
@@ -301,6 +282,25 @@ public class AppMainActivity extends CoreActivity {
         startService(new Intent(this, GeofencingService.class));
         GeofencingService.init(AppMainActivity.this);
 
+        switch (Prefs.getInt(Constants.SHOWING_FRAGMENT, Constants.LAUNCHER_FRAGMENT)) {
+            case Constants.LAUNCHER_FRAGMENT:
+                break;
+            case Constants.SET_NAME_FRAGMENT:
+                pushFragment(SetupLinka3.newInstance());
+                break;
+            case Constants.SET_PAC_FRAGMENT:
+                this.finish();
+                startActivity(new Intent(AppMainActivity.this, WalkthroughActivity.class));
+                break;
+            case Constants.TUTORIAL_FRAGMENT:
+                this.finish();
+                startActivity(new Intent(AppMainActivity.this, WalkthroughActivity.class));
+                break;
+            case Constants.DONE_FRAGMENT:
+                this.finish();
+                startActivity(new Intent(AppMainActivity.this, WalkthroughActivity.class));
+                break;
+        }
     }
 
 
@@ -397,6 +397,7 @@ public class AppMainActivity extends CoreActivity {
                     AppBluetoothService.getInstance().enableFixedTimeScanning(true);
                 }
 
+//                LocksController.init(this);
                 Fragment fragment = MainTabBarPageFragment.newInstance(LinkaNotificationSettings.get_latest_linka());
                 return fragment;
 

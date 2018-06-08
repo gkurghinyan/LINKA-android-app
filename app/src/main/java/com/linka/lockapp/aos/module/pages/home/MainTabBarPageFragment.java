@@ -264,18 +264,21 @@ public class MainTabBarPageFragment extends CoreFragment {
     void on_t1() {
         viewPager.setCurrentItem(0, true);
         changeButtonsState(true,false,false,false);
+        getAppMainActivity().setTitle("USERS");
     }
 
     @OnClick(R.id.t2)
     void on_t2() {
         viewPager.setCurrentItem(1, true);
         changeButtonsState(false,true,false,false);
+        getAppMainActivity().setTitle(linka.lock_name);
     }
 
     @OnClick(R.id.t3)
     void on_t3() {
         viewPager.setCurrentItem(2, true);
         changeButtonsState(false,false,true,false);
+        getAppMainActivity().setTitle("NOTIFICATIONS");
     }
 
     @OnClick(R.id.t4)
