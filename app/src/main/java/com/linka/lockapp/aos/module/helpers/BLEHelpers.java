@@ -85,7 +85,7 @@ public class BLEHelpers {
 
     /* discover device */
 
-    public static boolean upsertBluetoothLEDeviceList(List<BluetoothLEDevice> devices, List<Linka> linkaList, BluetoothDevice device, int rssi, byte[] scanrecord) {
+    public static int upsertBluetoothLEDeviceList(List<BluetoothLEDevice> devices, List<Linka> linkaList, BluetoothDevice device, int rssi, byte[] scanrecord) {
         // Check to see if we already have a device with that address
         for (BluetoothLEDevice d : devices) {
             if (d.getAddress().equals(device.getAddress()))
@@ -98,7 +98,7 @@ public class BLEHelpers {
                 if (ad_info != null) {
                     mLockDataLogger.addLogEntry(device.getAddress(), ad_info);
                 }
-                return false;
+                return 1;
             }
         }
 
@@ -114,10 +114,10 @@ public class BLEHelpers {
             devices.add(bluetoothLEDevice);
             linkaList.add(Linka.makeLinka(bluetoothLEDevice));
 
-            return true;
+            return 0;
         }
 
-        return false;
+        return 2;
     }
 
 

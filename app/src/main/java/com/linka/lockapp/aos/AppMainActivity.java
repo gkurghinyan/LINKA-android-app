@@ -723,7 +723,8 @@ public class AppMainActivity extends CoreActivity {
                 || fragment instanceof NotificationsPageFragment
                 || fragment instanceof LocationPageFragment
                 || fragment instanceof MyLinkasPageFragmentPage
-                || fragment instanceof WebPageFragment) {
+                || fragment instanceof WebPageFragment
+                || fragment instanceof MainTabBarPageFragment) {
             toolbar.setVisibility(View.VISIBLE);
             toolbarSpace.setVisibility(View.VISIBLE);
             toolbar.setBackgroundColor(getResources().getColor(R.color.linka_blue_tabbar));
@@ -742,7 +743,6 @@ public class AppMainActivity extends CoreActivity {
                 || fragment instanceof AccessLockFragment) {
             toolbar.setVisibility(View.GONE);
             toolbarSpace.setVisibility(View.GONE);
-            toolbar.setBackgroundColor(getResources().getColor(R.color.linka_blue_tabbar_transparent));
             title.setTextColor(getResources().getColor(R.color.linka_white));
             back.icon.setImageResource(R.drawable.icon_back_arrow);
             menu.setVisibility(View.GONE);
@@ -981,9 +981,11 @@ public class AppMainActivity extends CoreActivity {
 
     @OnClick(R.id.item_add)
     void onClick_item_add() {
-        toolbar.setVisibility(View.INVISIBLE);
-        SetupLinka1 fragment = SetupLinka1.newInstance();
-        pushFragment(fragment);
+        if(!(getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof SetupLinka1)) {
+            toolbar.setVisibility(View.INVISIBLE);
+            SetupLinka1 fragment = SetupLinka1.newInstance();
+            pushFragment(fragment);
+        }
         drawerLayout.closeDrawers();
     }
 

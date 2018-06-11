@@ -77,7 +77,9 @@ public class SetupLinka2 extends WalkthroughFragment {
     Runnable scanRunnable = new Runnable() {
         @Override
         public void run() {
-            scanLeDevice();
+            linkaList.clear();
+            devices.clear();
+            refresh();
         }
     };
 
@@ -103,12 +105,27 @@ public class SetupLinka2 extends WalkthroughFragment {
             threeDotsDialogFragment.dismiss();
             LinkaAPIServiceManager.getClient().dispatcher().cancelAll();
             String message = getString(R.string.fail_pairing) + " " + currentLinka.getName();
-            linkaList.clear();
-            devices.clear();
             stopLeScan();
             LinkaNotificationSettings.disconnect_all_linka();
             AppBluetoothService.getInstance().enableFixedTimeScanning(false);
-            scanLeDevice();
+            devices = new ArrayList<>();
+            linkaList = new ArrayList<>();
+            if(getInternetConnectivity()) {
+                if (bluetoothAdapter != null) {
+                    if (bluetoothAdapter.isEnabled()) {
+                        currentFragment = SEARCH_WITH_BLUETOOTH;
+                        updateLayouts(R.layout.fragment_searching_linka_with_bluetooth, 1);
+                        scanLeDevice();
+                    }else {
+                        currentFragment = NO_BLUETOOTH;
+                        updateLayouts(R.layout.fragment_no_bluetooth_connectivity, 1);
+                    }
+                }
+            }else {
+                isInternet = false;
+                currentFragment = NO_INTERNET;
+                updateLayouts(R.layout.fragment_no_internet_connectivity, 1);
+            }
             Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
         }
     };
@@ -130,16 +147,22 @@ public class SetupLinka2 extends WalkthroughFragment {
                 final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
                 switch (state) {
                     case BluetoothAdapter.STATE_OFF:
+                        scanHandler.removeCallbacks(scanRunnable);
                         currentFragment = NO_BLUETOOTH;
-                        updateLayouts(R.layout.fragment_no_bluetooth_connectivity,1);
-                        if(mScanning){
+                        updateLayouts(R.layout.fragment_no_bluetooth_connectivity, 1);
+                        if (mScanning) {
                             stopLeScan();
                         }
+                        linkaList.clear();
+                        devices.clear();
+                        LinkaNotificationSettings.disconnect_all_linka();
+                        AppBluetoothService.getInstance().enableFixedTimeScanning(false);
                         break;
                     case BluetoothAdapter.STATE_ON:
-                        if(getInternetConnectivity()) {
+                        if (getInternetConnectivity()) {
                             currentFragment = SEARCH_WITH_BLUETOOTH;
                             updateLayouts(R.layout.fragment_searching_linka_with_bluetooth, 1);
+                            scanLeDevice();
                         }
                         break;
                 }
@@ -160,15 +183,15 @@ public class SetupLinka2 extends WalkthroughFragment {
                     if (bluetoothAdapter != null) {
                         if (!bluetoothAdapter.isEnabled()) {
                             currentFragment = NO_BLUETOOTH;
-                            updateLayouts(R.layout.fragment_no_bluetooth_connectivity,1);
-                        }else {
+                            updateLayouts(R.layout.fragment_no_bluetooth_connectivity, 1);
+                        } else {
                             currentFragment = SEARCH_WITH_BLUETOOTH;
                             updateLayouts(R.layout.fragment_searching_linka_with_bluetooth, 1);
                             scanLeDevice();
                         }
-                    }else {
+                    } else {
                         currentFragment = NO_BLUETOOTH;
-                        updateLayouts(R.layout.fragment_no_bluetooth_connectivity,1);
+                        updateLayouts(R.layout.fragment_no_bluetooth_connectivity, 1);
                     }
                 }
             } else {
@@ -180,32 +203,6 @@ public class SetupLinka2 extends WalkthroughFragment {
             }
         }
     };
-
-//    BroadcastReceiver discoveryReceiver = new BroadcastReceiver() {
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//            if(intent.getAction().equals(ACTION_DISCOVERY_STARTED)){
-//                stopLeScan();
-//                linkaList.clear();
-//            }
-//            if(intent.getAction().equals(BluetoothDevice.ACTION_FOUND)){
-//                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-//                int rssi = intent.getIntExtra(BluetoothDevice.EXTRA_RSSI,0);
-//                byte[] scanRecord = intent.getByteArrayExtra(BluetoothDevice.)
-//                if (BLEHelpers.upsertBluetoothLEDeviceList(devices, linkaList, device, rssi, scanRecord)) {
-//                    if (currentFragment != SCAN_RESULT) {
-//                        updateLayouts(R.layout.fragment_setup_search_for_linkas_page,1);
-//                        currentFragment = SCAN_RESULT;
-//                    }
-//                    refresh();
-//                    scanHandler.postDelayed(scanRunnable,3000);
-//                }
-//            }
-//            if(intent.getAction().equals(ACTION_DISCOVERY_FINISHED)){
-//                scanLeDevice();
-//            }
-//        }
-//    };
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -226,7 +223,7 @@ public class SetupLinka2 extends WalkthroughFragment {
         setLayoutView(new LayoutView() {
             @Override
             public void onViewCreated(View view, int position) {
-                setView(view,position);
+                setView(view, position);
             }
 
             @Override
@@ -280,8 +277,8 @@ public class SetupLinka2 extends WalkthroughFragment {
         return connected;
     }
 
-    void setView(View view,int position) {
-        if(position == 1 && currentFragment == SCAN_RESULT) {
+    void setView(View view, int position) {
+        if (position == 1 && currentFragment == SCAN_RESULT) {
             RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
 
             if (recyclerView != null) {
@@ -309,6 +306,12 @@ public class SetupLinka2 extends WalkthroughFragment {
     @Override
     public void onResume() {
         super.onResume();
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
         scanHandler.removeCallbacks(scanRunnable);
         //scanHandler.postDelayed(scanRunnable, 1000); //Why wait 1 second? Disabled.
 
@@ -316,16 +319,16 @@ public class SetupLinka2 extends WalkthroughFragment {
         if (currentFragment != TURN_ON_LINKA) {
             registerReceivers(true);
         }
-        if(closeLoadingHandler != null){
+        if (closeLoadingHandler != null) {
 
-            closeLoadingHandler.postDelayed(closeLoadingRunnable,30000);
+            closeLoadingHandler.postDelayed(closeLoadingRunnable, 30000);
         }
         EventBus.getDefault().register(this);
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onStop() {
+        super.onStop();
         scanHandler.removeCallbacks(scanRunnable);
         stopLeScan();
 
@@ -334,10 +337,16 @@ public class SetupLinka2 extends WalkthroughFragment {
         if (currentFragment != TURN_ON_LINKA) {
             registerReceivers(false);
         }
-        if(closeLoadingHandler != null){
+        if (closeLoadingHandler != null) {
             closeLoadingHandler.removeCallbacks(closeLoadingRunnable);
         }
         EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
     }
 
     @Subscribe
@@ -358,7 +367,6 @@ public class SetupLinka2 extends WalkthroughFragment {
 
     void init() {
 
-
         //Need to set to null, or else sometimes the callback won't work
         scanCallback = null;
 
@@ -376,6 +384,7 @@ public class SetupLinka2 extends WalkthroughFragment {
             @Override
             public void onClickDeviceItem(Linka item, int position) {
                 currentLinka = item;
+                scanHandler.removeCallbacks(scanRunnable);
                 tryPreparePairingUp(devices.get(position));
             }
         });
@@ -417,19 +426,10 @@ public class SetupLinka2 extends WalkthroughFragment {
         if (bluetoothAdapter == null) return;
         mScanning = true;
 
+        initializeScanCallback();
         bluetoothAdapter.startLeScan(mLeScanCallback);
         refresh();
     }
-
-//    void discoveryDevices(){
-//        IntentFilter intentFilter = new IntentFilter();
-//        intentFilter.addAction(BluetoothDevice.ACTION_FOUND);
-//        intentFilter.addAction(ACTION_DISCOVERY_STARTED);
-//        intentFilter.addAction(ACTION_DISCOVERY_FINISHED);
-//
-//        getActivity().registerReceiver(discoveryReceiver,intentFilter);
-//        bluetoothAdapter.startDiscovery();
-//    }
 
     void stopLeScan() {
         LogHelper.e("SCAN", "stopping Scan");
@@ -439,48 +439,52 @@ public class SetupLinka2 extends WalkthroughFragment {
         mScanning = false;
     }
 
-    BluetoothAdapter.LeScanCallback mLeScanCallback = new BluetoothAdapter.LeScanCallback() {
+    private void initializeScanCallback() {
+        mLeScanCallback = new BluetoothAdapter.LeScanCallback() {
 
-        @Override
-        public void onLeScan(final BluetoothDevice device, final int rssi, final byte[] scanRecord) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (!isAdded()) return;
+            @Override
+            public void onLeScan(final BluetoothDevice device, final int rssi, final byte[] scanRecord) {
+                if (!isAdded()) return;
 
-                    if (device != null) {
-//                        scanHandler.removeCallbacks(scanRunnable);
-//                        currentFragment = SCAN_RESULT;
-//                        updateLayouts(R.layout.fragment_setup_search_for_linkas_page,1);
-                        LogHelper.e("SCAN", "Got Device " + device.getName() + device.getAddress());
+                if (device != null) {
+                    LogHelper.e("SCAN", "Got Device " + device.getName() + device.getAddress());
+                } else {
+                    return;
+                }
+
+                if (BLEHelpers.upsertBluetoothLEDeviceList(devices, linkaList, device, rssi, scanRecord) == 0) {
+                    if (currentFragment != SCAN_RESULT) {
+                        currentFragment = SCAN_RESULT;
+                        updateLayouts(R.layout.fragment_setup_search_for_linkas_page, 1);
                     }
-
-                    if (BLEHelpers.upsertBluetoothLEDeviceList(devices, linkaList, device, rssi, scanRecord)) {
-                        if (currentFragment != SCAN_RESULT) {
-                            currentFragment = SCAN_RESULT;
-                            updateLayouts(R.layout.fragment_setup_search_for_linkas_page,1);
-                        }
-                        refresh();
-//                        scanHandler.postDelayed(scanRunnable,3000);
+                    refresh();
+                    if (!linkaList.isEmpty()) {
+                        scanHandler.removeCallbacks(scanRunnable);
+                        scanHandler.postDelayed(scanRunnable, 4000);
+                    }
+                } else if (BLEHelpers.upsertBluetoothLEDeviceList(devices, linkaList, device, rssi, scanRecord) == 1) {
+                    if (!linkaList.isEmpty()) {
+                        scanHandler.removeCallbacks(scanRunnable);
+                        scanHandler.postDelayed(scanRunnable, 4000);
                     }
                 }
-            });
-        }
-    };
+            }
+        };
+    }
+
+    BluetoothAdapter.LeScanCallback mLeScanCallback;
 
 
     void tryPreparePairingUp(final BluetoothLEDevice item) {
         closeLoadingHandler = new Handler();
-        closeLoadingHandler.postDelayed(closeLoadingRunnable,30000);
+        closeLoadingHandler.postDelayed(closeLoadingRunnable, 30000);
         setBlur(true);
         threeDotsDialogFragment = ThreeDotsDialogFragment.newInstance();
-        threeDotsDialogFragment.show(getFragmentManager(),null);
+        threeDotsDialogFragment.show(getFragmentManager(), null);
         final Linka linka = Linka.makeLinka(item);
         LinkaAccessKey.tryRegisterLock(getAppMainActivity(), linka, new LinkaAccessKey.LinkaAccessKeyDetailedErrorCallback() {
             @Override
             public void onObtain(LinkaAccessKey accessKey, boolean isValid, boolean showError, int code, String error) {
-//                setBlur(false);
-//                threeDotsDialogFragment.dismiss();
 
                 if (accessKey == null && showError) {
                     if (!isAdded()) return;
@@ -496,7 +500,7 @@ public class SetupLinka2 extends WalkthroughFragment {
                     showAlert("", error);
                     setBlur(false);
                     threeDotsDialogFragment.dismiss();
-                    if(closeLoadingHandler != null){
+                    if (closeLoadingHandler != null) {
                         closeLoadingHandler.removeCallbacks(closeLoadingRunnable);
                         closeLoadingHandler = null;
                     }
@@ -512,7 +516,7 @@ public class SetupLinka2 extends WalkthroughFragment {
                     if (accessKey.access_key_admin.equals("")) {
                         setBlur(false);
                         threeDotsDialogFragment.dismiss();
-                        if(closeLoadingHandler != null){
+                        if (closeLoadingHandler != null) {
                             closeLoadingHandler.removeCallbacks(closeLoadingRunnable);
                             closeLoadingHandler = null;
                         }
@@ -522,7 +526,7 @@ public class SetupLinka2 extends WalkthroughFragment {
                     } else {
                         setBlur(false);
                         threeDotsDialogFragment.dismiss();
-                        if(closeLoadingHandler != null){
+                        if (closeLoadingHandler != null) {
                             closeLoadingHandler.removeCallbacks(closeLoadingRunnable);
                             closeLoadingHandler = null;
                         }
@@ -579,13 +583,12 @@ public class SetupLinka2 extends WalkthroughFragment {
                 Linka linka = Linka.saveLinka(item, true);
                 getAppMainActivity().saveLatestLinka(linka);
 
-//                getAppMainActivity().pushFragment(SetupLinka3.newInstance());
                 threeDotsDialogFragment.dismiss();
-                if(closeLoadingHandler != null){
+                if (closeLoadingHandler != null) {
                     closeLoadingHandler.removeCallbacks(closeLoadingRunnable);
                     closeLoadingHandler = null;
                 }
-                SuccessConnectionDialogFragment.newInstance(getString(R.string.connected_lower)).show(getFragmentManager(),null);
+                SuccessConnectionDialogFragment.newInstance(getString(R.string.connected_lower)).show(getFragmentManager(), null);
 
             }
         }, 500);

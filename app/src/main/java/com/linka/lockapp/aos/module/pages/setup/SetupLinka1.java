@@ -70,6 +70,7 @@ public class SetupLinka1 extends CoreFragment implements GoogleApiClient.Connect
     LinearLayout emailRoot;
 
     private Unbinder unbinder;
+    private static int boundedTextsCount;
 
     public static SetupLinka1 newInstance() {
         Bundle bundle = new Bundle();
@@ -97,7 +98,8 @@ public class SetupLinka1 extends CoreFragment implements GoogleApiClient.Connect
         if (getArguments() != null) {
             Bundle bundle = getArguments();
         }
-        setEmail();
+        boundedTextsCount = 0;
+        setViewObservers();
         List<Linka> linkas = Linka.getLinkas();
         for (int i = 0; i < linkas.size(); i++) {
             if (linkas.get(i).isLocked) {
@@ -107,21 +109,58 @@ public class SetupLinka1 extends CoreFragment implements GoogleApiClient.Connect
         }
     }
 
-    private void setEmail(){
-        DisplayMetrics metrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        final int screenWidth = metrics.widthPixels;
+    private void setViewObservers(){
         userEmail.setText(getString(R.string.you_re_logged_is_as) + " " + LinkaAPIServiceImpl.getUserEmail());
+
         userEmail.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                if(userEmail.getWidth() > screenWidth - (logOut.getWidth() + line.getWidth() + emailRoot.getPaddingStart() * 5)){
-                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    params.weight = 1;
-                    userEmail.setLayoutParams(params);
-                }
+                boundedTextsCount ++;
+                userEmail.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                setEmail();
             }
         });
+
+        logOut.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                boundedTextsCount ++;
+                logOut.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                setEmail();
+            }
+        });
+
+        line.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                boundedTextsCount ++;
+                line.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                setEmail();
+            }
+        });
+
+        emailRoot.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                boundedTextsCount ++;
+                emailRoot.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                setEmail();
+            }
+        });
+    }
+
+    private void setEmail(){
+        if(boundedTextsCount == 4) {
+            DisplayMetrics metrics = new DisplayMetrics();
+            getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+            final int screenWidth = metrics.widthPixels;
+            if (userEmail.getWidth() > screenWidth - (logOut.getWidth() + line.getWidth() + emailRoot.getPaddingStart() * 5)) {
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.weight = 1;
+                userEmail.setLayoutParams(params);
+            }
+            boundedTextsCount = 0;
+        }
     }
 
     @Override
