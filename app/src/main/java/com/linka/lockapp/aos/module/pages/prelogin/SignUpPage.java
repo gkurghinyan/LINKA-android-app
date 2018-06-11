@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -70,7 +69,6 @@ public class SignUpPage extends CoreFragment {
         View rootView = inflater.inflate(R.layout.fragment_prelogin_v2_signup_page, container, false);
         unbinder = ButterKnife.bind(this, rootView);
         Log.d("ActivityNameLog",getActivity().getLocalClassName());
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         return rootView;
     }

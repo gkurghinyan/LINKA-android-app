@@ -55,7 +55,7 @@
             android:name=".AppMainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".AppLanguagePickerActivity"
             android:label="@string/app_name"
