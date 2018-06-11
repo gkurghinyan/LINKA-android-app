@@ -6,11 +6,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -59,8 +62,12 @@ public class SetupLinka1 extends CoreFragment implements GoogleApiClient.Connect
     TextView userEmail;
     @BindView(R.id.log_out)
     TextView logOut;
+    @BindView(R.id.line)
+    TextView line;
     @BindView(R.id.root)
     ConstraintLayout root;
+    @BindView(R.id.email_root)
+    LinearLayout emailRoot;
 
     private Unbinder unbinder;
 
@@ -90,7 +97,7 @@ public class SetupLinka1 extends CoreFragment implements GoogleApiClient.Connect
         if (getArguments() != null) {
             Bundle bundle = getArguments();
         }
-        userEmail.setText(getString(R.string.you_re_logged_is_as) + " " + LinkaAPIServiceImpl.getUserEmail());
+        setEmail();
         List<Linka> linkas = Linka.getLinkas();
         for (int i = 0; i < linkas.size(); i++) {
             if (linkas.get(i).isLocked) {
@@ -98,6 +105,23 @@ public class SetupLinka1 extends CoreFragment implements GoogleApiClient.Connect
                 break;
             }
         }
+    }
+
+    private void setEmail(){
+        DisplayMetrics metrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        final int screenWidth = metrics.widthPixels;
+        userEmail.setText(getString(R.string.you_re_logged_is_as) + " " + LinkaAPIServiceImpl.getUserEmail());
+        userEmail.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if(userEmail.getWidth() > screenWidth - (logOut.getWidth() + line.getWidth() + emailRoot.getPaddingStart() * 5)){
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    params.weight = 1;
+                    userEmail.setLayoutParams(params);
+                }
+            }
+        });
     }
 
     @Override
