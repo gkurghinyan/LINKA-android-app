@@ -127,7 +127,7 @@ public class WalkthroughFragment extends CoreFragment {
         if(getActivity() instanceof WalkthroughActivity){
             ((WalkthroughActivity) getActivity()).popFragment();
         }else {
-            getFragmentManager().popBackStack();
+            getAppMainActivity().onBackPressed();
         }
     }
 

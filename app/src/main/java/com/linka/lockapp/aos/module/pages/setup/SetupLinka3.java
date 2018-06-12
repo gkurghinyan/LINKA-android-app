@@ -86,6 +86,17 @@ public class SetupLinka3 extends CoreFragment {
                 return;
             }
             Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).saveName(linkaName);
+            if (!Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).pacIsSet) {
+                SharedPreferences.Editor editor = Prefs.edit();
+                if (Prefs.getBoolean("show-walkthrough", false)) {
+                    editor.putInt(Constants.SHOWING_FRAGMENT, Constants.TUTORIAL_FRAGMENT);
+                } else {
+                    editor.putInt(Constants.SHOWING_FRAGMENT, Constants.DONE_FRAGMENT);
+                }
+                editor.apply();
+                getActivity().finish();
+                startActivity(new Intent(getActivity(), WalkthroughActivity.class));
+            }
             getActivity().finish();
             startActivity(new Intent(getActivity(), WalkthroughActivity.class));
         } else {

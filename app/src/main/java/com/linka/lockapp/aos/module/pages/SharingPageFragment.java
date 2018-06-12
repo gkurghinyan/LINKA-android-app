@@ -63,6 +63,7 @@ public class SharingPageFragment extends CoreFragment implements RecyclerItemTou
     TextView title;
 
     private Unbinder unbinder;
+    private View rootView;
 
     SharingAdapter adapter;
 
@@ -89,7 +90,7 @@ public class SharingPageFragment extends CoreFragment implements RecyclerItemTou
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_sharing_page, container, false);
+        rootView = inflater.inflate(R.layout.fragment_sharing_page, container, false);
         unbinder = ButterKnife.bind(this, rootView);
 
         return rootView;
@@ -266,7 +267,7 @@ public class SharingPageFragment extends CoreFragment implements RecyclerItemTou
             @Override
             public void onResponse(Call<LinkaAPIServiceResponse.LockPermissionsResponse> call, Response<LinkaAPIServiceResponse.LockPermissionsResponse> response) {
 
-                if(LinkaAPIServiceImpl.check(response, false, null)) {
+                if (LinkaAPIServiceImpl.check(response, false, null)) {
 
                     for (LinkaAPIServiceResponse.LockPermissionsResponse.Data userData : response.body().data) {
                         User newUser = User.saveUserForEmail(userData.email, userData.first_name, userData.last_name, userData.name, userData.userId, userData.owner, userData.isPendingApproval);
@@ -275,7 +276,7 @@ public class SharingPageFragment extends CoreFragment implements RecyclerItemTou
 //                            return;
 //                        }
 
-                        if(userData.owner){
+                        if (userData.owner) {
 //                            ownerEmail.setText(userData.email);
 //                            ownerName.setText(userData.name);
 
@@ -287,7 +288,7 @@ public class SharingPageFragment extends CoreFragment implements RecyclerItemTou
                                 selfIsOwner = true;
                             }
 
-                        }else {
+                        } else {
                             userList.add(newUser);
 
                         }
@@ -296,9 +297,12 @@ public class SharingPageFragment extends CoreFragment implements RecyclerItemTou
 
                     if (adapter == null) return;
                     adapter.setList(userList);
-                    if(userList.isEmpty()){
+                    if(title == null){
+                        unbinder = ButterKnife.bind(SharingPageFragment.this,rootView);
+                    }
+                    if (userList.isEmpty()) {
                         title.setText(R.string.no_one_to_access_your_bike);
-                    }else {
+                    } else {
                         title.setText(R.string.tap_to_modify_details);
                     }
                     adapter.notifyDataSetChanged();
@@ -345,7 +349,7 @@ public class SharingPageFragment extends CoreFragment implements RecyclerItemTou
         });
     }
 
-    void revokeAccess(String userId){
+    void revokeAccess(String userId) {
         LinkaAPIServiceImpl.revoke_access(getAppMainActivity(), linka, userId, new Callback<LinkaAPIServiceResponse>() {
 
             @Override
@@ -400,11 +404,11 @@ public class SharingPageFragment extends CoreFragment implements RecyclerItemTou
                 linka = newLinka;
             }*/
         }
-        if(object instanceof InviteUserBusEvent){
+        if (object instanceof InviteUserBusEvent) {
             inviteUser(((InviteUserBusEvent) object).getEmail());
         }
-        if(object instanceof String && object.equals("closeInvite")){
-            if(getFragmentManager().findFragmentById(R.id.users_page_root) != null &&
+        if (object instanceof String && object.equals("closeInvite")) {
+            if (getFragmentManager().findFragmentById(R.id.users_page_root) != null &&
                     getFragmentManager().findFragmentById(R.id.users_page_root) instanceof InviteUserDialogFragment) {
                 getFragmentManager().popBackStack();
             }
@@ -423,7 +427,7 @@ public class SharingPageFragment extends CoreFragment implements RecyclerItemTou
 
             // remove the item from recycler view
             adapter.removeUser(viewHolder.getAdapterPosition());
-            if(adapter.getItemCount() <= 1){
+            if (adapter.getItemCount() <= 1) {
                 title.setText(R.string.no_one_to_access_your_bike);
             }
 
