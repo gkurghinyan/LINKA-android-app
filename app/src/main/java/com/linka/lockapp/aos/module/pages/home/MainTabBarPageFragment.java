@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -111,6 +112,7 @@ public class MainTabBarPageFragment extends CoreFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         if (getArguments() != null) {
             Bundle bundle = getArguments();
             if (bundle.get("linka") != null) {
@@ -132,6 +134,7 @@ public class MainTabBarPageFragment extends CoreFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         viewPager.clearOnPageChangeListeners();
         if (adapter != null) {
             adapter.f1 = null;
