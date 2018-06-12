@@ -31,7 +31,7 @@ public class EmptyFragment extends Fragment {
         } else if (getArguments().getInt(NUMBER) == 1) {
 
             if(Prefs.getBoolean("show-walkthrough",false)){
-                ((WalkthroughActivity) getActivity()).nextTutorial(TutorialsPagerFragment.newInstance());
+                ((WalkthroughActivity) getActivity()).nextTutorial(TutorialsPagerFragment.newInstance(false));
             }else {
                 ((WalkthroughActivity) getActivity()).nextTutorial(TutorialDoneFragment.newInstance());
             }

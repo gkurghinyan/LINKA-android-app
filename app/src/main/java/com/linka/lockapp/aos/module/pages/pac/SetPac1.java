@@ -71,7 +71,7 @@ public class SetPac1 extends CoreFragment {
     @OnClick(R.id.pac_button1)
     void changePac() {
         getAppMainActivity().popFragment();
-        getAppMainActivity().pushFragment(SetPac3.newInstance(LinkaNotificationSettings.get_latest_linka(),SetPac3.SETTINGS));
+        getAppMainActivity().pushFragment(SetPac3.newInstance(LinkaNotificationSettings.get_latest_linka(),SetPac3.SETTINGS,false));
     }
 
     @OnClick(R.id.pac_button2)

@@ -10,16 +10,16 @@ import android.widget.TextView;
 import com.linka.lockapp.aos.AppMainActivity;
 import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.helpers.Constants;
+import com.linka.lockapp.aos.module.pages.pac.PacTutorialFragment;
 import com.pixplicity.easyprefs.library.Prefs;
 
 
 public class TutorialsPagerFragment extends WalkthroughFragment {
     private TextView mount;
-    private TextView takeApp;
 
-    public static TutorialsPagerFragment newInstance() {
-
+    public static TutorialsPagerFragment newInstance(boolean isTesting) {
         Bundle args = new Bundle();
+        args.putBoolean(PacTutorialFragment.IS_TESTING,isTesting);
         TutorialsPagerFragment fragment = new TutorialsPagerFragment();
         fragment.setArguments(args);
         return fragment;
@@ -30,9 +30,11 @@ public class TutorialsPagerFragment extends WalkthroughFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        SharedPreferences.Editor editor = Prefs.edit();
-        editor.putInt(Constants.SHOWING_FRAGMENT,Constants.TUTORIAL_FRAGMENT);
-        editor.apply();
+        if(!getArguments().getBoolean(PacTutorialFragment.IS_TESTING)) {
+            SharedPreferences.Editor editor = Prefs.edit();
+            editor.putInt(Constants.SHOWING_FRAGMENT, Constants.TUTORIAL_FRAGMENT);
+            editor.apply();
+        }
         int[] layouts = new int[]{
                 R.layout.fragment_tutorial_tamper,
                 R.layout.fragment_tutorial_share,
@@ -55,9 +57,13 @@ public class TutorialsPagerFragment extends WalkthroughFragment {
                             ((WalkthroughActivity) getActivity()).nextTutorial(MountingFragment.newInstance());
                         }
                     });
-                    takeApp.setOnClickListener(new View.OnClickListener() {
+                    view.findViewById(R.id.take_app).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            if(getArguments().getBoolean(PacTutorialFragment.IS_TESTING)){
+                                getActivity().finish();
+                                return;
+                            }
                             SharedPreferences.Editor editor = Prefs.edit();
                             editor.putInt(Constants.SHOWING_FRAGMENT,Constants.LAUNCHER_FRAGMENT);
                             editor.apply();

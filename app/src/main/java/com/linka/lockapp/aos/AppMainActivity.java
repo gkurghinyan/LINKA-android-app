@@ -286,7 +286,7 @@ public class AppMainActivity extends CoreActivity {
             case Constants.LAUNCHER_FRAGMENT:
                 break;
             case Constants.SET_NAME_FRAGMENT:
-                pushFragment(SetupLinka3.newInstance());
+                pushFragment(SetupLinka3.newInstance(false));
                 break;
             case Constants.SET_PAC_FRAGMENT:
                 this.finish();
@@ -396,7 +396,7 @@ public class AppMainActivity extends CoreActivity {
                 if (!AppBluetoothService.getInstance().dfu) {
                     AppBluetoothService.getInstance().enableFixedTimeScanning(true);
                 }
-                
+
                 Fragment fragment = MainTabBarPageFragment.newInstance(LinkaNotificationSettings.get_latest_linka());
                 return fragment;
 
@@ -709,10 +709,11 @@ public class AppMainActivity extends CoreActivity {
                 || fragment instanceof ForgotPasswordPage2
                 || fragment instanceof PacTutorialFragment
                 || fragment instanceof SetupLinka3
-                || fragment instanceof AutoUpdateFragment) {
+                || fragment instanceof AutoUpdateFragment
+                || fragment instanceof SetupLinka2
+                || fragment instanceof AccessLockFragment) {
             toolbar.setVisibility(View.GONE);
             toolbarSpace.setVisibility(View.GONE);
-            toolbar.setBackgroundColor(getResources().getColor(R.color.linka_blue_tabbar_transparent));
             title.setTextColor(getResources().getColor(R.color.linka_white));
             back.icon.setImageResource(R.drawable.icon_back_arrow);
             menu.setVisibility(View.GONE);
@@ -737,14 +738,13 @@ public class AppMainActivity extends CoreActivity {
             title.setTextColor(getResources().getColor(R.color.linka_white));
             back.icon.setImageResource(R.drawable.icon_back_arrow);
             disableDrawer();
-        } else if (fragment instanceof SetupLinka1
-                || fragment instanceof SetupLinka2
-                || fragment instanceof AccessLockFragment) {
+        } else if (fragment instanceof SetupLinka1) {
             toolbar.setVisibility(View.GONE);
             toolbarSpace.setVisibility(View.GONE);
             title.setTextColor(getResources().getColor(R.color.linka_white));
             back.icon.setImageResource(R.drawable.icon_back_arrow);
             menu.setVisibility(View.GONE);
+            enableDrawer();
         }
 
 
@@ -933,6 +933,11 @@ public class AppMainActivity extends CoreActivity {
     @OnClick(R.id.sidebar_icon_select_language)
     void onClick_sidebar_icon_select_language() {
         AppLanguagePickerActivity.createNewInstance(this, false);
+    }
+
+    @OnClick(R.id.sidebar_icon_testing)
+    void onClick_sidebar_icon_testing(){
+        pushFragment(SetupLinka3.newInstance(true));
     }
 
 

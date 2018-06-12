@@ -316,7 +316,7 @@ public class SetupLinka2 extends WalkthroughFragment {
         scanHandler.removeCallbacks(scanRunnable);
         //scanHandler.postDelayed(scanRunnable, 1000); //Why wait 1 second? Disabled.
 
-        scanHandler.post(scanRunnable);
+//        scanHandler.post(scanRunnable);
         if (currentFragment != TURN_ON_LINKA) {
             registerReceivers(true);
         }

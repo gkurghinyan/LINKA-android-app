@@ -450,7 +450,7 @@ public class MainTabBarPageFragment extends CoreFragment {
                                     .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            getAppMainActivity().pushFragment(SetPac3.newInstance(_linka,SetPac3.SETTINGS));
+                                            getAppMainActivity().pushFragment(SetPac3.newInstance(_linka,SetPac3.SETTINGS,false));
                                         }
                                     })
                                     .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {

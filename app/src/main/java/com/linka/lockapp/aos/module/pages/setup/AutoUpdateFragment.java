@@ -34,7 +34,7 @@ public class AutoUpdateFragment extends CoreFragment {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                getAppMainActivity().pushFragment(SetupLinka3.newInstance());
+                getAppMainActivity().pushFragment(SetupLinka3.newInstance(false));
             }
         },3000);
     }
