@@ -396,8 +396,7 @@ public class AppMainActivity extends CoreActivity {
                 if (!AppBluetoothService.getInstance().dfu) {
                     AppBluetoothService.getInstance().enableFixedTimeScanning(true);
                 }
-
-//                LocksController.init(this);
+                
                 Fragment fragment = MainTabBarPageFragment.newInstance(LinkaNotificationSettings.get_latest_linka());
                 return fragment;
 

@@ -89,15 +89,16 @@ public class LocksController {
 
         Linka linka = LinkaNotificationSettings.get_latest_linka();
 
-        if(lockController.linka == null || linka == null){return;}
-        //Disconnect if lockcontroller is different
-
-        if(linka != null && !lockController.getLinka().lock_mac_address.equals(linka.lock_mac_address)){
-            lockController.doDisconnectDevice();
+        if (linka != null) {
+            if (lockController.linka != null) {
+                //Disconnect if lockcontroller is different
+                if (!lockController.getLinka().lock_mac_address.equals(linka.lock_mac_address)) {
+                    lockController.doDisconnectDevice();
+                }
+            }
+            lockController.changeLinkaForThisLockController(context, linka, onRefreshListener, lockBLEServiceProxy);
+            lockController.initialize(true, true);
         }
-
-        lockController.changeLinkaForThisLockController(context, linka, onRefreshListener, lockBLEServiceProxy);
-        lockController.initialize(true, true);
     }
 
 
