@@ -4,6 +4,7 @@ package com.linka.lockapp.aos.module.pages.dialogs;
 import android.app.Dialog;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -11,13 +12,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import com.linka.lockapp.aos.R;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 public class ThreeDotsDialogFragment extends DialogFragment {
+    private boolean isSetConnecting = true;
+    @BindView(R.id.connecting_text)
+    TextView connecting;
+
+    private Unbinder unbinder;
 
     public static ThreeDotsDialogFragment newInstance() {
         return new ThreeDotsDialogFragment();
+    }
+
+    public ThreeDotsDialogFragment setConnectingText(boolean isSet){
+        isSetConnecting = isSet;
+        return this;
     }
 
     @Override
@@ -25,6 +41,15 @@ public class ThreeDotsDialogFragment extends DialogFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_three_dots_dialog, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        unbinder = ButterKnife.bind(this,view);
+        if(!isSetConnecting){
+            connecting.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
@@ -41,4 +66,9 @@ public class ThreeDotsDialogFragment extends DialogFragment {
         return dialog;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
 }

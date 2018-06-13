@@ -225,7 +225,7 @@ public class SetupLinka1 extends CoreFragment implements GoogleApiClient.Connect
         }
         if (!gps_enabled && !network_enabled) {
             Blurry.with(getActivity()).radius(25).sampling(2).onto(root);
-            threeDotsDialogFragment = ThreeDotsDialogFragment.newInstance();
+            threeDotsDialogFragment = ThreeDotsDialogFragment.newInstance().setConnectingText(false);
             threeDotsDialogFragment.show(getFragmentManager(), null);
             initGoogleApi();
         } else {

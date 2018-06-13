@@ -15,6 +15,7 @@
         android:background="@android:color/transparent"/>
 
     <TextView
+        android:id="@+id/connecting_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/text_size_xm"

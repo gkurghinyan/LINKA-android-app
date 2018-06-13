@@ -1180,10 +1180,8 @@ public class AppMainActivity extends CoreActivity {
         if (requestCode == SetupLinka1.REQUEST_CHECK_SETTINGS) {
             if (resultCode == RESULT_OK) {
                 EventBus.getDefault().post("GPSConnected");
-                Toast.makeText(this, "GPS enabled", Toast.LENGTH_LONG).show();
             } else {
                 EventBus.getDefault().post("GPSNotConnected");
-                Toast.makeText(this, "GPS is not enabled", Toast.LENGTH_LONG).show();
             }
         }
 
