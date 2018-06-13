@@ -220,7 +220,8 @@ public class SharingPageFragment extends CoreFragment implements RecyclerItemTou
 
             @Override
             public void onAddButtonClicked() {
-                getFragmentManager().beginTransaction()
+                getAppMainActivity().curFragmentCount ++;
+                getActivity().getSupportFragmentManager().beginTransaction()
                         .addToBackStack(null)
                         .replace(R.id.users_page_root, InviteUserDialogFragment.newInstance())
                         .commit();
