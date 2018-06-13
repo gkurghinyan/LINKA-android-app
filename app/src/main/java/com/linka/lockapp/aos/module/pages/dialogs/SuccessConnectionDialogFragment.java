@@ -4,6 +4,7 @@ package com.linka.lockapp.aos.module.pages.dialogs;
 import android.app.Dialog;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.DialogFragment;
@@ -22,6 +23,14 @@ import org.greenrobot.eventbus.EventBus;
 
 public class SuccessConnectionDialogFragment extends DialogFragment {
     private static final String DIALOG_MESSAGE = "DialogMessage";
+    private Handler handler;
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            handler = null;
+            getDialog().dismiss();
+        }
+    };
 
     public static SuccessConnectionDialogFragment newInstance(String message) {
 
@@ -50,6 +59,21 @@ public class SuccessConnectionDialogFragment extends DialogFragment {
                 getDialog().dismiss();
             }
         });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        handler = new Handler();
+        handler.postDelayed(runnable,5000);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(handler != null){
+            handler.removeCallbacks(runnable);
+        }
     }
 
     @Override
