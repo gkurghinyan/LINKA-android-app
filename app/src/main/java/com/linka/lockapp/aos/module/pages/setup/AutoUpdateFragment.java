@@ -41,15 +41,16 @@ public class AutoUpdateFragment extends CoreFragment {
                 @Override
                 public void run() {
                     if (Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).getName() != null &&
-                            !Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).getName().equals("")) {
+                            !Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).getName().equals("") && !Prefs.getBoolean(Constants.SHOW_SETUP_NAME,false)) {
                         SharedPreferences.Editor editor = Prefs.edit();
-                        if (!Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).pacIsSet) {
+                        if ((!Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).pacIsSet && Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).pac == 0) ||
+                                Prefs.getBoolean(Constants.SHOW_SETUP_PAC,false)) {
                             editor.putInt(Constants.SHOWING_FRAGMENT, Constants.SET_PAC_FRAGMENT);
                             editor.apply();
                             getActivity().finish();
                             startActivity(new Intent(getActivity(), WalkthroughActivity.class));
                         } else {
-                            if (Prefs.getBoolean("show-walkthrough", false)) {
+                            if (Prefs.getBoolean("show-walkthrough", false) || Prefs.getBoolean(Constants.SHOW_TUTORIAL_WALKTHROUGH,false)) {
                                 editor.putInt(Constants.SHOWING_FRAGMENT, Constants.TUTORIAL_FRAGMENT);
                             } else {
                                 editor.putInt(Constants.SHOWING_FRAGMENT, Constants.DONE_FRAGMENT);
@@ -59,7 +60,7 @@ public class AutoUpdateFragment extends CoreFragment {
                             startActivity(new Intent(getActivity(), WalkthroughActivity.class));
                         }
                     }else {
-                        getAppMainActivity().pushFragment(SetupLinka3.newInstance(false));
+                        getAppMainActivity().pushFragment(SetupLinka3.newInstance());
                     }
                 }
             }, 3000);

@@ -26,12 +26,10 @@ public class WalkthroughActivity extends CoreActivity {
 
     FrameLayout frameLayout;
     private static int fragmentsCount = 0;
-    private boolean isTesting;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        isTesting = getIntent() != null && getIntent().getBooleanExtra(PacTutorialFragment.IS_TESTING, false);
 
         setContentView(R.layout.walkthrough_activity);
 
@@ -41,9 +39,6 @@ public class WalkthroughActivity extends CoreActivity {
         frameLayout = (FrameLayout) findViewById(R.id.walkthrough_frame);
 
         changeStatusBarColor();
-        if(isTesting){
-            startTutorial();
-        }
 
 //        init();
         if(Prefs.getInt(Constants.SHOWING_FRAGMENT,0) == Constants.SET_NAME_FRAGMENT || Prefs.getInt(Constants.SHOWING_FRAGMENT,0) == Constants.SET_PAC_FRAGMENT){
@@ -95,13 +90,13 @@ public class WalkthroughActivity extends CoreActivity {
 
     private void startTutorial() {
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.walkthrough_frame, PacTutorialFragment.newInstance(isTesting))
+                .replace(R.id.walkthrough_frame, PacTutorialFragment.newInstance())
                 .commit();
     }
 
     private void startTutorial2(){
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.walkthrough_frame, TutorialsPagerFragment.newInstance(isTesting))
+                .replace(R.id.walkthrough_frame, TutorialsPagerFragment.newInstance())
                 .commit();
     }
 

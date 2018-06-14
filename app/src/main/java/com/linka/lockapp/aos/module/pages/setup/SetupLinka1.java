@@ -103,6 +103,7 @@ public class SetupLinka1 extends CoreFragment implements GoogleApiClient.Connect
         List<Linka> linkas = Linka.getLinkas();
         for (int i = 0; i < linkas.size(); i++) {
             if (linkas.get(i).isLocked) {
+                line.setVisibility(View.GONE);
                 logOut.setVisibility(View.GONE);
                 break;
             }

@@ -10,16 +10,14 @@ import android.widget.TextView;
 import com.linka.lockapp.aos.AppMainActivity;
 import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.helpers.Constants;
-import com.linka.lockapp.aos.module.pages.pac.PacTutorialFragment;
 import com.pixplicity.easyprefs.library.Prefs;
 
 
 public class TutorialsPagerFragment extends WalkthroughFragment {
     private TextView mount;
 
-    public static TutorialsPagerFragment newInstance(boolean isTesting) {
+    public static TutorialsPagerFragment newInstance() {
         Bundle args = new Bundle();
-        args.putBoolean(PacTutorialFragment.IS_TESTING,isTesting);
         TutorialsPagerFragment fragment = new TutorialsPagerFragment();
         fragment.setArguments(args);
         return fragment;
@@ -30,11 +28,10 @@ public class TutorialsPagerFragment extends WalkthroughFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if(!getArguments().getBoolean(PacTutorialFragment.IS_TESTING)) {
-            SharedPreferences.Editor editor = Prefs.edit();
-            editor.putInt(Constants.SHOWING_FRAGMENT, Constants.TUTORIAL_FRAGMENT);
-            editor.apply();
-        }
+        SharedPreferences.Editor editor = Prefs.edit();
+        editor.putInt(Constants.SHOWING_FRAGMENT, Constants.TUTORIAL_FRAGMENT);
+        editor.apply();
+
         int[] layouts = new int[]{
                 R.layout.fragment_tutorial_tamper,
                 R.layout.fragment_tutorial_share,
@@ -48,7 +45,7 @@ public class TutorialsPagerFragment extends WalkthroughFragment {
         setLayoutView(new LayoutView() {
             @Override
             public void onViewCreated(View view, int position) {
-                if(position == 4){
+                if (position == 4) {
                     mount = (TextView) view.findViewById(R.id.mount_lock);
 
                     mount.setOnClickListener(new View.OnClickListener() {
@@ -60,16 +57,12 @@ public class TutorialsPagerFragment extends WalkthroughFragment {
                     view.findViewById(R.id.take_app).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            if(getArguments().getBoolean(PacTutorialFragment.IS_TESTING)){
-                                getActivity().finish();
-                                return;
-                            }
                             SharedPreferences.Editor editor = Prefs.edit();
-                            editor.putInt(Constants.SHOWING_FRAGMENT,Constants.LAUNCHER_FRAGMENT);
+                            editor.putInt(Constants.SHOWING_FRAGMENT, Constants.LAUNCHER_FRAGMENT);
                             editor.apply();
-                            if(Prefs.getBoolean("show-walkthrough",false)){
+                            if (Prefs.getBoolean("show-walkthrough", false)) {
                                 SharedPreferences.Editor editor1 = Prefs.edit();
-                                editor1.putBoolean("show-walkthrough",false);
+                                editor1.putBoolean("show-walkthrough", false);
                                 editor1.apply();
                             }
                             Intent intent = new Intent(getActivity(), AppMainActivity.class);

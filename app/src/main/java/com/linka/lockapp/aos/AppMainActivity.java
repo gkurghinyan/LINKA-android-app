@@ -48,6 +48,7 @@ import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.model.LinkaAccessKey;
 import com.linka.lockapp.aos.module.model.LinkaActivity;
 import com.linka.lockapp.aos.module.model.LinkaNotificationSettings;
+import com.linka.lockapp.aos.module.pages.TestingFragment;
 import com.linka.lockapp.aos.module.pages.dfu.DfuManagerPageFragment;
 import com.linka.lockapp.aos.module.pages.home.MainTabBarPageFragment;
 import com.linka.lockapp.aos.module.pages.location.LocationPageFragment;
@@ -386,7 +387,7 @@ public class AppMainActivity extends CoreActivity {
                             fragment = MainTabBarPageFragment.newInstance(LinkaNotificationSettings.get_latest_linka());
                             break;
                         case Constants.SET_NAME_FRAGMENT:
-                            fragment = SetupLinka3.newInstance(false);
+                            fragment = SetupLinka3.newInstance();
                             break;
                         case Constants.SET_PAC_FRAGMENT:
                             this.finish();
@@ -732,7 +733,8 @@ public class AppMainActivity extends CoreActivity {
                 || fragment instanceof LocationPageFragment
                 || fragment instanceof MyLinkasPageFragmentPage
                 || fragment instanceof WebPageFragment
-                || fragment instanceof MainTabBarPageFragment) {
+                || fragment instanceof MainTabBarPageFragment
+                || fragment instanceof TestingFragment) {
             toolbar.setVisibility(View.VISIBLE);
             toolbarSpace.setVisibility(View.VISIBLE);
             toolbar.setBackgroundColor(getResources().getColor(R.color.linka_blue_tabbar));
@@ -945,7 +947,8 @@ public class AppMainActivity extends CoreActivity {
 
     @OnClick(R.id.sidebar_icon_testing)
     void onClick_sidebar_icon_testing(){
-        pushFragment(SetupLinka3.newInstance(true));
+        drawerLayout.closeDrawers();
+        setFragment(TestingFragment.newInstance());
     }
 
 

@@ -16,12 +16,10 @@ import com.linka.lockapp.aos.module.pages.walkthrough.WalkthroughActivity;
 import com.pixplicity.easyprefs.library.Prefs;
 
 public class PacTutorialFragment extends Fragment {
-    public static final String IS_TESTING = "IsTesting";
 
-    public static PacTutorialFragment newInstance(boolean isTesting) {
+    public static PacTutorialFragment newInstance() {
 
         Bundle args = new Bundle();
-        args.putBoolean(IS_TESTING,isTesting);
         PacTutorialFragment fragment = new PacTutorialFragment();
         fragment.setArguments(args);
         return fragment;
@@ -38,15 +36,14 @@ public class PacTutorialFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if(!getArguments().getBoolean(IS_TESTING)) {
-            SharedPreferences.Editor editor = Prefs.edit();
-            editor.putInt(Constants.SHOWING_FRAGMENT, Constants.SET_PAC_FRAGMENT);
-            editor.apply();
-        }
+        SharedPreferences.Editor editor = Prefs.edit();
+        editor.putInt(Constants.SHOWING_FRAGMENT, Constants.SET_PAC_FRAGMENT);
+        editor.apply();
+
         view.findViewById(R.id.set_pac_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((WalkthroughActivity) getActivity()).nextTutorial(SetPac3.newInstance(LinkaNotificationSettings.get_latest_linka(),SetPac3.WALKTHROUGH,getArguments().getBoolean(IS_TESTING)));
+                ((WalkthroughActivity) getActivity()).nextTutorial(SetPac3.newInstance(LinkaNotificationSettings.get_latest_linka(), SetPac3.WALKTHROUGH));
             }
         });
     }

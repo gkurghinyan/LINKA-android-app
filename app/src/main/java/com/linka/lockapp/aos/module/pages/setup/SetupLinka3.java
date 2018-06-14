@@ -16,7 +16,6 @@ import com.linka.lockapp.aos.module.core.CoreFragment;
 import com.linka.lockapp.aos.module.helpers.Constants;
 import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.model.LinkaNotificationSettings;
-import com.linka.lockapp.aos.module.pages.pac.PacTutorialFragment;
 import com.linka.lockapp.aos.module.pages.walkthrough.WalkthroughActivity;
 import com.pixplicity.easyprefs.library.Prefs;
 
@@ -38,9 +37,8 @@ public class SetupLinka3 extends CoreFragment {
 
     private Unbinder unbinder;
 
-    public static SetupLinka3 newInstance(boolean isTesting) {
+    public static SetupLinka3 newInstance() {
         Bundle bundle = new Bundle();
-        bundle.putBoolean(PacTutorialFragment.IS_TESTING,isTesting);
         SetupLinka3 fragment = new SetupLinka3();
         fragment.setArguments(bundle);
         return fragment;
@@ -52,11 +50,9 @@ public class SetupLinka3 extends CoreFragment {
         View rootView = inflater.inflate(R.layout.fragment_setup_name_linka, container, false);
         getAppMainActivity().setBackAviable(false);
         unbinder = ButterKnife.bind(this, rootView);
-        if(!getArguments().getBoolean(PacTutorialFragment.IS_TESTING)) {
-            SharedPreferences.Editor editor = Prefs.edit();
-            editor.putInt(Constants.SHOWING_FRAGMENT, Constants.SET_NAME_FRAGMENT);
-            editor.apply();
-        }
+        SharedPreferences.Editor editor = Prefs.edit();
+        editor.putInt(Constants.SHOWING_FRAGMENT, Constants.SET_NAME_FRAGMENT);
+        editor.apply();
 
         return rootView;
     }
@@ -78,17 +74,14 @@ public class SetupLinka3 extends CoreFragment {
     void onSearchForLinka() {
         String linkaName = editName.getText().toString();
         if (!linkaName.equals("")) {
-            if(getArguments().getBoolean(PacTutorialFragment.IS_TESTING)){
-                Intent intent = new Intent(getActivity(), WalkthroughActivity.class);
-                intent.putExtra(PacTutorialFragment.IS_TESTING,true);
-                getAppMainActivity().popFragment();
-                startActivity(intent);
-                return;
-            }
             Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).saveName(linkaName);
-            if (!Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).pacIsSet) {
+            if ((!Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).pacIsSet && Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).pac == 0) ||
+                    Prefs.getBoolean(Constants.SHOW_SETUP_PAC,false)) {
+                getActivity().finish();
+                startActivity(new Intent(getActivity(), WalkthroughActivity.class));
+            }else {
                 SharedPreferences.Editor editor = Prefs.edit();
-                if (Prefs.getBoolean("show-walkthrough", false)) {
+                if (Prefs.getBoolean("show-walkthrough", false) || Prefs.getBoolean(Constants.SHOW_TUTORIAL_WALKTHROUGH,false)) {
                     editor.putInt(Constants.SHOWING_FRAGMENT, Constants.TUTORIAL_FRAGMENT);
                 } else {
                     editor.putInt(Constants.SHOWING_FRAGMENT, Constants.DONE_FRAGMENT);
@@ -97,8 +90,6 @@ public class SetupLinka3 extends CoreFragment {
                 getActivity().finish();
                 startActivity(new Intent(getActivity(), WalkthroughActivity.class));
             }
-            getActivity().finish();
-            startActivity(new Intent(getActivity(), WalkthroughActivity.class));
         } else {
             Toast.makeText(getActivity(), "No valid name", Toast.LENGTH_SHORT).show();
         }

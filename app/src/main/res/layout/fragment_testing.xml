@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".module.pages.TestingFragment">
+
+    <Switch
+        android:id="@+id/tutorial_toggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="@dimen/margin_x"
+        android:layout_marginStart="@dimen/margin_x"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show tutorial walkthrough"
+        android:textSize="@dimen/text_size_xm"
+        android:textColor="@color/search_text"
+        app:layout_constraintStart_toEndOf="@id/tutorial_toggle"
+        app:layout_constraintTop_toTopOf="@id/tutorial_toggle"
+        app:layout_constraintBottom_toBottomOf="@id/tutorial_toggle"
+        android:layout_marginStart="@dimen/margin" />
+
+    <Switch
+        android:id="@+id/setup_name_toggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tutorial_toggle"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="@dimen/margin_x"
+        android:layout_marginStart="@dimen/margin_x"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show &quot;Setup Name&quot;"
+        android:textSize="@dimen/text_size_xm"
+        android:textColor="@color/search_text"
+        app:layout_constraintStart_toEndOf="@id/setup_name_toggle"
+        app:layout_constraintTop_toTopOf="@id/setup_name_toggle"
+        app:layout_constraintBottom_toBottomOf="@id/setup_name_toggle"
+        android:layout_marginStart="@dimen/margin" />
+
+    <Switch
+        android:id="@+id/setup_pac_toggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/setup_name_toggle"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="@dimen/margin_x"
+        android:layout_marginStart="@dimen/margin_x"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show &quot;Setup PAC&quot;"
+        android:textSize="@dimen/text_size_xm"
+        android:textColor="@color/search_text"
+        app:layout_constraintStart_toEndOf="@id/setup_pac_toggle"
+        app:layout_constraintTop_toTopOf="@id/setup_pac_toggle"
+        app:layout_constraintBottom_toBottomOf="@id/setup_pac_toggle"
+        android:layout_marginStart="@dimen/margin" />
+</android.support.constraint.ConstraintLayout>

@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.linka.lockapp.aos.AppMainActivity;
 import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.core.CoreFragment;
+import com.linka.lockapp.aos.module.helpers.Constants;
 import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.pages.dialogs.ThreeDotsDialogFragment;
 import com.linka.lockapp.aos.module.pages.walkthrough.TutorialDoneFragment;
@@ -31,8 +32,6 @@ import butterknife.OnClick;
 import butterknife.OnTouch;
 import butterknife.Unbinder;
 import jp.wasabeef.blurry.Blurry;
-
-import static com.linka.lockapp.aos.module.pages.pac.PacTutorialFragment.IS_TESTING;
 
 /**
  * Created by Vanson on 17/2/16.
@@ -77,12 +76,11 @@ public class SetPac3 extends CoreFragment {
     boolean isEnteredPinValue;
     boolean isReEnteredPinValue;
 
-    public static SetPac3 newInstance(Linka linka, int nextFragment,boolean isTesting) {
+    public static SetPac3 newInstance(Linka linka, int nextFragment) {
         Bundle bundle = new Bundle();
         SetPac3 fragment = new SetPac3();
         bundle.putSerializable("linka", linka);
         bundle.putInt(NEXT_FRAGMENT, nextFragment);
-        bundle.putBoolean(IS_TESTING,isTesting);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -406,11 +404,6 @@ public class SetPac3 extends CoreFragment {
                 }
 
                 // set lock settings
-                if(getArguments().getBoolean(PacTutorialFragment.IS_TESTING)){
-                    Toast.makeText(getActivity(), "Success Pac", Toast.LENGTH_SHORT).show();
-                    ((WalkthroughActivity) getActivity()).nextTutorial(TutorialsPagerFragment.newInstance(true));
-                    return;
-                }
                 LockController lockController = LocksController.getInstance().getLockController();
                 if (lockController == null) {
                     return;
@@ -423,8 +416,8 @@ public class SetPac3 extends CoreFragment {
 
                     Toast.makeText(getActivity(), "Success Pac", Toast.LENGTH_SHORT).show();
                     if (getArguments().getInt(NEXT_FRAGMENT) == WALKTHROUGH) {
-                        if (Prefs.getBoolean("show-walkthrough", false)) {
-                            ((WalkthroughActivity) getActivity()).nextTutorial(TutorialsPagerFragment.newInstance(false));
+                        if (Prefs.getBoolean("show-walkthrough", false) || Prefs.getBoolean(Constants.SHOW_TUTORIAL_WALKTHROUGH,false)) {
+                            ((WalkthroughActivity) getActivity()).nextTutorial(TutorialsPagerFragment.newInstance());
                         } else {
                             ((WalkthroughActivity) getActivity()).nextTutorial(TutorialDoneFragment.newInstance());
                         }
