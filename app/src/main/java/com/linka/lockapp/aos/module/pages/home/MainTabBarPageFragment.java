@@ -192,7 +192,6 @@ public class MainTabBarPageFragment extends CoreFragment {
             viewPager.setAdapter(adapter);
             viewPager.setCurrentItem(0, false); //Circle view is default
             t1.setSelected(true);
-            viewPager.setOffscreenPageLimit(4);
 
             viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override

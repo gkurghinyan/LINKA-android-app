@@ -622,6 +622,10 @@ public class AppMainActivity extends CoreActivity {
 
     @Override
     public void onBackPressed() {
+        if(drawerLayout.isDrawerOpen(drawer)){
+            drawerLayout.closeDrawer(drawer);
+            return;
+        }
         if (isBackAviable) {
             Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
             if (fragment instanceof DfuManagerPageFragment) {

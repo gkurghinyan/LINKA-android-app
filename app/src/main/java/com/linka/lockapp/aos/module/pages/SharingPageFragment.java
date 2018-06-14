@@ -248,33 +248,12 @@ public class SharingPageFragment extends CoreFragment implements RecyclerItemTou
         ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.RIGHT, this);
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
 
-
-//        userList = new ArrayList<>();
-//        User user = new User();
-//        user.name = "KYLE ZHANG";
-//        user.first_name = "Tomy";
-//        user.last_name = "Dolby";
-//        user.isOwner = false;
-//        user.email = "jack@gmail.com";
-//        user.isPendingApproval = false;
-//        userList.add(user);
-//        userList.add(user);
-//        userList.add(user);
-//        userList.add(user);
-//        userList.add(user);
-//        adapter.setList(userList);
-//        if(userList.isEmpty()){
-//            title.setText(R.string.no_one_to_access_your_bike);
-//        }else {
-//            title.setText(R.string.tap_to_modify_details);
-//        }
-
     }
 
     private Disposable editChangeDisp;
     private void initEditTextSubscription() {
         editChangeDisp = RxTextView.textChanges(search)
-                .debounce(500, TimeUnit.MILLISECONDS)
+                .debounce(400, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.computation())
                 .map(new Function<CharSequence, List<User>>() {
                     @Override
