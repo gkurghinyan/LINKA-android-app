@@ -6,18 +6,20 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.core.CoreFragment;
 import com.linka.lockapp.aos.module.helpers.LogHelper;
-import com.linka.lockapp.aos.module.i18n._;
 import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.model.LinkaActivity;
 import com.linka.lockapp.aos.module.pages.home.MainTabBarPageFragment;
@@ -59,12 +61,17 @@ public class CircleView extends CoreFragment {
     TextView batteryPercent;
     @BindView(R.id.panic_button)
     ImageView panicButton;
+    @BindView(R.id.root)
+    FrameLayout root;
 
     BluetoothAdapter bluetoothAdapter;
     Unbinder unbinder;
 
     Linka linka;
     LockController lockController;
+    View bluetoothPage;
+    View internetPage;
+    View connectivityPage;
 
     CircleAngleAnimation animation;
     private Rect rect;
@@ -85,6 +92,9 @@ public class CircleView extends CoreFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.layout_circle_view, container, false);
+        bluetoothPage = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_no_bluetooth_connectivity, null);
+        internetPage = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_no_internet_connectivity, null);
+        connectivityPage = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_searching_linka_with_bluetooth, null);
         unbinder = ButterKnife.bind(this, rootView);
 
         return rootView;
@@ -111,8 +121,35 @@ public class CircleView extends CoreFragment {
         unbinder.unbind();
     }
 
+    private boolean getInternetConnectivity() {
+        boolean connected;
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        connected = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED;
+        return connected;
+    }
+
+    private boolean getBluetoothConnectivity() {
+        if (!getContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+            return false;
+        }
+        BluetoothManager bluetoothManager = (BluetoothManager) getContext().getSystemService(Context.BLUETOOTH_SERVICE);
+        bluetoothAdapter = bluetoothManager.getAdapter();
+        return bluetoothAdapter.isEnabled();
+    }
+
 
     void init() {
+        if (!getInternetConnectivity()) {
+            root.setBackground(getResources().getDrawable(R.drawable.blue_gradient));
+            root.addView(internetPage);
+        } else if (!getBluetoothConnectivity()) {
+            root.setBackground(getResources().getDrawable(R.drawable.blue_gradient));
+            root.addView(bluetoothPage);
+        } else if (!linka.isConnected && !linka.isLockSettled) {
+            root.setBackground(getResources().getDrawable(R.drawable.blue_gradient));
+            root.addView(connectivityPage);
+        }
 
         lockController = LocksController.getInstance().getLockController();
 
@@ -145,7 +182,7 @@ public class CircleView extends CoreFragment {
 
             @Override
             public void clickComplete() {
-                if(tabBarPageFragment != null){
+                if (tabBarPageFragment != null) {
 
                     tabBarPageFragment.hideTabBar();
                     circleViewBackground.setColor(Color.parseColor("#0878ce"));
@@ -157,7 +194,7 @@ public class CircleView extends CoreFragment {
 
             @Override
             public void swipeStarted() {
-                if(tabBarPageFragment != null){
+                if (tabBarPageFragment != null) {
 
                     tabBarPageFragment.hideTabBar();
                 }
@@ -165,7 +202,7 @@ public class CircleView extends CoreFragment {
 
             @Override
             public void swipeCancelled() {
-                if(tabBarPageFragment != null){
+                if (tabBarPageFragment != null) {
                     tabBarPageFragment.showTabBar();
                 }
 
@@ -173,13 +210,13 @@ public class CircleView extends CoreFragment {
 
             @Override
             public void onSwipeComplete(boolean swiped) {
-                if(tabBarPageFragment != null){
+                if (tabBarPageFragment != null) {
                     tabBarPageFragment.showTabBar();
                 }
 
-                if(lockController.getLinka().isUnlocked()) {
+                if (lockController.getLinka().isUnlocked()) {
                     lockController.doLock();
-                }else{
+                } else {
                     lockController.doUnlock();
                 }
             }
@@ -190,7 +227,7 @@ public class CircleView extends CoreFragment {
     }
 
     @OnTouch(R.id.circle)
-    public boolean clickCircle(Circle circle, MotionEvent event){
+    public boolean clickCircle(Circle circle, MotionEvent event) {
 
         return false;
     }
@@ -204,7 +241,7 @@ public class CircleView extends CoreFragment {
 
 
     @OnClick(R.id.panic_button)
-    void onPanic(){
+    void onPanic() {
         lockController.doActionSiren();
     }
 
@@ -228,46 +265,39 @@ public class CircleView extends CoreFragment {
             getAppMainActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-
-
-                    if (linka.isConnected && linka.isLockSettled) {
-
-                        batteryPercent.setText(linka.batteryPercent + "%");
-
-                        if(linka.isLocked){
-                            statusText.setText("Hold to Unlock");
-                        }else if(linka.isUnlocked){
-                            statusText.setText("Hold to Lock");
-                        }else if(linka.isLocking){
-                            statusText.setText("Locking ...");
-                        }else if (linka.isUnlocking){
-                            statusText.setText("Unlocking ...");
-                        }
-
-
-                    } else if (linka.isConnected) {
-
-                        statusText.setText("Connecting to LINKA");
-
+                    if (!getInternetConnectivity()) {
+                        root.removeView(bluetoothPage);
+                        root.removeView(connectivityPage);
+                        root.addView(internetPage);
+                        root.setBackground(getResources().getDrawable(R.drawable.blue_gradient));
                     } else {
-
-
-                        //Check if bluetooth is turned on
-                        if (getContext() != null) {
-                            if (!getContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) { return; }
-                            final BluetoothManager bluetoothManager = (BluetoothManager) getContext().getSystemService(Context.BLUETOOTH_SERVICE);
-                            bluetoothAdapter = bluetoothManager.getAdapter();
-                        }
-
-                        if (bluetoothAdapter == null) { return; }
-                        String searchingString = "";
-                        if(bluetoothAdapter.isEnabled()){
-                            searchingString = _.i(R.string.reconnect_to_linka);
-
-                            statusText.setText("Wake up LINKA");
-                        }else{
-                            statusText.setText("Turn on Bluetooth");
-
+                        root.removeView(internetPage);
+                        root.setBackgroundColor(getResources().getColor(R.color.linka_transparent));
+                        if (!getBluetoothConnectivity()) {
+                            root.removeView(connectivityPage);
+                            root.setBackground(getResources().getDrawable(R.drawable.blue_gradient));
+                            root.addView(bluetoothPage);
+                        } else {
+                            root.removeView(bluetoothPage);
+                            root.setBackgroundColor(getResources().getColor(R.color.linka_transparent));
+                            if (!linka.isConnected) {
+                                root.setBackground(getResources().getDrawable(R.drawable.blue_gradient));
+                                root.addView(connectivityPage);
+                            } else {
+                                root.setBackgroundColor(getResources().getColor(R.color.linka_transparent));
+                                root.removeView(connectivityPage);
+                                if (linka.isLockSettled) {
+                                    if (linka.isLocked) {
+                                        statusText.setText("Hold to Unlock");
+                                    } else if (linka.isUnlocked) {
+                                        statusText.setText("Hold to Lock");
+                                    } else if (linka.isLocking) {
+                                        statusText.setText("Locking ...");
+                                    } else if (linka.isUnlocking) {
+                                        statusText.setText("Unlocking ...");
+                                    }
+                                }
+                            }
                         }
                     }
                 }

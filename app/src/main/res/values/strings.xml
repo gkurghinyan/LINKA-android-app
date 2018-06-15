@@ -473,4 +473,5 @@
     <string name="splash_title">LOCK SMARTER NOT HARDER</string>
     <string name="invite_a_friend">INVITE A FRIEND\nTO ACCESS YOUR BIKE</string>
     <string name="fail_pairing">Failed to pair with</string>
+    <string name="wake_up">"Wake up LINKA"</string>
 </resources>

@@ -1,94 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:gravity="center">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
 
     <android.support.v4.widget.Space
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-       />
+        android:layout_height="70dp" />
+
     <TextView
         android:id="@+id/status_text"
         android:layout_width="match_parent"
         android:layout_height="30dp"
-        android:text="LINKA IS LOCKING"
+        android:text="@string/wake_up"
         android:textAlignment="center"
         android:textColor="#008fc5"
-        android:textSize="18sp"/>
+        android:textSize="18sp" />
 
-    <RelativeLayout
+    <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_weight="7"
-        android:gravity="center"
-        >
+        android:gravity="center">
 
         <RelativeLayout
+            android:id="@+id/relativeLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="260dp"
-            android:id="@+id/relativeLayout">
+            android:layout_marginTop="260dp">
 
             <ImageView
                 android:id="@+id/panic_button"
-                android:clickable="true"
                 android:layout_width="110dp"
                 android:layout_height="110dp"
-                android:src="@drawable/panic_button"
-                />
+                android:clickable="true"
+                android:src="@drawable/panic_button" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:textColor="#fff"
-                android:text="PANIC"/>
+                android:text="PANIC"
+                android:textColor="#fff" />
 
         </RelativeLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="245dp">
+            android:layout_marginTop="245dp"
+            android:orientation="horizontal">
 
             <android.support.v4.widget.Space
                 android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
 
             <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
                 <ImageView
                     android:layout_width="25dp"
                     android:layout_height="38dp"
                     android:layout_marginStart="75dp"
-                    android:src="@drawable/battery1"
-                    />
+                    android:src="@drawable/battery1" />
+
                 <TextView
                     android:id="@+id/battery_percent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="100dp"
                     android:layout_marginTop="5dp"
-                    android:textSize="14sp"
+                    android:text="62%"
                     android:textColor="#039fdf"
-                    android:text="62%"/>
+                    android:textSize="14sp" />
 
-<!--                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="100dp"
-                    android:layout_marginTop="23dp"
-                    android:textSize="11sp"
-                    android:textColor="#039fdf"
-                    android:text="115 DAYS"/>-->
+                <!--                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="100dp"
+                                    android:layout_marginTop="23dp"
+                                    android:textSize="11sp"
+                                    android:textColor="#039fdf"
+                                    android:text="115 DAYS"/>-->
             </RelativeLayout>
         </LinearLayout>
 
@@ -96,20 +99,27 @@
             android:id="@+id/slide_to_lock"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="visible"
-            app:elevation="15dp"
-            app:button_image_disabled="@drawable/linka_logo"
-            app:button_image_enabled="@drawable/linka_logo"
-            app:button_background="@color/linka_transparent"
-            app:button_image_height="220dp"
-            app:button_image_width="220dp"
-            app:button_bottom_padding="15dp"
-            app:button_top_padding="15dp"
             android:layout_alignParentTop="true"
             android:layout_marginStart="12dp"
-            android:layout_marginTop="12dp"/>
+            android:layout_marginTop="12dp"
+            android:visibility="visible"
+            app:button_background="@color/linka_transparent"
+            app:button_bottom_padding="15dp"
+            app:button_image_disabled="@drawable/linka_logo"
+            app:button_image_enabled="@drawable/linka_logo"
+            app:button_image_height="220dp"
+            app:button_image_width="220dp"
+            app:button_top_padding="15dp"
+            app:elevation="15dp" />
 
 
     </RelativeLayout>
 
-</LinearLayout>
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/root"/>
+
+</FrameLayout>
