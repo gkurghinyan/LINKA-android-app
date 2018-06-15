@@ -3,10 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:clickable="true"
     android:layout_height="match_parent"
     android:background="@color/linka_white"
     tools:context=".module.pages.dialogs.InviteUserDialogFragment"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    android:focusable="true">
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline5"

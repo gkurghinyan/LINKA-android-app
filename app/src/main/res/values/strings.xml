@@ -479,4 +479,5 @@
     <string name="network_required_to_pair">A NETWORK IS REQUIRED TO PAIR WITH YOUR LINKA</string>
     <string name="this_allows_your_smart_device">THIS ALLOWS YOUR SMART DEVICE TO\nPAIR WITH LINKA</string>
     <string name="this_allows_your_smart_device_to_connect">THIS ALLOWS YOUR SMART DEVICE TO\nCONNECT TO LINKA</string>
+    <string name="user_exist">The user already exist</string>
 </resources>

@@ -102,6 +102,12 @@ public class CircleView extends CoreFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.layout_circle_view, container, false);
+        bluetoothPage = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_no_bluetooth_connectivity, null);
+        ((TextView) bluetoothPage.findViewById(R.id.title)).setText(R.string.this_allows_your_smart_device_to_connect);
+        internetPage = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_no_internet_connectivity, null);
+        ((TextView) internetPage.findViewById(R.id.title)).setText(R.string.network_required_to_connect);
+        connectivityPage = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_searching_linka_with_bluetooth, null);
+        ((TextView) connectivityPage.findViewById(R.id.title)).setText(R.string.scanning_for_linka);
         unbinder = ButterKnife.bind(this, rootView);
 
         return rootView;
@@ -146,12 +152,6 @@ public class CircleView extends CoreFragment {
 
 
     void init() {
-        bluetoothPage = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_no_bluetooth_connectivity, null);
-        ((TextView) bluetoothPage.findViewById(R.id.title)).setText(R.string.this_allows_your_smart_device_to_connect);
-        internetPage = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_no_internet_connectivity, null);
-        ((TextView) internetPage.findViewById(R.id.title)).setText(R.string.network_required_to_connect);
-        connectivityPage = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_searching_linka_with_bluetooth, null);
-        ((TextView) connectivityPage.findViewById(R.id.title)).setText(R.string.scanning_for_linka);
 
         if (!getInternetConnectivity()) {
             root.setBackground(getResources().getDrawable(R.drawable.blue_gradient));
@@ -259,20 +259,19 @@ public class CircleView extends CoreFragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        EventBus.getDefault().register(this);
+    public void onStart() {
+        super.onStart();
         IntentFilter filter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
         getActivity().registerReceiver(internetReceiver, filter);
+        EventBus.getDefault().register(this);
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onStop() {
+        super.onStop();
         EventBus.getDefault().unregister(this);
         getActivity().unregisterReceiver(internetReceiver);
     }
-
 
     public void refreshDisplay() {
         if (!isAdded()) return;

@@ -72,6 +72,7 @@ public class SharingPageFragment extends CoreFragment implements RecyclerItemTou
     @BindView(R.id.search_friends)
     EditText search;
 
+    private Snackbar snackbar;
     private Unbinder unbinder;
     private View rootView;
 
@@ -187,20 +188,16 @@ public class SharingPageFragment extends CoreFragment implements RecyclerItemTou
                     AlertDialog.Builder builder = new AlertDialog.Builder(getAppMainActivity());
                     builder.setTitle("Select Action");
                     builder.setItems(new CharSequence[]
-                                    {"Revoke Access", "Transfer ownership to this user", "Cancel"},
+                                    {"Transfer ownership to this user", "Cancel"},
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     // The 'which' argument contains the index position
                                     // of the selected item
                                     switch (which) {
                                         case 0:
-                                            Toast.makeText(getAppMainActivity(), "Revoking access", Toast.LENGTH_SHORT).show();
-                                            revokeAccess(item.userId);
-                                            break;
-                                        case 1:
                                             confirmTransferOwnership(item.email);
                                             break;
-                                        case 2:
+                                        case 1:
                                             break;
                                     }
                                 }
@@ -232,10 +229,16 @@ public class SharingPageFragment extends CoreFragment implements RecyclerItemTou
 
             @Override
             public void onAddButtonClicked() {
+                ArrayList<String> emails = new ArrayList<>();
+                if(!userList.isEmpty()){
+                    for(User user:userList){
+                        emails.add(user.email);
+                    }
+                }
                 getAppMainActivity().curFragmentCount ++;
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .addToBackStack(null)
-                        .replace(R.id.users_page_root, InviteUserDialogFragment.newInstance())
+                        .replace(R.id.users_page_root, InviteUserDialogFragment.newInstance(emails))
                         .commit();
             }
         });
@@ -389,7 +392,9 @@ public class SharingPageFragment extends CoreFragment implements RecyclerItemTou
             @Override
             public void onResponse(Call<LinkaAPIServiceResponse> call, Response<LinkaAPIServiceResponse> response) {
                 if (LinkaAPIServiceImpl.check(response, false, null)) {
-                    getLockPermissions();
+                    if(snackbar == null || !snackbar.isShown()) {
+                        getLockPermissions();
+                    }
                 }
             }
 
@@ -466,7 +471,7 @@ public class SharingPageFragment extends CoreFragment implements RecyclerItemTou
             }
 
             // showing snack bar with Undo option
-            Snackbar snackbar = Snackbar
+            snackbar = Snackbar
                     .make(root, name + " removed from list!", Snackbar.LENGTH_LONG);
             snackbar.setAction("UNDO", new View.OnClickListener() {
                 @Override
@@ -475,6 +480,15 @@ public class SharingPageFragment extends CoreFragment implements RecyclerItemTou
                     // undo is selected, restore the deleted item
                     adapter.restoreUser(deletedItem, deletedIndex);
                     title.setText(R.string.tap_to_modify_details);
+                }
+            });
+            snackbar.setCallback(new Snackbar.Callback() {
+                @Override
+                public void onDismissed(Snackbar snackbar, int event) {
+                    super.onDismissed(snackbar, event);
+                    if(event != DISMISS_EVENT_ACTION) {
+                        revokeAccess(deletedItem.userId);
+                    }
                 }
             });
             snackbar.setActionTextColor(Color.YELLOW);
