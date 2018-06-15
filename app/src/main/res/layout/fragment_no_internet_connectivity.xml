@@ -43,11 +43,12 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
+        android:id="@+id/title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin"
         android:gravity="center"
-        android:text="A NETWORK IS REQUIRED TO PAIR WITH YOUR LINKA"
+        android:text="@string/network_required_to_pair"
         android:textColor="@color/linka_white"
         android:textSize="@dimen/text_size_xm"
         app:layout_constraintEnd_toEndOf="parent"

@@ -441,7 +441,6 @@
     <string name="wrong_username_or_password">Wrong username or password.</string>
     <string name="you_re_logged_is_as">You\'re logged is as</string>
     <string name="the_led_will_blink">THE LED WILL BLINK BLUE\nWHEN IN DISCOVERABLE MODE</string>
-    <string name="this_allows_your_smart_device">THIS ALLOWS YOUR SMART DEVICE TO\nPAIR WITH LINKA</string>
     <string name="tap_the_name_of_the_linka">Tap the name of the LINKA device that\nappears below the connect</string>
 
     <string name="skip">(<u>SKIP</u>)</string>
@@ -474,4 +473,10 @@
     <string name="invite_a_friend">INVITE A FRIEND\nTO ACCESS YOUR BIKE</string>
     <string name="fail_pairing">Failed to pair with</string>
     <string name="wake_up">"Wake up LINKA"</string>
+    <string name="scanning_for_linkas">SCANNING FOR LINKAS</string>
+    <string name="scanning_for_linka">SCANNING FOR LINKA</string>
+    <string name="network_required_to_connect">A NETWORK IS REQUIRED TO CONNECT TO YOUR LINKA</string>
+    <string name="network_required_to_pair">A NETWORK IS REQUIRED TO PAIR WITH YOUR LINKA</string>
+    <string name="this_allows_your_smart_device">THIS ALLOWS YOUR SMART DEVICE TO\nPAIR WITH LINKA</string>
+    <string name="this_allows_your_smart_device_to_connect">THIS ALLOWS YOUR SMART DEVICE TO\nCONNECT TO LINKA</string>
 </resources>

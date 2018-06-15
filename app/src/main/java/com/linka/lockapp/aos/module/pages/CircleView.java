@@ -2,7 +2,10 @@ package com.linka.lockapp.aos.module.pages;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -76,6 +79,13 @@ public class CircleView extends CoreFragment {
     CircleAngleAnimation animation;
     private Rect rect;
 
+    private BroadcastReceiver internetReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            refreshDisplay();
+        }
+    };
+
     // @InjectView(R.id.row_audible_locking_unlocking)
     //LinearLayout rowAudibleLockingUnlocking;
 
@@ -92,9 +102,6 @@ public class CircleView extends CoreFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.layout_circle_view, container, false);
-        bluetoothPage = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_no_bluetooth_connectivity, null);
-        internetPage = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_no_internet_connectivity, null);
-        connectivityPage = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_searching_linka_with_bluetooth, null);
         unbinder = ButterKnife.bind(this, rootView);
 
         return rootView;
@@ -103,7 +110,6 @@ public class CircleView extends CoreFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
 
         if (getArguments() != null) {
             Bundle bundle = getArguments();
@@ -140,6 +146,13 @@ public class CircleView extends CoreFragment {
 
 
     void init() {
+        bluetoothPage = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_no_bluetooth_connectivity, null);
+        ((TextView) bluetoothPage.findViewById(R.id.title)).setText(R.string.this_allows_your_smart_device_to_connect);
+        internetPage = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_no_internet_connectivity, null);
+        ((TextView) internetPage.findViewById(R.id.title)).setText(R.string.network_required_to_connect);
+        connectivityPage = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_searching_linka_with_bluetooth, null);
+        ((TextView) connectivityPage.findViewById(R.id.title)).setText(R.string.scanning_for_linka);
+
         if (!getInternetConnectivity()) {
             root.setBackground(getResources().getDrawable(R.drawable.blue_gradient));
             root.addView(internetPage);
@@ -249,12 +262,15 @@ public class CircleView extends CoreFragment {
     public void onResume() {
         super.onResume();
         EventBus.getDefault().register(this);
+        IntentFilter filter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
+        getActivity().registerReceiver(internetReceiver, filter);
     }
 
     @Override
     public void onPause() {
         super.onPause();
         EventBus.getDefault().unregister(this);
+        getActivity().unregisterReceiver(internetReceiver);
     }
 
 
@@ -268,19 +284,23 @@ public class CircleView extends CoreFragment {
                     if (!getInternetConnectivity()) {
                         root.removeView(bluetoothPage);
                         root.removeView(connectivityPage);
-                        root.addView(internetPage);
+                        if(internetPage.getParent() == null) {
+                            root.addView(internetPage);
+                        }
                         root.setBackground(getResources().getDrawable(R.drawable.blue_gradient));
                     } else {
                         root.removeView(internetPage);
                         root.setBackgroundColor(getResources().getColor(R.color.linka_transparent));
                         if (!getBluetoothConnectivity()) {
                             root.removeView(connectivityPage);
+                            root.removeView(bluetoothPage);
                             root.setBackground(getResources().getDrawable(R.drawable.blue_gradient));
                             root.addView(bluetoothPage);
                         } else {
                             root.removeView(bluetoothPage);
                             root.setBackgroundColor(getResources().getColor(R.color.linka_transparent));
                             if (!linka.isConnected) {
+                                root.removeView(connectivityPage);
                                 root.setBackground(getResources().getDrawable(R.drawable.blue_gradient));
                                 root.addView(connectivityPage);
                             } else {

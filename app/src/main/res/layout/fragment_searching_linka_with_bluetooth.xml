@@ -51,7 +51,7 @@
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="SCANNING FOR LINKAS"
+        android:text="@string/scanning_for_linkas"
         android:textColor="@color/linka_white"
         android:textSize="@dimen/text_size_xm"
         app:layout_constraintEnd_toEndOf="parent"
