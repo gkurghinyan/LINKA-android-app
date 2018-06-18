@@ -18,6 +18,7 @@ import com.linka.lockapp.aos.module.core.CoreFragment;
 import com.linka.lockapp.aos.module.helpers.Constants;
 import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.pages.dialogs.ThreeDotsDialogFragment;
+import com.linka.lockapp.aos.module.pages.home.MainTabBarPageFragment;
 import com.linka.lockapp.aos.module.pages.walkthrough.TutorialDoneFragment;
 import com.linka.lockapp.aos.module.pages.walkthrough.TutorialsPagerFragment;
 import com.linka.lockapp.aos.module.pages.walkthrough.WalkthroughActivity;
@@ -102,6 +103,10 @@ public class SetPac3 extends CoreFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        if(getActivity() instanceof AppMainActivity){
+            ((AppMainActivity) getActivity()).setTitle(getString(R.string.set_pac));
+        }
 
         if (getArguments() != null) {
             Bundle bundle = getArguments();
@@ -422,7 +427,7 @@ public class SetPac3 extends CoreFragment {
                             ((WalkthroughActivity) getActivity()).nextTutorial(TutorialDoneFragment.newInstance());
                         }
                     } else {
-                        getAppMainActivity().setFragment(AppMainActivity.WalkthroughOrder.PAC);
+                        getAppMainActivity().setFragment(MainTabBarPageFragment.newInstance(linka));
                     }
 
                 } else {

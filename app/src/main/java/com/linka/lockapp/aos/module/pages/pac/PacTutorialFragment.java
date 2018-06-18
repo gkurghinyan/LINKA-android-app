@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.linka.lockapp.aos.AppMainActivity;
 import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.helpers.Constants;
 import com.linka.lockapp.aos.module.model.LinkaNotificationSettings;
@@ -36,14 +37,22 @@ public class PacTutorialFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        SharedPreferences.Editor editor = Prefs.edit();
-        editor.putInt(Constants.SHOWING_FRAGMENT, Constants.SET_PAC_FRAGMENT);
-        editor.apply();
+        if(getActivity() instanceof AppMainActivity){
+            ((AppMainActivity) getActivity()).setTitle(getString(R.string.set_pac));
+        }else {
+            SharedPreferences.Editor editor = Prefs.edit();
+            editor.putInt(Constants.SHOWING_FRAGMENT, Constants.SET_PAC_FRAGMENT);
+            editor.apply();
+        }
 
         view.findViewById(R.id.set_pac_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((WalkthroughActivity) getActivity()).nextTutorial(SetPac3.newInstance(LinkaNotificationSettings.get_latest_linka(), SetPac3.WALKTHROUGH));
+                if(getActivity() instanceof WalkthroughActivity) {
+                    ((WalkthroughActivity) getActivity()).nextTutorial(SetPac3.newInstance(LinkaNotificationSettings.get_latest_linka(), SetPac3.WALKTHROUGH));
+                }else if(getActivity() instanceof AppMainActivity){
+                    ((AppMainActivity) getActivity()).pushFragment(SetPac3.newInstance(LinkaNotificationSettings.get_latest_linka(), SetPac3.SETTINGS));
+                }
             }
         });
     }

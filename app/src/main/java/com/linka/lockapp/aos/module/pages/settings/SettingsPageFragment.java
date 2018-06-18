@@ -18,7 +18,7 @@ import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.model.LinkaAccessKey;
 import com.linka.lockapp.aos.module.model.LinkaActivity;
 import com.linka.lockapp.aos.module.pages.dfu.DfuManagerPageFragment;
-import com.linka.lockapp.aos.module.pages.pac.SetPac1;
+import com.linka.lockapp.aos.module.pages.pac.PacTutorialFragment;
 import com.linka.lockapp.aos.module.widget.LinkaButton;
 import com.linka.lockapp.aos.module.widget.LinkaTextView;
 import com.linka.lockapp.aos.module.widget.LockController;
@@ -411,7 +411,7 @@ public class SettingsPageFragment extends CoreFragment {
 
     @OnClick(R.id.row_phoneless_passcode)
     void onClick_row_phoneless_passcode() {
-        getAppMainActivity().pushFragment(SetPac1.newInstance());
+        getAppMainActivity().pushFragment(PacTutorialFragment.newInstance());
     }
 
     @OnClick(R.id.row_edit_name)
@@ -463,6 +463,7 @@ public class SettingsPageFragment extends CoreFragment {
     @Override
     public void onResume() {
         super.onResume();
+        getAppMainActivity().setTitle(getString(R.string.big_settings));
         EventBus.getDefault().register(this);
     }
 

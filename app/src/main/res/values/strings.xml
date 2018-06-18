@@ -91,6 +91,7 @@
     <string name="notifications">Notifications</string>
     <string name="activities">Activity</string>
     <string name="settings">Settings</string>
+    <string name="big_settings">SETTINGS</string>
     <string name="faqs">F.A.Q.s</string>
     <string name="chat_support">Chat Support</string>
     <string name="report_a_bug">Report a bug</string>
@@ -481,4 +482,5 @@
     <string name="this_allows_your_smart_device_to_connect">THIS ALLOWS YOUR SMART DEVICE TO\nCONNECT TO LINKA</string>
     <string name="user_exist">The user already exist</string>
     <string name="available_devices">Available Devices</string>
+    <string name="set_pac">SET PAC</string>
 </resources>

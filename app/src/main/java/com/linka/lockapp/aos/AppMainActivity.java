@@ -694,8 +694,8 @@ public class AppMainActivity extends CoreActivity {
             });
             back.setVisibility(View.GONE);
         } else {
-            menu.setVisibility(View.GONE);
-            back.setVisibility(View.VISIBLE);
+//            menu.setVisibility(View.GONE);
+//            back.setVisibility(View.VISIBLE);
             back.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -717,7 +717,6 @@ public class AppMainActivity extends CoreActivity {
                 || fragment instanceof SignInPage
                 || fragment instanceof ForgotPasswordPage1
                 || fragment instanceof ForgotPasswordPage2
-                || fragment instanceof PacTutorialFragment
                 || fragment instanceof SetupLinka3
                 || fragment instanceof AutoUpdateFragment
                 || fragment instanceof SetupLinka2
@@ -736,12 +735,14 @@ public class AppMainActivity extends CoreActivity {
                 || fragment instanceof WebPageFragment
                 || fragment instanceof MainTabBarPageFragment
                 || fragment instanceof TestingFragment
-                || fragment instanceof AvailableDevicesFragment) {
+                || fragment instanceof AvailableDevicesFragment
+                || fragment instanceof PacTutorialFragment
+                || fragment instanceof SetPac3) {
             toolbar.setVisibility(View.VISIBLE);
             toolbarSpace.setVisibility(View.VISIBLE);
             toolbar.setBackgroundColor(getResources().getColor(R.color.linka_blue_tabbar));
             title.setTextColor(getResources().getColor(R.color.linka_white));
-            back.icon.setImageResource(R.drawable.icon_back_arrow);
+//            back.icon.setImageResource(R.drawable.icon_back_arrow);
             enableDrawer();
         } else if (fragment instanceof DfuManagerPageFragment) {
             toolbar.setVisibility(View.VISIBLE);
@@ -775,7 +776,7 @@ public class AppMainActivity extends CoreActivity {
         } else if (fragment instanceof SettingsPageFragment) {
             setTitle(_.i(R.string.settings));
         } else if (fragment instanceof SetPac3) {
-            setTitle(_.i(R.string.phoneless_passcode));
+            setTitle(_.i(R.string.set_pac));
         } else if (fragment instanceof SettingsEditNamePageFragment) {
             setTitle(_.i(R.string.edit_name));
         } else if (fragment instanceof SettingsTamperSensitivityFragment) {
