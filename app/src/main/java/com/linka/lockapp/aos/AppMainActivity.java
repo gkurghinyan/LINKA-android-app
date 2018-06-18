@@ -999,7 +999,7 @@ public class AppMainActivity extends CoreActivity {
         if(!(getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof SetupLinka1)) {
             toolbar.setVisibility(View.INVISIBLE);
             SetupLinka1 fragment = SetupLinka1.newInstance();
-            pushFragment(fragment);
+            setFragment(fragment);
         }
         drawerLayout.closeDrawers();
     }
