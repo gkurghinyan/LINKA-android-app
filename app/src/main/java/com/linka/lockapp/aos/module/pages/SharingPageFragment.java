@@ -13,11 +13,9 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.adapters.SharingAdapter;
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceImpl;
@@ -35,16 +33,10 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Function;
-import io.reactivex.observers.DisposableObserver;
-import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -69,8 +61,8 @@ public class SharingPageFragment extends CoreFragment implements RecyclerItemTou
 //    LinkaTextView ownerName;
     @BindView(R.id.title)
     TextView title;
-    @BindView(R.id.search_friends)
-    EditText search;
+//    @BindView(R.id.search_friends)
+//    EditText search;
 
     private Snackbar snackbar;
     private Unbinder unbinder;
@@ -130,7 +122,7 @@ public class SharingPageFragment extends CoreFragment implements RecyclerItemTou
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        editChangeDisp.dispose();
+//        editChangeDisp.dispose();
         unbinder.unbind();
     }
 
@@ -246,53 +238,53 @@ public class SharingPageFragment extends CoreFragment implements RecyclerItemTou
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
-        initEditTextSubscription();
+//        initEditTextSubscription();
 
         ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.RIGHT, this);
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
 
     }
 
-    private Disposable editChangeDisp;
-    private void initEditTextSubscription() {
-        editChangeDisp = RxTextView.textChanges(search)
-                .debounce(400, TimeUnit.MILLISECONDS)
-                .subscribeOn(Schedulers.computation())
-                .map(new Function<CharSequence, List<User>>() {
-                    @Override
-                    public List<User> apply(CharSequence charSequence) throws Exception {
-                        if(!charSequence.toString().isEmpty()){
-                            searchList.clear();
-                            for(User user : userList){
-                                if(user.name.contains(charSequence)){
-                                    searchList.add(user);
-                                }
-                            }
-                            return searchList;
-                        } else {
-                            return userList;
-                        }
-                    }
-                }).observeOn(AndroidSchedulers.mainThread()).subscribeWith(new DisposableObserver<List<User>>(){
-
-                    @Override
-                    public void onNext(List<User> users) {
-                        adapter.setList(users);
-                        adapter.notifyDataSetChanged();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
-
-    }
+//    private Disposable editChangeDisp;
+//    private void initEditTextSubscription() {
+//        editChangeDisp = RxTextView.textChanges(search)
+//                .debounce(400, TimeUnit.MILLISECONDS)
+//                .subscribeOn(Schedulers.computation())
+//                .map(new Function<CharSequence, List<User>>() {
+//                    @Override
+//                    public List<User> apply(CharSequence charSequence) throws Exception {
+//                        if(!charSequence.toString().isEmpty()){
+//                            searchList.clear();
+//                            for(User user : userList){
+//                                if(user.name.contains(charSequence)){
+//                                    searchList.add(user);
+//                                }
+//                            }
+//                            return searchList;
+//                        } else {
+//                            return userList;
+//                        }
+//                    }
+//                }).observeOn(AndroidSchedulers.mainThread()).subscribeWith(new DisposableObserver<List<User>>(){
+//
+//                    @Override
+//                    public void onNext(List<User> users) {
+//                        adapter.setList(users);
+//                        adapter.notifyDataSetChanged();
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onComplete() {
+//
+//                    }
+//                });
+//
+//    }
 
     void getLockPermissions() {
 //        addUser.setVisibility(View.GONE);

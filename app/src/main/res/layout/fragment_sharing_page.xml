@@ -28,23 +28,23 @@
         android:layout_width="match_parent"
         android:layout_height="20dp"/>
 
-    <EditText
-        android:id="@+id/search_friends"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin"
-        android:background="@drawable/rounded_edit_text_back"
-        app:layout_constraintTop_toBottomOf="@id/space"
-        app:layout_constraintStart_toStartOf="@id/guideline"
-        app:layout_constraintEnd_toEndOf="@id/guideline1"
-        android:hint="SEARCH FRIENDS"
-        android:textSize="@dimen/text_size_xm"/>
+    <!--<EditText-->
+        <!--android:id="@+id/search_friends"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="@dimen/margin"-->
+        <!--android:background="@drawable/rounded_edit_text_back"-->
+        <!--app:layout_constraintTop_toBottomOf="@id/space"-->
+        <!--app:layout_constraintStart_toStartOf="@id/guideline"-->
+        <!--app:layout_constraintEnd_toEndOf="@id/guideline1"-->
+        <!--android:hint="SEARCH FRIENDS"-->
+        <!--android:textSize="@dimen/text_size_xm"/>-->
 
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/search_friends"
+        app:layout_constraintTop_toBottomOf="@id/space"
         app:layout_constraintStart_toStartOf="@id/guideline"
         app:layout_constraintEnd_toEndOf="@id/guideline1"
         android:layout_marginTop="@dimen/margin"
