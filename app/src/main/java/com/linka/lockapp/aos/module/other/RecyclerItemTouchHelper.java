@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
+import com.linka.lockapp.aos.module.adapters.AvailableDevicesAdapter;
 import com.linka.lockapp.aos.module.adapters.SharingAdapter;
 
 public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
@@ -27,6 +28,10 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
                 final View foregroundView = ((SharingAdapter.ViewHolder) viewHolder).foregroundView;
 
                 getDefaultUIUtil().onSelected(foregroundView);
+            }else if(viewHolder instanceof AvailableDevicesAdapter.DeviceHolder){
+                final View foregroundView = ((AvailableDevicesAdapter.DeviceHolder) viewHolder).foregroundView;
+
+                getDefaultUIUtil().onSelected(foregroundView);
             }
         }
     }
@@ -39,6 +44,10 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
             final View foregroundView = ((SharingAdapter.ViewHolder) viewHolder).foregroundView;
             getDefaultUIUtil().onDrawOver(c, recyclerView, foregroundView, dX, dY,
                     actionState, isCurrentlyActive);
+        }else if(viewHolder instanceof AvailableDevicesAdapter.DeviceHolder){
+            final View foregroundView = ((AvailableDevicesAdapter.DeviceHolder) viewHolder).foregroundView;
+            getDefaultUIUtil().onDrawOver(c, recyclerView, foregroundView, dX, dY,
+                    actionState, isCurrentlyActive);
         }
     }
 
@@ -46,6 +55,9 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
     public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         if(viewHolder instanceof SharingAdapter.ViewHolder) {
             final View foregroundView = ((SharingAdapter.ViewHolder) viewHolder).foregroundView;
+            getDefaultUIUtil().clearView(foregroundView);
+        }else if(viewHolder instanceof AvailableDevicesAdapter.DeviceHolder){
+            final View foregroundView = ((AvailableDevicesAdapter.DeviceHolder) viewHolder).foregroundView;
             getDefaultUIUtil().clearView(foregroundView);
         }
     }
@@ -59,12 +71,19 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
 
             getDefaultUIUtil().onDraw(c, recyclerView, foregroundView, dX, dY,
                     actionState, isCurrentlyActive);
+        }else if(viewHolder instanceof AvailableDevicesAdapter.DeviceHolder){
+            final View foregroundView = ((AvailableDevicesAdapter.DeviceHolder) viewHolder).foregroundView;
+
+            getDefaultUIUtil().onDraw(c, recyclerView, foregroundView, dX, dY,
+                    actionState, isCurrentlyActive);
         }
     }
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
         if(viewHolder instanceof SharingAdapter.ViewHolder) {
+            listener.onSwiped(viewHolder, direction, viewHolder.getAdapterPosition());
+        }else if(viewHolder instanceof AvailableDevicesAdapter.DeviceHolder){
             listener.onSwiped(viewHolder, direction, viewHolder.getAdapterPosition());
         }
     }

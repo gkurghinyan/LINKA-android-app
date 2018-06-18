@@ -48,6 +48,7 @@ import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.model.LinkaAccessKey;
 import com.linka.lockapp.aos.module.model.LinkaActivity;
 import com.linka.lockapp.aos.module.model.LinkaNotificationSettings;
+import com.linka.lockapp.aos.module.pages.AvailableDevicesFragment;
 import com.linka.lockapp.aos.module.pages.TestingFragment;
 import com.linka.lockapp.aos.module.pages.dfu.DfuManagerPageFragment;
 import com.linka.lockapp.aos.module.pages.home.MainTabBarPageFragment;
@@ -734,7 +735,8 @@ public class AppMainActivity extends CoreActivity {
                 || fragment instanceof MyLinkasPageFragmentPage
                 || fragment instanceof WebPageFragment
                 || fragment instanceof MainTabBarPageFragment
-                || fragment instanceof TestingFragment) {
+                || fragment instanceof TestingFragment
+                || fragment instanceof AvailableDevicesFragment) {
             toolbar.setVisibility(View.VISIBLE);
             toolbarSpace.setVisibility(View.VISIBLE);
             toolbar.setBackgroundColor(getResources().getColor(R.color.linka_blue_tabbar));
@@ -818,6 +820,13 @@ public class AppMainActivity extends CoreActivity {
         } else {
             setFragment(MainTabBarPageFragment.newInstance(LinkaNotificationSettings.get_latest_linka()));
         }
+    }
+
+    @OnClick(R.id.sidebar_available_devices)
+    void onClick_sidebar_available_devices(){
+        drawerLayout.closeDrawers();
+
+        setFragment(AvailableDevicesFragment.newInstance());
     }
 
     @OnClick(R.id.sidebar_notifications)
