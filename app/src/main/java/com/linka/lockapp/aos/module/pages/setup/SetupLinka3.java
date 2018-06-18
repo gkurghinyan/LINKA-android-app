@@ -1,5 +1,6 @@
 package com.linka.lockapp.aos.module.pages.setup;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
@@ -7,6 +8,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -16,6 +18,7 @@ import com.linka.lockapp.aos.module.core.CoreFragment;
 import com.linka.lockapp.aos.module.helpers.Constants;
 import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.model.LinkaNotificationSettings;
+import com.linka.lockapp.aos.module.pages.home.MainTabBarPageFragment;
 import com.linka.lockapp.aos.module.pages.walkthrough.WalkthroughActivity;
 import com.pixplicity.easyprefs.library.Prefs;
 
@@ -28,7 +31,9 @@ import butterknife.Unbinder;
  * Created by Vanson on 17/2/16.
  */
 public class SetupLinka3 extends CoreFragment {
-
+    private static final String CURRENT_FRAGMENT = "CurrentFragment";
+    public static final int WALKTHROUGH = 0;
+    public static final int SETTINGS = 1;
 
     @BindView(R.id.next_button)
     Button next;
@@ -37,8 +42,9 @@ public class SetupLinka3 extends CoreFragment {
 
     private Unbinder unbinder;
 
-    public static SetupLinka3 newInstance() {
+    public static SetupLinka3 newInstance(int currentFragment) {
         Bundle bundle = new Bundle();
+        bundle.putInt(CURRENT_FRAGMENT,currentFragment);
         SetupLinka3 fragment = new SetupLinka3();
         fragment.setArguments(bundle);
         return fragment;
@@ -48,11 +54,13 @@ public class SetupLinka3 extends CoreFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_setup_name_linka, container, false);
-        getAppMainActivity().setBackAviable(false);
+        if(getArguments().getInt(CURRENT_FRAGMENT) == WALKTHROUGH) {
+            getAppMainActivity().setBackAviable(false);
+            SharedPreferences.Editor editor = Prefs.edit();
+            editor.putInt(Constants.SHOWING_FRAGMENT, Constants.SET_NAME_FRAGMENT);
+            editor.apply();
+        }
         unbinder = ButterKnife.bind(this, rootView);
-        SharedPreferences.Editor editor = Prefs.edit();
-        editor.putInt(Constants.SHOWING_FRAGMENT, Constants.SET_NAME_FRAGMENT);
-        editor.apply();
 
         return rootView;
     }
@@ -75,6 +83,15 @@ public class SetupLinka3 extends CoreFragment {
         String linkaName = editName.getText().toString();
         if (!linkaName.equals("")) {
             Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).saveName(linkaName);
+            View view = getActivity().getCurrentFocus();
+            if (view != null) {
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
+            if(getArguments().getInt(CURRENT_FRAGMENT) == SETTINGS){
+                getAppMainActivity().setFragment(MainTabBarPageFragment.newInstance(Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id())));
+                return;
+            }
             if ((!Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).pacIsSet && Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).pac == 0) ||
                     Prefs.getBoolean(Constants.SHOW_SETUP_PAC,false)) {
                 getActivity().finish();

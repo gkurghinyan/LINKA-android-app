@@ -19,6 +19,7 @@ import com.linka.lockapp.aos.module.model.LinkaAccessKey;
 import com.linka.lockapp.aos.module.model.LinkaActivity;
 import com.linka.lockapp.aos.module.pages.dfu.DfuManagerPageFragment;
 import com.linka.lockapp.aos.module.pages.pac.PacTutorialFragment;
+import com.linka.lockapp.aos.module.pages.setup.SetupLinka3;
 import com.linka.lockapp.aos.module.widget.LinkaButton;
 import com.linka.lockapp.aos.module.widget.LinkaTextView;
 import com.linka.lockapp.aos.module.widget.LockController;
@@ -416,7 +417,7 @@ public class SettingsPageFragment extends CoreFragment {
 
     @OnClick(R.id.row_edit_name)
     void onClick_row_edit_name() {
-        getAppMainActivity().pushFragment(SettingsEditNamePageFragment.newInstance(linka));
+        getAppMainActivity().pushFragment(SetupLinka3.newInstance(SetupLinka3.SETTINGS));
     }
 
     @OnClick(R.id.row_tamper_sensitivity)

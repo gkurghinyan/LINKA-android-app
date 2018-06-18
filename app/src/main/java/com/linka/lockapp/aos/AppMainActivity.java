@@ -388,7 +388,7 @@ public class AppMainActivity extends CoreActivity {
                             fragment = MainTabBarPageFragment.newInstance(LinkaNotificationSettings.get_latest_linka());
                             break;
                         case Constants.SET_NAME_FRAGMENT:
-                            fragment = SetupLinka3.newInstance();
+                            fragment = SetupLinka3.newInstance(SetupLinka3.WALKTHROUGH);
                             break;
                         case Constants.SET_PAC_FRAGMENT:
                             this.finish();

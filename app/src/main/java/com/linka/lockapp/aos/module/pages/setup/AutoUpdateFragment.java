@@ -60,7 +60,7 @@ public class AutoUpdateFragment extends CoreFragment {
                             startActivity(new Intent(getActivity(), WalkthroughActivity.class));
                         }
                     }else {
-                        getAppMainActivity().pushFragment(SetupLinka3.newInstance());
+                        getAppMainActivity().pushFragment(SetupLinka3.newInstance(SetupLinka3.WALKTHROUGH));
                     }
                 }
             }, 3000);
