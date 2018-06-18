@@ -26,6 +26,7 @@ public class WalkthroughActivity extends CoreActivity {
 
     FrameLayout frameLayout;
     private static int fragmentsCount = 0;
+    private boolean isBackButtonAvaiable = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,12 +65,18 @@ public class WalkthroughActivity extends CoreActivity {
 
     @Override
     public void onBackPressed() {
-        if (fragmentsCount > 1) {
-            getSupportFragmentManager().popBackStack();
-            fragmentsCount --;
-        } else {
-           this.finish();
+        if(isBackButtonAvaiable) {
+            if (fragmentsCount > 1) {
+                getSupportFragmentManager().popBackStack();
+                fragmentsCount--;
+            } else {
+                this.finish();
+            }
         }
+    }
+
+    public void setBackButtonAvaiable(boolean isAvaiable){
+        isBackButtonAvaiable = isAvaiable;
     }
 
     public void popFragment(){

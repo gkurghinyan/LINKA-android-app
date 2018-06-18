@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.linka.lockapp.aos.AppMainActivity;
 import com.linka.lockapp.aos.R;
+import com.linka.lockapp.aos.module.pages.walkthrough.WalkthroughActivity;
 
 
 /**
@@ -28,6 +29,10 @@ public class CoreFragment extends Fragment {
     protected AppMainActivity getAppMainActivity()
     {
         return (AppMainActivity) getActivity();
+    }
+
+    protected WalkthroughActivity getWalkthroughActivity(){
+        return (WalkthroughActivity) getActivity();
     }
 
     protected void toastMake(String... message)

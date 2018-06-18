@@ -98,6 +98,10 @@ public class WalkthroughFragment extends CoreFragment {
         }
     }
 
+    public void setBackButtonVisibility(int visibility){
+        backButton.setVisibility(visibility);
+    }
+
     public void setLayouts(int[] layouts){
 
         this.layouts = layouts;

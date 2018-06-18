@@ -27,6 +27,8 @@ public class TutorialsPagerFragment extends WalkthroughFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setBackButtonVisibility(View.INVISIBLE);
+        getWalkthroughActivity().setBackButtonAvaiable(false);
 
         SharedPreferences.Editor editor = Prefs.edit();
         editor.putInt(Constants.SHOWING_FRAGMENT, Constants.TUTORIAL_FRAGMENT);
@@ -67,6 +69,7 @@ public class TutorialsPagerFragment extends WalkthroughFragment {
                             }
                             Intent intent = new Intent(getActivity(), AppMainActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            getWalkthroughActivity().setBackButtonAvaiable(true);
                             getActivity().finish();
                             startActivity(intent);
                         }
