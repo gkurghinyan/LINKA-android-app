@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,8 @@ public class ForgotPasswordPage2 extends CoreFragment {
     EditText confirmNewPassword;
     @BindView(R.id.ok)
     TextView ok;
+    @BindView(R.id.root)
+    ConstraintLayout root;
 
     private Unbinder unbinder;
 
@@ -104,7 +107,7 @@ public class ForgotPasswordPage2 extends CoreFragment {
             return;
         }
 
-        showLoading();
+        showLoading(root);
 
         LinkaAPIServiceImpl.reset_password(
                 getAppMainActivity(),

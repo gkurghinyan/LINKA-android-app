@@ -1,6 +1,7 @@
 package com.linka.lockapp.aos.module.pages.prelogin;
 
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +38,9 @@ public class WelcomePage extends CoreFragment {
 
     @BindView(R.id.login_facebook)
     Button signInFb;
+
+    @BindView(R.id.root)
+    ConstraintLayout root;
 
     private Unbinder unbinder;
 
@@ -102,7 +106,7 @@ public class WelcomePage extends CoreFragment {
         FacebookHelper.authenticate(new FacebookHelper.FacebookHelperCallback() {
             @Override
             public void OnSuccess(String facebook_account, String facebook_email, String facebook_display_name, AccessToken access_token) {
-                showLoading(getString(R.string.logging_in));
+                showLoading(root);
 
                 LinkaAPIServiceImpl.login_facebook(getAppMainActivity(), access_token.getToken(), new Callback<LinkaAPIServiceResponse.LoginResponse>() {
                     @Override

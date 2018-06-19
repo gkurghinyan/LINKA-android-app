@@ -13,11 +13,11 @@ import android.widget.RelativeLayout;
 
 import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.core.CoreFragment;
+import com.linka.lockapp.aos.module.other.Utils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import jp.wasabeef.blurry.Blurry;
 
 /**
  * Created by kyle on 3/8/18.
@@ -92,9 +92,9 @@ public class WalkthroughFragment extends CoreFragment {
 
     public void setBlur(boolean isBlur){
         if(isBlur){
-            Blurry.with(getActivity()).radius(25).sampling(2).onto(relativeLayout);
+            Utils.getInstance(getActivity()).showLoading(relativeLayout);
         }else {
-            Blurry.delete(relativeLayout);
+            Utils.getInstance(getActivity()).cancelLoading();
         }
     }
 

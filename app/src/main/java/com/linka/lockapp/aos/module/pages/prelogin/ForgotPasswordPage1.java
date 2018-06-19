@@ -3,6 +3,7 @@ package com.linka.lockapp.aos.module.pages.prelogin;
 import android.app.AlertDialog;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,8 @@ public class ForgotPasswordPage1 extends CoreFragment {
     TextView ok;
     @BindView(R.id.proceed_with_code)
     TextView proceedWithCode;
+    @BindView(R.id.root)
+    ConstraintLayout root;
 
     private Unbinder unbinder;
 
@@ -92,7 +95,7 @@ public class ForgotPasswordPage1 extends CoreFragment {
     @OnClick(R.id.ok)
     void onOk() {
         getAppMainActivity().hideKeyboard();
-        showLoading();
+        showLoading(root);
 
         final String _email = email.getText().toString();
 

@@ -32,7 +32,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
 import butterknife.Unbinder;
-import jp.wasabeef.blurry.Blurry;
 
 /**
  * Created by Vanson on 17/2/16.
@@ -440,14 +439,6 @@ public class SetPac3 extends CoreFragment {
                         .make(view, "Re-entered PAC doesn't match", Snackbar.LENGTH_LONG);
                 snackbar.show();
             }
-        }
-    }
-
-    public void setBlur(boolean isBlur){
-        if(isBlur){
-            Blurry.with(getActivity()).radius(25).sampling(2).onto(root);
-        }else {
-            Blurry.delete(root);
         }
     }
 }

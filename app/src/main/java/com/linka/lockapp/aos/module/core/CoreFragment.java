@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.linka.lockapp.aos.AppMainActivity;
 import com.linka.lockapp.aos.R;
+import com.linka.lockapp.aos.module.other.Utils;
 import com.linka.lockapp.aos.module.pages.walkthrough.WalkthroughActivity;
 
 
@@ -122,28 +123,21 @@ public class CoreFragment extends Fragment {
 
 
     ProgressDialog progressDialog;
-    public void showLoading() {
-        hideLoading();
-        progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setCancelable(false);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.show();
+    public void showLoading(ViewGroup viewGroup) {
+        Utils.getInstance(getActivity()).showLoading(viewGroup);
     }
 
-    public void showLoading(String message) {
-        hideLoading();
-        progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setMessage(message);
-        progressDialog.setCancelable(false);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.show();
-    }
+//    public void showLoading(String message) {
+//        hideLoading();
+//        progressDialog = new ProgressDialog(getActivity());
+//        progressDialog.setMessage(message);
+//        progressDialog.setCancelable(false);
+//        progressDialog.setCanceledOnTouchOutside(false);
+//        progressDialog.show();
+//    }
 
     public void hideLoading() {
-        if (progressDialog != null) {
-            progressDialog.dismiss();
-            progressDialog = null;
-        }
+        Utils.getInstance(getActivity()).cancelLoading();
     }
 
 

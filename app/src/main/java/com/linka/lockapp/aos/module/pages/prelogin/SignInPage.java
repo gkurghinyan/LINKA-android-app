@@ -117,7 +117,7 @@ public class SignInPage extends CoreFragment {
         Blurry.with(getActivity()).radius(25).sampling(2).onto(constraintLayout);
 
         getAppMainActivity().hideKeyboard();
-        showLoading(getString(R.string.logging_in));
+        showLoading(constraintLayout);
 
         LinkaAPIServiceImpl.login(getAppMainActivity(), username.getText().toString(), password.getText().toString(), new Callback<LinkaAPIServiceResponse.LoginResponse>() {
             @Override

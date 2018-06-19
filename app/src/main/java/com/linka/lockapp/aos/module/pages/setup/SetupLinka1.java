@@ -31,6 +31,7 @@ import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceImpl;
 import com.linka.lockapp.aos.module.core.CoreFragment;
 import com.linka.lockapp.aos.module.model.Linka;
+import com.linka.lockapp.aos.module.other.Utils;
 import com.linka.lockapp.aos.module.pages.dialogs.ThreeDotsDialogFragment;
 
 import org.greenrobot.eventbus.EventBus;
@@ -42,7 +43,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-import jp.wasabeef.blurry.Blurry;
 
 /**
  * Created by Vanson on 17/2/16.
@@ -225,9 +225,7 @@ public class SetupLinka1 extends CoreFragment implements GoogleApiClient.Connect
         } catch (Exception ex) {
         }
         if (!gps_enabled && !network_enabled) {
-            Blurry.with(getActivity()).radius(25).sampling(2).onto(root);
-            threeDotsDialogFragment = ThreeDotsDialogFragment.newInstance().setConnectingText(false);
-            threeDotsDialogFragment.show(getFragmentManager(), null);
+            Utils.getInstance(getActivity()).showLoading(root);
             initGoogleApi();
         } else {
             getAppMainActivity().pushFragment(SetupLinka2.newInstance());
@@ -272,11 +270,7 @@ public class SetupLinka1 extends CoreFragment implements GoogleApiClient.Connect
                     status.startResolutionForResult(getActivity(), REQUEST_CHECK_SETTINGS);
 
                 } catch (IntentSender.SendIntentException e) {
-                    if (threeDotsDialogFragment != null) {
-                        Blurry.delete(root);
-                        threeDotsDialogFragment.dismiss();
-                        threeDotsDialogFragment = null;
-                    }
+                    Utils.getInstance(getActivity()).cancelLoading();
                     //failed to show dialog
                 }
                 break;
@@ -291,18 +285,10 @@ public class SetupLinka1 extends CoreFragment implements GoogleApiClient.Connect
     @Subscribe
     public void onEvent(Object object) {
         if (object instanceof String && object.equals("GPSConnected")) {
-            if (threeDotsDialogFragment != null) {
-                Blurry.delete(root);
-                threeDotsDialogFragment.dismiss();
-                threeDotsDialogFragment = null;
-            }
+            Utils.getInstance(getActivity()).cancelLoading();
             onSearchForLinka();
         }else if(object instanceof String && object.equals("GPSNotConnected")){
-            if (threeDotsDialogFragment != null) {
-                Blurry.delete(root);
-                threeDotsDialogFragment.dismiss();
-                threeDotsDialogFragment = null;
-            }
+            Utils.getInstance(getActivity()).cancelLoading();
         }
     }
 }

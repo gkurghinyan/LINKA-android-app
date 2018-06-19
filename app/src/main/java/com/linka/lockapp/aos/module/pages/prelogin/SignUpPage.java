@@ -3,6 +3,7 @@ package com.linka.lockapp.aos.module.pages.prelogin;
 import android.app.AlertDialog;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,6 +50,8 @@ public class SignUpPage extends CoreFragment {
     EditText reenterPassword;
     @BindView(R.id.create_account)
     Button createAccount;
+    @BindView(R.id.root)
+    ConstraintLayout root;
 
     private Unbinder unbinder;
 
@@ -144,7 +147,7 @@ public class SignUpPage extends CoreFragment {
         body.os_version = Helpers.os_version;
 
 
-        showLoading(getString(R.string.creating_account));
+        showLoading(root);
 
         LinkaAPIServiceImpl.register(getAppMainActivity(),
                 body,
@@ -183,7 +186,7 @@ public class SignUpPage extends CoreFragment {
 
     void login() {
         getAppMainActivity().hideKeyboard();
-        showLoading(getString(R.string.logging_in));
+        showLoading(root);
 
         LinkaAPIServiceImpl.login(getAppMainActivity(), username.getText().toString(), password.getText().toString(), new Callback<LinkaAPIServiceResponse.LoginResponse>() {
             @Override

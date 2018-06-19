@@ -15,6 +15,7 @@ import com.linka.lockapp.aos.module.api.LinkaAPIServiceResponse;
 import com.linka.lockapp.aos.module.core.CoreFragment;
 import com.linka.lockapp.aos.module.eventbus.SuccessConnectBusEventMessage;
 import com.linka.lockapp.aos.module.model.Linka;
+import com.linka.lockapp.aos.module.other.Utils;
 import com.linka.lockapp.aos.module.pages.dialogs.SuccessConnectionDialogFragment;
 import com.linka.lockapp.aos.module.pages.dialogs.ThreeDotsDialogFragment;
 
@@ -25,7 +26,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-import jp.wasabeef.blurry.Blurry;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -119,9 +119,9 @@ public class AccessLockFragment extends CoreFragment {
 
     public void setBlur(boolean isBlur){
         if(isBlur){
-            Blurry.with(getActivity()).radius(25).sampling(2).onto(root);
+            Utils.getInstance(getActivity()).showLoading(root);
         }else {
-            Blurry.delete(root);
+            Utils.getInstance(getActivity()).cancelLoading();
         }
     }
 

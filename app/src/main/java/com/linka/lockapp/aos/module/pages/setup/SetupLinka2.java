@@ -106,7 +106,7 @@ public class SetupLinka2 extends WalkthroughFragment {
         public void run() {
             closeLoadingHandler = null;
             setBlur(false);
-            threeDotsDialogFragment.dismiss();
+//            threeDotsDialogFragment.dismiss();
             LinkaAPIServiceManager.getClient().dispatcher().cancelAll();
             String message = getString(R.string.fail_pairing) + " " + currentLinka.getName();
             stopLeScan();
@@ -503,7 +503,7 @@ public class SetupLinka2 extends WalkthroughFragment {
 
                     showAlert("", error);
                     setBlur(false);
-                    threeDotsDialogFragment.dismiss();
+//                    threeDotsDialogFragment.dismiss();
                     if (closeLoadingHandler != null) {
                         closeLoadingHandler.removeCallbacks(closeLoadingRunnable);
                         closeLoadingHandler = null;
@@ -519,7 +519,7 @@ public class SetupLinka2 extends WalkthroughFragment {
                     if (!isAdded()) return;
                     if (accessKey.access_key_admin.equals("")) {
                         setBlur(false);
-                        threeDotsDialogFragment.dismiss();
+//                        threeDotsDialogFragment.dismiss();
                         if (closeLoadingHandler != null) {
                             closeLoadingHandler.removeCallbacks(closeLoadingRunnable);
                             closeLoadingHandler = null;
@@ -529,7 +529,7 @@ public class SetupLinka2 extends WalkthroughFragment {
                         return;
                     } else {
                         setBlur(false);
-                        threeDotsDialogFragment.dismiss();
+//                        threeDotsDialogFragment.dismiss();
                         if (closeLoadingHandler != null) {
                             closeLoadingHandler.removeCallbacks(closeLoadingRunnable);
                             closeLoadingHandler = null;
@@ -557,11 +557,11 @@ public class SetupLinka2 extends WalkthroughFragment {
 
 
     void trySendAdminPermissionRequest(Linka linka) {
-        showLoading(_.i(R.string.requesting_permission));
+        setBlur(true);
         LinkaAPIServiceImpl.send_request_for_user_permission(getActivity(), linka, new Callback<LinkaAPIServiceResponse>() {
             @Override
             public void onResponse(Call<LinkaAPIServiceResponse> call, Response<LinkaAPIServiceResponse> response) {
-                hideLoading();
+                setBlur(false);
                 if (!isAdded()) return;
                 if (LinkaAPIServiceImpl.check(response, false, getActivity())) {
                     showAlert(_.i(R.string.almost_done), _.i(R.string.permission_being_processed));
@@ -571,7 +571,7 @@ public class SetupLinka2 extends WalkthroughFragment {
 
             @Override
             public void onFailure(Call<LinkaAPIServiceResponse> call, Throwable t) {
-                hideLoading();
+                setBlur(false);
             }
         });
     }
@@ -587,7 +587,8 @@ public class SetupLinka2 extends WalkthroughFragment {
                 Linka linka = Linka.saveLinka(item, true);
                 getAppMainActivity().saveLatestLinka(linka);
 
-                threeDotsDialogFragment.dismiss();
+                setBlur(false);
+//                threeDotsDialogFragment.dismiss();
                 if (closeLoadingHandler != null) {
                     closeLoadingHandler.removeCallbacks(closeLoadingRunnable);
                     closeLoadingHandler = null;
