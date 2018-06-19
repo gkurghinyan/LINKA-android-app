@@ -223,6 +223,8 @@ public class AppMainActivity extends CoreActivity {
     LinkaTextView sidebarTextLogout;
     @BindView(R.id.sidebar_app_version)
     LinkaTextView sidebarTextAppVersion;
+    @BindView(R.id.sidebar_icon_testing)
+    LinearLayout testing;
 
     private boolean isBackAviable = true;
 
@@ -552,6 +554,9 @@ public class AppMainActivity extends CoreActivity {
 
 
     private void initDrawer() {
+        if (!BuildConfig.DEBUG) {
+            testing.setVisibility(View.GONE);
+        }
         drawerLayout.addDrawerListener(drawerListener);
         setDrawer();
     }
