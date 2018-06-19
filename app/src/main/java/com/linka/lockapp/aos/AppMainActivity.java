@@ -240,6 +240,32 @@ public class AppMainActivity extends CoreActivity {
 
     LockListAdapter adapter;
     RecyclerView recyclerView;
+    private Fragment drawerFragment = null;
+
+    private DrawerLayout.DrawerListener drawerListener = new DrawerLayout.DrawerListener() {
+        @Override
+        public void onDrawerSlide(View drawerView, float slideOffset) {
+
+        }
+
+        @Override
+        public void onDrawerOpened(View drawerView) {
+
+        }
+
+        @Override
+        public void onDrawerClosed(View drawerView) {
+            if(drawerFragment != null) {
+                setFragment(drawerFragment);
+                drawerFragment = null;
+            }
+        }
+
+        @Override
+        public void onDrawerStateChanged(int newState) {
+
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -481,8 +507,8 @@ public class AppMainActivity extends CoreActivity {
 
     public void gotoLinka(Linka linka) {
         saveLatestLinka(linka);
-        MainTabBarPageFragment fragment = MainTabBarPageFragment.newInstance(linka);
-        setFragment(fragment);
+        drawerFragment = MainTabBarPageFragment.newInstance(linka);
+//        setFragment(fragment);
     }
 
     public void removeLinka(Linka linka) {
@@ -526,6 +552,7 @@ public class AppMainActivity extends CoreActivity {
 
 
     private void initDrawer() {
+        drawerLayout.addDrawerListener(drawerListener);
         setDrawer();
     }
 
@@ -813,27 +840,28 @@ public class AppMainActivity extends CoreActivity {
 
     @OnClick(R.id.sidebar_lock)
     void onClick_sidebar_lock() {
-        drawerLayout.closeDrawers();
 
         if (Linka.getLinkas().size() == 0) {
-            SetupLinka1 fragment = SetupLinka1.newInstance();
-            pushFragment(fragment);
+            drawerFragment = SetupLinka1.newInstance();
+//            pushFragment(fragment);
         } else {
-            setFragment(MainTabBarPageFragment.newInstance(LinkaNotificationSettings.get_latest_linka()));
+            drawerFragment = MainTabBarPageFragment.newInstance(LinkaNotificationSettings.get_latest_linka());
         }
+        drawerLayout.closeDrawers();
     }
 
     @OnClick(R.id.sidebar_available_devices)
     void onClick_sidebar_available_devices(){
-        drawerLayout.closeDrawers();
+        drawerFragment = AvailableDevicesFragment.newInstance();
 
-        setFragment(AvailableDevicesFragment.newInstance());
+        drawerLayout.closeDrawers();
     }
 
     @OnClick(R.id.sidebar_notifications)
     void onClick_sidebar_notifications() {
+        drawerFragment = NotificationSettingsPageFragment.newInstance();
+
         drawerLayout.closeDrawers();
-        setFragment(NotificationSettingsPageFragment.newInstance());
     }
 
     @OnClick(R.id.sidebar_icon_chat)
@@ -899,20 +927,20 @@ public class AppMainActivity extends CoreActivity {
 
     @OnClick(R.id.sidebar_icon_tc)
     void onClick_sidebar_terms_conditions() {
+        drawerFragment = WebPageFragment.newInstance(_.i(R.string.terms_and_conditions), _.i(R.string.terms_url));
         drawerLayout.closeDrawers();
-        setFragment(WebPageFragment.newInstance(_.i(R.string.terms_and_conditions), _.i(R.string.terms_url)));
     }
 
     @OnClick(R.id.sidebar_icon_privacy)
     void onClick_sidebar_privacy() {
+        drawerFragment = WebPageFragment.newInstance(_.i(R.string.privacy_policy), _.i(R.string.privacy_url));
         drawerLayout.closeDrawers();
-        setFragment(WebPageFragment.newInstance(_.i(R.string.privacy_policy), _.i(R.string.privacy_url)));
     }
 
     @OnClick(R.id.sidebar_icon_faq)
     void onClick_sidebar_faq() {
+        drawerFragment = WebPageFragment.newInstance(_.i(R.string.faqs), _.i(R.string.faq_url));
         drawerLayout.closeDrawers();
-        setFragment(WebPageFragment.newInstance(_.i(R.string.faqs), _.i(R.string.faq_url)));
     }
 
     @OnClick(R.id.sidebar_icon_check_app_updates)
@@ -957,8 +985,8 @@ public class AppMainActivity extends CoreActivity {
 
     @OnClick(R.id.sidebar_icon_testing)
     void onClick_sidebar_icon_testing(){
+        drawerFragment = TestingFragment.newInstance();
         drawerLayout.closeDrawers();
-        setFragment(TestingFragment.newInstance());
     }
 
 
@@ -1008,8 +1036,8 @@ public class AppMainActivity extends CoreActivity {
     void onClick_item_add() {
         if(!(getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof SetupLinka1)) {
             toolbar.setVisibility(View.INVISIBLE);
-            SetupLinka1 fragment = SetupLinka1.newInstance();
-            setFragment(fragment);
+            drawerFragment = SetupLinka1.newInstance();
+//            setFragment(fragment);
         }
         drawerLayout.closeDrawers();
     }
