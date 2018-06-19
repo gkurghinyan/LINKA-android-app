@@ -483,4 +483,6 @@
     <string name="user_exist">The user already exist</string>
     <string name="available_devices">Available Devices</string>
     <string name="set_pac">SET PAC</string>
+    <string name="location_disabled">Location Disabled</string>
+    <string name="location_turn_on">Turn on location provider and click OK</string>
 </resources>

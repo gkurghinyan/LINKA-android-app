@@ -17,8 +17,8 @@ import com.linka.lockapp.aos.module.i18n._;
 import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.model.LinkaAccessKey;
 import com.linka.lockapp.aos.module.model.LinkaActivity;
-import com.linka.lockapp.aos.module.pages.dfu.DfuManagerPageFragment;
 import com.linka.lockapp.aos.module.pages.pac.PacTutorialFragment;
+import com.linka.lockapp.aos.module.pages.setup.AutoUpdateFragment;
 import com.linka.lockapp.aos.module.pages.setup.SetupLinka3;
 import com.linka.lockapp.aos.module.widget.LinkaButton;
 import com.linka.lockapp.aos.module.widget.LinkaTextView;
@@ -455,7 +455,8 @@ public class SettingsPageFragment extends CoreFragment {
     void onClick_fw_update_button() {
 
 
-            DfuManagerPageFragment fragment = DfuManagerPageFragment.newInstance(linka);
+//            DfuManagerPageFragment fragment = DfuManagerPageFragment.newInstance(linka);
+        AutoUpdateFragment fragment = AutoUpdateFragment.newInstance(linka,AutoUpdateFragment.SETTINGS);
             getAppMainActivity().pushFragment(fragment);
 
     }
