@@ -129,8 +129,20 @@ public class MainTabBarPageFragment extends CoreFragment {
                 linka = Linka.getLinkaById(savedInstanceState.getLong("linka_id", 0));
                 init(savedInstanceState);
             }
+        }switch (currentPosition){
+            case 0:
+                changeButtonsState(true,false,false,false);
+                break;
+            case 1:
+                changeButtonsState(false,true,false,false);
+                break;
+            case 2:
+                changeButtonsState(false,false,true,false);
+                break;
+            case 3:
+                changeButtonsState(false,false,false,true);
+                break;
         }
-        changeButtonsState(true,false,false,false);
     }
 
     @Override
@@ -145,6 +157,12 @@ public class MainTabBarPageFragment extends CoreFragment {
             adapter.f4 = null;
         }
         unbinder.unbind();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        currentPosition = 0;
     }
 
     @Override

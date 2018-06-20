@@ -18,7 +18,6 @@ import com.linka.lockapp.aos.module.core.CoreFragment;
 import com.linka.lockapp.aos.module.helpers.Constants;
 import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.model.LinkaNotificationSettings;
-import com.linka.lockapp.aos.module.pages.home.MainTabBarPageFragment;
 import com.linka.lockapp.aos.module.pages.walkthrough.WalkthroughActivity;
 import com.pixplicity.easyprefs.library.Prefs;
 
@@ -89,7 +88,7 @@ public class SetupLinka3 extends CoreFragment {
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
             if(getArguments().getInt(CURRENT_FRAGMENT) == SETTINGS){
-                getAppMainActivity().setFragment(MainTabBarPageFragment.newInstance(Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id())));
+                getAppMainActivity().popFragment();
                 return;
             }
             if ((!Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).pacIsSet && Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).pac == 0) ||

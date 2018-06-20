@@ -513,6 +513,7 @@ public class AppMainActivity extends CoreActivity {
     public void gotoLinka(Linka linka) {
         saveLatestLinka(linka);
         drawerFragment = MainTabBarPageFragment.newInstance(linka);
+        drawerLayout.closeDrawers();
 //        setFragment(fragment);
     }
 
@@ -1152,7 +1153,6 @@ public class AppMainActivity extends CoreActivity {
                 LogHelper.e("Linka List", "LINKA clicked " + linka.lock_mac_address + " " + linka.getName());
 
                 gotoLinka(linka);
-                drawerLayout.closeDrawers();
 
                 return;
             }
