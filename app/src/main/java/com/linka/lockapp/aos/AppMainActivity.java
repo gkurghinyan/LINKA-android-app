@@ -48,6 +48,7 @@ import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.model.LinkaAccessKey;
 import com.linka.lockapp.aos.module.model.LinkaActivity;
 import com.linka.lockapp.aos.module.model.LinkaNotificationSettings;
+import com.linka.lockapp.aos.module.other.Utils;
 import com.linka.lockapp.aos.module.pages.AvailableDevicesFragment;
 import com.linka.lockapp.aos.module.pages.TestingFragment;
 import com.linka.lockapp.aos.module.pages.dfu.DfuManagerPageFragment;
@@ -225,6 +226,8 @@ public class AppMainActivity extends CoreActivity {
     LinkaTextView sidebarTextAppVersion;
     @BindView(R.id.sidebar_icon_testing)
     LinearLayout testing;
+    @BindView(R.id.main_root)
+    RelativeLayout root;
 
     private boolean isBackAviable = true;
 
@@ -1009,18 +1012,18 @@ public class AppMainActivity extends CoreActivity {
                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        showLoading("Logging Out...");
+                        Utils.showLoading(AppMainActivity.this,root);
                         LinkaNotificationSettings.disconnect_all_linka();
                         LinkaAPIServiceImpl.logout(AppMainActivity.this, new Callback<LinkaAPIServiceResponse>() {
                             @Override
                             public void onResponse(Call<LinkaAPIServiceResponse> call, Response<LinkaAPIServiceResponse> response) {
-                                hideLoading();
+                                Utils.cancelLoading();
                                 onLogout();
                             }
 
                             @Override
                             public void onFailure(Call<LinkaAPIServiceResponse> call, Throwable t) {
-                                hideLoading();
+                                Utils.cancelLoading();
                                 onLogout();
                             }
                         });

@@ -122,7 +122,7 @@ public class SignInPage extends CoreFragment {
         LinkaAPIServiceImpl.login(getAppMainActivity(), username.getText().toString(), password.getText().toString(), new Callback<LinkaAPIServiceResponse.LoginResponse>() {
             @Override
             public void onResponse(Call<LinkaAPIServiceResponse.LoginResponse> call, Response<LinkaAPIServiceResponse.LoginResponse> response) {
-                hideLoading();
+                cancelLoading();
                 if (LinkaAPIServiceImpl.check(response, false, getAppMainActivity())) {
                     getAppMainActivity().didSignIn();
                 }
@@ -135,7 +135,7 @@ public class SignInPage extends CoreFragment {
             @Override
             public void onFailure(Call<LinkaAPIServiceResponse.LoginResponse> call, Throwable t) {
                 Blurry.delete(constraintLayout);
-                hideLoading();
+                cancelLoading();
             }
         });
     }

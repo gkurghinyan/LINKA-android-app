@@ -2,7 +2,6 @@ package com.linka.lockapp.aos.module.core;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.net.Uri;
@@ -250,32 +249,6 @@ public class CoreActivity extends AppCompatActivity implements FragmentManager.O
         super.onDestroy();
         if (instance == this) {
             instance = null;
-        }
-    }
-
-
-
-
-
-
-    ProgressDialog progressDialog;
-    public void showLoading() {
-        hideLoading();
-        progressDialog = new ProgressDialog(this);
-        progressDialog.show();
-    }
-
-    public void showLoading(String message) {
-        hideLoading();
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage(message);
-        progressDialog.show();
-    }
-
-    public void hideLoading() {
-        if (progressDialog != null) {
-            progressDialog.dismiss();
-            progressDialog = null;
         }
     }
 

@@ -92,9 +92,9 @@ public class WalkthroughFragment extends CoreFragment {
 
     public void setBlur(boolean isBlur){
         if(isBlur){
-            Utils.getInstance(getActivity()).showLoading(relativeLayout);
+            Utils.showLoading(getContext(),relativeLayout);
         }else {
-            Utils.getInstance(getActivity()).cancelLoading();
+            Utils.cancelLoading();
         }
     }
 

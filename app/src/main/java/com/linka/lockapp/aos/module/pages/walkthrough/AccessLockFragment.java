@@ -119,9 +119,9 @@ public class AccessLockFragment extends CoreFragment {
 
     public void setBlur(boolean isBlur){
         if(isBlur){
-            Utils.getInstance(getActivity()).showLoading(root);
+            Utils.showLoading(getContext(),root);
         }else {
-            Utils.getInstance(getActivity()).cancelLoading();
+            Utils.cancelLoading();
         }
     }
 

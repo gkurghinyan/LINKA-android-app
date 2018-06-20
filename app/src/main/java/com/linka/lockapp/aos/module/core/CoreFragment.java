@@ -116,7 +116,7 @@ public class CoreFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         asyncHandlerOnViewCreated.removeCallbacks(asyncRunnableOnViewCreated);
-        hideLoading();
+//        cancelLoading();
     }
 
 
@@ -124,20 +124,11 @@ public class CoreFragment extends Fragment {
 
     ProgressDialog progressDialog;
     public void showLoading(ViewGroup viewGroup) {
-        Utils.getInstance(getActivity()).showLoading(viewGroup);
+        Utils.showLoading(getContext(),viewGroup);
     }
 
-//    public void showLoading(String message) {
-//        hideLoading();
-//        progressDialog = new ProgressDialog(getActivity());
-//        progressDialog.setMessage(message);
-//        progressDialog.setCancelable(false);
-//        progressDialog.setCanceledOnTouchOutside(false);
-//        progressDialog.show();
-//    }
-
-    public void hideLoading() {
-        Utils.getInstance(getActivity()).cancelLoading();
+    public void cancelLoading() {
+        Utils.cancelLoading();
     }
 
 

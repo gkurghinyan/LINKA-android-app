@@ -111,7 +111,7 @@ public class WelcomePage extends CoreFragment {
                 LinkaAPIServiceImpl.login_facebook(getAppMainActivity(), access_token.getToken(), new Callback<LinkaAPIServiceResponse.LoginResponse>() {
                     @Override
                     public void onResponse(Call<LinkaAPIServiceResponse.LoginResponse> call, Response<LinkaAPIServiceResponse.LoginResponse> response) {
-                        hideLoading();
+                        cancelLoading();
                         if (LinkaAPIServiceImpl.check(response, false, getAppMainActivity())) {
                             getAppMainActivity().didSignIn();
                         }
@@ -122,7 +122,7 @@ public class WelcomePage extends CoreFragment {
 
                     @Override
                     public void onFailure(Call<LinkaAPIServiceResponse.LoginResponse> call, Throwable t) {
-                        hideLoading();
+                        cancelLoading();
                     }
                 });
             }

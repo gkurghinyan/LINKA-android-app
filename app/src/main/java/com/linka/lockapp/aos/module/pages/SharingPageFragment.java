@@ -288,6 +288,7 @@ public class SharingPageFragment extends CoreFragment implements RecyclerItemTou
 
     void getLockPermissions() {
 //        addUser.setVisibility(View.GONE);
+        showLoading(root);
         userList.clear();
         selfIsOwner = false;
 
@@ -336,11 +337,12 @@ public class SharingPageFragment extends CoreFragment implements RecyclerItemTou
                     }
                     adapter.notifyDataSetChanged();
                 }
+                cancelLoading();
             }
 
             @Override
             public void onFailure(Call<LinkaAPIServiceResponse.LockPermissionsResponse> call, Throwable t) {
-
+                cancelLoading();
             }
         });
     }

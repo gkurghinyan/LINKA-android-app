@@ -22,6 +22,7 @@ import com.linka.lockapp.aos.module.api.LinkaAPIServiceResponse;
 import com.linka.lockapp.aos.module.core.CoreFragment;
 import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.other.RecyclerItemTouchHelper;
+import com.linka.lockapp.aos.module.other.Utils;
 import com.linka.lockapp.aos.module.widget.LocksController;
 
 import java.util.ArrayList;
@@ -87,6 +88,7 @@ public class AvailableDevicesFragment extends CoreFragment implements RecyclerIt
     }
 
     void getLockPermissions(final Linka linka) {
+        Utils.showLoading(getContext(),root);
         //Get lock permissions
         LinkaAPIServiceImpl.lock_permissions(getAppMainActivity(), linka, new Callback<LinkaAPIServiceResponse.LockPermissionsResponse>() {
             @Override
@@ -114,11 +116,12 @@ public class AvailableDevicesFragment extends CoreFragment implements RecyclerIt
                         adapter.notifyItemInserted(devices.size()-1);
                     }
                 }
+                Utils.cancelLoading();
             }
 
             @Override
             public void onFailure(Call<LinkaAPIServiceResponse.LockPermissionsResponse> call, Throwable t) {
-
+                Utils.cancelLoading();
             }
         });
     }

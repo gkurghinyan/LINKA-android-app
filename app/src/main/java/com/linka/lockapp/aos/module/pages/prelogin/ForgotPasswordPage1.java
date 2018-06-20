@@ -105,7 +105,7 @@ public class ForgotPasswordPage1 extends CoreFragment {
                 new Callback<LinkaAPIServiceResponse>() {
                     @Override
                     public void onResponse(Call<LinkaAPIServiceResponse> call, Response<LinkaAPIServiceResponse> response) {
-                        hideLoading();
+                        cancelLoading();
                         if (LinkaAPIServiceImpl.check(response, false, getAppMainActivity())) {
                             new AlertDialog.Builder(getAppMainActivity())
                                     .setTitle(_.i(R.string.almost_done))
@@ -117,7 +117,7 @@ public class ForgotPasswordPage1 extends CoreFragment {
 
                     @Override
                     public void onFailure(Call<LinkaAPIServiceResponse> call, Throwable t) {
-                        hideLoading();
+                        cancelLoading();
                     }
                 }
         );

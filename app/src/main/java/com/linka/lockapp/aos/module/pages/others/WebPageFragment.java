@@ -1,14 +1,17 @@
 package com.linka.lockapp.aos.module.pages.others;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.LinearLayout;
 
 import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.core.CoreFragment;
+import com.linka.lockapp.aos.module.other.Utils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,6 +24,8 @@ public class WebPageFragment extends CoreFragment {
 
     @BindView(R.id.webView)
     WebView webView;
+    @BindView(R.id.root)
+    LinearLayout root;
 
     Unbinder unbinder;
 
@@ -73,7 +78,21 @@ public class WebPageFragment extends CoreFragment {
         getAppMainActivity().setTitle(title);
 
         if (url != null) {
-            webView.setWebViewClient(new WebViewClient());
+            webView.setWebViewClient(new WebViewClient(){
+                @Override
+                public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                    super.onPageStarted(view, url, favicon);
+                    Utils.showLoading(WebPageFragment.this.getContext(),webView);
+                }
+
+                @Override
+                public void onPageFinished(WebView view, String url) {
+                    super.onPageFinished(view, url);
+                    Utils.cancelLoading();
+                }
+
+
+            });
             webView.loadUrl(url);
         }
 

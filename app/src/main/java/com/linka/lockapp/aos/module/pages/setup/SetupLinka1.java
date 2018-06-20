@@ -225,7 +225,7 @@ public class SetupLinka1 extends CoreFragment implements GoogleApiClient.Connect
         } catch (Exception ex) {
         }
         if (!gps_enabled && !network_enabled) {
-            Utils.getInstance(getActivity()).showLoading(root);
+            Utils.showLoading(getContext(),root);
             initGoogleApi();
         } else {
             getAppMainActivity().pushFragment(SetupLinka2.newInstance());
@@ -270,7 +270,7 @@ public class SetupLinka1 extends CoreFragment implements GoogleApiClient.Connect
                     status.startResolutionForResult(getActivity(), REQUEST_CHECK_SETTINGS);
 
                 } catch (IntentSender.SendIntentException e) {
-                    Utils.getInstance(getActivity()).cancelLoading();
+                    Utils.cancelLoading();
                     //failed to show dialog
                 }
                 break;
@@ -285,10 +285,10 @@ public class SetupLinka1 extends CoreFragment implements GoogleApiClient.Connect
     @Subscribe
     public void onEvent(Object object) {
         if (object instanceof String && object.equals("GPSConnected")) {
-            Utils.getInstance(getActivity()).cancelLoading();
+            Utils.cancelLoading();
             onSearchForLinka();
         }else if(object instanceof String && object.equals("GPSNotConnected")){
-            Utils.getInstance(getActivity()).cancelLoading();
+            Utils.cancelLoading();
         }
     }
 }
