@@ -17,7 +17,6 @@ import com.linka.lockapp.aos.module.eventbus.SuccessConnectBusEventMessage;
 import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.other.Utils;
 import com.linka.lockapp.aos.module.pages.dialogs.SuccessConnectionDialogFragment;
-import com.linka.lockapp.aos.module.pages.dialogs.ThreeDotsDialogFragment;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -97,12 +96,10 @@ public class AccessLockFragment extends CoreFragment {
 
     void trySendUserPermissionRequest(Linka linka) {
         setBlur(true);
-        final ThreeDotsDialogFragment threeDotsDialogFragment = ThreeDotsDialogFragment.newInstance();
-        threeDotsDialogFragment.show(getFragmentManager(), null);
         LinkaAPIServiceImpl.send_request_for_user_permission(getActivity(), linka, new Callback<LinkaAPIServiceResponse>() {
             @Override
             public void onResponse(Call<LinkaAPIServiceResponse> call, Response<LinkaAPIServiceResponse> response) {
-                threeDotsDialogFragment.dismiss();
+                setBlur(false);
                 if (!isAdded()) return;
                 if (LinkaAPIServiceImpl.check(response, false, getActivity())) {
                     SuccessConnectionDialogFragment.newInstance(getString(R.string.request_sent)).show(getFragmentManager(),null);
@@ -112,7 +109,6 @@ public class AccessLockFragment extends CoreFragment {
             @Override
             public void onFailure(Call<LinkaAPIServiceResponse> call, Throwable t) {
                 setBlur(false);
-                threeDotsDialogFragment.dismiss();
             }
         });
     }

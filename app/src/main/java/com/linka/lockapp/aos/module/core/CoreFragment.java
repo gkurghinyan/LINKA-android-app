@@ -2,7 +2,6 @@ package com.linka.lockapp.aos.module.core;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -122,7 +121,6 @@ public class CoreFragment extends Fragment {
 
 
 
-    ProgressDialog progressDialog;
     public void showLoading(ViewGroup viewGroup) {
         Utils.showLoading(getContext(),viewGroup);
     }

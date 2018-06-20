@@ -32,11 +32,11 @@ import com.linka.lockapp.aos.module.model.LinkaActivity;
 import com.linka.lockapp.aos.module.model.Notification;
 import com.linka.lockapp.aos.module.pages.CircleView;
 import com.linka.lockapp.aos.module.pages.SharingPageFragment;
-import com.linka.lockapp.aos.module.pages.dfu.DfuManagerPageFragment;
 import com.linka.lockapp.aos.module.pages.dialogs.InviteUserDialogFragment;
 import com.linka.lockapp.aos.module.pages.notifications.NotificationsPageFragment;
 import com.linka.lockapp.aos.module.pages.pac.SetPac3;
 import com.linka.lockapp.aos.module.pages.settings.SettingsPageFragment;
+import com.linka.lockapp.aos.module.pages.setup.AutoUpdateFragment;
 import com.linka.lockapp.aos.module.widget.LockController;
 import com.linka.lockapp.aos.module.widget.LocksController;
 import com.linka.lockapp.aos.module.widget.ToggleSwipeableViewPager;
@@ -83,6 +83,7 @@ public class MainTabBarPageFragment extends CoreFragment {
     @BindView(R.id.t4_img)
     ImageView t4Img;
 
+    public static int currentPosition = 0;
     Linka linka;
     Unbinder unbinder;
 
@@ -193,29 +194,12 @@ public class MainTabBarPageFragment extends CoreFragment {
             viewPager.setCurrentItem(0, false); //Circle view is default
             t1.setSelected(true);
 
-            viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                @Override
-                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                    EventBus.getDefault().post("closeInvite");
-                }
-
-                @Override
-                public void onPageSelected(int position) {
-
-                }
-
-                @Override
-                public void onPageScrollStateChanged(int state) {
-
-                }
-            });
-
             getAppMainActivity().onChangeFragment(getSelectedPageFragment(viewPager, adapter));
 
             viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+                    EventBus.getDefault().post("closeInvite");
                 }
 
                 @Override
@@ -286,6 +270,7 @@ public class MainTabBarPageFragment extends CoreFragment {
 
     @OnClick(R.id.t1)
     void on_t1() {
+        currentPosition = 0;
         viewPager.setCurrentItem(0, true);
         changeButtonsState(true,false,false,false);
         getAppMainActivity().setTitle("USERS");
@@ -293,6 +278,7 @@ public class MainTabBarPageFragment extends CoreFragment {
 
     @OnClick(R.id.t2)
     void on_t2() {
+        currentPosition = 1;
         viewPager.setCurrentItem(1, true);
         changeButtonsState(false,true,false,false);
         getAppMainActivity().setTitle(linka.lock_name);
@@ -300,6 +286,7 @@ public class MainTabBarPageFragment extends CoreFragment {
 
     @OnClick(R.id.t3)
     void on_t3() {
+        currentPosition = 2;
         viewPager.setCurrentItem(2, true);
         changeButtonsState(false,false,true,false);
         getAppMainActivity().setTitle("NOTIFICATIONS");
@@ -308,6 +295,7 @@ public class MainTabBarPageFragment extends CoreFragment {
     @OnClick(R.id.t4)
     void on_t4() {
         //Refresh the settings page
+        currentPosition = 3;
         EventBus.getDefault().post(LinkaActivity.LINKA_ACTIVITY_ON_CHANGE);
 
         viewPager.setCurrentItem(3, true);
@@ -537,7 +525,8 @@ public class MainTabBarPageFragment extends CoreFragment {
                                         .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
-                                                getAppMainActivity().pushFragment(DfuManagerPageFragment.newInstance(linka));
+//                                                getAppMainActivity().pushFragment(DfuManagerPageFragment.newInstance(linka));
+                                                getAppMainActivity().pushFragment(AutoUpdateFragment.newInstance(linka,AutoUpdateFragment.SETTINGS));
                                             }
                                         })
                                         .setNegativeButton(R.string.maybe_later, null)
@@ -567,7 +556,8 @@ public class MainTabBarPageFragment extends CoreFragment {
                                     @Override
                                     public void onClick(DialogInterface dialog, int id) {
                                         //Start DFU fragment, make LINKA parameter null because we don't initialize it
-                                        DfuManagerPageFragment fragment = DfuManagerPageFragment.newInstance(null);
+//                                        DfuManagerPageFragment fragment = DfuManagerPageFragment.newInstance(null);
+                                        AutoUpdateFragment fragment = AutoUpdateFragment.newInstance(null,AutoUpdateFragment.SETTINGS);
                                         fragment.blod_firmware_mode = true;
                                         fragment.blod_firmware_try_again = true;
                                         AppMainActivity.getInstance().pushFragment(fragment);
@@ -598,5 +588,9 @@ public class MainTabBarPageFragment extends CoreFragment {
 
 
         }
+    }
+
+    public void getCurrentFragment(){
+
     }
 }

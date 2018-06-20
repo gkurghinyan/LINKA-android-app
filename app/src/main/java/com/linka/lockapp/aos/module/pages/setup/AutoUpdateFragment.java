@@ -93,8 +93,22 @@ public class AutoUpdateFragment extends CoreFragment {
             if (bundle.get("linka") != null) {
                 linka = (Linka) bundle.getSerializable("linka");
             }
-            init();
-
+//            init();
+            if(getArguments().getInt(CURRENT_FRAGMENT) == WALKTHROUGH) {
+                if (wasDFUSuccessful) {
+                    if (linka != null) {
+                        linka.updateLockSettingsProfile = true;
+                        linka.saveSettings();
+                    }
+                }
+                openWalkthrough();
+                return;
+            }else if (Linka.getLinkas().size() == 0) {
+                SetupLinka1 fragment = SetupLinka1.newInstance();
+                AppMainActivity.getInstance().pushFragment(fragment);
+            } else {
+                AppMainActivity.getInstance().setFragment(MainTabBarPageFragment.newInstance(LinkaNotificationSettings.get_latest_linka()));
+            }
         }
 
 

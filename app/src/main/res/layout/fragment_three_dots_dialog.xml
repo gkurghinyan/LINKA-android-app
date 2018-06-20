@@ -23,6 +23,7 @@
         android:text="Connecting"
         android:layout_below="@+id/dialog"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/margin_xl"/>
+        android:layout_marginTop="@dimen/margin_xl"
+        android:visibility="invisible"/>
 
 </RelativeLayout>

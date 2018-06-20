@@ -21,7 +21,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 public class ThreeDotsDialogFragment extends DialogFragment {
-    private boolean isSetConnecting = true;
+    private boolean isSetConnecting = false;
     @BindView(R.id.connecting_text)
     TextView connecting;
 
@@ -47,8 +47,8 @@ public class ThreeDotsDialogFragment extends DialogFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         unbinder = ButterKnife.bind(this,view);
-        if(!isSetConnecting){
-            connecting.setVisibility(View.INVISIBLE);
+        if(isSetConnecting){
+            connecting.setVisibility(View.VISIBLE);
         }
     }
 

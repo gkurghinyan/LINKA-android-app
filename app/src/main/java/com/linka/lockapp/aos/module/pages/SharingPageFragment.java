@@ -26,7 +26,9 @@ import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.model.User;
 import com.linka.lockapp.aos.module.other.RecyclerItemTouchHelper;
 import com.linka.lockapp.aos.module.pages.dialogs.InviteUserDialogFragment;
+import com.linka.lockapp.aos.module.pages.home.MainTabBarPageFragment;
 import com.linka.lockapp.aos.module.widget.LockController;
+import com.linka.lockapp.aos.module.widget.ThreeDotsView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -51,6 +53,8 @@ public class SharingPageFragment extends CoreFragment implements RecyclerItemTou
 
     public static int active_page = 0;
     public static int rssiInterval = 10;
+    //This fragment position in viewpager of MainTabBarPageFragment
+    private final int thisPage = 0;
 
     RecyclerView recyclerView;
     private ConstraintLayout root;
@@ -61,6 +65,8 @@ public class SharingPageFragment extends CoreFragment implements RecyclerItemTou
 //    LinkaTextView ownerName;
     @BindView(R.id.title)
     TextView title;
+    @BindView(R.id.three_dots)
+    ThreeDotsView threeDotsView;
 //    @BindView(R.id.search_friends)
 //    EditText search;
 
@@ -288,7 +294,11 @@ public class SharingPageFragment extends CoreFragment implements RecyclerItemTou
 
     void getLockPermissions() {
 //        addUser.setVisibility(View.GONE);
-        showLoading(root);
+        if(MainTabBarPageFragment.currentPosition == thisPage) {
+            threeDotsView.setVisibility(View.VISIBLE);
+        }else {
+            threeDotsView.setVisibility(View.GONE);
+        }
         userList.clear();
         selfIsOwner = false;
 
@@ -337,12 +347,12 @@ public class SharingPageFragment extends CoreFragment implements RecyclerItemTou
                     }
                     adapter.notifyDataSetChanged();
                 }
-                cancelLoading();
+                threeDotsView.setVisibility(View.GONE);
             }
 
             @Override
             public void onFailure(Call<LinkaAPIServiceResponse.LockPermissionsResponse> call, Throwable t) {
-                cancelLoading();
+                threeDotsView.setVisibility(View.GONE);
             }
         });
     }

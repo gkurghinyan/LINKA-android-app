@@ -915,7 +915,8 @@ public class AppMainActivity extends CoreActivity {
                             drawerLayout.closeDrawers();
 
                             //Start DFU fragment, make LINKA parameter null because we don't initialize it
-                            DfuManagerPageFragment fragment = DfuManagerPageFragment.newInstance(null);
+//                            DfuManagerPageFragment fragment = DfuManagerPageFragment.newInstance(null);
+                            AutoUpdateFragment fragment = AutoUpdateFragment.newInstance(null,AutoUpdateFragment.SETTINGS);
                             fragment.blod_firmware_mode = true;
                             pushFragment(fragment);
 

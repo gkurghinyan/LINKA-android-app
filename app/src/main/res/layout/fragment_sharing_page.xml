@@ -53,6 +53,15 @@
         android:textColor="@color/menu_gray_text"
         android:textSize="@dimen/text_size_mm"/>
 
+    <com.linka.lockapp.aos.module.widget.ThreeDotsView
+        android:id="@+id/three_dots"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintStart_toStartOf="@id/title"
+        app:layout_constraintEnd_toEndOf="@id/title"
+        android:layout_marginTop="@dimen/margin_xm" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="0dp"

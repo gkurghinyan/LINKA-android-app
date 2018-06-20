@@ -34,7 +34,6 @@ import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.model.LinkaAccessKey;
 import com.linka.lockapp.aos.module.model.LinkaNotificationSettings;
 import com.linka.lockapp.aos.module.pages.dialogs.SuccessConnectionDialogFragment;
-import com.linka.lockapp.aos.module.pages.dialogs.ThreeDotsDialogFragment;
 import com.linka.lockapp.aos.module.pages.walkthrough.AccessLockFragment;
 import com.linka.lockapp.aos.module.pages.walkthrough.WalkthroughFragment;
 
@@ -71,7 +70,6 @@ public class SetupLinka2 extends WalkthroughFragment {
     List<BluetoothLEDevice> devices = new ArrayList<>();
     List<Linka> linkaList = new ArrayList<>();
     BluetoothLEDeviceListAdapter adapter;
-    private ThreeDotsDialogFragment threeDotsDialogFragment;
 
     Handler scanHandler = new Handler();
     Runnable scanRunnable = new Runnable() {
@@ -483,8 +481,6 @@ public class SetupLinka2 extends WalkthroughFragment {
         closeLoadingHandler = new Handler();
         closeLoadingHandler.postDelayed(closeLoadingRunnable, 30000);
         setBlur(true);
-        threeDotsDialogFragment = ThreeDotsDialogFragment.newInstance();
-        threeDotsDialogFragment.show(getFragmentManager(), null);
         final Linka linka = Linka.makeLinka(item);
         LinkaAccessKey.tryRegisterLock(getAppMainActivity(), linka, new LinkaAccessKey.LinkaAccessKeyDetailedErrorCallback() {
             @Override
@@ -587,7 +583,7 @@ public class SetupLinka2 extends WalkthroughFragment {
                 Linka linka = Linka.saveLinka(item, true);
                 getAppMainActivity().saveLatestLinka(linka);
 
-                setBlur(false);
+                removeDialog();
 //                threeDotsDialogFragment.dismiss();
                 if (closeLoadingHandler != null) {
                     closeLoadingHandler.removeCallbacks(closeLoadingRunnable);

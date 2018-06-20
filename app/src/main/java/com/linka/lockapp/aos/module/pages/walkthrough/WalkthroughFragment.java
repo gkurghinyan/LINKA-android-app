@@ -13,11 +13,12 @@ import android.widget.RelativeLayout;
 
 import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.core.CoreFragment;
-import com.linka.lockapp.aos.module.other.Utils;
+import com.linka.lockapp.aos.module.pages.dialogs.ThreeDotsDialogFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import jp.wasabeef.blurry.Blurry;
 
 /**
  * Created by kyle on 3/8/18.
@@ -54,7 +55,7 @@ public class WalkthroughFragment extends CoreFragment {
     ImageView dot5selected;
     @BindView(R.id.back_button)
     ImageView backButton;
-//    @BindView(R.id.button2)
+    //    @BindView(R.id.button2)
 //    Button button;
     @BindView(R.id.relative)
     RelativeLayout relativeLayout;
@@ -62,9 +63,9 @@ public class WalkthroughFragment extends CoreFragment {
     @BindView(R.id.walkthrough_view_pager)
     ViewPager viewPager;
 
-//    @BindView(R.id.skip_button)
+    //    @BindView(R.id.skip_button)
 //    TextView skipButton;
-    public WalkthroughFragment(){
+    public WalkthroughFragment() {
 
     }
 
@@ -90,19 +91,27 @@ public class WalkthroughFragment extends CoreFragment {
         return rootView;
     }
 
-    public void setBlur(boolean isBlur){
-        if(isBlur){
-            Utils.showLoading(getContext(),relativeLayout);
-        }else {
-            Utils.cancelLoading();
+    ThreeDotsDialogFragment threeDotsDialogFragment;
+    public void setBlur(boolean isBlur) {
+        if (isBlur) {
+            Blurry.with(getContext()).radius(25).sampling(2).onto(relativeLayout);
+            threeDotsDialogFragment = ThreeDotsDialogFragment.newInstance().setConnectingText(true);
+            threeDotsDialogFragment.show(getFragmentManager(), null);
+        } else {
+            Blurry.delete(relativeLayout);
+            threeDotsDialogFragment.dismiss();
         }
     }
 
-    public void setBackButtonVisibility(int visibility){
+    public void removeDialog(){
+        threeDotsDialogFragment.dismiss();
+    }
+
+    public void setBackButtonVisibility(int visibility) {
         backButton.setVisibility(visibility);
     }
 
-    public void setLayouts(int[] layouts){
+    public void setLayouts(int[] layouts) {
 
         this.layouts = layouts;
 
@@ -114,7 +123,7 @@ public class WalkthroughFragment extends CoreFragment {
 
     }
 
-    public void updateLayouts(int layout,int position){
+    public void updateLayouts(int layout, int position) {
         this.layouts[position] = layout;
         myViewPagerAdapter.notifyDataSetChanged();
     }
@@ -127,10 +136,10 @@ public class WalkthroughFragment extends CoreFragment {
 //    }
 
     @OnClick(R.id.back_button)
-    void onBackClicked(){
-        if(getActivity() instanceof WalkthroughActivity){
+    void onBackClicked() {
+        if (getActivity() instanceof WalkthroughActivity) {
             ((WalkthroughActivity) getActivity()).popFragment();
-        }else {
+        } else {
             getAppMainActivity().onBackPressed();
         }
     }
@@ -146,7 +155,7 @@ public class WalkthroughFragment extends CoreFragment {
         */
     }
 
-    void setDots(int position){
+    void setDots(int position) {
 
         dot1.setVisibility(View.GONE);
         dot2.setVisibility(View.GONE);
@@ -159,7 +168,7 @@ public class WalkthroughFragment extends CoreFragment {
         dot4selected.setVisibility(View.GONE);
         dot5selected.setVisibility(View.GONE);
 
-        switch(layouts.length){
+        switch (layouts.length) {
             case 5:
                 dot5.setVisibility(View.VISIBLE);
             case 4:
@@ -172,7 +181,7 @@ public class WalkthroughFragment extends CoreFragment {
                 dot1.setVisibility(View.VISIBLE);
         }
 
-        switch(position + 1){
+        switch (position + 1) {
             case 5:
                 dot5selected.setVisibility(View.VISIBLE);
                 dot5.setVisibility(View.GONE);
@@ -208,13 +217,15 @@ public class WalkthroughFragment extends CoreFragment {
             }
             setDots(position);
 
-            if(layoutView != null) {
+            if (layoutView != null) {
                 layoutView.onViewChanged(position);
             }
         }
+
         @Override
         public void onPageScrolled(int arg0, float arg1, int arg2) {
         }
+
         @Override
         public void onPageScrollStateChanged(int arg0) {
 
@@ -237,8 +248,8 @@ public class WalkthroughFragment extends CoreFragment {
             container.addView(view);
 
             //This will be called once per slide in the view
-            if(layoutView != null) {
-                layoutView.onViewCreated(view,position);
+            if (layoutView != null) {
+                layoutView.onViewCreated(view, position);
             }
 
             return view;
@@ -267,12 +278,13 @@ public class WalkthroughFragment extends CoreFragment {
     }
 
     //Need a callback for when the view is created. This is cause view pager adapter loads after the views, so if we instantiate it before view is created, it will be null
-    public void setLayoutView(LayoutView layoutView){
+    public void setLayoutView(LayoutView layoutView) {
         this.layoutView = layoutView;
     }
 
-    public interface LayoutView{
-        void onViewCreated(View view,int position);
+    public interface LayoutView {
+        void onViewCreated(View view, int position);
+
         void onViewChanged(int position);
     }
 }
