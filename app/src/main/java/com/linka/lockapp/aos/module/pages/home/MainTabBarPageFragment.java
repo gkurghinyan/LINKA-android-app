@@ -312,6 +312,7 @@ public class MainTabBarPageFragment extends CoreFragment {
 
         viewPager.setCurrentItem(3, true);
         changeButtonsState(false,false,false,true);
+        getAppMainActivity().setTitle(getString(R.string.big_settings));
     }
 
 
