@@ -22,53 +22,63 @@
             android:textColor="@color/linka_gray"
             android:textSize="18sp" />
 
-        <LinearLayout
+        <com.linka.lockapp.aos.module.widget.LinkaTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textSize="14sp"
             android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:textColor="@color/linka_gray"
+            android:text="@string/sleep_unlock_desc"/>
+
+        <LinearLayout
+            android:id="@+id/time_picker"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/margin_xu"
             android:layout_marginBottom="15dp"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            android:gravity="center">
 
-            <com.linka.lockapp.aos.module.widget.LinkaTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:gravity="center"
-                android:textColor="@color/linka_gray"
-                android:text="@string/sleep_unlock_desc"/>
-
-            <SeekBar
-                style="android:style/Theme.Holo.Light.DarkActionBar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="20dp"
-                android:paddingBottom="20dp"
-                android:max="28"
-                android:progress="1"
-                android:thumbTint="@color/linka_blue"
-                android:progressTint="@color/linka_blue"
-                android:id="@+id/unlock_sleep_timer" />
-
-            <com.linka.lockapp.aos.module.widget.LinkaTextViewRegular
-                android:id="@+id/unlock_sleep_timer_text"
+            <NumberPicker
+                android:id="@+id/unlock_hour_picker"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textColor="@color/linka_blue"
-                android:textSize="24sp"
-                android:text="1 min"/>
+                android:layout_height="match_parent" />
 
-            <com.linka.lockapp.aos.module.widget.LinkaTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="5dp"
-                android:textColor="@color/linka_gray"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text=":"
+                android:textColor="@color/linka_black_transparent"
                 android:gravity="center"
-                android:textSize="14sp"
-                android:text="@string/sleep_unlock_hint"/>
+                android:textSize="@dimen/text_size_x"
+                android:layout_marginStart="@dimen/margin_mm"
+                android:layout_marginEnd="@dimen/margin_mm"/>
+
+            <NumberPicker
+                android:id="@+id/unlock_minute_picker"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
 
         </LinearLayout>
+
+        <com.linka.lockapp.aos.module.widget.LinkaTextViewRegular
+            android:id="@+id/unlock_sleep_timer_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@color/linka_blue"
+            android:textSize="24sp"
+            android:text="1 min"/>
+
+        <com.linka.lockapp.aos.module.widget.LinkaTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
+            android:textColor="@color/linka_gray"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:text="@string/sleep_unlock_hint"/>
 
         <View
             android:layout_width="match_parent"
@@ -90,17 +100,35 @@
                 android:textColor="@color/linka_gray"
                 android:text="@string/sleep_lock_desc"/>
 
-            <SeekBar
-                style="android:style/Theme.Holo.Light.DarkActionBar"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="20dp"
-                android:paddingBottom="20dp"
-                android:max="28"
-                android:progress="1"
-                android:thumbTint="@color/linka_blue"
-                android:progressTint="@color/linka_blue"
-                android:id="@+id/lock_sleep_timer" />
+                android:layout_height="@dimen/margin_xu"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <NumberPicker
+                    android:id="@+id/lock_hour_picker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text=":"
+                    android:textColor="@color/linka_black_transparent"
+                    android:gravity="center"
+                    android:textSize="@dimen/text_size_x"
+                    android:layout_marginStart="@dimen/margin_mm"
+                    android:layout_marginEnd="@dimen/margin_mm"/>
+
+                <NumberPicker
+                    android:id="@+id/lock_minute_picker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
 
             <com.linka.lockapp.aos.module.widget.LinkaTextViewRegular
                 android:id="@+id/lock_sleep_timer_text"
@@ -110,16 +138,6 @@
                 android:textColor="@color/linka_blue"
                 android:textSize="24sp"
                 android:text="1 min"/>
-
-            <!--<com.linka.lockapp.aos.module.widget.LinkaTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="5dp"
-                android:textColor="@color/linka_gray"
-                android:gravity="center"
-                android:textSize="13sp"
-                android:text="@string/sleep_lock_hint"/>-->
 
         </LinearLayout>
 

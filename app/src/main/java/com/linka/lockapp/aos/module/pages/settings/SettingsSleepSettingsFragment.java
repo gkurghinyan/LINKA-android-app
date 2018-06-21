@@ -1,13 +1,14 @@
 package com.linka.lockapp.aos.module.pages.settings;
 
 import android.app.AlertDialog;
+import android.content.res.Resources;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.SeekBar;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import com.linka.lockapp.aos.AppDelegate;
@@ -20,7 +21,7 @@ import com.linka.lockapp.aos.module.widget.LinkaButton;
 import com.linka.lockapp.aos.module.widget.LockController;
 import com.linka.lockapp.aos.module.widget.LocksController;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,11 +34,23 @@ public class SettingsSleepSettingsFragment extends CoreFragment {
     @BindView(R.id.save)
     LinkaButton save;
 
-    @BindView(R.id.lock_sleep_timer)
-    SeekBar lock_sleep_timer;
+    @BindView(R.id.unlock_hour_picker)
+    NumberPicker unlockHourPicker;
 
-    @BindView(R.id.unlock_sleep_timer)
-    SeekBar unlock_sleep_timer;
+    @BindView(R.id.unlock_minute_picker)
+    NumberPicker unlockMinutePicker;
+
+    @BindView(R.id.lock_hour_picker)
+    NumberPicker lockHourPicker;
+
+    @BindView(R.id.lock_minute_picker)
+    NumberPicker lockMinutePicker;
+
+    @BindView(R.id.lock_sleep_timer_text)
+    TextView lockText;
+
+    @BindView(R.id.unlock_sleep_timer_text)
+    TextView unlockText;
 
     @BindView(R.id.battery_estimated_days_remaining)
     TextView battery_estimated_days_remaining;
@@ -48,39 +61,13 @@ public class SettingsSleepSettingsFragment extends CoreFragment {
     @BindView(R.id.sleep_battery_icon)
     ImageView battery_icon;
 
+    private int lockTime;
+    private int unlockTime;
+
     private Unbinder unbinder;
 
-    private static ArrayList<SleepOption> mOptions = new ArrayList<SleepOption>() {{
-        add(SleepOption.SLEEPING_OPTION_1);
-//        add(SleepOption.SLEEPING_OPTION_2);
-//        add(SleepOption.SLEEPING_OPTION_3);
-//        add(SleepOption.SLEEPING_OPTION_4);
-        add(SleepOption.SLEEPING_OPTION_5);
-//        add(SleepOption.SLEEPING_OPTION_6);
-//        add(SleepOption.SLEEPING_OPTION_7);
-//        add(SleepOption.SLEEPING_OPTION_8);
-//        add(SleepOption.SLEEPING_OPTION_9);
-        add(SleepOption.SLEEPING_OPTION_10);
-//        add(SleepOption.SLEEPING_OPTION_11);
-        add(SleepOption.SLEEPING_OPTION_12);
-//        add(SleepOption.SLEEPING_OPTION_13);
-        add(SleepOption.SLEEPING_OPTION_14);
-//        add(SleepOption.SLEEPING_OPTION_15);
-        add(SleepOption.SLEEPING_OPTION_16);
-//        add(SleepOption.SLEEPING_OPTION_17);
-        add(SleepOption.SLEEPING_OPTION_18);
-//        add(SleepOption.SLEEPING_OPTION_19);
-        add(SleepOption.SLEEPING_OPTION_20);
-        add(SleepOption.SLEEPING_OPTION_21);
-        add(SleepOption.SLEEPING_OPTION_22);
-        add(SleepOption.SLEEPING_OPTION_23);
-        add(SleepOption.SLEEPING_OPTION_24);
-        add(SleepOption.SLEEPING_OPTION_25);
-        add(SleepOption.SLEEPING_OPTION_26);
-        add(SleepOption.SLEEPING_OPTION_27);
-        add(SleepOption.SLEEPING_OPTION_28);
-        add(SleepOption.SLEEPING_OPTION_29);
-    }};
+    private String[] minuteValues = new String[12];
+    private HashMap<String,Integer> minutes;
 
 
     public static SettingsSleepSettingsFragment newInstance(Linka linka) {
@@ -114,18 +101,19 @@ public class SettingsSleepSettingsFragment extends CoreFragment {
             if (bundle.get("linka") != null) {
                 linka = (Linka) bundle.getSerializable("linka");
             }
-            init(view);
+            init();
         }
     }
 
-    void init(final View view) {
+    void init() {
+        initPickers();
 
         int batteryPercent = linka.batteryPercent;
 
         setEstimatedBatteryRemaining(linka.settings_unlocked_sleep, linka.settings_locked_sleep);
-        battery_percent.setText("("+batteryPercent+"%)");
+        battery_percent.setText("(" + batteryPercent + "%)");
 
-        if (batteryPercent < AppDelegate.battery_mid && batteryPercent >= AppDelegate.battery_low_below){
+        if (batteryPercent < AppDelegate.battery_mid && batteryPercent >= AppDelegate.battery_low_below) {
             battery_icon.setImageResource(R.drawable.icon_activity_battery_mid_x);
         } else if (batteryPercent < AppDelegate.battery_critically_low_below) {
             battery_icon.setImageResource(R.drawable.icon_activity_battery_low_critical_x);
@@ -135,150 +123,176 @@ public class SettingsSleepSettingsFragment extends CoreFragment {
             battery_icon.setImageResource(R.drawable.icon_activity_battery_high_x);
         }
 
-        SleepOption lockedSleepOption = SleepOption.lookUpLockedValue(linka.settings_locked_sleep);
-        SleepOption unlockedSleepOption = SleepOption.lookUpUnlockedValue(linka.settings_unlocked_sleep);
+        //lock
+        lockTime = linka.settings_locked_sleep;
+        lockText.setText(String.valueOf(lockTime));
+        if (getHourFromSeconds(lockTime) != 0) {
+            lockHourPicker.setValue(getHourFromSeconds(lockTime));
+        } else {
+            lockHourPicker.setValue(0);
+        }
+        if (getMinutesFromSeconds(lockTime) != 0) {
+            lockMinutePicker.setValue(minutes.get(String.valueOf(getMinutesFromSeconds(lockTime))));
+        } else {
+            lockMinutePicker.setValue(0);
+        }
 
-        SeekBar.OnSeekBarChangeListener sleeptimer = new SeekBar.OnSeekBarChangeListener(){
+        //unlock
+        unlockTime = linka.settings_unlocked_sleep;
+        unlockText.setText(String.valueOf(unlockTime));
+        if (getHourFromSeconds(unlockTime) != 0) {
+            unlockHourPicker.setValue(getHourFromSeconds(unlockTime));
+        } else {
+            unlockHourPicker.setValue(0);
+        }
+        if (getMinutesFromSeconds(unlockTime) != 0) {
+            unlockMinutePicker.setValue(minutes.get(String.valueOf(getMinutesFromSeconds(unlockTime))));
+        } else {
+            unlockMinutePicker.setValue(0);
+        }
+
+        updateTimeTexts();
+    }
+
+    private void initPickers() {
+        minutes = new HashMap<>();
+        for (int i = 0; i < minuteValues.length; i++) {
+            String minute = Integer.toString(i*5);
+            minuteValues[i] = minute;
+            minutes.put(minute,i);
+        }
+
+        NumberPicker.OnValueChangeListener onValueChangeListener = new NumberPicker.OnValueChangeListener() {
             @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                int timerTextId = R.id.unlock_sleep_timer_text;
-                if (seekBar.getId() == R.id.lock_sleep_timer){
-                    timerTextId = R.id.lock_sleep_timer_text;
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                switch (picker.getId()) {
+                    case R.id.unlock_hour_picker:
+                        unlockTime = unlockTime + (newVal - oldVal) * 3600;
+                        break;
+                    case R.id.unlock_minute_picker:
+                        int newUnlockVal = Integer.parseInt(minuteValues[newVal]);
+                        int oldUnlockVal = Integer.parseInt(minuteValues[oldVal]);
+                        unlockTime = unlockTime + (newUnlockVal - oldUnlockVal) * 60;
+                        break;
+                    case R.id.lock_hour_picker:
+                        lockTime = lockTime + (newVal - oldVal) * 3600;
+                        break;
+                    case R.id.lock_minute_picker:
+                        int newLockVal1 = Integer.parseInt(minuteValues[newVal]);
+                        int oldLockVal1 = Integer.parseInt(minuteValues[oldVal]);
+                        lockTime = lockTime + (newLockVal1 - oldLockVal1) * 60;
+                        break;
                 }
-                if (seekBar.getId() == R.id.unlock_sleep_timer){
-                    timerTextId = R.id.unlock_sleep_timer_text;
-                }
-                TextView timerText = (TextView) view.findViewById(timerTextId);
-                timerText.setText(mOptions.get(i).sleepStringResource);
-                setEstimatedBatteryRemaining(mOptions.get(unlock_sleep_timer.getProgress()).sleepTime, mOptions.get(lock_sleep_timer.getProgress()).sleepTime);
-                Log.i("timer progress", String.valueOf(i));
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
+                setEstimatedBatteryRemaining(unlockTime, lockTime);
+                updateTimeTexts();
             }
         };
-        //lock
-        TextView timerText = (TextView) view.findViewById(R.id.lock_sleep_timer_text);
-        if(lockedSleepOption == SleepOption.SLEEPING_OPTION_LOCK_DEFAULT){
-            timerText.setText(SleepOption.SLEEPING_OPTION_LOCK_DEFAULT.sleepStringResource);
-        }else{
-            timerText.setText(lockedSleepOption.sleepStringResource);
-            lock_sleep_timer.setProgress(mOptions.indexOf(lockedSleepOption));
-        }
-        //unlock
-        timerText = (TextView) view.findViewById(R.id.unlock_sleep_timer_text);
-        if(unlockedSleepOption == SleepOption.SLEEPING_OPTION_UNLOCK_DEFAULT){
-            timerText.setText(SleepOption.SLEEPING_OPTION_UNLOCK_DEFAULT.sleepStringResource);
-        }else{
-            timerText.setText(unlockedSleepOption.sleepStringResource);
-            unlock_sleep_timer.setProgress(mOptions.indexOf(unlockedSleepOption));
-        }
 
-        unlock_sleep_timer.setMax(mOptions.size() - 1);
-        lock_sleep_timer.setMax(mOptions.size() - 1);
-        unlock_sleep_timer.setOnSeekBarChangeListener(sleeptimer);
-        lock_sleep_timer.setOnSeekBarChangeListener(sleeptimer);
 
+        unlockHourPicker.setMinValue(0);
+        unlockHourPicker.setMaxValue(99);
+        setDividerColor(unlockHourPicker, getResources().getColor(R.color.linka_blue));
+        unlockHourPicker.setOnValueChangedListener(onValueChangeListener);
+
+        unlockMinutePicker.setMinValue(0);
+        unlockMinutePicker.setMaxValue(11);
+        unlockMinutePicker.setDisplayedValues(minuteValues);
+        setDividerColor(unlockMinutePicker, getResources().getColor(R.color.linka_blue));
+        unlockMinutePicker.setOnValueChangedListener(onValueChangeListener);
+
+        lockHourPicker.setMinValue(0);
+        lockHourPicker.setMaxValue(99);
+        setDividerColor(lockHourPicker, getResources().getColor(R.color.linka_blue));
+        lockHourPicker.setOnValueChangedListener(onValueChangeListener);
+
+        lockMinutePicker.setMinValue(0);
+        lockMinutePicker.setMaxValue(11);
+        lockMinutePicker.setDisplayedValues(minuteValues);
+        setDividerColor(lockMinutePicker, getResources().getColor(R.color.linka_blue));
+        lockMinutePicker.setOnValueChangedListener(onValueChangeListener);
     }
 
-    private enum SleepOption {
+    private int getHourFromSeconds(int seconds) {
+        return seconds / 3600;
+    }
 
+    private int getMinutesFromSeconds(int seconds) {
+        return (seconds - getHourFromSeconds(seconds) * 3600) / 60;
+    }
 
-
-        SLEEPING_OPTION_1(1*60,"1 min", "1 "+_.i(R.string.min)),
-//        SLEEPING_OPTION_2(2*60,"2 mins", "2 "+_.i(R.string.mins)),
-//        SLEEPING_OPTION_3(3*60,"3 mins", "3 "+_.i(R.string.mins)),
-//        SLEEPING_OPTION_4(4*60,"4 mins", "4 "+_.i(R.string.mins)),
-        SLEEPING_OPTION_5(5*60,"5 mins", "5 "+_.i(R.string.mins)),
-//        SLEEPING_OPTION_6(6*60,"6 mins", "6 "+_.i(R.string.mins)),
-//        SLEEPING_OPTION_7(7*60,"7 mins", "7 "+_.i(R.string.mins)),
-//        SLEEPING_OPTION_8(8*60,"8 mins", "8 "+_.i(R.string.mins)),
-//        SLEEPING_OPTION_9(9*60,"9 mins", "9 "+_.i(R.string.mins)),
-        SLEEPING_OPTION_10(10*60,"10 mins", "10 "+_.i(R.string.mins)),
-//        SLEEPING_OPTION_11(15*60,"15 mins", "15 "+_.i(R.string.mins)),
-        SLEEPING_OPTION_12(20*60,"20 mins", "20 "+_.i(R.string.mins)),
-//        SLEEPING_OPTION_13(25*60,"25 mins", "25 "+_.i(R.string.mins)),
-        SLEEPING_OPTION_14(30*60,"30 mins", "30 "+_.i(R.string.mins)),
-//        SLEEPING_OPTION_15(35*60,"35 mins", "35 "+_.i(R.string.mins)),
-        SLEEPING_OPTION_16(40*60,"40 mins", "40 "+_.i(R.string.mins)),
-//        SLEEPING_OPTION_17(45*60,"45 mins", "45 "+_.i(R.string.mins)),
-        SLEEPING_OPTION_18(50*60,"50 mins", "50 "+_.i(R.string.mins)),
-//        SLEEPING_OPTION_19(55*60,"55 mins", "55 "+_.i(R.string.mins)),
-        SLEEPING_OPTION_20(1*60*60,"1 hour", "1 "+_.i(R.string.hr)),
-        SLEEPING_OPTION_21(2*60*60,"2 hours", "2 "+_.i(R.string.hrs)),
-        SLEEPING_OPTION_22(3*60*60,"3 hours", "3 "+_.i(R.string.hrs)),
-        SLEEPING_OPTION_23(4*60*60,"4 hours", "4 "+_.i(R.string.hrs)),
-        SLEEPING_OPTION_24(5*60*60,"5 hours", "5 "+_.i(R.string.hrs)),
-        SLEEPING_OPTION_25(6*60*60,"6 hours", "6 "+_.i(R.string.hrs)),
-        SLEEPING_OPTION_26(7*60*60,"7 hours", "7 "+_.i(R.string.hrs)),
-        SLEEPING_OPTION_27(8*60*60,"8 hours", "8 "+_.i(R.string.hrs)),
-        SLEEPING_OPTION_28(9*60*60,"9 hours", "9 "+_.i(R.string.hrs)),
-        SLEEPING_OPTION_29(10*60*60,"10 hours", "10 "+_.i(R.string.hrs)),
-        SLEEPING_OPTION_LOCK_DEFAULT(AppDelegate.default_lock_sleep_time, "3 hrs", "3 "+_.i(R.string.hrs)),
-        SLEEPING_OPTION_UNLOCK_DEFAULT(AppDelegate.default_unlock_sleep_time, "30 mins", "30 "+_.i(R.string.mins));
-
-
-        private int sleepTime;
-        private String optionName;
-        private String sleepStringResource;
-
-
-        SleepOption(int sleepTime, String optionName, String sleepStringResource) {
-            this.sleepTime = sleepTime;
-            this.optionName = optionName;
-            this.sleepStringResource = sleepStringResource;
+    private void updateTimeTexts() {
+        String lockHour;
+        if (lockHourPicker.getValue() != 0) {
+            lockHour = String.valueOf(getHourFromSeconds(lockTime) + " hours ");
+        } else {
+            lockHour = "";
         }
-
-        public static SleepOption lookUpLockedValue(int sec){
-            for(SleepOption sleepOption : mOptions){
-                if(sleepOption.sleepTime == sec){
-                    return sleepOption;
-                }
-            }
-            return SleepOption.SLEEPING_OPTION_LOCK_DEFAULT;
+        String lockMinute;
+        if (lockMinutePicker.getValue() != 0) {
+            lockMinute = String.valueOf(getMinutesFromSeconds(lockTime)) + " mins";
+        } else {
+            lockMinute = "";
         }
+        lockText.setText(lockHour + lockMinute);
 
-        public static SleepOption lookUpUnlockedValue(int sec){
-            for(SleepOption sleepOption : mOptions){
-                if(sleepOption.sleepTime == sec){
-                    return sleepOption;
+        String unlockHour;
+        if (unlockHourPicker.getValue() != 0) {
+            unlockHour = String.valueOf(getHourFromSeconds(unlockTime) + " hours ");
+        } else {
+            unlockHour = "";
+        }
+        String unlockMinute;
+        if (unlockMinutePicker.getValue() != 0) {
+            unlockMinute = String.valueOf(getMinutesFromSeconds(unlockTime) + " mins");
+        } else {
+            unlockMinute = "";
+        }
+        unlockText.setText(unlockHour + unlockMinute);
+    }
+
+
+    private void setDividerColor(NumberPicker picker, int color) {
+
+        java.lang.reflect.Field[] pickerFields = NumberPicker.class.getDeclaredFields();
+        for (java.lang.reflect.Field pf : pickerFields) {
+            if (pf.getName().equals("mSelectionDivider")) {
+                pf.setAccessible(true);
+                try {
+                    ColorDrawable colorDrawable = new ColorDrawable(color);
+                    pf.set(picker, colorDrawable);
+                } catch (IllegalArgumentException e) {
+                    e.printStackTrace();
+                } catch (Resources.NotFoundException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
                 }
+                break;
             }
-            return SleepOption.SLEEPING_OPTION_UNLOCK_DEFAULT;
         }
     }
 
-    private void setEstimatedBatteryRemaining(int unlock_time, int lock_time){
+    private void setEstimatedBatteryRemaining(int unlock_time, int lock_time) {
         battery_estimated_days_remaining.setText(linka.getEstimatedBatteryRemaining(unlock_time, lock_time));
     }
 
     @OnClick(R.id.save)
     void onSave() {
-        int unlock_time = mOptions.get(unlock_sleep_timer.getProgress()).sleepTime;
-        int lock_time = mOptions.get(lock_sleep_timer.getProgress()).sleepTime;
-
-        save(unlock_time, lock_time);
+        save(unlockTime, lockTime);
     }
 
     @OnClick(R.id.reset_to_default)
     void onDefault() {
-        //save(AppDelegate.default_unlock_sleep_time, AppDelegate.default_lock_sleep_time);
-
-        //TextView timerText = (TextView) view.findViewById(R.id.lock_sleep_timer_text);
-        //timerText.setText(SleepOption.SLEEPING_OPTION_LOCK_DEFAULT.sleepStringResource);
-        lock_sleep_timer.setProgress(9);
-        unlock_sleep_timer.setProgress(4);
-
+        save(AppDelegate.default_unlock_sleep_time, AppDelegate.default_lock_sleep_time);
+        unlockHourPicker.setValue(AppDelegate.default_unlock_sleep_time / 3600);
+        unlockMinutePicker.setValue(AppDelegate.default_unlock_sleep_time / 60);
+        lockHourPicker.setValue(AppDelegate.default_lock_sleep_time / 3600);
+        lockMinutePicker.setValue(AppDelegate.default_lock_sleep_time / 60);
+        setEstimatedBatteryRemaining(unlockTime, lockTime);
+        updateTimeTexts();
     }
 
-    private void save(int unlock_time, int lock_time){
+    private void save(int unlock_time, int lock_time) {
         boolean isAllCompleted = true;
 
         //Set Locked time first in case LINKA goes to sleep
@@ -307,7 +321,7 @@ public class SettingsSleepSettingsFragment extends CoreFragment {
         getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
     }
 
-    private void displayErrorMessage(){
+    private void displayErrorMessage() {
         new AlertDialog.Builder(getAppMainActivity())
                 .setTitle(_.i(R.string.fail_to_communicate))
                 .setMessage(_.i(R.string.check_connection))
