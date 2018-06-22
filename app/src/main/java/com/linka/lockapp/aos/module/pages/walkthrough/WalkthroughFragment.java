@@ -92,14 +92,17 @@ public class WalkthroughFragment extends CoreFragment {
     }
 
     ThreeDotsDialogFragment threeDotsDialogFragment;
-    public void setBlur(boolean isBlur) {
+    public void setBlur(boolean isBlur,String text) {
         if (isBlur) {
             Blurry.with(getContext()).radius(25).sampling(2).onto(relativeLayout);
-            threeDotsDialogFragment = ThreeDotsDialogFragment.newInstance().setConnectingText(true);
+            threeDotsDialogFragment = ThreeDotsDialogFragment.newInstance().setConnectingText(true,text);
             threeDotsDialogFragment.show(getFragmentManager(), null);
         } else {
             Blurry.delete(relativeLayout);
-            threeDotsDialogFragment.dismiss();
+            if(threeDotsDialogFragment != null) {
+                threeDotsDialogFragment.dismiss();
+                threeDotsDialogFragment = null;
+            }
         }
     }
 

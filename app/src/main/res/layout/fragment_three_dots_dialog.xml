@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:textSize="@dimen/text_size_xm"
         android:textColor="@color/linka_white"
-        android:text="Connecting"
+        android:text="@string/connecting"
         android:layout_below="@+id/dialog"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/margin_xl"

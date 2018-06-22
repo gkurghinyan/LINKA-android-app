@@ -485,4 +485,7 @@
     <string name="set_pac">SET PAC</string>
     <string name="location_disabled">Location Disabled</string>
     <string name="location_turn_on">Turn on location provider and click OK</string>
+    <string name="connecting">Connecting</string>
+    <string name="connecting_to_network">Connecting to network</string>
+    <string name="enabling_bluetooth">Enabling bluetooth</string>
 </resources>

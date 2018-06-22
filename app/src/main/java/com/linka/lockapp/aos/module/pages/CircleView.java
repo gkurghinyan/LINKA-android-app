@@ -11,7 +11,9 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,6 +27,7 @@ import com.linka.lockapp.aos.module.core.CoreFragment;
 import com.linka.lockapp.aos.module.helpers.LogHelper;
 import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.model.LinkaActivity;
+import com.linka.lockapp.aos.module.pages.dialogs.ThreeDotsDialogFragment;
 import com.linka.lockapp.aos.module.pages.home.MainTabBarPageFragment;
 import com.linka.lockapp.aos.module.pages.mylinkas.Circle;
 import com.linka.lockapp.aos.module.widget.LockController;
@@ -39,6 +42,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
 import butterknife.Unbinder;
+import jp.wasabeef.blurry.Blurry;
 
 import static com.linka.lockapp.aos.module.widget.LocksController.LOCKSCONTROLLER_NOTIFY_REFRESHED;
 
@@ -66,15 +70,18 @@ public class CircleView extends CoreFragment {
     ImageView panicButton;
     @BindView(R.id.root)
     FrameLayout root;
+    @BindView(R.id.all_root)
+    FrameLayout allRoot;
 
     BluetoothAdapter bluetoothAdapter;
     Unbinder unbinder;
 
     Linka linka;
     LockController lockController;
-    View bluetoothPage;
     View internetPage;
     View connectivityPage;
+    private boolean isInternetConnecting = false;
+    private boolean isBluetoothEnableing = false;
 
     CircleAngleAnimation animation;
     private Rect rect;
@@ -82,7 +89,54 @@ public class CircleView extends CoreFragment {
     private BroadcastReceiver internetReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            if (getInternetConnectivity()) {
+                isInternetConnecting = false;
+                setBlur(false, null);
+                if (wifiHandler != null) {
+                    wifiHandler.removeCallbacks(wifiRunnable);
+                    wifiHandler = null;
+                }
+            }
             refreshDisplay();
+        }
+    };
+    private final BroadcastReceiver blueToothReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+
+            if (action != null && action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
+                final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
+                switch (state) {
+                    case BluetoothAdapter.STATE_OFF:
+                        setBlur(true, getString(R.string.enabling_bluetooth));
+                        break;
+                    case BluetoothAdapter.STATE_ON:
+                        setBlur(false,null);
+                        break;
+                }
+
+            }
+        }
+    };
+
+
+    Handler wifiHandler = null;
+    Runnable wifiRunnable = new Runnable() {
+        @Override
+        public void run() {
+            wifiHandler = null;
+            if (!getInternetConnectivity()) {
+                setBlur(false, null);
+                if (internetPage.getParent() == null) {
+                    root.removeView(connectivityPage);
+                    root.addView(internetPage);
+                    root.setBackground(getResources().getDrawable(R.drawable.blue_gradient));
+                }
+            } else {
+                isInternetConnecting = false;
+            }
         }
     };
 
@@ -102,8 +156,6 @@ public class CircleView extends CoreFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.layout_circle_view, container, false);
-        bluetoothPage = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_no_bluetooth_connectivity, null);
-        ((TextView) bluetoothPage.findViewById(R.id.title)).setText(R.string.this_allows_your_smart_device_to_connect);
         internetPage = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_no_internet_connectivity, null);
         ((TextView) internetPage.findViewById(R.id.title)).setText(R.string.network_required_to_connect);
         connectivityPage = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_searching_linka_with_bluetooth, null);
@@ -154,11 +206,9 @@ public class CircleView extends CoreFragment {
     void init() {
 
         if (!getInternetConnectivity()) {
-            root.setBackground(getResources().getDrawable(R.drawable.blue_gradient));
-            root.addView(internetPage);
+            turnOnInternet();
         } else if (!getBluetoothConnectivity()) {
-            root.setBackground(getResources().getDrawable(R.drawable.blue_gradient));
-            root.addView(bluetoothPage);
+            turnOnBluetooth();
         } else if (!linka.isConnected && !linka.isLockSettled) {
             root.setBackground(getResources().getDrawable(R.drawable.blue_gradient));
             root.addView(connectivityPage);
@@ -239,6 +289,57 @@ public class CircleView extends CoreFragment {
 
     }
 
+    private void turnOnInternet() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (!isInternetConnecting) {
+                    WifiManager wifiManager = (WifiManager) getActivity().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+                    if (wifiManager != null && !wifiManager.isWifiEnabled()) {
+                        isInternetConnecting = true;
+                        setBlur(true, getString(R.string.connecting_to_network));
+                        wifiManager.setWifiEnabled(true);
+                        wifiHandler = new Handler();
+                        wifiHandler.postDelayed(wifiRunnable, 10000);
+                    } else {
+                        root.removeView(internetPage);
+                        root.removeView(connectivityPage);
+                        if (internetPage.getParent() == null) {
+                            root.addView(internetPage);
+                        }
+                        root.setBackground(getResources().getDrawable(R.drawable.blue_gradient));
+                    }
+                }
+            }
+        }, 300);
+    }
+
+    private void turnOnBluetooth() {
+        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (!mBluetoothAdapter.isEnabled()) {
+            mBluetoothAdapter.enable();
+        }
+    }
+
+    ThreeDotsDialogFragment threeDotsDialogFragment;
+
+    public void setBlur(boolean isBlur, String text) {
+        if (isBlur) {
+            if(threeDotsDialogFragment == null) {
+                root.setBackground(getResources().getDrawable(R.drawable.blue_gradient));
+                Blurry.with(getContext()).radius(25).sampling(2).onto(allRoot);
+                threeDotsDialogFragment = ThreeDotsDialogFragment.newInstance().setConnectingText(true, text);
+                threeDotsDialogFragment.show(getFragmentManager(), null);
+            }
+        } else {
+            Blurry.delete(allRoot);
+            if (threeDotsDialogFragment != null) {
+                threeDotsDialogFragment.dismiss();
+                threeDotsDialogFragment = null;
+            }
+        }
+    }
+
     @OnTouch(R.id.circle)
     public boolean clickCircle(Circle circle, MotionEvent event) {
 
@@ -263,6 +364,8 @@ public class CircleView extends CoreFragment {
         super.onStart();
         IntentFilter filter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
         getActivity().registerReceiver(internetReceiver, filter);
+        IntentFilter filter1 = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+        getActivity().registerReceiver(blueToothReceiver, filter1);
         EventBus.getDefault().register(this);
     }
 
@@ -281,41 +384,28 @@ public class CircleView extends CoreFragment {
                 @Override
                 public void run() {
                     if (!getInternetConnectivity()) {
-                        root.removeView(bluetoothPage);
-                        root.removeView(connectivityPage);
-                        if(internetPage.getParent() == null) {
-                            root.addView(internetPage);
-                        }
-                        root.setBackground(getResources().getDrawable(R.drawable.blue_gradient));
+                        turnOnInternet();
+                    } else if (!getBluetoothConnectivity()) {
+                        setBlur(true, getString(R.string.enabling_bluetooth));
+                        turnOnBluetooth();
                     } else {
-                        root.removeView(internetPage);
-                        root.setBackgroundColor(getResources().getColor(R.color.linka_transparent));
-                        if (!getBluetoothConnectivity()) {
+                        if (!linka.isConnected) {
+                            root.removeView(internetPage);
                             root.removeView(connectivityPage);
-                            root.removeView(bluetoothPage);
                             root.setBackground(getResources().getDrawable(R.drawable.blue_gradient));
-                            root.addView(bluetoothPage);
-                        } else {
-                            root.removeView(bluetoothPage);
+                            root.addView(connectivityPage);
+                        } else if (linka.isLockSettled) {
                             root.setBackgroundColor(getResources().getColor(R.color.linka_transparent));
-                            if (!linka.isConnected) {
-                                root.removeView(connectivityPage);
-                                root.setBackground(getResources().getDrawable(R.drawable.blue_gradient));
-                                root.addView(connectivityPage);
-                            } else {
-                                root.setBackgroundColor(getResources().getColor(R.color.linka_transparent));
-                                root.removeView(connectivityPage);
-                                if (linka.isLockSettled) {
-                                    if (linka.isLocked) {
-                                        statusText.setText("Hold to Unlock");
-                                    } else if (linka.isUnlocked) {
-                                        statusText.setText("Hold to Lock");
-                                    } else if (linka.isLocking) {
-                                        statusText.setText("Locking ...");
-                                    } else if (linka.isUnlocking) {
-                                        statusText.setText("Unlocking ...");
-                                    }
-                                }
+                            root.removeView(internetPage);
+                            root.removeView(connectivityPage);
+                            if (linka.isLocked) {
+                                statusText.setText("Hold to Unlock");
+                            } else if (linka.isUnlocked) {
+                                statusText.setText("Hold to Lock");
+                            } else if (linka.isLocking) {
+                                statusText.setText("Locking ...");
+                            } else if (linka.isUnlocking) {
+                                statusText.setText("Unlocking ...");
                             }
                         }
                     }

@@ -22,6 +22,7 @@ import butterknife.Unbinder;
 
 public class ThreeDotsDialogFragment extends DialogFragment {
     private boolean isSetConnecting = false;
+    private String text;
     @BindView(R.id.connecting_text)
     TextView connecting;
 
@@ -31,8 +32,9 @@ public class ThreeDotsDialogFragment extends DialogFragment {
         return new ThreeDotsDialogFragment();
     }
 
-    public ThreeDotsDialogFragment setConnectingText(boolean isSet){
+    public ThreeDotsDialogFragment setConnectingText(boolean isSet,String text){
         isSetConnecting = isSet;
+        this.text = text;
         return this;
     }
 
@@ -49,6 +51,7 @@ public class ThreeDotsDialogFragment extends DialogFragment {
         unbinder = ButterKnife.bind(this,view);
         if(isSetConnecting){
             connecting.setVisibility(View.VISIBLE);
+            connecting.setText(text);
         }
     }
 
