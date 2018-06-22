@@ -144,10 +144,10 @@ public class CoreActivity extends AppCompatActivity implements FragmentManager.O
         if (instance == null) { Log.e("warning", "fragment instance is null!"); return; }
 //        getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         curFragmentCount = 0;
-        onChangeFragment(instance);
         getSupportFragmentManager().beginTransaction()
 //                .setCustomAnimations(R.anim.anim_fade_in, R.anim.anim_fade_out, R.anim.anim_fade_in, R.anim.anim_fade_out)
                 .replace(R.id.fragment_container, instance).commit();
+        onChangeFragment(instance);
     }
 
     public void popFragment() {

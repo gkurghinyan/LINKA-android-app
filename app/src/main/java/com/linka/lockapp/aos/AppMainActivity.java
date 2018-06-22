@@ -1045,7 +1045,6 @@ public class AppMainActivity extends CoreActivity {
     @OnClick(R.id.item_add)
     void onClick_item_add() {
         if(!(getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof SetupLinka1)) {
-            toolbar.setVisibility(View.INVISIBLE);
             drawerFragment = SetupLinka1.newInstance();
 //            setFragment(fragment);
         }
