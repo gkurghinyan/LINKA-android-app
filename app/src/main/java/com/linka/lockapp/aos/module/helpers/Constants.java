@@ -36,6 +36,9 @@ public class Constants {
     //Constants for shared preferences
     public static final String LINKA_ADDRESS_FOR_AUTO_UNLOCK = "linka_address_for_auto_unlock";
 
+    //Constants for extras name
+    public static final String IS_IT_OPEN_FROM_NOTIFICATION = "IsItOpenFromNotification";
+
     public enum NotificationType {
 
         //TODO: try to get this as capitalized. Currently doesn't work with all caps

@@ -43,7 +43,6 @@ import java.io.Serializable;
 import java.util.Random;
 import java.util.Set;
 
-import br.com.goncalves.pugnotification.notification.PugNotification;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -319,8 +318,8 @@ public class LockController implements Serializable {
             Intent intent = new Intent(AppDelegate.getInstance(),GeofenceService.class);
             intent.putExtra(GeofenceService.GEOFENCE_ACTION,GeofenceService.GEOFENCE_REMOVE_ACTION);
             AppDelegate.getInstance().startService(intent);
-            PugNotification.with(AppDelegate.getInstance()).cancel(LinkaActivity.LinkaActivityType.isOutOfRange.getValue());
         }
+//        PugNotification.with(AppDelegate.getInstance()).cancel(LinkaActivity.LinkaActivityType.isOutOfRange.getValue());
         SharedPreferences.Editor editor = Prefs.edit();
         editor.putString(Constants.LINKA_ADDRESS_FOR_AUTO_UNLOCK,"");
         editor.apply();

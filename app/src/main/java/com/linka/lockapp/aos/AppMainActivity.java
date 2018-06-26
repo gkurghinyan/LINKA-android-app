@@ -411,7 +411,7 @@ public class AppMainActivity extends CoreActivity {
                 }
                 Fragment fragment = null;
 
-                if(getIntent().getStringExtra("NotificationIntent") != null){
+                if(getIntent().getBooleanExtra(Constants.IS_IT_OPEN_FROM_NOTIFICATION,false)){
                     fragment = MainTabBarPageFragment.newInstance(LinkaNotificationSettings.get_latest_linka());
                 }else {
                     switch (Prefs.getInt(Constants.SHOWING_FRAGMENT, Constants.LAUNCHER_FRAGMENT)) {

@@ -59,14 +59,14 @@ public class GeofenceTransitionsIntentService extends IntentService {
 
         } else if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
             Bundle args = new Bundle();
-            args.putString("NotificationIntent","yes");
+            args.putBoolean(Constants.LINKA_ADDRESS_FOR_AUTO_UNLOCK,true);
 
             PugNotification.with(AppDelegate.getInstance())
                     .load()
                     .autoCancel(true)
                     .identifier(LinkaActivity.LinkaActivityType.isOutOfRange.getValue())
-                    .title(getString(R.string.auto_unlock_notif_title))
-                    .message(getString(R.string.auto_unlock_notif_message))
+                    .title(getString(R.string.out_of_range_notif_title))
+                    .message(getString(R.string.out_of_range_notif_message))
                     .smallIcon(R.drawable.ic_action_name)
                     .largeIcon(R.mipmap.ic_launcher)
                     .flags(Notification.DEFAULT_ALL)

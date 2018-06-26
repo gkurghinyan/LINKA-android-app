@@ -1,6 +1,8 @@
 package com.linka.lockapp.aos.module.model;
 
+import android.app.Notification;
 import android.bluetooth.BluetoothAdapter;
+import android.os.Bundle;
 import android.os.Handler;
 import android.provider.BaseColumns;
 
@@ -980,6 +982,21 @@ public class Linka extends Model implements Serializable {
                 LogHelper.e("RSSI", "Started Unlocking");
 
                 LocksController.getInstance().getLockController().doUnlock();
+
+                Bundle args = new Bundle();
+                args.putBoolean(Constants.LINKA_ADDRESS_FOR_AUTO_UNLOCK,true);
+                PugNotification.with(AppDelegate.getInstance())
+                        .load()
+                        .autoCancel(true)
+                        .identifier(LinkaActivity.LinkaActivityType.isOutOfRange.getValue())
+                        .title(AppDelegate.getInstance().getString(R.string.auto_unlock_notif_title))
+                        .message(AppDelegate.getInstance().getString(R.string.auto_unlock_notif_message))
+                        .smallIcon(R.drawable.ic_action_name)
+                        .largeIcon(R.mipmap.ic_launcher)
+                        .flags(Notification.DEFAULT_ALL)
+                        .click(AppMainActivity.class,args)
+                        .simple()
+                        .build();
                 awaitsForAutoUnlocking = false;
                 waitingUntilSettledtoAutoUnlock = false;
                 rssi_outOfBounds = false;

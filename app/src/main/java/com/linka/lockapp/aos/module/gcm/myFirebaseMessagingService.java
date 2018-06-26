@@ -9,6 +9,7 @@ import android.support.v4.app.NotificationCompat;
 import com.google.firebase.messaging.RemoteMessage;
 import com.linka.lockapp.aos.AppMainActivity;
 import com.linka.lockapp.aos.R;
+import com.linka.lockapp.aos.module.helpers.Constants;
 import com.linka.lockapp.aos.module.helpers.LogHelper;
 
 /**
@@ -39,7 +40,7 @@ public class myFirebaseMessagingService extends com.google.firebase.messaging.Fi
 
         //If new lock is added, then we will notify the user
         Intent resultIntent = new Intent(this, AppMainActivity.class);
-        resultIntent.putExtra("NotificationIntent","NewAccess");
+        resultIntent.putExtra(Constants.IS_IT_OPEN_FROM_NOTIFICATION,true);
         PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, resultIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
