@@ -33,6 +33,9 @@ public class Constants {
     public static final String SHOW_SETUP_NAME = "ShowSetupName";
     public static final String SHOW_SETUP_PAC = "ShowSetupPac";
 
+    //Constants for shared preferences
+    public static final String LINKA_ADDRESS_FOR_AUTO_UNLOCK = "linka_address_for_auto_unlock";
+
     public enum NotificationType {
 
         //TODO: try to get this as capitalized. Currently doesn't work with all caps

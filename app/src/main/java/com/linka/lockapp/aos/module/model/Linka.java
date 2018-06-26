@@ -22,11 +22,13 @@ import com.linka.lockapp.aos.module.api.LinkaAPIServiceImpl;
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceResponse;
 import com.linka.lockapp.aos.module.helpers.AppBluetoothService;
 import com.linka.lockapp.aos.module.helpers.BLEHelpers;
+import com.linka.lockapp.aos.module.helpers.Constants;
 import com.linka.lockapp.aos.module.helpers.LogHelper;
 import com.linka.lockapp.aos.module.helpers.SleepNotificationService;
 import com.linka.lockapp.aos.module.i18n._;
 import com.linka.lockapp.aos.module.widget.LockController;
 import com.linka.lockapp.aos.module.widget.LocksController;
+import com.pixplicity.easyprefs.library.Prefs;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -36,6 +38,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import br.com.goncalves.pugnotification.notification.PugNotification;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -184,13 +187,18 @@ public class Linka extends Model implements Serializable {
     public boolean updateLockSettingsProfile = false; // After FW update or initial pairing set this to true
     public boolean updateAppSettingsProfile = true; // After App update or initial pairing this is true
 
+    @Column(name = "awaits_for_auto_unlock")
     public boolean awaitsForAutoUnlocking = false;
+
+    @Column(name = "waiting_until_settled_to_auto_lock")
     private boolean waitingUntilSettledtoAutoUnlock = false;
 
     public boolean canRecordStall = true;
     public boolean canRecordBatteryLow = true;
     public boolean canRecordBatteryCriticallyLow = true;
     public boolean canRecordTamperAlert = true;
+
+    @Column(name = "rssi_out_bound")
     private boolean rssi_outOfBounds = false; // Prevents auto unlocking unless user has walked out of bounds
 
 
@@ -247,8 +255,6 @@ public class Linka extends Model implements Serializable {
     public boolean isUnlocked() {
         return !isLocking && !isUnlocking && !isLocked;
     }
-
-
 
     public static List<Linka> getLinkas() {
         From from = new Select().from(Linka.class);
@@ -826,7 +832,7 @@ public class Linka extends Model implements Serializable {
         }
 
         //Only autounlock if we have disconnected
-        if (rssi <= -100 && !isConnected) {
+        if ((rssi <= -100 && !isConnected)) {
             rssi = -1000;
 
             RSSIs.clear();
@@ -967,17 +973,22 @@ public class Linka extends Model implements Serializable {
 
 
     private void doAutounlock() {
-        if (isConnected && isLockSettled && isLocked && !isLocking && !isUnlocking) {
-            LogHelper.e("AutoUnlock", "UnLock");
-            LogHelper.e("RSSI", "Started Unlocking");
+        if(Prefs.getString(Constants.LINKA_ADDRESS_FOR_AUTO_UNLOCK,"").equals(lock_mac_address)) {
+            PugNotification.with(AppDelegate.getInstance()).cancel(LinkaActivity.LinkaActivityType.isOutOfRange.getValue());
+            if (isConnected && isLockSettled && isLocked && !isLocking && !isUnlocking) {
+                LogHelper.e("AutoUnlock", "UnLock");
+                LogHelper.e("RSSI", "Started Unlocking");
 
-            LocksController.getInstance().getLockController().doUnlock();
-            rssi_outOfBounds = false;
-        } else if (isConnected && (isUnlocking || isLocking)) {
-            LogHelper.e("AutoUnlock", "set AwaitsForAutounlocking = false");
-            awaitsForAutoUnlocking = false;
-        } else if (isConnected && !isLockSettled) {
-            waitingUntilSettledtoAutoUnlock = true;
+                LocksController.getInstance().getLockController().doUnlock();
+                awaitsForAutoUnlocking = false;
+                waitingUntilSettledtoAutoUnlock = false;
+                rssi_outOfBounds = false;
+            } else if (isConnected && (isUnlocking || isLocking)) {
+                LogHelper.e("AutoUnlock", "set AwaitsForAutounlocking = false");
+                awaitsForAutoUnlocking = false;
+            } else if (isConnected && !isLockSettled) {
+                waitingUntilSettledtoAutoUnlock = true;
+            }
         }
 
     }

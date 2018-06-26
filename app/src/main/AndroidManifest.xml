@@ -12,8 +12,8 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
     <!-- BLE -->
     <uses-feature
@@ -57,14 +57,14 @@
             android:name=".AppMainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".AppLanguagePickerActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".module.pages.walkthrough.WalkthroughActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".AppDeepLinkActivity"
             android:launchMode="singleTask"
@@ -113,15 +113,15 @@
         <service
             android:name=".module.helpers.AppBluetoothService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
         <service
             android:name=".module.helpers.AppLocationService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
         <service
             android:name=".module.helpers.GeofencingService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
         <service
             android:name=".module.helpers.GeofencingIntentService"
             android:exported="false" />
@@ -166,6 +166,14 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="dfd7bc331ef26e3925fc8f49976fac87dbad2696" />
+
+        <service
+            android:name=".module.helpers.GeofenceService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name=".module.helpers.GeofenceTransitionsIntentService"
+            android:exported="false"/>
     </application>
 
 </manifest>

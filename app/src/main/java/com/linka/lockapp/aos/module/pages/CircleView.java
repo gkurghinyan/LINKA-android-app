@@ -374,6 +374,7 @@ public class CircleView extends CoreFragment {
         super.onStop();
         EventBus.getDefault().unregister(this);
         getActivity().unregisterReceiver(internetReceiver);
+        getActivity().unregisterReceiver(blueToothReceiver);
     }
 
     public void refreshDisplay() {

@@ -6,6 +6,7 @@ import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.util.Log;
@@ -21,10 +22,13 @@ import com.linka.Lock.FirmwareAPI.Comms.LockStatusPacket;
 import com.linka.Lock.FirmwareAPI.LINKA_BLE_Service;
 import com.linka.Lock.FirmwareAPI.Types.AuthState;
 import com.linka.Lock.FirmwareAPI.Types.LockState;
+import com.linka.lockapp.aos.AppDelegate;
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceImpl;
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceResponse;
 import com.linka.lockapp.aos.module.helpers.AppBluetoothService;
 import com.linka.lockapp.aos.module.helpers.BLEHelpers;
+import com.linka.lockapp.aos.module.helpers.Constants;
+import com.linka.lockapp.aos.module.helpers.GeofenceService;
 import com.linka.lockapp.aos.module.helpers.LogHelper;
 import com.linka.lockapp.aos.module.helpers.SleepNotificationService;
 import com.linka.lockapp.aos.module.model.Linka;
@@ -39,6 +43,7 @@ import java.io.Serializable;
 import java.util.Random;
 import java.util.Set;
 
+import br.com.goncalves.pugnotification.notification.PugNotification;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -300,10 +305,25 @@ public class LockController implements Serializable {
     }
 
     public boolean doLock() {
-        return lockBLEServiceProxy.doAction_Lock(lockControllerBundle);
+        boolean isSuccess = lockBLEServiceProxy.doAction_Lock(lockControllerBundle);
+        if(isSuccess && linka.settings_auto_unlocking){
+            Intent intent = new Intent(AppDelegate.getInstance(), GeofenceService.class);
+            intent.putExtra(GeofenceService.GEOFENCE_ACTION,GeofenceService.GEOFENCE_ADD_ACTION);
+            AppDelegate.getInstance().startService(intent);
+        }
+        return isSuccess;
     }
 
     public boolean doUnlock() {
+        if(linka.settings_auto_unlocking && Prefs.getString(Constants.LINKA_ADDRESS_FOR_AUTO_UNLOCK,"").equals("")){
+            Intent intent = new Intent(AppDelegate.getInstance(),GeofenceService.class);
+            intent.putExtra(GeofenceService.GEOFENCE_ACTION,GeofenceService.GEOFENCE_REMOVE_ACTION);
+            AppDelegate.getInstance().startService(intent);
+            PugNotification.with(AppDelegate.getInstance()).cancel(LinkaActivity.LinkaActivityType.isOutOfRange.getValue());
+        }
+        SharedPreferences.Editor editor = Prefs.edit();
+        editor.putString(Constants.LINKA_ADDRESS_FOR_AUTO_UNLOCK,"");
+        editor.apply();
         return lockBLEServiceProxy.doAction_Unlock(lockControllerBundle);
     }
 

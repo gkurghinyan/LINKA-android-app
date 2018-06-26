@@ -488,4 +488,6 @@
     <string name="connecting">Connecting</string>
     <string name="connecting_to_network">Connecting to network</string>
     <string name="enabling_bluetooth">Enabling bluetooth</string>
+    <string name="auto_unlock_notif_title">Auto-unlocking is now enabled</string>
+    <string name="auto_unlock_notif_message">When you return to your bike it will automatically unlock.</string>
 </resources>

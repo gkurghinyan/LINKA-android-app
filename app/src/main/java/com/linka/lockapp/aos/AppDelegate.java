@@ -1,19 +1,14 @@
 package com.linka.lockapp.aos;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Bundle;
 import android.support.multidex.MultiDexApplication;
 import android.support.v4.content.ContextCompat;
-import android.widget.Toast;
 
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Configuration;
@@ -24,12 +19,10 @@ import com.linka.lockapp.aos.module.api.LinkaAPIServiceManager;
 import com.linka.lockapp.aos.module.helpers.AppBluetoothService;
 import com.linka.lockapp.aos.module.helpers.AppLocationService;
 import com.linka.lockapp.aos.module.helpers.BLEHelpers;
-import com.linka.lockapp.aos.module.helpers.GeofencingIntentService;
-import com.linka.lockapp.aos.module.helpers.GeofencingService;
 import com.linka.lockapp.aos.module.helpers.Helpers;
 import com.linka.lockapp.aos.module.helpers.ImageHelpers;
-import com.linka.lockapp.aos.module.helpers.SleepNotificationService;
 import com.linka.lockapp.aos.module.helpers.LogHelper;
+import com.linka.lockapp.aos.module.helpers.SleepNotificationService;
 import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.model.LinkaAccessKey;
 import com.linka.lockapp.aos.module.model.LinkaNotificationSettings;
@@ -39,15 +32,11 @@ import com.pixplicity.easyprefs.library.Prefs;
 import net.danlew.android.joda.JodaTimeAndroid;
 
 import org.acra.ACRA;
-import org.joda.time.MutableDateTime;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 import pl.aprilapps.easyphotopicker.EasyImage;
-import com.facebook.stetho.Stetho;
 
 /**
  * Created by van on 13/7/15.
