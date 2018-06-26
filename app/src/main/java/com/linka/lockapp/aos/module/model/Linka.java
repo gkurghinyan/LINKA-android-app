@@ -934,10 +934,10 @@ public class Linka extends Model implements Serializable {
             Integer item = RSSIs.get(i);
             int _rssi = item.intValue();
 
-            if (_rssi > -59){ //Check two that exceed -58 in the last 7 rssi values
+            if (_rssi > -66){ //Check two that exceed -58 in the last 7 rssi values
                 numHighRssiCandidates++;
             }
-            if (_rssi >-64 && i >= 2){ //Check two that exceed -63 in the last 5 rssi values
+            if (_rssi > -73 && i >= 2){ //Check two that exceed -63 in the last 5 rssi values
                 numMediumRssiCandidate++;
             }
 
