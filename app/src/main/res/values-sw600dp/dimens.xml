@@ -6,6 +6,8 @@
     <dimen name="text_size_l">29sp</dimen>
     <dimen name="text_size_xl">31sp</dimen>
     <dimen name="text_size_x">33sp</dimen>
+    <dimen name="text_size_px">35sp</dimen>
+    <dimen name="text_size_dx">38sp</dimen>
     <dimen name="text_size_title">22sp</dimen>
 
     <dimen name="margin_mm">14dp</dimen>

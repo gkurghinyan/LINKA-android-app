@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -194,24 +199,74 @@
 
                 <LinearLayout
                     android:id="@+id/row_auto_unlocking"
-                    style="@style/settings_row">
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:paddingRight="@dimen/activity_horizontal_margin">
+
+                    <com.linka.lockapp.aos.module.widget.LinkaTextView
+                        style="@style/settings_row_text"
+                        android:layout_marginTop="@dimen/margin"
+                        android:text="@string/auto_unlocking" />
+
+                    <android.support.constraint.ConstraintLayout
+                        style="@style/settings_row_text_layout"
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="@dimen/margin"
+                        android:orientation="horizontal">
+
+                        <com.linka.lockapp.aos.module.widget.LinkaTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Enable"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <com.rey.material.widget.Switch xmlns:android="http://schemas.android.com/apk/res/android"
+                            xmlns:custom="http://schemas.android.com/apk/res-auto"
+                            android:id="@+id/settings_auto_unlocking"
+                            style="@style/settings_row_switch"
+                            android:checked="false"
+                            custom:layout_constraintBottom_toBottomOf="parent"
+                            custom:layout_constraintEnd_toEndOf="parent"
+                            custom:layout_constraintTop_toTopOf="parent"
+                            custom:sw_thumbColor="@color/linka_white"
+                            custom:sw_thumbElevation="2dp"
+                            custom:sw_thumbRadius="17dp"
+                            custom:sw_trackColor="@color/colorstate_switch"
+                            custom:sw_trackSize="33dp" />
+                    </android.support.constraint.ConstraintLayout>
 
                     <LinearLayout
-                        style="@style/settings_row_text_layout"
-                        android:orientation="vertical">
+                        android:id="@+id/row_radius_settings"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin"
+                        android:gravity="center_vertical">
 
-                        <com.linka.lockapp.aos.module.widget.LinkaTextView
-                            style="@style/settings_row_text"
-                            android:text="@string/auto_unlocking" />
+                        <LinearLayout
+                            style="@style/settings_row_text_layout"
+                            android:orientation="vertical">
 
-                        <com.linka.lockapp.aos.module.widget.LinkaTextView
-                            style="@style/settings_row_text_desc"
-                            android:text="@string/auto_unlocking_desc" />
+                            <com.linka.lockapp.aos.module.widget.LinkaTextView
+                                style="@style/settings_row_text"
+                                android:text="Set Range" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/settings_radius_settings"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:paddingLeft="@dimen/activity_horizontal_margin_xsm"
+                            android:paddingRight="@dimen/activity_horizontal_margin_xsm"
+                            android:src="@drawable/icon_forward_arrow" />
+
+
                     </LinearLayout>
 
-                    <include
-                        android:id="@+id/settings_auto_unlocking"
-                        layout="@layout/widget_linka_switch" />
 
                 </LinearLayout>
 
@@ -349,4 +404,11 @@
 
     </ScrollView>
 
-</LinearLayout>
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/settings_page_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</FrameLayout>

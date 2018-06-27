@@ -48,7 +48,7 @@ public class GeofenceService extends Service implements GoogleApiClient.Connecti
         public void onLocationResult(LocationResult locationResult) {
             super.onLocationResult(locationResult);
             locationProviderClient.removeLocationUpdates(this);
-            addGeofence(locationResult.getLastLocation().getLatitude(),locationResult.getLastLocation().getLongitude(), 100, Geofence.NEVER_EXPIRE, GEOFENCE_ID);
+            addGeofence(locationResult.getLastLocation().getLatitude(),locationResult.getLastLocation().getLongitude(), LocksController.getInstance().getLockController().getLinka().getAuto_unlock_radius(), Geofence.NEVER_EXPIRE, GEOFENCE_ID);
         }
     };
 

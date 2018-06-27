@@ -492,4 +492,5 @@
     <string name="out_of_range_notif_message">When you return to your bike it will automatically unlock.</string>
     <string name="auto_unlock_notif_title">Auto-unlocking started</string>
     <string name="auto_unlock_notif_message">Your bike is being unlocked</string>
+    <string name="set_radius_screen_title">SET THE PARAMETERS OF YOUR LINKA UNLOCK ZONE BY PULLING THE DIAMETER RING</string>
 </resources>

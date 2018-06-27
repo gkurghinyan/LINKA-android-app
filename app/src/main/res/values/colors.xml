@@ -70,5 +70,14 @@
     <color name="green">#2D9926</color>
     <color name="keyboard_color">#B7D4E5</color>
     <color name="dark_white">#FAFAFA</color>
+    <color name="gray_text_color">#a1a0a0</color>
+
+    //RadarView
+    <color name="gray">#dadada</color>
+    <color name="firstCircle">#f0eff1</color>
+    <color name="secondCircle">#E8E7E8</color>
+    <color name="thirdCircle">#E1E0E1</color>
+    <color name="fourthCircle">#dad8d8</color>
+    <color name="fifthCircle">#d1d0d0</color>
 
 </resources>

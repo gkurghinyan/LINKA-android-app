@@ -71,6 +71,8 @@ public class SettingsPageFragment extends CoreFragment {
     Switch switchAudibleLockingUnlocking;
     @BindView(R.id.settings_auto_unlocking)
     Switch switchAutoUnlocking;
+    @BindView(R.id.row_radius_settings)
+    LinearLayout rowRadiusSettings;
     @BindView(R.id.settings_stall_override)
     Switch switchStallOverride;
     @BindView(R.id.settings_tamper_siren)
@@ -200,6 +202,7 @@ public class SettingsPageFragment extends CoreFragment {
         switchAudibleLockingUnlocking.setChecked(linka.settings_audible_locking_unlocking);
         switchTamperSiren.setChecked(linka.settings_tamper_siren);
         switchAutoUnlocking.setChecked(linka.settings_auto_unlocking);
+        setRadiusLinearVisibility(linka.settings_auto_unlocking);
         doNotSendWrite = false;
 
         switchAudibleLockingUnlocking.setOnCheckedChangeListener(settings_audible_locking_unlocking);
@@ -209,6 +212,7 @@ public class SettingsPageFragment extends CoreFragment {
         switchAutoUnlocking.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(Switch view, boolean checked) {
+                setRadiusLinearVisibility(checked);
                 linka.settings_auto_unlocking = checked;
                 linka.saveSettings();
             }
@@ -322,6 +326,7 @@ public class SettingsPageFragment extends CoreFragment {
             rowTamperSiren.setAlpha(1.0f);
             switchAutoUnlocking.setEnabled(true);
             switchAutoUnlocking.setAlpha(1.0f);
+            setRadiusLinearVisibility(switchAutoUnlocking.isChecked());
             switchStallOverride.setEnabled(true);
             switchStallOverride.setAlpha(1.0f);
             rowStallOverride.setAlpha(1.0f);
@@ -369,6 +374,7 @@ public class SettingsPageFragment extends CoreFragment {
             rowTamperSiren.setAlpha(0.35f);
             switchAutoUnlocking.setEnabled(false);
             switchAutoUnlocking.setAlpha(0.35f);
+            setRadiusLinearVisibility(false);
             switchStallOverride.setEnabled(false);
             switchStallOverride.setAlpha(0.35f);
             rowStallOverride.setAlpha(0.35f);
@@ -387,6 +393,7 @@ public class SettingsPageFragment extends CoreFragment {
         switchAudibleLockingUnlocking.setChecked(linka.settings_audible_locking_unlocking);
         switchTamperSiren.setChecked(linka.settings_tamper_siren);
         switchAutoUnlocking.setChecked(linka.settings_auto_unlocking);
+        setRadiusLinearVisibility(linka.settings_auto_unlocking);
 
 
         if (linka != null && !linka.isUnlocked()) {
@@ -407,7 +414,7 @@ public class SettingsPageFragment extends CoreFragment {
 
     @OnClick(R.id.row_auto_unlocking)
     void onClick_row_auto_unlocking() {
-        switchAutoUnlocking.toggle();
+//        switchAutoUnlocking.toggle();
     }
 
     @OnClick(R.id.row_phoneless_passcode)
@@ -451,6 +458,15 @@ public class SettingsPageFragment extends CoreFragment {
 
     }
 
+    @OnClick(R.id.row_radius_settings)
+    void onClick_row_radius_settings(){
+        getAppMainActivity().curFragmentCount ++;
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .addToBackStack(null)
+                .replace(R.id.settings_page_root, CheckRadiusFragment.newInstance(linka))
+                .commit();
+    }
+
     @OnClick(R.id.fw_update_button)
     void onClick_fw_update_button() {
 
@@ -489,6 +505,16 @@ public class SettingsPageFragment extends CoreFragment {
             linka = Linka.getLinkaFromLockController(linka);
 
             refreshDisplay();
+        }
+    }
+
+    private void setRadiusLinearVisibility(boolean visibility){
+        if(visibility){
+            rowRadiusSettings.setEnabled(true);
+            rowRadiusSettings.setAlpha(1.0f);
+        }else {
+            rowRadiusSettings.setEnabled(false);
+            rowRadiusSettings.setAlpha(0.35f);
         }
     }
 }
