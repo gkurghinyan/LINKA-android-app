@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
@@ -99,19 +98,6 @@ public class SetupLinka2 extends WalkthroughFragment {
         }
     };
 
-    Handler wifiHandler = null;
-    Runnable wifiRunnable = new Runnable() {
-        @Override
-        public void run() {
-            if (!getInternetConnectivity()) {
-                wifiHandler = null;
-                setBlur(false,null);
-                currentFragment = NO_INTERNET;
-                updateLayouts(R.layout.fragment_no_internet_connectivity,1);
-            }
-        }
-    };
-
     private Handler closeLoadingHandler = null;
     private Runnable closeLoadingRunnable = new Runnable() {
         @Override
@@ -138,7 +124,8 @@ public class SetupLinka2 extends WalkthroughFragment {
                 }
             } else {
                 isInternet = false;
-                turnOnInternet();
+                currentFragment = NO_INTERNET;
+                updateLayouts(R.layout.fragment_no_internet_connectivity,1);
             }
             Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
         }
@@ -210,29 +197,12 @@ public class SetupLinka2 extends WalkthroughFragment {
             } else {
                 if (isInternet) {
                     isInternet = false;
-                    turnOnInternet();
-                }
-            }
-        }
-    };
-
-    private void turnOnInternet() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                WifiManager wifiManager = (WifiManager) getActivity().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-                if (wifiManager != null && !wifiManager.isWifiEnabled()) {
-                    setBlur(true, getString(R.string.connecting_to_network));
-                    wifiManager.setWifiEnabled(true);
-                    wifiHandler = new Handler();
-                    wifiHandler.postDelayed(wifiRunnable, 7000);
-                } else {
                     currentFragment = NO_INTERNET;
                     updateLayouts(R.layout.fragment_no_internet_connectivity,1);
                 }
             }
-        },300);
-    }
+        }
+    };
 
     private void turnOnBluetooth(){
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -279,7 +249,8 @@ public class SetupLinka2 extends WalkthroughFragment {
         if (position == 1) {
             registerReceivers(true);
             if (!getInternetConnectivity()) {
-                turnOnInternet();
+                currentFragment = NO_INTERNET;
+                updateLayouts(R.layout.fragment_no_internet_connectivity,1);
             } else {
                 bluetoothAdapter = BLEHelpers.checkBLESupportForAdapter(getContext());
                 if (bluetoothAdapter != null) {
@@ -372,9 +343,6 @@ public class SetupLinka2 extends WalkthroughFragment {
         }
         if (closeLoadingHandler != null) {
             closeLoadingHandler.removeCallbacks(closeLoadingRunnable);
-        }
-        if (wifiHandler != null) {
-            wifiHandler.removeCallbacks(wifiRunnable);
         }
         EventBus.getDefault().unregister(this);
     }
