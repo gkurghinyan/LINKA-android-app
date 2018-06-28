@@ -31,8 +31,8 @@ import com.linka.lockapp.aos.module.model.LinkaAccessKey;
 import com.linka.lockapp.aos.module.model.LinkaActivity;
 import com.linka.lockapp.aos.module.model.Notification;
 import com.linka.lockapp.aos.module.pages.CircleView;
-import com.linka.lockapp.aos.module.pages.SharingPageFragment;
-import com.linka.lockapp.aos.module.pages.dialogs.InviteUserDialogFragment;
+import com.linka.lockapp.aos.module.pages.users.SharingPageFragment;
+import com.linka.lockapp.aos.module.pages.users.InviteUserDialogFragment;
 import com.linka.lockapp.aos.module.pages.notifications.NotificationsPageFragment;
 import com.linka.lockapp.aos.module.pages.pac.SetPac3;
 import com.linka.lockapp.aos.module.pages.settings.SettingsPageFragment;
@@ -61,6 +61,7 @@ import retrofit2.Response;
  * Created by Vanson on 30/3/16.
  */
 public class MainTabBarPageFragment extends CoreFragment {
+    public static final String CLOSE_PAGES_IN_USERS_SCREEN = "ClosePagesInUsersScreen";
 
     @BindView(R.id.viewPager)
     ToggleSwipeableViewPager viewPager;
@@ -217,7 +218,7 @@ public class MainTabBarPageFragment extends CoreFragment {
             viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                    EventBus.getDefault().post("closeInvite");
+                    EventBus.getDefault().post(CLOSE_PAGES_IN_USERS_SCREEN);
                 }
 
                 @Override

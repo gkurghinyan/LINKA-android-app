@@ -238,6 +238,7 @@ public class LinkaAPIServiceResponse {
             public String userId;
             public boolean owner;
             public boolean isPendingApproval;
+            public String lastUsed;
         }
         public List<Data> data = new ArrayList<>();
     }

@@ -24,5 +24,5 @@
 
     <dimen name="logo_height">160dp</dimen>
     <dimen name="logo_width">360dp</dimen>
-    <dimen name="user_avatar_size">105dp</dimen>
+    <dimen name="user_avatar_size">75dp</dimen>
 </resources>

@@ -6,7 +6,7 @@
     android:clickable="true"
     android:layout_height="match_parent"
     android:background="@color/linka_white"
-    tools:context=".module.pages.dialogs.InviteUserDialogFragment"
+    tools:context=".module.pages.users.InviteUserDialogFragment"
     android:fitsSystemWindows="true"
     android:focusable="true">
 
@@ -36,7 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.7" />
+        app:layout_constraintGuide_percent="0.65" />
 
     <android.support.v7.widget.CardView
         android:layout_width="0dp"
@@ -87,7 +87,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/invite_a_friend"
+            android:text="INVITE GUEST USER"
             android:textColor="@color/linka_white"
             android:textSize="@dimen/text_size_xm"
             app:layout_constraintEnd_toEndOf="@id/guideline1"
@@ -95,24 +95,10 @@
             app:layout_constraintTop_toTopOf="@id/guideline2" />
 
         <EditText
-            android:id="@+id/name_edit"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_px"
-            android:hint="NAME"
-            android:inputType="text"
-            android:textColor="@color/linka_white"
-            android:textColorHint="@color/linka_white"
-            android:textSize="@dimen/text_size_xm"
-            app:layout_constraintEnd_toEndOf="@id/guideline1"
-            app:layout_constraintStart_toStartOf="@id/guideline"
-            app:layout_constraintTop_toBottomOf="@id/title" />
-
-        <EditText
             android:id="@+id/email_edit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_x"
+            android:layout_marginTop="@dimen/margin_ml"
             android:hint="EMAIL"
             android:inputType="textEmailAddress"
             android:textColor="@color/linka_white"
@@ -120,14 +106,14 @@
             android:textSize="@dimen/text_size_xm"
             app:layout_constraintEnd_toEndOf="@id/guideline1"
             app:layout_constraintStart_toStartOf="@id/guideline"
-            app:layout_constraintTop_toBottomOf="@id/name_edit" />
+            app:layout_constraintTop_toBottomOf="@id/title"/>
 
         <TextView
             android:id="@+id/cancel_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin"
-            android:layout_marginTop="@dimen/margin_px"
+            android:layout_marginTop="@dimen/margin_ml"
             android:background="@drawable/white_rounded_empty_back"
             android:gravity="center"
             android:text="CANCEL"
@@ -142,7 +128,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin"
-            android:layout_marginTop="@dimen/margin_px"
+            android:layout_marginTop="@dimen/margin_ml"
             android:background="@drawable/white_rounded_full_back"
             android:gravity="center"
             android:text="INVITE"

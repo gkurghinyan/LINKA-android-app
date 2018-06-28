@@ -1,21 +1,24 @@
 package com.linka.lockapp.aos.module.adapters;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.linka.lockapp.aos.R;
-import com.linka.lockapp.aos.module.api.LinkaAPIServiceImpl;
 import com.linka.lockapp.aos.module.model.User;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,10 +31,16 @@ import butterknife.OnClick;
 public class SharingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public List<User> mItems;
-    private static final int FOOTER_TIPE = 1;
+    private static final int FOOTER_TYPE = 1;
     private static final int NORMAL_TYPE = 2;
 
     public Context context;
+    public static final int VISIBLE = 1;
+    public static final int INVISIBLE = 0;
+    private static int addButtonVisibility = INVISIBLE;
+    private SimpleDateFormat allDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss", Locale.UK);
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd', 'h:mma", Locale.UK);
+
 
     public SharingAdapter(Context context) {
         super();
@@ -39,8 +48,7 @@ public class SharingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         mItems = new ArrayList<>();
     }
 
-    public void setList(List<User> models)
-    {
+    public void setList(List<User> models) {
         // SET REFERENCE
         this.mItems.clear();
         for (User item : models) {
@@ -56,46 +64,55 @@ public class SharingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if(viewType == NORMAL_TYPE) {
+        if (viewType == NORMAL_TYPE) {
             View v = LayoutInflater.from(
                     parent.getContext()).inflate(R.layout.list_item_user, parent, false);
             ViewHolder viewHolder = new ViewHolder(v);
             return viewHolder;
-        }else {
-            return new FooterViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.users_footer_card,parent,false));
+        } else {
+            return new FooterViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.users_footer_card, parent, false));
         }
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if(holder instanceof ViewHolder) {
+        if (holder instanceof ViewHolder) {
             User user = mItems.get(position);
 
 
             String userName = user.name;
-            String email = user.email;
+            String lastUsed = user.lastUsed;
 
-            if (userName != null && email != null) {
+            if (userName != null) {
 
-                String ownEmail = LinkaAPIServiceImpl.getUserEmail();
-                if (ownEmail != null && ownEmail.equals(user.email)) {
-                    userName = userName + " (You)";
-                }
+//                String ownEmail = LinkaAPIServiceImpl.getUserEmail();
+//                if (ownEmail != null && ownEmail.equals(user.email)) {
+//                    userName = userName + " (You)";
+//                }
 
                 if (user.isPendingApproval) {
                     userName = userName + " (Requesting Access)";
                 }
 
                 ((ViewHolder) holder).userName.setText(userName);
-                ((ViewHolder) holder).userEmail.setText(email);
+                if (lastUsed != null) {
+                    Date date = null;
+                    try {
+                        date = allDateFormat.parse(lastUsed);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    if(date != null) {
+                        ((ViewHolder) holder).lastUsed.setText("Last used: " + dateFormat.format(date));
+                    }
+                }
             }
 
-            ((ViewHolder) holder).userName.setTextColor(context.getResources().getColor(R.color.linka_blue_tabbar));
-
+            ((ViewHolder) holder).avatar.setColorFilter( context.getResources().getColor(R.color.linka_black_transparent), PorterDuff.Mode.MULTIPLY );
             ((ViewHolder) holder).item = user;
             ((ViewHolder) holder).position = position;
             ((ViewHolder) holder).onClickDeviceItemListener = onClickDeviceItemListener;
-        }else {
+        } else {
             ((FooterViewHolder) holder).addButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -107,46 +124,45 @@ public class SharingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public int getItemCount() {
-        return mItems.size() + 1;
+        return mItems.size() + addButtonVisibility;
     }
 
     @Override
     public int getItemViewType(int position) {
-        if(position == mItems.size()){
-            return FOOTER_TIPE;
+        if (position == mItems.size()) {
+            return FOOTER_TYPE;
         }
         return NORMAL_TYPE;
     }
 
-    public void removeUser(int position){
-        mItems.remove(position);
-        notifyItemRemoved(position);
+    public void removeUser(User user) {
+        mItems.remove(user);
+        notifyDataSetChanged();
     }
 
-    public void restoreUser(User user,int position){
-        mItems.add(position,user);
-        notifyItemInserted(position);
-    }
+//    public void restoreUser(User user,int position){
+//        mItems.add(position,user);
+//        notifyItemInserted(position);
+//    }
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.foreground_view)
         public ConstraintLayout foregroundView;
-        @BindView(R.id.background_view)
-        public RelativeLayout backgroundView;
         @BindView(R.id.user_name)
         TextView userName;
-        @BindView(R.id.user_email)
-        TextView userEmail;
+        @BindView(R.id.last_used)
+        TextView lastUsed;
+        @BindView(R.id.person_avatar)
+        ImageView avatar;
 
         User item;
         int position;
         View itemView;
         OnClickDeviceItemListener onClickDeviceItemListener;
 
-        public ViewHolder(View itemView)
-        {
+        public ViewHolder(View itemView) {
             super(itemView);
             this.itemView = itemView;
             ButterKnife.bind(this, itemView);
@@ -160,23 +176,30 @@ public class SharingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-    class FooterViewHolder extends RecyclerView.ViewHolder{
+    class FooterViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.plus_button)
         ImageView addButton;
 
         FooterViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            ButterKnife.bind(this, itemView);
         }
     }
 
 
+    public void setAddButtonVisibility(int visibility) {
+        addButtonVisibility = visibility;
+        notifyDataSetChanged();
+    }
 
     public interface OnClickDeviceItemListener {
         void onClickDeviceItem(User item, int position);
+
         void onAddButtonClicked();
     }
+
     public OnClickDeviceItemListener onClickDeviceItemListener;
+
     public void setOnClickDeviceItemListener(OnClickDeviceItemListener onClickDeviceItemListener) {
         this.onClickDeviceItemListener = onClickDeviceItemListener;
     }

@@ -186,7 +186,7 @@ public interface LinkaAPIService {
     @FormUrlEncoded
     @PUT("/api/keys/transfer_ownership")
     Call<LinkaAPIServiceResponse> transfer_ownership(
-            @Field("email") String email,
+            @Field("userId") String userId,
             @Field("lock_serial_no") String lock_serial_no
     );
 
@@ -205,6 +205,13 @@ public interface LinkaAPIService {
     @FormUrlEncoded
     @PUT("/api/keys/send_invite")
     Call<LinkaAPIServiceResponse> send_invite(
+            @Field("userId") String userId,
+            @Field("lock_serial_no") String lock_serial_no
+    );
+
+    @FormUrlEncoded
+    @PUT("/api/keys/send_invite")
+    Call<LinkaAPIServiceResponse> send_invite_with_email(
             @Field("email") String email,
             @Field("lock_serial_no") String lock_serial_no
     );

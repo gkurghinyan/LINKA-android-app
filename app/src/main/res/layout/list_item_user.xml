@@ -8,23 +8,6 @@
     android:layout_marginTop="@dimen/margin"
     android:layout_marginBottom="@dimen/margin">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/background_view"
-        android:background="@color/linka_blue">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/revoke_access"
-            android:layout_centerVertical="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="@dimen/margin_x"
-            android:textSize="@dimen/text_size_xm"
-            android:textColor="@color/linka_light_bg"/>
-    </RelativeLayout>
-
     <android.support.constraint.ConstraintLayout
         android:id="@+id/foreground_view"
         android:layout_width="match_parent"
@@ -39,13 +22,13 @@
             app:layout_constraintGuide_percent="0.93" />
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/friend_avatar"
+            android:id="@+id/person_avatar"
             android:layout_width="@dimen/user_avatar_size"
             android:layout_height="@dimen/user_avatar_size"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/facebook_login"
+            android:src="@drawable/person_default_logo"
             android:layout_marginStart="@dimen/margin_x"/>
 
         <LinearLayout
@@ -54,38 +37,28 @@
             android:layout_marginStart="@dimen/margin_x"
             android:gravity="center"
             android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="@id/friend_avatar"
+            app:layout_constraintBottom_toBottomOf="@id/person_avatar"
             app:layout_constraintEnd_toEndOf="@id/guideline"
-            app:layout_constraintStart_toEndOf="@id/friend_avatar"
-            app:layout_constraintTop_toTopOf="@id/friend_avatar">
+            app:layout_constraintStart_toEndOf="@id/person_avatar"
+            app:layout_constraintTop_toTopOf="@id/person_avatar">
 
             <TextView
                 android:id="@+id/user_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Jack Wilson"
-                android:textColor="@color/linka_blue"
+                android:textAllCaps="true"
+                android:textColor="@color/linka_blue_tabbar"
                 android:textSize="@dimen/text_size_normal"
                 android:layout_marginBottom="4dp"/>
 
             <TextView
-                android:id="@+id/user_email"
+                android:id="@+id/last_used"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Last used NOV 17 6:32 pm"
                 android:textColor="@color/menu_gray_text"
                 android:textSize="@dimen/text_size_mm" />
 
         </LinearLayout>
-
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/guideline"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:src="@drawable/arrow_to_right"/>
 
     </android.support.constraint.ConstraintLayout>
 </FrameLayout>

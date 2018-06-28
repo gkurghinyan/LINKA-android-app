@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/linka_white"
+    tools:context=".module.pages.users.GuestUserFragment">
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.1" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.2" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.8"/>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_dx"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/guideline">
+
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:text="JACK WILSON"
+            android:textAllCaps="true"
+            android:textColor="@color/linka_blue"
+            android:textSize="@dimen/text_size_x" />
+
+        <TextView
+            android:id="@+id/used_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Last used NOV 17 6:32 pm"
+            android:textColor="@color/menu_gray_text"
+            android:textSize="@dimen/text_size_normal" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/grant_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="GRANT ACCESS"
+        android:textSize="@dimen/text_size_normal"
+        android:gravity="center"
+        android:paddingTop="@dimen/margin"
+        android:paddingBottom="@dimen/margin"
+        android:textColor="@color/linka_blue"
+        android:layout_marginBottom="@dimen/margin"
+        android:background="@drawable/white_rounded_back_with_blue_stroke"
+        app:layout_constraintBottom_toBottomOf="@id/guideline1"
+        app:layout_constraintStart_toStartOf="@id/guideline2"
+        app:layout_constraintEnd_toEndOf="@id/guideline3"/>
+
+    <TextView
+        android:id="@+id/deny_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="DENY ACCESS"
+        android:textSize="@dimen/text_size_normal"
+        android:gravity="center"
+        android:paddingTop="@dimen/margin"
+        android:paddingBottom="@dimen/margin"
+        android:textColor="@color/linka_white"
+        android:layout_marginTop="@dimen/margin"
+        android:background="@drawable/blue_rounded_back"
+        app:layout_constraintTop_toTopOf="@id/guideline1"
+        app:layout_constraintStart_toStartOf="@id/guideline2"
+        app:layout_constraintEnd_toEndOf="@id/guideline3"/>
+
+
+</android.support.constraint.ConstraintLayout>

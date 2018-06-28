@@ -950,7 +950,7 @@ public class LinkaAPIServiceImpl {
     public static Call<LinkaAPIServiceResponse> transfer_ownership(
             final Context context,
             Linka linka,
-            String email,
+            String userId,
             final Callback<LinkaAPIServiceResponse> callback
     ) {
         LinkaAPIServiceConfig.log("send_request_for_user_permission");
@@ -962,7 +962,7 @@ public class LinkaAPIServiceImpl {
         String appName = "Android";
 
         Call<LinkaAPIServiceResponse> call = LinkaAPIServiceManager.getInstance().transfer_ownership(
-                email,
+                userId,
                 linka.lock_mac_address
         );
         call.enqueue(new Callback<LinkaAPIServiceResponse>() {
@@ -1026,7 +1026,7 @@ public class LinkaAPIServiceImpl {
     public static Call<LinkaAPIServiceResponse> send_invite(
             final Context context,
             Linka linka,
-            String email,
+            String userId,
             final Callback<LinkaAPIServiceResponse> callback
     ) {
         LinkaAPIServiceConfig.log("send_request_for_user_permission");
@@ -1038,6 +1038,43 @@ public class LinkaAPIServiceImpl {
         String appName = "Android";
 
         Call<LinkaAPIServiceResponse> call = LinkaAPIServiceManager.getInstance().send_invite(
+                userId,
+                linka.lock_mac_address
+        );
+        call.enqueue(new Callback<LinkaAPIServiceResponse>() {
+            @Override
+            public void onResponse(Call<LinkaAPIServiceResponse> call, Response<LinkaAPIServiceResponse> response) {
+                if (check(response, true, context)) {
+                    callback.onResponse(call, response);
+                } else {
+                    callback.onResponse(call, response);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LinkaAPIServiceResponse> call, Throwable t) {
+                doErrors(null, context);
+                callback.onFailure(call, t);
+            }
+        });
+        return call;
+    }
+
+    public static Call<LinkaAPIServiceResponse> send_invite_with_email(
+            final Context context,
+            Linka linka,
+            String email,
+            final Callback<LinkaAPIServiceResponse> callback
+    ) {
+        LinkaAPIServiceConfig.log("send_request_for_user_permission");
+
+        String token = Helpers.device_token;
+        if (token == null) {
+            token = "";
+        }
+        String appName = "Android";
+
+        Call<LinkaAPIServiceResponse> call = LinkaAPIServiceManager.getInstance().send_invite_with_email(
                 email,
                 linka.lock_mac_address
         );
