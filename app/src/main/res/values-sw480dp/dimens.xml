@@ -25,4 +25,7 @@
     <dimen name="logo_height">120dp</dimen>
     <dimen name="logo_width">320dp</dimen>
     <dimen name="user_avatar_size">65dp</dimen>
+    <dimen name="battery_width">30dp</dimen>
+    <dimen name="battery_height">37dp</dimen>
+    <dimen name="panic_size">115dp</dimen>
 </resources>

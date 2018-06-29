@@ -71,6 +71,13 @@
     <color name="keyboard_color">#B7D4E5</color>
     <color name="dark_white">#FAFAFA</color>
     <color name="gray_text_color">#a1a0a0</color>
+    <color name="panic_color">#D9D9D9</color>
+    <color name="unlocked_green">#6AA84F</color>
+    <color name="locked_red">#FF0000</color>
+    <color name="switch_back_start_color">#FEFEFE</color>
+    <color name="switch_back_middle_color">#D9D9D9</color>
+    <color name="switch_back_end_color">#B4B4B4</color>
+    <color name="bottom_image_color">#CDCDCD</color>
 
     //RadarView
     <color name="gray">#dadada</color>
@@ -78,6 +85,6 @@
     <color name="secondCircle">#E8E7E8</color>
     <color name="thirdCircle">#E1E0E1</color>
     <color name="fourthCircle">#dad8d8</color>
-    <color name="fifthCircle">#d1d0d0</color>
+    <color name="fifthCircle">#c7c7c7</color>
 
 </resources>

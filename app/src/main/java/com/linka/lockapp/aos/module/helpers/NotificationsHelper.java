@@ -15,6 +15,8 @@ import com.linka.lockapp.aos.module.model.LinkaActivity;
 import com.linka.lockapp.aos.module.model.LinkaActivity.LinkaActivityType;
 import com.linka.lockapp.aos.module.model.LinkaNotificationSettings;
 
+import org.greenrobot.eventbus.EventBus;
+
 import br.com.goncalves.pugnotification.notification.Load;
 import br.com.goncalves.pugnotification.notification.PugNotification;
 
@@ -22,6 +24,7 @@ import br.com.goncalves.pugnotification.notification.PugNotification;
  * Created by Vanson on 3/4/16.
  */
 public class NotificationsHelper {
+    public static final String LINKA_NOT_LOCKED = "LinkaNotLocked";
 
     private MediaPlayer mediaPlayer;
 
@@ -82,9 +85,11 @@ public class NotificationsHelper {
             audio = AUDIO_BACKINRANGE;
         }
         else if (activity.linka_activity_status == LinkaActivityType.isStalled.getValue()) {
-            title = _.i(R.string.warning);
-            message = _.i(R.string.stall);
-            audio = AUDIO_STALL;
+//            title = _.i(R.string.warning);
+//            message = _.i(R.string.stall);
+//            audio = AUDIO_STALL;
+            EventBus.getDefault().post(LINKA_NOT_LOCKED);
+            return false;
         }
         else {
             return false;

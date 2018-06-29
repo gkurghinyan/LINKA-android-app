@@ -1,13 +1,16 @@
 package com.linka.lockapp.aos.module.pages.mylinkas;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.widget.DimensionUtils;
 
 /**
@@ -15,50 +18,86 @@ import com.linka.lockapp.aos.module.widget.DimensionUtils;
  */
 
 public class Circle extends View {
+    public static final int UNLOCKED_STATE = 1;
+    public static final int LOCKED_STATE = 2;
+    public static final int UNLOCKING_STATE = 3;
+    public static final int LOCKING_STATE = 4;
+
+    private int currentState = UNLOCKED_STATE;
 
     private static final int START_ANGLE_POINT = 270;
 
-    public static float CIRCLE_SIZE_DP = 220;
-    public static float CIRCLE_STROKE_WIDTH_DP = 30;
+    public static float CIRCLE_SIZE_DP = 200;
 
     private final Paint paint;
     private RectF rect;
 
     private float angle;
-    public static int strokeWidth;
     public static int circleSize;
+    private Bitmap lockedLinka;
+    private Bitmap unlockedLinka;
+    private float bitmapProp;
+
+    private ObjectAnimator animator;
 
     public Circle(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        strokeWidth = (int) DimensionUtils.convertDpToPixel(CIRCLE_STROKE_WIDTH_DP, context);
         circleSize = (int) DimensionUtils.convertDpToPixel(CIRCLE_SIZE_DP, context);
 
         paint = new Paint();
         paint.setAntiAlias(true);
-        paint.setStyle(Paint.Style.STROKE);
+        paint.setStyle(Paint.Style.FILL);
         paint.setStrokeCap(Paint.Cap.ROUND);
-        paint.setStrokeWidth(strokeWidth);
-        //Circle color
-        paint.setColor(Color.parseColor("#0878ce"));
-
         rect = new RectF();
+        angle = 0;
+        lockedLinka = BitmapFactory.decodeResource(getResources(), R.drawable.close_white_linka);
+        unlockedLinka = BitmapFactory.decodeResource(getResources(),R.drawable.open_white_linka);
+        bitmapProp = ((float) lockedLinka.getHeight()) / ((float) lockedLinka.getWidth());
 
-        //Initial Angle (optional, it can be zero)
-        angle = 10;
+        animator = ObjectAnimator.ofFloat(this, "angle", 360).setDuration(2800);
+        animator.setRepeatCount(0);
+        animator.setInterpolator(null);
     }
 
     @Override
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        int height = canvas.getHeight();
         int width = canvas.getWidth() / 2;
 
-        //size 200x200 example
-        rect.set(width - circleSize/2 + strokeWidth/2, strokeWidth/2, width + circleSize/2 - strokeWidth/2, circleSize - strokeWidth/2);
-
-        canvas.drawArc(rect, START_ANGLE_POINT, angle, false, paint);
+        switch (currentState) {
+            case UNLOCKED_STATE:
+                paint.setColor(getResources().getColor(R.color.unlocked_green));
+                rect.set(width - circleSize / 2, 0, width + circleSize / 2, circleSize);
+                canvas.drawOval(rect, paint);
+                rect.set(width - (circleSize - 60)/(2*bitmapProp),30,width + (circleSize - 60)/(2*bitmapProp),circleSize - 30);
+                canvas.drawBitmap(unlockedLinka,null,rect,null);
+                break;
+            case LOCKED_STATE:
+                paint.setColor(getResources().getColor(R.color.locked_red));
+                rect.set(width - circleSize / 2, 0, width + circleSize / 2, circleSize);
+                canvas.drawOval(rect, paint);
+                rect.set(width - (circleSize - 60)/(2*bitmapProp),30,width + (circleSize - 60)/(2*bitmapProp),circleSize - 30);
+                canvas.drawBitmap(lockedLinka,null,rect,null);
+                break;
+            case LOCKING_STATE:
+                paint.setColor(getResources().getColor(R.color.unlocked_green));
+                rect.set(width - circleSize / 2, 0, width + circleSize / 2, circleSize);
+                canvas.drawOval(rect, paint);
+                paint.setColor(getResources().getColor(R.color.locked_red));
+                rect.set(width - circleSize / 2, 0, width + circleSize / 2, circleSize);
+                canvas.drawArc(rect, START_ANGLE_POINT, angle, true, paint);
+                break;
+            case UNLOCKING_STATE:
+                paint.setColor(getResources().getColor(R.color.locked_red));
+                rect.set(width - circleSize / 2, 0, width + circleSize / 2, circleSize);
+                canvas.drawOval(rect, paint);
+                paint.setColor(getResources().getColor(R.color.unlocked_green));
+                rect.set(width - circleSize / 2, 0, width + circleSize / 2, circleSize);
+                canvas.drawArc(rect, START_ANGLE_POINT, angle, true, paint);
+                break;
+        }
     }
 
     public float getAngle() {
@@ -67,9 +106,36 @@ public class Circle extends View {
 
     public void setAngle(float angle) {
         this.angle = angle;
+        invalidate();
     }
 
-    public void setColor(int color){
+    public void setColor(int color) {
         paint.setColor(color);
+    }
+
+    public void drawState(int state) {
+        if(currentState != state) {
+            if ((state == UNLOCKED_STATE || state == LOCKED_STATE) && !animator.isRunning()) {
+                currentState = state;
+                invalidate();
+            } else if (state == LOCKING_STATE || state == UNLOCKING_STATE){
+                currentState = state;
+                animator.start();
+            }
+        }
+    }
+
+    public void cancelAnimation(){
+        animator.cancel();
+        if(currentState == LOCKING_STATE){
+            currentState = UNLOCKED_STATE;
+        }else if(currentState == UNLOCKING_STATE){
+            currentState = LOCKED_STATE;
+        }
+        invalidate();
+    }
+
+    public int getCurrentState() {
+        return currentState;
     }
 }

@@ -272,8 +272,8 @@ public class SetupLinka2 extends WalkthroughFragment {
                 }
             }
         } else if (position == 0) {
-            registerReceivers(false);
             currentFragment = TURN_ON_LINKA;
+            registerReceivers(false);
         }
     }
 

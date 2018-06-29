@@ -4,13 +4,16 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.constraint.ConstraintLayout;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,9 +25,9 @@ import android.widget.TextView;
 import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.core.CoreFragment;
 import com.linka.lockapp.aos.module.helpers.LogHelper;
+import com.linka.lockapp.aos.module.helpers.NotificationsHelper;
 import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.model.LinkaActivity;
-import com.linka.lockapp.aos.module.pages.dialogs.ThreeDotsDialogFragment;
 import com.linka.lockapp.aos.module.pages.home.MainTabBarPageFragment;
 import com.linka.lockapp.aos.module.pages.mylinkas.Circle;
 import com.linka.lockapp.aos.module.widget.LockController;
@@ -39,7 +42,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
 import butterknife.Unbinder;
-import jp.wasabeef.blurry.Blurry;
+import pl.droidsonroids.gif.GifImageView;
 
 import static com.linka.lockapp.aos.module.widget.LocksController.LOCKSCONTROLLER_NOTIFY_REFRESHED;
 
@@ -49,26 +52,35 @@ import static com.linka.lockapp.aos.module.widget.LocksController.LOCKSCONTROLLE
 
 
 public class CircleView extends CoreFragment {
-
+    //This fragment position in viewpager of MainTabBarPageFragment
+    private final int thisPage = 1;
 
     @BindView(R.id.circle)
     Circle circleView;
 
-    @BindView(R.id.circle_background)
-    Circle circleViewBackground;
-
     @BindView(R.id.slide_to_lock)
     SwipeButton swipeButton;
-    @BindView(R.id.status_text)
-    TextView statusText;
+
     @BindView(R.id.battery_percent)
     TextView batteryPercent;
+
     @BindView(R.id.panic_button)
     ImageView panicButton;
+
     @BindView(R.id.root)
     FrameLayout root;
+
     @BindView(R.id.all_root)
-    FrameLayout allRoot;
+    ConstraintLayout allRoot;
+
+    @BindView(R.id.no_connection_img)
+    GifImageView gifImageView;
+
+    @BindView(R.id.warning_title)
+    TextView warningTitle;
+
+    @BindView(R.id.warning_text)
+    TextView warningText;
 
     private BluetoothAdapter bluetoothAdapter;
     private Unbinder unbinder;
@@ -76,7 +88,36 @@ public class CircleView extends CoreFragment {
     private Linka linka;
     private LockController lockController;
     private View internetPage;
-//    View connectivityPage;
+
+    private boolean isWarningShow = false;
+    private boolean isTurningOnShow = false;
+
+    private AlertDialog turningLinkaDialog = null;
+
+    private Handler notSuccessLockHandler;
+    private Runnable notSuccessLockRunnable = new Runnable() {
+        @Override
+        public void run() {
+            notSuccessLockHandler = null;
+            isWarningShow = false;
+            gifImageView.setBackgroundResource(R.drawable.panic_button);
+            gifImageView.setVisibility(View.GONE);
+            panicButton.setVisibility(View.VISIBLE);
+            warningTitle.setVisibility(View.GONE);
+            warningText.setVisibility(View.GONE);
+            refreshDisplay();
+        }
+    };
+
+    private Handler turningOnLinkaHandler;
+    private Runnable turningOnLinkaRunnable = new Runnable() {
+        @Override
+        public void run() {
+            turningOnLinkaHandler = null;
+            isTurningOnShow = false;
+            showTurrningOnLinkaDialog();
+        }
+    };
 
     private final BroadcastReceiver blueToothReceiver = new BroadcastReceiver() {
 
@@ -88,10 +129,14 @@ public class CircleView extends CoreFragment {
                 final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
                 switch (state) {
                     case BluetoothAdapter.STATE_OFF:
-                        setBlur(true, getString(R.string.enabling_bluetooth));
+                        gifImageView.setVisibility(View.VISIBLE);
+                        gifImageView.setImageResource(R.drawable.close_white_linka);
+                        swipeButton.setCicrleClickable(false);
+                        panicButton.setBackground(getResources().getDrawable(R.drawable.panic_button));
+                        turnOnBluetooth();
                         break;
                     case BluetoothAdapter.STATE_ON:
-                        setBlur(false,null);
+                        refreshDisplay();
                         break;
                 }
 
@@ -161,46 +206,22 @@ public class CircleView extends CoreFragment {
 
 
     void init() {
-
-        if (!getInternetConnectivity()) {
-            root.removeView(internetPage);
-            if (internetPage.getParent() == null) {
-                root.addView(internetPage);
-            }
-            root.setBackground(getResources().getDrawable(R.drawable.blue_gradient));
-        } else if (!getBluetoothConnectivity()) {
-            turnOnBluetooth();
-        } else if (!linka.isConnected && !linka.isLockSettled) {
-            statusText.setText("Turn On Linka");
-        }
+        refreshDisplay();
 
         lockController = LocksController.getInstance().getLockController();
-
-        circleViewBackground.setColor(Color.parseColor("#0878ce"));
-        circleViewBackground.setAngle(365);
-
-        circleView.setVisibility(View.INVISIBLE);
 
         final MainTabBarPageFragment tabBarPageFragment = (MainTabBarPageFragment) getParentFragment();
 
         swipeButton.setSwipeCompleteListener(new SwipeButton.OnSwipeCompleteListener() {
             @Override
             public void clickStarted() {
+                panicButton.setVisibility(View.GONE);
 
-                circleViewBackground.setColor(Color.parseColor("#32c967"));
-                circleViewBackground.invalidate(); //This will cause the circle to update
-
-                circleView.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void clickCancelled() {
-
-                circleViewBackground.setColor(Color.parseColor("#0878ce"));
-                circleViewBackground.invalidate(); //This will cause the circle to update
-
-                circleView.setVisibility(View.INVISIBLE);
-
+                panicButton.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -208,10 +229,6 @@ public class CircleView extends CoreFragment {
                 if (tabBarPageFragment != null) {
 
                     tabBarPageFragment.hideTabBar();
-                    circleViewBackground.setColor(Color.parseColor("#0878ce"));
-                    circleViewBackground.invalidate(); //This will cause the circle to update
-
-                    circleView.setVisibility(View.INVISIBLE);
                 }
             }
 
@@ -242,10 +259,9 @@ public class CircleView extends CoreFragment {
                 } else {
                     lockController.doUnlock();
                 }
+                panicButton.setVisibility(View.VISIBLE);
             }
         });
-
-        batteryPercent.setText(linka.batteryPercent + "%");
 
     }
 
@@ -253,25 +269,6 @@ public class CircleView extends CoreFragment {
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (!mBluetoothAdapter.isEnabled()) {
             mBluetoothAdapter.enable();
-        }
-    }
-
-    ThreeDotsDialogFragment threeDotsDialogFragment;
-
-    public void setBlur(boolean isBlur, String text) {
-        if (isBlur) {
-            if(threeDotsDialogFragment == null) {
-                root.setBackground(getResources().getDrawable(R.drawable.blue_gradient));
-                Blurry.with(getContext()).radius(25).sampling(2).onto(allRoot);
-                threeDotsDialogFragment = ThreeDotsDialogFragment.newInstance().setConnectingText(true, text);
-                threeDotsDialogFragment.show(getFragmentManager(), null);
-            }
-        } else {
-            Blurry.delete(allRoot);
-            if (threeDotsDialogFragment != null) {
-                threeDotsDialogFragment.dismiss();
-                threeDotsDialogFragment = null;
-            }
         }
     }
 
@@ -297,7 +294,6 @@ public class CircleView extends CoreFragment {
     @Override
     public void onStart() {
         super.onStart();
-        IntentFilter filter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
         IntentFilter filter1 = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         getActivity().registerReceiver(blueToothReceiver, filter1);
         EventBus.getDefault().register(this);
@@ -308,6 +304,22 @@ public class CircleView extends CoreFragment {
         super.onStop();
         EventBus.getDefault().unregister(this);
         getActivity().unregisterReceiver(blueToothReceiver);
+        if (notSuccessLockHandler != null) {
+            isWarningShow = false;
+            notSuccessLockHandler.removeCallbacks(notSuccessLockRunnable);
+            notSuccessLockHandler = null;
+            gifImageView.setBackgroundResource(R.drawable.panic_button);
+            gifImageView.setVisibility(View.GONE);
+            panicButton.setVisibility(View.VISIBLE);
+            warningTitle.setVisibility(View.GONE);
+            warningText.setVisibility(View.GONE);
+            refreshDisplay();
+        }
+        if(turningOnLinkaHandler != null){
+            turningOnLinkaHandler.removeCallbacks(turningOnLinkaRunnable);
+            turningOnLinkaHandler = null;
+            isTurningOnShow = false;
+        }
     }
 
     public void refreshDisplay() {
@@ -323,24 +335,60 @@ public class CircleView extends CoreFragment {
                             root.addView(internetPage);
                         }
                         root.setBackground(getResources().getDrawable(R.drawable.blue_gradient));
+                        batteryPercent.setText("");
                     } else if (!getBluetoothConnectivity()) {
-                        setBlur(true, getString(R.string.enabling_bluetooth));
+                        batteryPercent.setText("");
+                        gifImageView.setVisibility(View.VISIBLE);
+                        gifImageView.setImageResource(R.drawable.close_white_linka);
+                        swipeButton.setCicrleClickable(false);
+                        panicButton.setBackground(getResources().getDrawable(R.drawable.panic_button));
                         turnOnBluetooth();
                     } else {
                         root.setBackgroundColor(getResources().getColor(R.color.linka_transparent));
-                        if (!linka.isConnected) {
-                            root.removeView(internetPage);
-                            statusText.setText("Turn On Linka");
-                        } else if (linka.isLockSettled) {
-                            root.removeView(internetPage);
-                            if (linka.isLocked) {
-                                statusText.setText("Hold to Unlock");
-                            } else if (linka.isUnlocked) {
-                                statusText.setText("Hold to Lock");
-                            } else if (linka.isLocking) {
-                                statusText.setText("Locking ...");
-                            } else if (linka.isUnlocking) {
-                                statusText.setText("Unlocking ...");
+                        if (!isWarningShow) {
+                            if (!linka.isConnected) {
+                                if(!isTurningOnShow) {
+                                    batteryPercent.setText("");
+                                    root.removeView(internetPage);
+                                    gifImageView.setVisibility(View.VISIBLE);
+                                    gifImageView.setImageResource(R.drawable.close_white_linka);
+                                    swipeButton.setCicrleClickable(false);
+                                    panicButton.setBackground(getResources().getDrawable(R.drawable.panic_button));
+                                    showTurrningOnLinkaDialog();
+                                }
+                            } else {
+                                isTurningOnShow = false;
+                                if(turningOnLinkaHandler != null){
+                                    turningOnLinkaHandler.removeCallbacks(turningOnLinkaRunnable);
+                                }
+                                if(turningLinkaDialog != null && turningLinkaDialog.isShowing()){
+                                    turningLinkaDialog.dismiss();
+                                }
+                                if (linka.isLockSettled) {
+                                    batteryPercent.setText(linka.batteryPercent + "%");
+                                    root.removeView(internetPage);
+                                    gifImageView.setVisibility(View.GONE);
+                                    panicButton.setBackground(getResources().getDrawable(R.drawable.panic_red_button));
+                                    if (linka.isLocked) {
+                                        swipeButton.setCurrentState(Circle.LOCKED_STATE);
+                                        swipeButton.setCicrleClickable(true);
+                                    } else if (linka.isUnlocked) {
+                                        swipeButton.setCurrentState(Circle.UNLOCKED_STATE);
+                                        swipeButton.setCicrleClickable(true);
+                                    } else if (linka.isLocking) {
+                                        swipeButton.setCicrleClickable(false);
+                                    } else if (linka.isUnlocking) {
+                                        swipeButton.setCicrleClickable(false);
+                                    }
+                                } else {
+                                    root.removeView(internetPage);
+                                    if(gifImageView.getVisibility() != View.VISIBLE || gifImageView.getDrawable().equals(getResources().getDrawable(R.drawable.wi_fi_connection))) {
+                                        gifImageView.setVisibility(View.VISIBLE);
+                                        gifImageView.setImageResource(R.drawable.wi_fi_connection);
+                                    }
+                                    swipeButton.setCicrleClickable(false);
+                                    panicButton.setBackground(getResources().getDrawable(R.drawable.panic_button));
+                                }
                             }
                         }
                     }
@@ -352,7 +400,7 @@ public class CircleView extends CoreFragment {
     @Subscribe
     public void onEvent(Object object) {
         if (!isAdded()) return;
-        if (object instanceof String && ((String) object).equals(LOCKSCONTROLLER_NOTIFY_REFRESHED)) {
+        if (object instanceof String && object.equals(LOCKSCONTROLLER_NOTIFY_REFRESHED)) {
 
             linka = Linka.getLinkaFromLockController(linka);
 
@@ -368,6 +416,42 @@ public class CircleView extends CoreFragment {
 
             linka = Linka.getLinkaFromLockController(linka);
             refreshDisplay();
+        } else if (object != null && object.equals(NotificationsHelper.LINKA_NOT_LOCKED)) {
+            isWarningShow = true;
+            swipeButton.setCicrleClickable(false);
+            panicButton.setVisibility(View.GONE);
+            gifImageView.setVisibility(View.VISIBLE);
+            gifImageView.setBackgroundResource(R.drawable.danger_red_back);
+            gifImageView.setImageResource(R.drawable.close_white_linka);
+            warningTitle.setVisibility(View.VISIBLE);
+            warningText.setVisibility(View.VISIBLE);
+            notSuccessLockHandler = new Handler();
+            notSuccessLockHandler.postDelayed(notSuccessLockRunnable, 5000);
+        }
+    }
+
+    private void showTurrningOnLinkaDialog(){
+        if(MainTabBarPageFragment.currentPosition == thisPage) {
+            if (!isTurningOnShow) {
+                gifImageView.setImageResource(R.drawable.close_white_linka);
+                isTurningOnShow = true;
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Turn on lock").
+                        setMessage("Press the lock's POWER button to connect.").
+                        setCancelable(false).
+                        setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                gifImageView.setVisibility(View.VISIBLE);
+                                gifImageView.setImageResource(R.drawable.wi_fi_connection);
+                                dialog.dismiss();
+                                turningOnLinkaHandler = new Handler();
+                                turningOnLinkaHandler.postDelayed(turningOnLinkaRunnable, 20000);
+                            }
+                        });
+                turningLinkaDialog = builder.create();
+                turningLinkaDialog.show();
+            }
         }
     }
 

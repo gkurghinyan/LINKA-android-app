@@ -493,4 +493,5 @@
     <string name="auto_unlock_notif_title">Auto-unlocking started</string>
     <string name="auto_unlock_notif_message">Your bike is being unlocked</string>
     <string name="set_radius_screen_title">SET THE PARAMETERS OF YOUR LINKA UNLOCK ZONE BY PULLING THE DIAMETER RING</string>
+    <string name="your_bike_has_not_locked">your bike has not locked.\nplease check for obstructions.</string>
 </resources>
