@@ -19,6 +19,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -32,7 +33,6 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.linka.lockapp.aos.module.adapters.LockListAdapter;
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceImpl;
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceResponse;
-import com.linka.lockapp.aos.module.api.LinkaAPIServiceResponse.GetEmailResponse;
 import com.linka.lockapp.aos.module.core.CoreActivity;
 import com.linka.lockapp.aos.module.gcm.MyFirebaseInstanceIdService;
 import com.linka.lockapp.aos.module.helpers.AppBluetoothService;
@@ -52,6 +52,7 @@ import com.linka.lockapp.aos.module.other.Utils;
 import com.linka.lockapp.aos.module.pages.AvailableDevicesFragment;
 import com.linka.lockapp.aos.module.pages.TestingFragment;
 import com.linka.lockapp.aos.module.pages.dfu.DfuManagerPageFragment;
+import com.linka.lockapp.aos.module.pages.help.HelpFragment;
 import com.linka.lockapp.aos.module.pages.home.MainTabBarPageFragment;
 import com.linka.lockapp.aos.module.pages.location.LocationPageFragment;
 import com.linka.lockapp.aos.module.pages.mylinkas.MyLinkasPageFragmentPage;
@@ -75,18 +76,11 @@ import com.linka.lockapp.aos.module.pages.setup.SetupLinka2;
 import com.linka.lockapp.aos.module.pages.setup.SetupLinka3;
 import com.linka.lockapp.aos.module.pages.walkthrough.AccessLockFragment;
 import com.linka.lockapp.aos.module.pages.walkthrough.WalkthroughActivity;
-import com.linka.lockapp.aos.module.pages.walkthrough.WalkthroughGeofencing;
 import com.linka.lockapp.aos.module.pages.walkthrough.WalkthroughGetToKnow;
-import com.linka.lockapp.aos.module.pages.walkthrough.WalkthroughSharing;
-import com.linka.lockapp.aos.module.pages.walkthrough.WalkthroughTamper;
 import com.linka.lockapp.aos.module.widget.BadgeIconView;
-import com.linka.lockapp.aos.module.widget.LinkaTextView;
 import com.linka.lockapp.aos.module.widget.LinkaTouchableLinearLayout;
 import com.linka.lockapp.aos.module.widget.LocksController;
 import com.pixplicity.easyprefs.library.Prefs;
-import com.zopim.android.sdk.api.ZopimChat;
-import com.zopim.android.sdk.model.VisitorInfo;
-import com.zopim.android.sdk.prechat.ZopimChatActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -137,14 +131,31 @@ public class AppMainActivity extends CoreActivity {
     TextView r1;
 
 
-    @BindView(R.id.row_profile)
-    LinkaTouchableLinearLayout rowProfile;
-    @BindView(R.id.sidebar_lock)
-    LinkaTouchableLinearLayout sidebarLock;
-    @BindView(R.id.sidebar_managedevices)
-    LinkaTouchableLinearLayout sidebarManagedevices;
-    @BindView(R.id.sidebar_notifications)
-    LinkaTouchableLinearLayout sidebarNotifications;/*
+//    @BindView(R.id.row_profile)
+//    LinkaTouchableLinearLayout rowProfile;
+//    @BindView(R.id.sidebar_lock)
+//    LinkaTouchableLinearLayout sidebarLock;
+//    @BindView(R.id.sidebar_managedevices)
+//    LinkaTouchableLinearLayout sidebarManagedevices;
+//    @BindView(R.id.sidebar_notifications)
+//    LinkaTouchableLinearLayout sidebarNotifications;
+//    @BindView(R.id.sidebar_icon_faq)
+//    LinkaTouchableLinearLayout sidebarIconFaq;
+//    @BindView(R.id.sidebar_icon_chat)
+//    LinkaTouchableLinearLayout sidebarIconChat;
+//    @BindView(R.id.sidebar_icon_reportbug)
+//    LinkaTouchableLinearLayout sidebarIconReportbug;
+//    @BindView(R.id.sidebar_icon_tc)
+//    LinkaTouchableLinearLayout sidebarIconTc;
+//    @BindView(R.id.sidebar_icon_privacy)
+//    LinkaTouchableLinearLayout sidebarIconPrivacy;
+//    @BindView(R.id.sidebar_icon_check_app_updates)
+//    LinkaTouchableLinearLayout sidebarIconCheckAppUpdates;
+//    @BindView(R.id.sidebar_icon_select_language)
+//    LinkaTouchableLinearLayout sidebarIconSelectLanguage;
+//    @BindView(R.id.sidebar_icon_user_email)
+//    LinkaTouchableLinearLayout sidebarIconUserEmail;
+    /*
     @InjectView(R.id.item_1_text)
     LinkaTextView item1Text;
     @InjectView(R.id.item_1)
@@ -163,24 +174,21 @@ public class AppMainActivity extends CoreActivity {
     LinkaTouchableLinearLayout item4;*/
     @BindView(R.id.item_add)
     LinkaTouchableLinearLayout itemAdd;
-    @BindView(R.id.sidebar_icon_faq)
-    LinkaTouchableLinearLayout sidebarIconFaq;
-    @BindView(R.id.sidebar_icon_chat)
-    LinkaTouchableLinearLayout sidebarIconChat;
-    @BindView(R.id.sidebar_icon_reportbug)
-    LinkaTouchableLinearLayout sidebarIconReportbug;
-    @BindView(R.id.sidebar_icon_tc)
-    LinkaTouchableLinearLayout sidebarIconTc;
-    @BindView(R.id.sidebar_icon_privacy)
-    LinkaTouchableLinearLayout sidebarIconPrivacy;
-    @BindView(R.id.sidebar_icon_check_app_updates)
-    LinkaTouchableLinearLayout sidebarIconCheckAppUpdates;
-    @BindView(R.id.sidebar_icon_select_language)
-    LinkaTouchableLinearLayout sidebarIconSelectLanguage;
-    @BindView(R.id.sidebar_icon_user_email)
-    LinkaTouchableLinearLayout sidebarIconUserEmail;
+
+    @BindView(R.id.sidebar_icon_help)
+    LinkaTouchableLinearLayout itemHelp;
+
+    @BindView(R.id.sidebar_icon_settings)
+    LinkaTouchableLinearLayout itemSettings;
+
     @BindView(R.id.sidebar_icon_logout)
     LinkaTouchableLinearLayout sidebarIconLogout;
+
+    @BindView(R.id.user_avatar)
+    ImageView userAvatar;
+
+    @BindView(R.id.user_name)
+    TextView userName;
 
 
     @BindView(R.id.log)
@@ -196,36 +204,36 @@ public class AppMainActivity extends CoreActivity {
     @InjectView(R.id.item_4_delete)
     ImageView item4Delete;*/
 
-    @BindView(R.id.sidebar_text_lock)
-    LinkaTextView sidebarTextLock;
-    @BindView(R.id.sidebar_text_managedevices)
-    LinkaTextView sidebarTextManagedevices;
-    @BindView(R.id.item_text_add)
-    LinkaTextView itemTextAdd;
-    @BindView(R.id.sidebar_text_notifications)
-    LinkaTextView sidebarTextNotifications;
-    @BindView(R.id.sidebar_text_faq)
-    LinkaTextView sidebarTextFaq;
-    @BindView(R.id.sidebar_text_chat)
-    LinkaTextView sidebarTextChat;
-    @BindView(R.id.sidebar_text_reportbug)
-    LinkaTextView sidebarTextReportbug;
-    @BindView(R.id.sidebar_text_tc)
-    LinkaTextView sidebarTextTc;
-    @BindView(R.id.sidebar_text_privacy)
-    LinkaTextView sidebarTextPrivacy;
-    @BindView(R.id.sidebar_text_check_app_updates)
-    LinkaTextView sidebarTextCheckAppUpdates;
-    @BindView(R.id.sidebar_text_select_language)
-    LinkaTextView sidebarTextSelectLanguage;
-    @BindView(R.id.sidebar_text_user_email)
-    LinkaTextView sidebarTextUserEmail;
-    @BindView(R.id.sidebar_text_logout)
-    LinkaTextView sidebarTextLogout;
-    @BindView(R.id.sidebar_app_version)
-    LinkaTextView sidebarTextAppVersion;
-    @BindView(R.id.sidebar_icon_testing)
-    LinearLayout testing;
+//    @BindView(R.id.sidebar_text_lock)
+//    LinkaTextView sidebarTextLock;
+//    @BindView(R.id.sidebar_text_managedevices)
+//    LinkaTextView sidebarTextManagedevices;
+//    @BindView(R.id.item_text_add)
+//    LinkaTextView itemTextAdd;
+//    @BindView(R.id.sidebar_text_notifications)
+//    LinkaTextView sidebarTextNotifications;
+//    @BindView(R.id.sidebar_text_faq)
+//    LinkaTextView sidebarTextFaq;
+//    @BindView(R.id.sidebar_text_chat)
+//    LinkaTextView sidebarTextChat;
+//    @BindView(R.id.sidebar_text_reportbug)
+//    LinkaTextView sidebarTextReportbug;
+//    @BindView(R.id.sidebar_text_tc)
+//    LinkaTextView sidebarTextTc;
+//    @BindView(R.id.sidebar_text_privacy)
+//    LinkaTextView sidebarTextPrivacy;
+//    @BindView(R.id.sidebar_text_check_app_updates)
+//    LinkaTextView sidebarTextCheckAppUpdates;
+//    @BindView(R.id.sidebar_text_select_language)
+//    LinkaTextView sidebarTextSelectLanguage;
+//    @BindView(R.id.sidebar_text_user_email)
+//    LinkaTextView sidebarTextUserEmail;
+//    @BindView(R.id.sidebar_text_logout)
+//    LinkaTextView sidebarTextLogout;
+//    @BindView(R.id.sidebar_app_version)
+//    LinkaTextView sidebarTextAppVersion;
+//    @BindView(R.id.sidebar_icon_testing)
+//    LinearLayout testing;
     @BindView(R.id.main_root)
     RelativeLayout root;
 
@@ -291,11 +299,11 @@ public class AppMainActivity extends CoreActivity {
 
         MyFirebaseInstanceIdService.getFcmToken();
 
-        if (!AppDelegate.shouldShowSelectLanguage) {
-            AppLanguagePickerActivity.forceSelectLanguageEnglish(getBaseContext());
-
-            sidebarTextSelectLanguage.setVisibility(View.GONE);
-        }
+//        if (!AppDelegate.shouldShowSelectLanguage) {
+//            AppLanguagePickerActivity.forceSelectLanguageEnglish(getBaseContext());
+//
+//            sidebarTextSelectLanguage.setVisibility(View.GONE);
+//        }
 
         if (AppLanguagePickerActivity.shouldStartLanguageSelect()) {
             AppLanguagePickerActivity.createNewInstance(this, true);
@@ -342,20 +350,6 @@ public class AppMainActivity extends CoreActivity {
     public void setFragment(WalkthroughOrder step) {
         switch (step) {
             case SETUP:
-                break;
-            case PAC:
-                popFragment();
-                pushFragment(WalkthroughTamper.class);
-                break;
-
-            case TAMPER:
-                popFragment();
-                pushFragment(WalkthroughGeofencing.class);
-                break;
-
-            case AUTOUNLOCK:
-                popFragment();
-                pushFragment(WalkthroughSharing.class);
                 break;
 
             case SHARING:
@@ -558,60 +552,29 @@ public class AppMainActivity extends CoreActivity {
 
 
     private void initDrawer() {
-        if (!BuildConfig.DEBUG) {
-            testing.setVisibility(View.GONE);
-        }
         drawerLayout.addDrawerListener(drawerListener);
         setDrawer();
     }
 
     public void setDrawer() {
 
-        sidebarTextLock.setText(R.string.my_linkas);
-        sidebarTextManagedevices.setText(R.string.managedevices);
-        itemTextAdd.setText(R.string.new_linka_cap);
-        sidebarTextNotifications.setText(R.string.notifications);
-        sidebarTextFaq.setText(R.string.faqs);
-        sidebarTextChat.setText(R.string.chat_support);
-        sidebarTextReportbug.setText(R.string.report_a_bug);
-        sidebarTextTc.setText(R.string.terms_and_conditions);
-        sidebarTextPrivacy.setText(R.string.privacy_policy);
-        sidebarTextCheckAppUpdates.setText(R.string.check_app_updates);
-        sidebarTextSelectLanguage.setText(R.string.select_language);
-        sidebarTextLogout.setText(R.string.logout);
+//        sidebarTextLock.setText(R.string.my_linkas);
+//        sidebarTextManagedevices.setText(R.string.managedevices);
+//        itemTextAdd.setText(R.string.new_linka_cap);
+//        sidebarTextNotifications.setText(R.string.notifications);
+//        sidebarTextFaq.setText(R.string.faqs);
+//        sidebarTextChat.setText(R.string.chat_support);
+//        sidebarTextReportbug.setText(R.string.report_a_bug);
+//        sidebarTextTc.setText(R.string.terms_and_conditions);
+//        sidebarTextPrivacy.setText(R.string.privacy_policy);
+//        sidebarTextCheckAppUpdates.setText(R.string.check_app_updates);
+//        sidebarTextSelectLanguage.setText(R.string.select_language);
+//        sidebarTextLogout.setText(R.string.logout);
 
         if (LinkaAPIServiceImpl.isLoggedIn()) {
-            String userEmail = LinkaAPIServiceImpl.getUserEmail();
-            if (userEmail != null) {
-                if (userEmail.equals(" ")) {
-                    sidebarIconUserEmail.setVisibility(View.INVISIBLE);
-                } else {
-                    sidebarTextUserEmail.setText(userEmail);
-                    sidebarIconUserEmail.setVisibility(View.VISIBLE);
-                }
-            } else {
-                if (isNetworkAvailable()) {
-                    LinkaAPIServiceImpl.get_email(AppMainActivity.this, new Callback<GetEmailResponse>() {
-                        @Override
-                        public void onResponse(Call<GetEmailResponse> call, Response<GetEmailResponse> response) {
-                            if (response.body() != null) {
-                                if (response.body().data != null) {
-                                    sidebarTextUserEmail.setText(response.body().data.userEmail);
-                                    sidebarIconUserEmail.setVisibility(View.VISIBLE);
-                                }
-                            }
-                        }
+            userName.setText(Prefs.getString("user-name",""));
 
-                        @Override
-                        public void onFailure(Call<GetEmailResponse> call, Throwable t) {
-                        }
-                    });
-                }
-            }
         }
-        sidebarTextAppVersion.setText(_.i(R.string.app_version) + " " + BuildConfig.VERSION_NAME);
-
-
     }
 
 
@@ -697,6 +660,7 @@ public class AppMainActivity extends CoreActivity {
             } else {
                 super.onBackPressed();
             }
+            setBackIconVisible(false);
         }
     }
 
@@ -798,7 +762,7 @@ public class AppMainActivity extends CoreActivity {
 
 
         if (fragment instanceof WelcomePage) {
-            setTitle(_.i(R.string.sign_in));
+            setTitle(_.i( R.string.sign_in));
         } else if (fragment instanceof SignUpPage) {
             setTitle(_.i(R.string.sign_up));
         } else if (fragment instanceof ForgotPasswordPage1) {
@@ -844,10 +808,20 @@ public class AppMainActivity extends CoreActivity {
         }
     }
 
+    public void setBackIconVisible(boolean visible){
+        if(visible){
+            menu.setVisibility(View.GONE);
+            back.setVisibility(View.VISIBLE);
+        }else {
+            back.setVisibility(View.GONE);
+            menu.setVisibility(View.VISIBLE);
+        }
+    }
+
 
     /* MENU */
 
-    @OnClick(R.id.sidebar_lock)
+//    @OnClick(R.id.sidebar_lock)
     void onClick_sidebar_lock() {
 
         if (Linka.getLinkas().size() == 0) {
@@ -859,44 +833,23 @@ public class AppMainActivity extends CoreActivity {
         drawerLayout.closeDrawers();
     }
 
-    @OnClick(R.id.sidebar_available_devices)
+//    @OnClick(R.id.sidebar_available_devices)
     void onClick_sidebar_available_devices(){
         drawerFragment = AvailableDevicesFragment.newInstance();
 
         drawerLayout.closeDrawers();
     }
 
-    @OnClick(R.id.sidebar_notifications)
+//    @OnClick(R.id.sidebar_notifications)
     void onClick_sidebar_notifications() {
         drawerFragment = NotificationSettingsPageFragment.newInstance();
 
         drawerLayout.closeDrawers();
     }
 
-    @OnClick(R.id.sidebar_icon_chat)
-    void onClick_sidebar_icon_chat() {
-
-        String chatEmail = LinkaAPIServiceImpl.getUserEmail();
-        String[] names = chatEmail.split("@");
-        String name = names[0];
-
-        drawerLayout.closeDrawers();
-        ZopimChat.init("4owkb9rQ1cOU3hAcZImdl3vKrPsCAjye");
-
-        VisitorInfo visitorInfo = new VisitorInfo.Builder()
-                .name(name)
-                .email(chatEmail)
-                .build();
-        // set visitor info
-        ZopimChat.setVisitorInfo(visitorInfo);
-
-        startActivity(new Intent(getApplicationContext(), ZopimChatActivity.class));
-
-    }
-
     private int firmwareMode = 0;
 
-    @OnClick(R.id.sidebar_icon_user_email)
+//    @OnClick(R.id.sidebar_icon_user_email)
     void onClick_sidebar_email() {
 
         //Enable firmware recovery mode if it is pressed 10 times
@@ -929,31 +882,31 @@ public class AppMainActivity extends CoreActivity {
         }
     }
 
-    @OnClick(R.id.sidebar_icon_reportbug)
+//    @OnClick(R.id.sidebar_icon_reportbug)
     void onClick_sidebar_bug() {
         drawerLayout.closeDrawers();
         Helpers.sendEmail(this, _.i(R.string.report_a_bug_url), _.i(R.string.report_a_bug));
     }
 
-    @OnClick(R.id.sidebar_icon_tc)
+//    @OnClick(R.id.sidebar_icon_tc)
     void onClick_sidebar_terms_conditions() {
         drawerFragment = WebPageFragment.newInstance(_.i(R.string.terms_and_conditions), _.i(R.string.terms_url));
         drawerLayout.closeDrawers();
     }
 
-    @OnClick(R.id.sidebar_icon_privacy)
+//    @OnClick(R.id.sidebar_icon_privacy)
     void onClick_sidebar_privacy() {
         drawerFragment = WebPageFragment.newInstance(_.i(R.string.privacy_policy), _.i(R.string.privacy_url));
         drawerLayout.closeDrawers();
     }
 
-    @OnClick(R.id.sidebar_icon_faq)
+//    @OnClick(R.id.sidebar_icon_faq)
     void onClick_sidebar_faq() {
         drawerFragment = WebPageFragment.newInstance(_.i(R.string.faqs), _.i(R.string.faq_url));
         drawerLayout.closeDrawers();
     }
 
-    @OnClick(R.id.sidebar_icon_check_app_updates)
+//    @OnClick(R.id.sidebar_icon_check_app_updates)
     void onClick_sidebar_check_app_updates() {
 
         double latitude = AppLocationService.getInstance().latitude;
@@ -988,15 +941,26 @@ public class AppMainActivity extends CoreActivity {
     }
 
 
-    @OnClick(R.id.sidebar_icon_select_language)
+//    @OnClick(R.id.sidebar_icon_select_language)
     void onClick_sidebar_icon_select_language() {
         AppLanguagePickerActivity.createNewInstance(this, false);
     }
 
-    @OnClick(R.id.sidebar_icon_testing)
+//    @OnClick(R.id.sidebar_icon_testing)
     void onClick_sidebar_icon_testing(){
         drawerFragment = TestingFragment.newInstance();
         drawerLayout.closeDrawers();
+    }
+
+    @OnClick(R.id.sidebar_icon_help)
+    void onHelpItemClicked(){
+        drawerFragment = HelpFragment.newInstance();
+        drawerLayout.closeDrawers();
+    }
+
+    @OnClick(R.id.sidebar_icon_settings)
+    void onSettingsItemClicked(){
+
     }
 
 

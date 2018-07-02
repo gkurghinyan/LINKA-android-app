@@ -1,6 +1,7 @@
 package com.linka.lockapp.aos.module.pages;
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -83,6 +84,7 @@ public class CircleView extends CoreFragment {
     TextView warningText;
 
     private BluetoothAdapter bluetoothAdapter;
+    private BluetoothAdapter.LeScanCallback scanCallback;
     private Unbinder unbinder;
 
     private Linka linka;
@@ -115,7 +117,7 @@ public class CircleView extends CoreFragment {
         public void run() {
             turningOnLinkaHandler = null;
             isTurningOnShow = false;
-            showTurrningOnLinkaDialog();
+            showTurningOnLinkaDialog();
         }
     };
 
@@ -131,7 +133,7 @@ public class CircleView extends CoreFragment {
                     case BluetoothAdapter.STATE_OFF:
                         gifImageView.setVisibility(View.VISIBLE);
                         gifImageView.setImageResource(R.drawable.close_white_linka);
-                        swipeButton.setCicrleClickable(false);
+                        swipeButton.setCircleClickable(false);
                         panicButton.setBackground(getResources().getDrawable(R.drawable.panic_button));
                         turnOnBluetooth();
                         break;
@@ -320,6 +322,12 @@ public class CircleView extends CoreFragment {
             turningOnLinkaHandler = null;
             isTurningOnShow = false;
         }
+        if(bluetoothAdapter != null){
+            bluetoothAdapter.stopLeScan(scanCallback);
+        }
+        if(turningLinkaDialog != null && turningLinkaDialog.isShowing()){
+            turningLinkaDialog.dismiss();
+        }
     }
 
     public void refreshDisplay() {
@@ -340,7 +348,7 @@ public class CircleView extends CoreFragment {
                         batteryPercent.setText("");
                         gifImageView.setVisibility(View.VISIBLE);
                         gifImageView.setImageResource(R.drawable.close_white_linka);
-                        swipeButton.setCicrleClickable(false);
+                        swipeButton.setCircleClickable(false);
                         panicButton.setBackground(getResources().getDrawable(R.drawable.panic_button));
                         turnOnBluetooth();
                     } else {
@@ -352,9 +360,9 @@ public class CircleView extends CoreFragment {
                                     root.removeView(internetPage);
                                     gifImageView.setVisibility(View.VISIBLE);
                                     gifImageView.setImageResource(R.drawable.close_white_linka);
-                                    swipeButton.setCicrleClickable(false);
+                                    swipeButton.setCircleClickable(false);
                                     panicButton.setBackground(getResources().getDrawable(R.drawable.panic_button));
-                                    showTurrningOnLinkaDialog();
+                                    showTurningOnLinkaDialog();
                                 }
                             } else {
                                 isTurningOnShow = false;
@@ -371,14 +379,14 @@ public class CircleView extends CoreFragment {
                                     panicButton.setBackground(getResources().getDrawable(R.drawable.panic_red_button));
                                     if (linka.isLocked) {
                                         swipeButton.setCurrentState(Circle.LOCKED_STATE);
-                                        swipeButton.setCicrleClickable(true);
+                                        swipeButton.setCircleClickable(true);
                                     } else if (linka.isUnlocked) {
                                         swipeButton.setCurrentState(Circle.UNLOCKED_STATE);
-                                        swipeButton.setCicrleClickable(true);
+                                        swipeButton.setCircleClickable(true);
                                     } else if (linka.isLocking) {
-                                        swipeButton.setCicrleClickable(false);
+                                        swipeButton.setCircleClickable(false);
                                     } else if (linka.isUnlocking) {
-                                        swipeButton.setCicrleClickable(false);
+                                        swipeButton.setCircleClickable(false);
                                     }
                                 } else {
                                     root.removeView(internetPage);
@@ -386,7 +394,7 @@ public class CircleView extends CoreFragment {
                                         gifImageView.setVisibility(View.VISIBLE);
                                         gifImageView.setImageResource(R.drawable.wi_fi_connection);
                                     }
-                                    swipeButton.setCicrleClickable(false);
+                                    swipeButton.setCircleClickable(false);
                                     panicButton.setBackground(getResources().getDrawable(R.drawable.panic_button));
                                 }
                             }
@@ -418,7 +426,7 @@ public class CircleView extends CoreFragment {
             refreshDisplay();
         } else if (object != null && object.equals(NotificationsHelper.LINKA_NOT_LOCKED)) {
             isWarningShow = true;
-            swipeButton.setCicrleClickable(false);
+            swipeButton.setCircleClickable(false);
             panicButton.setVisibility(View.GONE);
             gifImageView.setVisibility(View.VISIBLE);
             gifImageView.setBackgroundResource(R.drawable.danger_red_back);
@@ -430,7 +438,7 @@ public class CircleView extends CoreFragment {
         }
     }
 
-    private void showTurrningOnLinkaDialog(){
+    private void showTurningOnLinkaDialog(){
         if(MainTabBarPageFragment.currentPosition == thisPage) {
             if (!isTurningOnShow) {
                 gifImageView.setImageResource(R.drawable.close_white_linka);
@@ -447,12 +455,41 @@ public class CircleView extends CoreFragment {
                                 dialog.dismiss();
                                 turningOnLinkaHandler = new Handler();
                                 turningOnLinkaHandler.postDelayed(turningOnLinkaRunnable, 20000);
+                                initializeScanCallback();
+                                scanLeDevice();
                             }
                         });
                 turningLinkaDialog = builder.create();
                 turningLinkaDialog.show();
             }
         }
+    }
+
+    private void initializeScanCallback() {
+        scanCallback = new BluetoothAdapter.LeScanCallback() {
+
+            @Override
+            public void onLeScan(final BluetoothDevice device, final int rssi, final byte[] scanRecord) {
+
+                if (device != null) {
+                    LogHelper.e("SCAN", "Got Device " + device.getName() + device.getAddress());
+                    bluetoothAdapter.stopLeScan(this);
+                    scanCallback = null;
+                    bluetoothAdapter = null;
+                }
+            }
+        };
+    }
+
+    void scanLeDevice() {
+        if (bluetoothAdapter == null) return;
+
+        initializeScanCallback();
+        if(bluetoothAdapter == null){
+            BluetoothManager bluetoothManager = (BluetoothManager) getContext().getSystemService(Context.BLUETOOTH_SERVICE);
+            bluetoothAdapter = bluetoothManager.getAdapter();
+        }
+        bluetoothAdapter.startLeScan(scanCallback);
     }
 
 }

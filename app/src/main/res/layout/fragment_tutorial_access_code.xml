@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/gif_blue"
-    tools:context=".module.pages.walkthrough.TutorialShareFragment">
+    tools:context=".module.pages.walkthrough.TutorialAccessCodeFragment">
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline"
@@ -31,9 +31,21 @@
     <pl.droidsonroids.gif.GifImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/share_your_bike"
+        android:src="@drawable/phoneless_access_code"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="@dimen/margin_xl"/>
+        android:layout_marginBottom="@dimen/margin_dx"/>
+
+    <TextView
+        android:id="@+id/header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/using_a_phoneless_access_code"
+        android:textAllCaps="true"
+        android:textColor="@color/linka_white"
+        android:textSize="@dimen/text_size_l"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/guideline" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -52,7 +64,7 @@
         android:layout_marginBottom="@dimen/margin_x"
         android:gravity="start"
         android:layout_marginEnd="@dimen/margin"
-        android:text="@string/let_friends_access_your_bike"
+        android:text="@string/hold_the_power_button"
         android:textColor="@color/linka_white"
         android:textSize="@dimen/text_size_normal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -75,10 +87,12 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/margin"
         android:gravity="start"
-        android:text="@string/friends_can_also_request_access"
+        android:text="@string/enter_your_pac_using_the_power_button"
         android:textColor="@color/linka_white"
         android:textSize="@dimen/text_size_normal"
         app:layout_constraintBottom_toBottomOf="@id/guideline1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/guideline2" />
+
+
 </android.support.constraint.ConstraintLayout>

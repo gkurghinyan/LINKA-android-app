@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/help_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".module.pages.help.HelpFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_px"
+            android:gravity="center"
+            android:text="@string/tutorials"
+            android:textColor="@color/linka_blue"
+            android:textSize="@dimen/text_size_x"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/tamper_alerts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_px"
+            android:background="@drawable/linear_background"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/margin"
+            android:paddingEnd="@dimen/margin"
+            android:paddingStart="@dimen/margin_x"
+            android:paddingTop="@dimen/margin">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/tamper_alerts"
+                android:textColor="@color/gray_text"
+                android:textSize="@dimen/text_size_normal" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/battery_width"
+                android:padding="3dp"
+                android:scaleType="fitEnd"
+                android:src="@drawable/blue_arrow_to_right" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginStart="@dimen/margin_x"
+            android:background="@color/search_text" />
+
+        <LinearLayout
+            android:id="@+id/share_bike"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/linear_background"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/margin"
+            android:paddingEnd="@dimen/margin"
+            android:paddingStart="@dimen/margin_x"
+            android:paddingTop="@dimen/margin">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="Share Bike"
+                android:textColor="@color/gray_text"
+                android:textSize="@dimen/text_size_normal" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/battery_width"
+                android:padding="3dp"
+                android:scaleType="fitEnd"
+                android:src="@drawable/blue_arrow_to_right" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginStart="@dimen/margin_x"
+            android:background="@color/search_text" />
+
+        <LinearLayout
+            android:id="@+id/auto_unlocking"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/linear_background"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/margin"
+            android:paddingEnd="@dimen/margin"
+            android:paddingStart="@dimen/margin_x"
+            android:paddingTop="@dimen/margin">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="Auto-unlocking"
+                android:textColor="@color/gray_text"
+                android:textSize="@dimen/text_size_normal" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/battery_width"
+                android:padding="3dp"
+                android:scaleType="fitEnd"
+                android:src="@drawable/blue_arrow_to_right" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginStart="@dimen/margin_x"
+            android:background="@color/search_text" />
+
+        <LinearLayout
+            android:id="@+id/quick_lock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/linear_background"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/margin"
+            android:paddingEnd="@dimen/margin"
+            android:paddingStart="@dimen/margin_x"
+            android:paddingTop="@dimen/margin">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/quick_lock_and_unlock"
+                android:textColor="@color/gray_text"
+                android:textSize="@dimen/text_size_normal" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/battery_width"
+                android:padding="3dp"
+                android:scaleType="fitEnd"
+                android:src="@drawable/blue_arrow_to_right" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginStart="@dimen/margin_x"
+            android:background="@color/search_text" />
+
+        <LinearLayout
+            android:id="@+id/access_code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/linear_background"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/margin"
+            android:paddingEnd="@dimen/margin"
+            android:paddingStart="@dimen/margin_x"
+            android:paddingTop="@dimen/margin">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/phoneless_access_code"
+                android:textColor="@color/gray_text"
+                android:textSize="@dimen/text_size_normal" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/battery_width"
+                android:padding="3dp"
+                android:scaleType="fitEnd"
+                android:src="@drawable/blue_arrow_to_right" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginStart="@dimen/margin_x"
+            android:background="@color/search_text" />
+
+        <LinearLayout
+            android:id="@+id/mounting_guide"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/linear_background"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/margin"
+            android:paddingEnd="@dimen/margin"
+            android:paddingStart="@dimen/margin_x"
+            android:paddingTop="@dimen/margin">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/mounting_guide"
+                android:textColor="@color/gray_text"
+                android:textSize="@dimen/text_size_normal" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/battery_width"
+                android:padding="3dp"
+                android:scaleType="fitEnd"
+                android:src="@drawable/blue_arrow_to_right" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginStart="@dimen/margin_x"
+            android:background="@color/search_text" />
+
+
+    </LinearLayout>
+
+
+</FrameLayout>

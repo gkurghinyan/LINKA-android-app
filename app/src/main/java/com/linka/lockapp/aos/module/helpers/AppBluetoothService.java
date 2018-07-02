@@ -1,9 +1,6 @@
 package com.linka.lockapp.aos.module.helpers;
 
 import android.annotation.TargetApi;
-import android.app.AlarmManager;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -12,26 +9,16 @@ import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanSettings;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Handler;
 import android.os.IBinder;
-import android.support.v7.app.AlertDialog;
-import android.util.Log;
 
-import com.linka.lockapp.aos.AppDelegate;
-import com.linka.lockapp.aos.AppMainActivity;
-import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.model.LinkaNotificationSettings;
 import com.linka.lockapp.aos.module.widget.LockController;
 import com.linka.lockapp.aos.module.widget.LocksController;
-
-import org.androidannotations.annotations.App;
 
 import java.util.ArrayList;
 import java.util.Date;

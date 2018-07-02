@@ -49,6 +49,7 @@ public class WebPageFragment extends CoreFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_web_page, container, false);
+        getAppMainActivity().setBackIconVisible(true);
         unbinder = ButterKnife.bind(this, rootView);
 
         return rootView;

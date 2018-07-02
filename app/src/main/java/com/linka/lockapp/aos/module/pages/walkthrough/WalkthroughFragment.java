@@ -53,6 +53,10 @@ public class WalkthroughFragment extends CoreFragment {
     ImageView dot5;
     @BindView(R.id.dot5_selected)
     ImageView dot5selected;
+    @BindView(R.id.dot6)
+    ImageView dot6;
+    @BindView(R.id.dot6_selected)
+    ImageView dot6selected;
     @BindView(R.id.back_button)
     ImageView backButton;
     //    @BindView(R.id.button2)
@@ -165,13 +169,17 @@ public class WalkthroughFragment extends CoreFragment {
         dot3.setVisibility(View.GONE);
         dot4.setVisibility(View.GONE);
         dot5.setVisibility(View.GONE);
+        dot6.setVisibility(View.GONE);
         dot1selected.setVisibility(View.GONE);
         dot2selected.setVisibility(View.GONE);
         dot3selected.setVisibility(View.GONE);
         dot4selected.setVisibility(View.GONE);
         dot5selected.setVisibility(View.GONE);
+        dot6selected.setVisibility(View.GONE);
 
         switch (layouts.length) {
+            case 6:
+                dot6.setVisibility(View.VISIBLE);
             case 5:
                 dot5.setVisibility(View.VISIBLE);
             case 4:
@@ -185,6 +193,9 @@ public class WalkthroughFragment extends CoreFragment {
         }
 
         switch (position + 1) {
+            case 6:
+                dot6selected.setVisibility(View.VISIBLE);
+                dot6.setVisibility(View.GONE);
             case 5:
                 dot5selected.setVisibility(View.VISIBLE);
                 dot5.setVisibility(View.GONE);

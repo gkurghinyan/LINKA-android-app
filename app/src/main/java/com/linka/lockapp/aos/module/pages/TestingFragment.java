@@ -52,7 +52,6 @@ public class TestingFragment extends CoreFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         unbinder = ButterKnife.bind(this,view);
-        getAppMainActivity().setTitle("Testing");
 
         tutorialToggle.setChecked(Prefs.getBoolean(Constants.SHOW_TUTORIAL_WALKTHROUGH,false));
         nameToggle.setChecked(Prefs.getBoolean(Constants.SHOW_SETUP_NAME,false));

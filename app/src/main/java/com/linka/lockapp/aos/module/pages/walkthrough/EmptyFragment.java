@@ -39,10 +39,7 @@ public class EmptyFragment extends Fragment {
 
         } else if (getArguments().getInt(NUMBER) == 2) {
 //            ((WalkthroughActivity) getActivity()).nextTutorial(EmptyFragment.newInstance(3));
-            ((WalkthroughActivity) getActivity()).nextTutorial(TutorialShareFragment.newInstance(getString(R.string.two_press),
-                    getString(R.string.press_power_button),
-                    R.drawable.wi_fi_connection,
-                    TutorialShareFragment.DONE_FRAGMENT));
+            ((WalkthroughActivity) getActivity()).nextTutorial(TutorialShareFragment.newInstance());
         } else if (getArguments().getInt(NUMBER) == 3) {
 //            ((WalkthroughActivity) getActivity()).nextTutorial(TutorialDoneFragment.newInstance());
 

@@ -37,8 +37,9 @@ public class TutorialsPagerFragment extends WalkthroughFragment {
         int[] layouts = new int[]{
                 R.layout.fragment_tutorial_tamper,
                 R.layout.fragment_tutorial_share,
-                R.layout.fragment_empty,
-                R.layout.fragment_tutorial_press_lock_unlock,
+                R.layout.fragment_tutorial_auto_unlock,
+                R.layout.fragment_tutorial_quick_lock,
+                R.layout.fragment_tutorial_access_code,
                 R.layout.fragment_tutorial_done
         };
 
@@ -47,7 +48,7 @@ public class TutorialsPagerFragment extends WalkthroughFragment {
         setLayoutView(new LayoutView() {
             @Override
             public void onViewCreated(View view, int position) {
-                if (position == 4) {
+                if (position == 5) {
                     mount = (TextView) view.findViewById(R.id.mount_lock);
 
                     mount.setOnClickListener(new View.OnClickListener() {

@@ -3,7 +3,7 @@
     android:id="@+id/relative"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/blue_gradient"
+    android:background="@color/gif_blue"
     android:orientation="vertical">
 
     <!--<TextView-->
@@ -138,6 +138,23 @@
 
         <ImageView
             android:id="@+id/dot5_selected"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:src="@drawable/walkthrough_dot_blue"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/dot6"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:src="@drawable/walkthrough_dot_white" />
+
+        <ImageView
+            android:id="@+id/dot6_selected"
             android:layout_width="10dp"
             android:layout_height="10dp"
             android:layout_marginLeft="4dp"

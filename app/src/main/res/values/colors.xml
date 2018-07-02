@@ -78,6 +78,9 @@
     <color name="switch_back_middle_color">#D9D9D9</color>
     <color name="switch_back_end_color">#B4B4B4</color>
     <color name="bottom_image_color">#CDCDCD</color>
+    <color name="navigation_color">#009FDF</color>
+    <color name="gray_text">#666666</color>
+    <color name="gif_blue">#2EB7F1</color>
 
     //RadarView
     <color name="gray">#dadada</color>

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/gif_blue"
     tools:context=".module.pages.walkthrough.TutorialTamperFragment">
 
     <android.support.constraint.Guideline
@@ -11,78 +12,87 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.2" />
+        app:layout_constraintGuide_percent="0.1" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.55" />
+        app:layout_constraintGuide_percent="0.93" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.15" />
+
+    <pl.droidsonroids.gif.GifImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/alarm_tamper_alert"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="@dimen/margin_dx"/>
 
     <TextView
         android:id="@+id/header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@id/guideline"
-        app:layout_constraintStart_toStartOf="parent"
+        android:text="@string/setting_tamper_sensitivity"
+        android:textAllCaps="true"
+        android:textColor="@color/linka_white"
+        android:textSize="@dimen/text_size_l"
         app:layout_constraintEnd_toEndOf="parent"
-        android:text="@string/tamper_alerts_tones"
-        android:textSize="@dimen/text_size_xm"
-        android:textColor="@color/linka_white"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/guideline" />
 
-    <ImageView
-        android:id="@+id/image"
+    <TextView
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="@id/guideline"
-        app:layout_constraintBottom_toBottomOf="@id/guideline1"
+        android:layout_height="wrap_content"
+        android:text="1."
+        android:textColor="@color/linka_white"
+        android:textSize="@dimen/text_size_normal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:src="@drawable/alert_linka"
-        android:layout_marginTop="@dimen/margin_dx"/>
+        app:layout_constraintEnd_toEndOf="@id/guideline2"
+        app:layout_constraintTop_toTopOf="@id/footer1"/>
 
     <TextView
         android:id="@+id/footer1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/when_your_bike_is_tampered"
-        android:gravity="center"
-        app:layout_constraintTop_toTopOf="@id/guideline1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:textSize="@dimen/text_size_xm"
+        android:layout_marginBottom="@dimen/margin_x"
+        android:gravity="start"
+        android:layout_marginEnd="@dimen/margin"
+        android:text="@string/when_your_bike_is_tampered_with"
         android:textColor="@color/linka_white"
-        android:layout_marginTop="@dimen/margin_px"/>
+        android:textSize="@dimen/text_size_normal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guideline2"
+        app:layout_constraintBottom_toTopOf="@id/footer2" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2."
+        android:textColor="@color/linka_white"
+        android:textSize="@dimen/text_size_normal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/guideline2"
+        app:layout_constraintTop_toTopOf="@id/footer2"/>
 
     <TextView
         android:id="@+id/footer2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/you_can_set_your_lock"
-        android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/footer1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:textSize="@dimen/text_size_xm"
+        android:layout_marginEnd="@dimen/margin"
+        android:gravity="start"
+        android:text="@string/you_can_change_your_lock_tamper"
         android:textColor="@color/linka_white"
-        android:layout_marginTop="@dimen/margin"
-        android:layout_marginStart="@dimen/margin"
-        android:layout_marginEnd="@dimen/margin"/>
-
-    <!--<TextView-->
-        <!--android:id="@+id/next"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--app:layout_constraintTop_toBottomOf="@id/footer2"-->
-        <!--app:layout_constraintStart_toStartOf="@id/header"-->
-        <!--app:layout_constraintEnd_toEndOf="@id/header"-->
-        <!--android:layout_marginTop="@dimen/margin_px"-->
-        <!--android:background="@drawable/white_rounded_full_back"-->
-        <!--android:text="@string/next"-->
-        <!--android:gravity="center"-->
-        <!--android:textSize="@dimen/text_size_xm"-->
-        <!--android:textColor="@color/linka_blue"/>-->
+        android:textSize="@dimen/text_size_normal"
+        app:layout_constraintBottom_toBottomOf="@id/guideline1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guideline2" />
 
 
 </android.support.constraint.ConstraintLayout>

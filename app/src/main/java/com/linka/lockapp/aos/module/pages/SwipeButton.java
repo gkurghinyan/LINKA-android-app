@@ -16,7 +16,6 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -534,7 +533,10 @@ public class SwipeButton extends RelativeLayout {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                isCircleEnable = true;
+                if(circleView.getCurrentState() == Circle.LOCKED_STATE ||
+                        circleView.getCurrentState() == Circle.UNLOCKED_STATE) {
+                    isCircleEnable = true;
+                }
             }
 
             @Override
@@ -585,13 +587,11 @@ public class SwipeButton extends RelativeLayout {
 
     public void setCurrentState(int state){
         if(isCircleEnable) {
-            Log.d("locklock","OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
             circleView.drawState(state);
         }
     }
 
-    public void setCicrleClickable(boolean clickable){
+    public void setCircleClickable(boolean clickable){
         isCircleClickable = clickable;
     }
-
 }
