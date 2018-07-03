@@ -29,6 +29,7 @@
         app:layout_constraintGuide_percent="0.15" />
 
     <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/gif_tutorial"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/quick_lock"
