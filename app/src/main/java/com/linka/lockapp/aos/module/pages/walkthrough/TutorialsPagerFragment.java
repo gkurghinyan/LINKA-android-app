@@ -12,9 +12,22 @@ import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.helpers.Constants;
 import com.pixplicity.easyprefs.library.Prefs;
 
+import pl.droidsonroids.gif.GifDrawable;
+import pl.droidsonroids.gif.GifImageView;
+
 
 public class TutorialsPagerFragment extends WalkthroughFragment {
     private TextView mount;
+
+    private View.OnClickListener onGifTutorialClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if(!((GifDrawable) ((GifImageView) v).getDrawable()).isPlaying()){
+                ((GifDrawable) ((GifImageView) v).getDrawable()).reset();
+                ((GifDrawable) ((GifImageView) v).getDrawable()).start();
+            }
+        }
+    };
 
     public static TutorialsPagerFragment newInstance() {
         Bundle args = new Bundle();
@@ -75,6 +88,10 @@ public class TutorialsPagerFragment extends WalkthroughFragment {
                             startActivity(intent);
                         }
                     });
+                }else {
+                    GifImageView gifTutorial = ((GifImageView) view.findViewById(R.id.gif_tutorial));
+                    ((GifDrawable) gifTutorial.getDrawable()).setLoopCount(1);
+                    gifTutorial.setOnClickListener(onGifTutorialClickListener);
                 }
             }
 

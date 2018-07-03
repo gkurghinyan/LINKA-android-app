@@ -455,7 +455,6 @@ public class CircleView extends CoreFragment {
                                 dialog.dismiss();
                                 turningOnLinkaHandler = new Handler();
                                 turningOnLinkaHandler.postDelayed(turningOnLinkaRunnable, 20000);
-                                initializeScanCallback();
                                 scanLeDevice();
                             }
                         });
@@ -473,6 +472,10 @@ public class CircleView extends CoreFragment {
 
                 if (device != null) {
                     LogHelper.e("SCAN", "Got Device " + device.getName() + device.getAddress());
+                    if(bluetoothAdapter == null){
+                        BluetoothManager bluetoothManager = (BluetoothManager) getContext().getSystemService(Context.BLUETOOTH_SERVICE);
+                        bluetoothAdapter = bluetoothManager.getAdapter();
+                    }
                     bluetoothAdapter.stopLeScan(this);
                     scanCallback = null;
                     bluetoothAdapter = null;
