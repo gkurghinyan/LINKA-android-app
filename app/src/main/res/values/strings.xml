@@ -521,4 +521,6 @@
     <string name="hold_the_power_button">Hold the POWER button until LINKA’s light blinks purple.</string>
     <string name="lock_tones_alarms">LOCK TONES &amp; ALARMS</string>
     <string name="firmware_update_available">Firmware Update Available</string>
+    <string name="account">account</string>
+    <string name="account_settings">Account Settings</string>
 </resources>

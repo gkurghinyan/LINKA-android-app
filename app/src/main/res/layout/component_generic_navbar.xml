@@ -33,8 +33,7 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/activity_horizontal_margin_sm"
         android:gravity="center|left"
-        android:orientation="horizontal"
-        android:background="@color/linka_blue">
+        android:orientation="horizontal">
 
         <com.linka.lockapp.aos.module.widget.BadgeIconView
             android:id="@+id/menu"

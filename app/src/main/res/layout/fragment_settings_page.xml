@@ -41,11 +41,6 @@
                         android:textColor="@color/search_text"
                         android:textSize="@dimen/text_size_normal" />
 
-                    <!--<com.linka.lockapp.aos.module.widget.LinkaTextView-->
-                    <!--android:id="@+id/field_pac"-->
-                    <!--style="@style/settings_row_text_desc"-->
-                    <!--android:text="" />-->
-
                     <ImageView
                         android:id="@+id/settings_phoneless_pass_code"
                         android:layout_width="match_parent"
@@ -111,6 +106,7 @@
                     android:layout_height="@dimen/margin_l"
                     android:background="@color/linka_white"
                     android:hint="Linka's name"
+                    android:textColorHint="@color/bottom_image_color"
                     android:paddingStart="@dimen/margin_x"
                     android:textColor="@color/search_text"
                     android:textSize="@dimen/text_size_normal" />

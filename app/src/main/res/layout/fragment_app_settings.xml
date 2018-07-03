@@ -3,12 +3,290 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".module.pages.settings.AppSettingsFragment">
+    tools:context=".module.pages.settings.AppSettingsFragment"
+    android:orientation="vertical"
+    android:background="@color/linka_white">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content">
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin_ml"
+                android:text="@string/account"
+                android:textAllCaps="true"
+                android:textColor="@color/search_text"
+                android:gravity="bottom"
+                android:paddingStart="@dimen/margin_x"
+                android:paddingBottom="@dimen/margin"
+                android:textSize="@dimen/text_size_xm"
+                android:background="@color/title_back_color"/>
+
+            <View style="@style/menu_divider" />
+            
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin_px"
+                android:text="FIRST NAME"
+                android:paddingStart="@dimen/margin_x"
+                android:layout_marginTop="@dimen/margin_mm"
+                android:textColor="@color/search_text"
+                android:textSize="@dimen/text_size_xm"
+                android:background="@color/linka_white"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin_px"
+                android:hint="First Name"
+                android:paddingStart="@dimen/margin_x"
+                android:layout_marginTop="@dimen/margin_mm"
+                android:textColor="@color/search_text"
+                android:textColorHint="@color/bottom_image_color"
+                android:textSize="@dimen/text_size_normal"
+                android:singleLine="true"
+                android:background="@color/linka_white"/>
+
+            <View style="@style/menu_divider"
+                android:layout_marginTop="@dimen/margin_xm"
+                android:layout_marginStart="@dimen/margin_x"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin_px"
+                android:text="LAST NAME"
+                android:paddingStart="@dimen/margin_x"
+                android:layout_marginTop="@dimen/margin_mm"
+                android:textColor="@color/search_text"
+                android:textSize="@dimen/text_size_xm"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin_px"
+                android:hint="Last Name"
+                android:paddingStart="@dimen/margin_x"
+                android:textColorHint="@color/bottom_image_color"
+                android:layout_marginTop="@dimen/margin_mm"
+                android:textColor="@color/search_text"
+                android:textSize="@dimen/text_size_normal"
+                android:singleLine="true"
+                android:background="@color/linka_white"/>
+
+            <View style="@style/menu_divider"
+                android:layout_marginTop="@dimen/margin_xm"
+                android:layout_marginStart="@dimen/margin_x"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin_l"
+                android:background="@color/linka_white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/margin_x"
+                    android:text="Reset password"
+                    android:textColor="@color/linka_black_transparent"
+                    android:textSize="@dimen/text_size_normal" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/margin_x"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="@dimen/margin_x"
+                    android:paddingLeft="@dimen/activity_horizontal_margin_xsm"
+                    android:paddingRight="@dimen/activity_horizontal_margin_xsm"
+                    android:scaleType="fitEnd"
+                    android:src="@drawable/right_gray_arrow" />
+            </LinearLayout>
+
+
+            <View style="@style/menu_divider" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin_ml"
+                android:text="@string/notifications"
+                android:textAllCaps="true"
+                android:textColor="@color/search_text"
+                android:gravity="bottom"
+                android:paddingStart="@dimen/margin_x"
+                android:paddingBottom="@dimen/margin"
+                android:textSize="@dimen/text_size_xm"
+                android:background="@color/title_back_color"/>
+
+            <View style="@style/menu_divider" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin_l"
+                android:background="@color/linka_white">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/margin_x"
+                    android:text="Out of range"
+                    android:textColor="@color/linka_black_transparent"
+                    android:textSize="@dimen/text_size_normal" />
+
+                <com.rey.material.widget.Switch xmlns:custom="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/margin_x"
+                    android:checked="false"
+                    custom:sw_thumbColor="@color/linka_white"
+                    custom:sw_thumbElevation="2dp"
+                    custom:sw_thumbRadius="17dp"
+                    custom:sw_trackColor="@color/colorstate_switch"
+                    custom:sw_trackSize="33dp" />
+            </RelativeLayout>
+
+            <View style="@style/menu_divider"
+                android:layout_marginStart="@dimen/margin_x"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin_l"
+                android:background="@color/linka_white">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/margin_x"
+                    android:text="Back in range"
+                    android:textColor="@color/linka_black_transparent"
+                    android:textSize="@dimen/text_size_normal" />
+
+                <com.rey.material.widget.Switch xmlns:custom="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/margin_x"
+                    android:checked="false"
+                    custom:sw_thumbColor="@color/linka_white"
+                    custom:sw_thumbElevation="2dp"
+                    custom:sw_thumbRadius="17dp"
+                    custom:sw_trackColor="@color/colorstate_switch"
+                    custom:sw_trackSize="33dp" />
+            </RelativeLayout>
+
+            <View style="@style/menu_divider"
+                android:layout_marginStart="@dimen/margin_x"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin_l"
+                android:background="@color/linka_white">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/margin_x"
+                    android:text="Battery low"
+                    android:textColor="@color/linka_black_transparent"
+                    android:textSize="@dimen/text_size_normal" />
+
+                <com.rey.material.widget.Switch xmlns:custom="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/margin_x"
+                    android:checked="false"
+                    custom:sw_thumbColor="@color/linka_white"
+                    custom:sw_thumbElevation="2dp"
+                    custom:sw_thumbRadius="17dp"
+                    custom:sw_trackColor="@color/colorstate_switch"
+                    custom:sw_trackSize="33dp" />
+            </RelativeLayout>
+
+            <View style="@style/menu_divider"
+                android:layout_marginStart="@dimen/margin_x"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin_l"
+                android:background="@color/linka_white">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/margin_x"
+                    android:text="Battery critically low"
+                    android:textColor="@color/linka_black_transparent"
+                    android:textSize="@dimen/text_size_normal" />
+
+                <com.rey.material.widget.Switch xmlns:custom="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/margin_x"
+                    android:checked="false"
+                    custom:sw_thumbColor="@color/linka_white"
+                    custom:sw_thumbElevation="2dp"
+                    custom:sw_thumbRadius="17dp"
+                    custom:sw_trackColor="@color/colorstate_switch"
+                    custom:sw_trackSize="33dp" />
+            </RelativeLayout>
+
+            <View style="@style/menu_divider"
+                android:layout_marginStart="@dimen/margin_x"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin_l"
+                android:background="@color/linka_white">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/margin_x"
+                    android:text="Sleep notification"
+                    android:textColor="@color/linka_black_transparent"
+                    android:textSize="@dimen/text_size_normal" />
+
+                <com.rey.material.widget.Switch xmlns:custom="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/margin_x"
+                    android:checked="false"
+                    custom:sw_thumbColor="@color/linka_white"
+                    custom:sw_thumbElevation="2dp"
+                    custom:sw_thumbRadius="17dp"
+                    custom:sw_trackColor="@color/colorstate_switch"
+                    custom:sw_trackSize="33dp" />
+            </RelativeLayout>
+
+            <View style="@style/menu_divider"
+                android:layout_marginStart="@dimen/margin_x"/>
+
+            <android.support.v4.widget.Space
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin_dx"
+                android:background="@color/title_back_color"/>
+            
+        </LinearLayout>
+        
+    </ScrollView>
+
 
 </FrameLayout>

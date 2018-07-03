@@ -66,6 +66,7 @@ import com.linka.lockapp.aos.module.pages.prelogin.ForgotPasswordPage2;
 import com.linka.lockapp.aos.module.pages.prelogin.SignInPage;
 import com.linka.lockapp.aos.module.pages.prelogin.SignUpPage;
 import com.linka.lockapp.aos.module.pages.prelogin.WelcomePage;
+import com.linka.lockapp.aos.module.pages.settings.AppSettingsFragment;
 import com.linka.lockapp.aos.module.pages.settings.SettingsEditNamePageFragment;
 import com.linka.lockapp.aos.module.pages.settings.SettingsPageFragment;
 import com.linka.lockapp.aos.module.pages.settings.SettingsSleepSettingsFragment;
@@ -960,7 +961,8 @@ public class AppMainActivity extends CoreActivity {
 
     @OnClick(R.id.sidebar_icon_settings)
     void onSettingsItemClicked(){
-
+        drawerFragment = AppSettingsFragment.newInstance();
+        drawerLayout.closeDrawers();
     }
 
 
