@@ -519,4 +519,6 @@
     <string name="using_a_phoneless_access_code">using a phoneless access code</string>
     <string name="enter_your_pac_using_the_power_button">Enter your PAC using the POWER button. In this example, the PAC is 1212.</string>
     <string name="hold_the_power_button">Hold the POWER button until LINKA’s light blinks purple.</string>
+    <string name="lock_tones_alarms">LOCK TONES &amp; ALARMS</string>
+    <string name="firmware_update_available">Firmware Update Available</string>
 </resources>

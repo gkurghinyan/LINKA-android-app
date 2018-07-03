@@ -11,8 +11,8 @@ import android.view.ViewGroup;
 import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceImpl;
 import com.linka.lockapp.aos.module.core.CoreFragment;
+import com.linka.lockapp.aos.module.helpers.Helpers;
 import com.linka.lockapp.aos.module.i18n._;
-import com.linka.lockapp.aos.module.pages.TestingFragment;
 import com.linka.lockapp.aos.module.pages.others.WebPageFragment;
 import com.zopim.android.sdk.api.ZopimChat;
 import com.zopim.android.sdk.model.VisitorInfo;
@@ -65,7 +65,7 @@ public class HelpFragment extends CoreFragment {
 
     @OnClick(R.id.email_us)
     void onEmailUsClicked() {
-        getAppMainActivity().pushFragment(TestingFragment.newInstance());
+        Helpers.sendEmail(getActivity(), _.i(R.string.report_a_bug_url), _.i(R.string.report_a_bug));
     }
 
     @OnClick(R.id.live_chat)

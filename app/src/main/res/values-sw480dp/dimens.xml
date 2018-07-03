@@ -2,6 +2,7 @@
 <resources>
     <dimen name="text_size_mm">15sp</dimen>
     <dimen name="text_size_xm">19sp</dimen>
+    <dimen name="text_size_xxm">21sp</dimen>
     <dimen name="text_size_normal">22sp</dimen>
     <dimen name="text_size_l">24sp</dimen>
     <dimen name="text_size_xl">25sp</dimen>

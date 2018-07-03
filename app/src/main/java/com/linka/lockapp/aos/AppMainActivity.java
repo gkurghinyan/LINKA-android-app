@@ -111,7 +111,7 @@ public class AppMainActivity extends CoreActivity {
     @BindView(R.id.back)
     BadgeIconView back;
     @BindView(R.id.nav_bar_left_icons)
-    LinearLayout navBarLeftIcons;
+    FrameLayout navBarLeftIcons;
     @BindView(R.id.nav_bar_right_icons)
     LinearLayout navBarRightIcons;
     @BindView(R.id.toolbar)

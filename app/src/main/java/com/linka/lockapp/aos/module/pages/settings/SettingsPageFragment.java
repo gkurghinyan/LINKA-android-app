@@ -6,22 +6,20 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.linka.lockapp.aos.AppDelegate;
 import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.core.CoreFragment;
-import com.linka.lockapp.aos.module.i18n._;
 import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.model.LinkaAccessKey;
 import com.linka.lockapp.aos.module.model.LinkaActivity;
 import com.linka.lockapp.aos.module.pages.pac.PacTutorialFragment;
 import com.linka.lockapp.aos.module.pages.setup.AutoUpdateFragment;
-import com.linka.lockapp.aos.module.pages.setup.SetupLinka3;
-import com.linka.lockapp.aos.module.widget.LinkaButton;
-import com.linka.lockapp.aos.module.widget.LinkaTextView;
 import com.linka.lockapp.aos.module.widget.LockController;
 import com.linka.lockapp.aos.module.widget.LocksController;
 import com.rey.material.widget.Switch;
@@ -43,29 +41,25 @@ public class SettingsPageFragment extends CoreFragment {
 
 
     @BindView(R.id.row_audible_locking_unlocking)
-    LinearLayout rowAudibleLockingUnlocking;
+    RelativeLayout rowAudibleLockingUnlocking;
     @BindView(R.id.row_auto_unlocking)
-    LinearLayout rowStallOverride;
-    @BindView(R.id.row_stall_override)
-    LinearLayout rowAutoUnlocking;
+    RelativeLayout rowAutoUnlocking;
+//    @BindView(R.id.row_stall_override)
+//    LinearLayout rowAutoUnlocking;
     @BindView(R.id.row_phoneless_passcode)
     LinearLayout rowPhonelessPasscode;
     @BindView(R.id.settings_phoneless_pass_code)
     ImageView settingsPhonelessPassCode;
-    @BindView(R.id.field_pac)
-    TextView pacField;
     @BindView(R.id.row_tamper_siren)
-    LinearLayout rowTamperSiren;
-    @BindView(R.id.row_edit_name)
-    LinearLayout rowEditName;
-    @BindView(R.id.settings_edit_name)
-    ImageView settingsEditName;
+    RelativeLayout rowTamperSiren;
     @BindView(R.id.row_tamper_sensitivity)
     LinearLayout rowTamperSensitivity;
     @BindView(R.id.row_sleep_settings)
     LinearLayout rowSleepSettings;
-    @BindView(R.id.row_mac_id)
-    LinearLayout rowMacId;
+    @BindView(R.id.row_edit_name)
+    EditText editName;
+//    @BindView(R.id.row_mac_id)
+//    LinearLayout rowMacId;
 
     @BindView(R.id.settings_audible_locking_unlocking)
     Switch switchAudibleLockingUnlocking;
@@ -73,14 +67,12 @@ public class SettingsPageFragment extends CoreFragment {
     Switch switchAutoUnlocking;
     @BindView(R.id.row_radius_settings)
     LinearLayout rowRadiusSettings;
-    @BindView(R.id.settings_stall_override)
-    Switch switchStallOverride;
+//    @BindView(R.id.settings_stall_override)
+//    Switch switchStallOverride;
     @BindView(R.id.settings_tamper_siren)
     Switch switchTamperSiren;
 
     Linka linka;
-    @BindView(R.id.field_lock_name)
-    LinkaTextView fieldLockName;
 /*
     @InjectView(R.id.settings_revoke)
     ImageView settingsRevoke;
@@ -90,18 +82,20 @@ public class SettingsPageFragment extends CoreFragment {
     LinearLayout rowFirmwareVersion;
     @BindView(R.id.firmware_version)
     TextView firmwareVersion;
-    @BindView(R.id.mac_id)
-    TextView macId;
-    @BindView(R.id.settings_reset_factory_settings)
-    ImageView settingsResetFactorySettings;
+    @BindView(R.id.firmware_text)
+    TextView firmwareText;
+//    @BindView(R.id.mac_id)
+//    TextView macId;
+//    @BindView(R.id.settings_reset_factory_settings)
+//    ImageView settingsResetFactorySettings;
     @BindView(R.id.row_reset_to_factory_settings)
     LinearLayout rowResetToFactorySettings;
 
     RevocationControllerV2 revocationController = new RevocationControllerV2();
 
     boolean isAdmin = false;
-    @BindView(R.id.fw_update_button)
-    LinkaButton fwUpdateButton;
+//    @BindView(R.id.fw_update_button)
+//    LinkaButton fwUpdateButton;
 
     private Unbinder unbinder;
 
@@ -218,45 +212,45 @@ public class SettingsPageFragment extends CoreFragment {
             }
         });
 
-        switchStallOverride.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(Switch view, boolean checked) {
-                linka.settings_stall_override = checked;
-
-                int stall;
-
-                String fwVersion = linka.fw_version;
-                //If 1.5.9 then use new way of detecting stall, so reduce stall value
-
-                if (checked) {
-                    stall = 250;  // Crank it all the way up
-                    if (fwVersion.equals("1.5.9")){
-                        stall = 0;
-                    }
-                } else {
-                    stall = 135;  // Normal setting
-
-                    if (fwVersion.equals("1.5.9")){
-                        stall = 60;
-                    }
-                }
-
-                // set lock settings
-                LockController lockController = LocksController.getInstance().getLockController();
-                if (lockController.doSetStall(stall)) {
-                    linka.saveSettings();
-
-                    if (checked){
-                        getAppMainActivity().popFragment();
-                        new AlertDialog.Builder(getAppMainActivity())
-                                .setTitle(_.i(R.string.warning))
-                                .setMessage(_.i(R.string.stall_override_warning))
-                                .setNegativeButton(_.i(R.string.ok), null)
-                                .show();
-                    }
-                }
-            }
-        });
+//        switchStallOverride.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(Switch view, boolean checked) {
+//                linka.settings_stall_override = checked;
+//
+//                int stall;
+//
+//                String fwVersion = linka.fw_version;
+//                //If 1.5.9 then use new way of detecting stall, so reduce stall value
+//
+//                if (checked) {
+//                    stall = 250;  // Crank it all the way up
+//                    if (fwVersion.equals("1.5.9")){
+//                        stall = 0;
+//                    }
+//                } else {
+//                    stall = 135;  // Normal setting
+//
+//                    if (fwVersion.equals("1.5.9")){
+//                        stall = 60;
+//                    }
+//                }
+//
+//                // set lock settings
+//                LockController lockController = LocksController.getInstance().getLockController();
+//                if (lockController.doSetStall(stall)) {
+//                    linka.saveSettings();
+//
+//                    if (checked){
+//                        getAppMainActivity().popFragment();
+//                        new AlertDialog.Builder(getAppMainActivity())
+//                                .setTitle(_.i(R.string.warning))
+//                                .setMessage(_.i(R.string.stall_override_warning))
+//                                .setNegativeButton(_.i(R.string.ok), null)
+//                                .show();
+//                    }
+//                }
+//            }
+//        });
 
 
         LinkaAccessKey key = LinkaAccessKey.getKeyFromLinka(linka);
@@ -289,29 +283,29 @@ public class SettingsPageFragment extends CoreFragment {
             firmwareVersion.setText("");
         }
 
-        macId.setText(linka.lock_mac_address);
+//        macId.setText(linka.lock_mac_address);
 
         if(isAdmin && linka.isLockSettled) {
             //Set PAC values into settings page
             if(linka.pac == 0 || linka.pac == 1234) {
-                pacField.setText("");
                 if(!lockController.hasReadPac) {
                     lockController.doReadPAC();
                 }
             }else {
-                pacField.setText(Integer.toString(linka.pac));
+//                777777777777777777777777777
             }
         }
         else {
-            pacField.setText("");
+//           777777777777777777777777777
         }
 
         //if (linka != null && linka.isConnected && linka.isLockSettled && isAdmin) {
          if(true){
             rowPhonelessPasscode.setAlpha(1.0f);
             rowPhonelessPasscode.setClickable(true);
-            rowEditName.setAlpha(1.0f);
-            rowEditName.setClickable(true);
+            editName.setAlpha(1.0f);
+            editName.setEnabled(true);
+            editName.setText(linka.getName());
             rowTamperSensitivity.setAlpha(1.0f);
             rowTamperSensitivity.setClickable(true);
             rowSleepSettings.setAlpha(1.0f);
@@ -327,39 +321,41 @@ public class SettingsPageFragment extends CoreFragment {
             switchAutoUnlocking.setEnabled(true);
             switchAutoUnlocking.setAlpha(1.0f);
             setRadiusLinearVisibility(switchAutoUnlocking.isChecked());
-            switchStallOverride.setEnabled(true);
-            switchStallOverride.setAlpha(1.0f);
-            rowStallOverride.setAlpha(1.0f);
+//            switchStallOverride.setEnabled(true);
+//            switchStallOverride.setAlpha(1.0f);
             rowAutoUnlocking.setAlpha(1.0f);
             rowResetToFactorySettings.setClickable(true);
             rowResetToFactorySettings.setAlpha(1.0f);
   //          rowRevoke.setClickable(true);
 //            rowRevoke.setAlpha(1.0f);
 
-            fwUpdateButton.setVisibility(View.INVISIBLE);
-            fwUpdateButton.setEnabled(false);
+            firmwareText.setText(getString(R.string.firmware_version));
+            firmwareText.setTextColor(getResources().getColor(R.color.search_text));
+            rowFirmwareVersion.setClickable(false);
 
             String no = lockController.lockControllerBundle.getFwVersionNumber();
             if (true)
             {
-                fwUpdateButton.setVisibility(View.VISIBLE);
-                fwUpdateButton.setEnabled(true);
+                firmwareText.setText(getString(R.string.firmware_update_available));
+                firmwareText.setTextColor(getResources().getColor(R.color.red));
+                rowFirmwareVersion.setClickable(true);
 
             }
 
             if (AppDelegate.shouldAlwaysEnableFwUpgradeButton)
             {
-                fwUpdateButton.setVisibility(View.VISIBLE);
-                fwUpdateButton.setEnabled(true);
-                fwUpdateButton.setText("Update (DBG)");
+                firmwareText.setText(getString(R.string.firmware_update_available));
+                firmwareText.setTextColor(getResources().getColor(R.color.red));
+                rowFirmwareVersion.setClickable(true);
             }
 
         } else {
 
             rowPhonelessPasscode.setAlpha(0.35f);
             rowPhonelessPasscode.setClickable(false);
-            rowEditName.setAlpha(0.35f);
-            rowEditName.setClickable(false);
+            editName.setAlpha(0.35f);
+            editName.setEnabled(false);
+            editName.setText("");
             rowTamperSensitivity.setAlpha(0.35f);
             rowTamperSensitivity.setClickable(false);
             rowSleepSettings.setAlpha(0.35f);
@@ -375,20 +371,21 @@ public class SettingsPageFragment extends CoreFragment {
             switchAutoUnlocking.setEnabled(false);
             switchAutoUnlocking.setAlpha(0.35f);
             setRadiusLinearVisibility(false);
-            switchStallOverride.setEnabled(false);
-            switchStallOverride.setAlpha(0.35f);
-            rowStallOverride.setAlpha(0.35f);
+//            switchStallOverride.setEnabled(false);
+//            switchStallOverride.setAlpha(0.35f);
             rowAutoUnlocking.setAlpha(0.35f);
             rowResetToFactorySettings.setAlpha(0.35f);
             rowResetToFactorySettings.setClickable(false);
     //        rowRevoke.setAlpha(0.35f);
       //      rowRevoke.setClickable(false);
 
-            fwUpdateButton.setVisibility(View.GONE);
-            fwUpdateButton.setEnabled(false);
+             firmwareText.setText(getString(R.string.firmware_version));
+             firmwareText.setTextColor(getResources().getColor(R.color.search_text));
+             rowFirmwareVersion.setClickable(false);
         }
 
-        fieldLockName.setText(linka.getName());
+//        fieldLockName.setText(linka.getName());
+//        77777777777
 
         switchAudibleLockingUnlocking.setChecked(linka.settings_audible_locking_unlocking);
         switchTamperSiren.setChecked(linka.settings_tamper_siren);
@@ -402,7 +399,7 @@ public class SettingsPageFragment extends CoreFragment {
          //   rowRevoke.setClickable(false);
             rowResetToFactorySettings.setClickable(false);
 
-            fwUpdateButton.setEnabled(false);
+            rowFirmwareVersion.setEnabled(false);
         }
     }
 
@@ -422,10 +419,11 @@ public class SettingsPageFragment extends CoreFragment {
         getAppMainActivity().pushFragment(PacTutorialFragment.newInstance());
     }
 
-    @OnClick(R.id.row_edit_name)
-    void onClick_row_edit_name() {
-        getAppMainActivity().pushFragment(SetupLinka3.newInstance(SetupLinka3.SETTINGS));
-    }
+//    @OnClick(R.id.row_edit_name)
+//    void onClick_row_edit_name() {
+//        getAppMainActivity().pushFragment(SetupLinka3.newInstance(SetupLinka3.SETTINGS));
+//    }
+//    777777777777777
 
     @OnClick(R.id.row_tamper_sensitivity)
     void OnClick_row_tamper_sensitivity() {
@@ -467,7 +465,7 @@ public class SettingsPageFragment extends CoreFragment {
                 .commit();
     }
 
-    @OnClick(R.id.fw_update_button)
+    @OnClick(R.id.row_firmware_version)
     void onClick_fw_update_button() {
 
 

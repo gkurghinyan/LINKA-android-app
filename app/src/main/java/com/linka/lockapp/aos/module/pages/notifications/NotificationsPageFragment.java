@@ -107,10 +107,11 @@ public class NotificationsPageFragment extends CoreFragment {
     }
 
     List<Notification> notifications = new ArrayList<>();
-    NotificationListAdapter adapter = new NotificationListAdapter(getActivity());
+    NotificationListAdapter adapter;
 
 
     void init(Bundle savedInstanceState) {
+        adapter = new NotificationListAdapter(getActivity());
 
         if (savedInstanceState != null) {
             if (recyclerView != null) {

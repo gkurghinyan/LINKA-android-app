@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.linka.lockapp.aos.R;
@@ -77,15 +76,18 @@ public class NotificationListAdapter extends GenericLoadMoreAdapter<Notification
         int icon = 0;
 
         if (item.type == LinkaActivityType.isLocked) {
-            icon = R.drawable.icon_activity_locked;
+            holder.notificationIcon.setColorFilter(context.getResources().getColor(R.color.linka_blue), android.graphics.PorterDuff.Mode.MULTIPLY);
+            icon = R.drawable.close_white_linka;
         } else if (item.type == LinkaActivityType.isUnlocked) {
-            icon = R.drawable.icon_activity_unlocked;
+            holder.notificationIcon.setColorFilter(context.getResources().getColor(R.color.linka_blue), android.graphics.PorterDuff.Mode.MULTIPLY);
+            icon = R.drawable.open_white_linka;
         } else if (item.type == LinkaActivityType.isTamperAlert) {
-            icon = R.drawable.icon_activity_tamper;
+            holder.notificationIcon.setColorFilter(context.getResources().getColor(R.color.linka_blue), android.graphics.PorterDuff.Mode.MULTIPLY);
+            icon = R.drawable.panic_icon;
         } else if (item.type == LinkaActivityType.isBatteryLow) {
-            icon = R.drawable.icon_activity_battery_low;
+            icon = R.drawable.danger_icon;
         } else if (item.type == LinkaActivityType.isBatteryCriticallyLow) {
-            icon = R.drawable.icon_activity_battery_low_critical;
+            icon = R.drawable.danger_icon;
         }
         holder.container.setTag(item);
         holder.container.setOnClickListener(mOnclickListener);
@@ -109,8 +111,6 @@ public class NotificationListAdapter extends GenericLoadMoreAdapter<Notification
         TextView notification;
         @BindView(R.id.time)
         TextView time;
-        @BindView(R.id.message_item_content)
-        LinearLayout messageItemContent;
 
         Notification item;
         int position;

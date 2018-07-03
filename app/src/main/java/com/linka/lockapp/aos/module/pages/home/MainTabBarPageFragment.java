@@ -31,12 +31,12 @@ import com.linka.lockapp.aos.module.model.LinkaAccessKey;
 import com.linka.lockapp.aos.module.model.LinkaActivity;
 import com.linka.lockapp.aos.module.model.Notification;
 import com.linka.lockapp.aos.module.pages.CircleView;
-import com.linka.lockapp.aos.module.pages.users.SharingPageFragment;
-import com.linka.lockapp.aos.module.pages.users.InviteUserDialogFragment;
 import com.linka.lockapp.aos.module.pages.notifications.NotificationsPageFragment;
 import com.linka.lockapp.aos.module.pages.pac.SetPac3;
 import com.linka.lockapp.aos.module.pages.settings.SettingsPageFragment;
 import com.linka.lockapp.aos.module.pages.setup.AutoUpdateFragment;
+import com.linka.lockapp.aos.module.pages.users.InviteUserDialogFragment;
+import com.linka.lockapp.aos.module.pages.users.SharingPageFragment;
 import com.linka.lockapp.aos.module.widget.LockController;
 import com.linka.lockapp.aos.module.widget.LocksController;
 import com.linka.lockapp.aos.module.widget.ToggleSwipeableViewPager;
@@ -130,18 +130,19 @@ public class MainTabBarPageFragment extends CoreFragment {
                 linka = Linka.getLinkaById(savedInstanceState.getLong("linka_id", 0));
                 init(savedInstanceState);
             }
-        }switch (currentPosition){
+        }
+        switch (currentPosition) {
             case 0:
-                changeButtonsState(true,false,false,false);
+                changeButtonsState(true, false, false, false);
                 break;
             case 1:
-                changeButtonsState(false,true,false,false);
+                changeButtonsState(false, true, false, false);
                 break;
             case 2:
-                changeButtonsState(false,false,true,false);
+                changeButtonsState(false, false, true, false);
                 break;
             case 3:
-                changeButtonsState(false,false,false,true);
+                changeButtonsState(false, false, false, true);
                 break;
         }
     }
@@ -231,13 +232,13 @@ public class MainTabBarPageFragment extends CoreFragment {
 
                     if (position == 0) {
                         t1.setSelected(true);
-                    }else {
-                        if(getActivity().getSupportFragmentManager().findFragmentById(R.id.users_page_root) instanceof InviteUserDialogFragment){
-                            getAppMainActivity().popFragment();
-                        }
                     }
                     if (position == 1) {
                         t2.setSelected(true);
+                    }else {
+                        if (getActivity().getSupportFragmentManager().findFragmentById(R.id.users_page_root) instanceof InviteUserDialogFragment) {
+                            getAppMainActivity().popFragment();
+                        }
                     }
                     if (position == 2) {
                         t3.setSelected(true);
@@ -265,23 +266,23 @@ public class MainTabBarPageFragment extends CoreFragment {
 
     private void changeButtonsState(boolean first, boolean second, boolean third, boolean fourth) {
         if (first) {
-            t1Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_user_select));
+            t1Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_linka_select));
         } else {
-            t1Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_user));
+            t1Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_linka));
         }
         if (second) {
-            t2Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_linka_select));
+            t2Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_user_select));
         } else {
-            t2Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_linka));
+            t2Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_user));
         }
-        if(third){
+        if (third) {
             t3Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_notif_select));
-        }else {
+        } else {
             t3Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_notif));
         }
-        if(fourth){
+        if (fourth) {
             t4Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_setting_select));
-        }else {
+        } else {
             t4Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_setting));
         }
     }
@@ -291,23 +292,23 @@ public class MainTabBarPageFragment extends CoreFragment {
     void on_t1() {
         currentPosition = 0;
         viewPager.setCurrentItem(0, true);
-        changeButtonsState(true,false,false,false);
-        getAppMainActivity().setTitle("USERS");
+        changeButtonsState(true, false, false, false);
+        getAppMainActivity().setTitle(linka.lock_name);
     }
 
     @OnClick(R.id.t2)
     void on_t2() {
         currentPosition = 1;
         viewPager.setCurrentItem(1, true);
-        changeButtonsState(false,true,false,false);
-        getAppMainActivity().setTitle(linka.lock_name);
+        changeButtonsState(false, true, false, false);
+        getAppMainActivity().setTitle("USERS");
     }
 
     @OnClick(R.id.t3)
     void on_t3() {
         currentPosition = 2;
         viewPager.setCurrentItem(2, true);
-        changeButtonsState(false,false,true,false);
+        changeButtonsState(false, false, true, false);
         getAppMainActivity().setTitle("NOTIFICATIONS");
     }
 
@@ -318,22 +319,22 @@ public class MainTabBarPageFragment extends CoreFragment {
         EventBus.getDefault().post(LinkaActivity.LINKA_ACTIVITY_ON_CHANGE);
 
         viewPager.setCurrentItem(3, true);
-        changeButtonsState(false,false,false,true);
+        changeButtonsState(false, false, false, true);
         getAppMainActivity().setTitle(getString(R.string.big_settings));
     }
 
 
     class MainTabBarPageFragmentAdapter extends FragmentPagerAdapter {
-        public SharingPageFragment f1;
-        public CircleView f2;
+        public CircleView f1;
+        public SharingPageFragment f2;
         public NotificationsPageFragment f3;
         public SettingsPageFragment f4;
 
         public MainTabBarPageFragmentAdapter(FragmentManager fragmentManager, Linka linka) {
             super(fragmentManager);
 
-            f1 = SharingPageFragment.newInstance(linka);
-            f2 = CircleView.newInstance(linka);
+            f1 = CircleView.newInstance(linka);
+            f2 = SharingPageFragment.newInstance(linka);
             f3 = NotificationsPageFragment.newInstance(linka);// TODO
             f4 = SettingsPageFragment.newInstance(linka);
         }
@@ -465,7 +466,7 @@ public class MainTabBarPageFragment extends CoreFragment {
                                     .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            getAppMainActivity().pushFragment(SetPac3.newInstance(_linka,SetPac3.SETTINGS));
+                                            getAppMainActivity().pushFragment(SetPac3.newInstance(_linka, SetPac3.SETTINGS));
                                         }
                                     })
                                     .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
@@ -545,7 +546,7 @@ public class MainTabBarPageFragment extends CoreFragment {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
 //                                                getAppMainActivity().pushFragment(DfuManagerPageFragment.newInstance(linka));
-                                                getAppMainActivity().pushFragment(AutoUpdateFragment.newInstance(linka,AutoUpdateFragment.SETTINGS));
+                                                getAppMainActivity().pushFragment(AutoUpdateFragment.newInstance(linka, AutoUpdateFragment.SETTINGS));
                                             }
                                         })
                                         .setNegativeButton(R.string.maybe_later, null)
@@ -576,7 +577,7 @@ public class MainTabBarPageFragment extends CoreFragment {
                                     public void onClick(DialogInterface dialog, int id) {
                                         //Start DFU fragment, make LINKA parameter null because we don't initialize it
 //                                        DfuManagerPageFragment fragment = DfuManagerPageFragment.newInstance(null);
-                                        AutoUpdateFragment fragment = AutoUpdateFragment.newInstance(null,AutoUpdateFragment.SETTINGS);
+                                        AutoUpdateFragment fragment = AutoUpdateFragment.newInstance(null, AutoUpdateFragment.SETTINGS);
                                         fragment.blod_firmware_mode = true;
                                         fragment.blod_firmware_try_again = true;
                                         AppMainActivity.getInstance().pushFragment(fragment);
@@ -609,7 +610,7 @@ public class MainTabBarPageFragment extends CoreFragment {
         }
     }
 
-    public void getCurrentFragment(){
+    public void getCurrentFragment() {
 
     }
 }

@@ -55,7 +55,7 @@ public class SharingPageFragment extends CoreFragment {
     public static int rssiInterval = 10;
 
     //This fragment position in viewpager of MainTabBarPageFragment
-    private final int thisPage = 0;
+    private final int thisPage = 1;
 
     RecyclerView recyclerView;
     private ConstraintLayout root;

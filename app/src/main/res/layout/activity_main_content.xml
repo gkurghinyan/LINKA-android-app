@@ -14,7 +14,7 @@
         android:layout_alignLeft="@+id/toolbar"
         android:layout_alignRight="@+id/toolbar"
         android:layout_alignTop="@+id/toolbar"
-        android:background="@null"></View>
+        android:background="@null"/>
 
     <FrameLayout
         android:id="@+id/fragment_container"

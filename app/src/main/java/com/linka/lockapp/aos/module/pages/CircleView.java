@@ -54,7 +54,7 @@ import static com.linka.lockapp.aos.module.widget.LocksController.LOCKSCONTROLLE
 
 public class CircleView extends CoreFragment {
     //This fragment position in viewpager of MainTabBarPageFragment
-    private final int thisPage = 1;
+    private final int thisPage = 0;
 
     @BindView(R.id.circle)
     Circle circleView;
