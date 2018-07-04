@@ -38,6 +38,7 @@
                     android:layout_marginStart="@dimen/margin_x"
                     android:gravity="start|center"
                     android:textAllCaps="true"
+                    android:layout_marginEnd="@dimen/margin"
                     android:textColor="@color/linka_white"
                     android:textSize="@dimen/text_size_normal"
                     android:textStyle="bold" />

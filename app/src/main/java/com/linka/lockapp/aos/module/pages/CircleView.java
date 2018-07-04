@@ -16,19 +16,22 @@ import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.linka.Lock.BLE.BluetoothLEDevice;
 import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.core.CoreFragment;
+import com.linka.lockapp.aos.module.helpers.AppBluetoothService;
+import com.linka.lockapp.aos.module.helpers.BLEHelpers;
 import com.linka.lockapp.aos.module.helpers.LogHelper;
 import com.linka.lockapp.aos.module.helpers.NotificationsHelper;
 import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.model.LinkaActivity;
+import com.linka.lockapp.aos.module.model.LinkaNotificationSettings;
 import com.linka.lockapp.aos.module.pages.home.MainTabBarPageFragment;
 import com.linka.lockapp.aos.module.pages.mylinkas.Circle;
 import com.linka.lockapp.aos.module.widget.LockController;
@@ -38,10 +41,12 @@ import com.linka.lockapp.aos.module.widget.LocksController;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnTouch;
 import butterknife.Unbinder;
 import pl.droidsonroids.gif.GifImageView;
 
@@ -146,9 +151,6 @@ public class CircleView extends CoreFragment {
         }
     };
 
-    // @InjectView(R.id.row_audible_locking_unlocking)
-    //LinearLayout rowAudibleLockingUnlocking;
-
     public static CircleView newInstance(Linka linka) {
         Bundle bundle = new Bundle();
         CircleView fragment = new CircleView();
@@ -208,7 +210,6 @@ public class CircleView extends CoreFragment {
 
 
     void init() {
-        refreshDisplay();
 
         lockController = LocksController.getInstance().getLockController();
 
@@ -274,19 +275,6 @@ public class CircleView extends CoreFragment {
         }
     }
 
-    @OnTouch(R.id.circle)
-    public boolean clickCircle(Circle circle, MotionEvent event) {
-
-        return false;
-    }
-
-    Runnable showSlider = new Runnable() {
-        @Override
-        public void run() {
-
-        }
-    };
-
 
     @OnClick(R.id.panic_button)
     void onPanic() {
@@ -299,6 +287,12 @@ public class CircleView extends CoreFragment {
         IntentFilter filter1 = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         getActivity().registerReceiver(blueToothReceiver, filter1);
         EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshDisplay();
     }
 
     @Override
@@ -440,6 +434,14 @@ public class CircleView extends CoreFragment {
 
     private void showTurningOnLinkaDialog(){
         if(MainTabBarPageFragment.currentPosition == thisPage) {
+            scanCallback = null;
+            devices.clear();
+            linkaList.clear();
+            LinkaNotificationSettings.refresh_for_latest_linka();
+            LocksController.getInstance().refresh();
+            if (!AppBluetoothService.getInstance().dfu) {
+                AppBluetoothService.getInstance().enableFixedTimeScanning(true);
+            }
             if (!isTurningOnShow) {
                 gifImageView.setImageResource(R.drawable.close_white_linka);
                 isTurningOnShow = true;
@@ -464,21 +466,40 @@ public class CircleView extends CoreFragment {
         }
     }
 
+    List<Linka> linkaList = new ArrayList<>();
+    List<BluetoothLEDevice> devices = new ArrayList<>();
+
     private void initializeScanCallback() {
         scanCallback = new BluetoothAdapter.LeScanCallback() {
 
             @Override
             public void onLeScan(final BluetoothDevice device, final int rssi, final byte[] scanRecord) {
-
                 if (device != null) {
                     LogHelper.e("SCAN", "Got Device " + device.getName() + device.getAddress());
-                    if(bluetoothAdapter == null){
-                        BluetoothManager bluetoothManager = (BluetoothManager) getContext().getSystemService(Context.BLUETOOTH_SERVICE);
-                        bluetoothAdapter = bluetoothManager.getAdapter();
+                } else {
+                    return;
+                }
+                int result = BLEHelpers.upsertBluetoothLEDeviceList(devices, linkaList, device, rssi, scanRecord);
+                if (result == 0) {
+                    if (!linkaList.isEmpty()) {
+                        if(bluetoothAdapter == null){
+                            BluetoothManager bluetoothManager = (BluetoothManager) getContext().getSystemService(Context.BLUETOOTH_SERVICE);
+                            bluetoothAdapter = bluetoothManager.getAdapter();
+                        }
+                        bluetoothAdapter.stopLeScan(this);
+                        scanCallback = null;
+                        bluetoothAdapter = null;
                     }
-                    bluetoothAdapter.stopLeScan(this);
-                    scanCallback = null;
-                    bluetoothAdapter = null;
+                } else if (result == 1) {
+                    if (!linkaList.isEmpty()) {
+                        if(bluetoothAdapter == null){
+                            BluetoothManager bluetoothManager = (BluetoothManager) getContext().getSystemService(Context.BLUETOOTH_SERVICE);
+                            bluetoothAdapter = bluetoothManager.getAdapter();
+                        }
+                        bluetoothAdapter.stopLeScan(scanCallback);
+                        scanCallback = null;
+                        bluetoothAdapter = null;
+                    }
                 }
             }
         };
