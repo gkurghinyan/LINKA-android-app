@@ -44,6 +44,9 @@ public class PacTutorialFragment extends Fragment {
             editor.putInt(Constants.SHOWING_FRAGMENT, Constants.SET_PAC_FRAGMENT);
             editor.apply();
         }
+        if(getActivity() instanceof AppMainActivity){
+            ((AppMainActivity) getActivity()).setBackIconVisible(true);
+        }
 
         view.findViewById(R.id.set_pac_button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,5 +58,13 @@ public class PacTutorialFragment extends Fragment {
                 }
             }
         });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if(getActivity() instanceof AppMainActivity){
+            ((AppMainActivity) getActivity()).setBackIconVisible(false);
+        }
     }
 }

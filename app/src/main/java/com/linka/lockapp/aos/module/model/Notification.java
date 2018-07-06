@@ -1,13 +1,19 @@
 package com.linka.lockapp.aos.module.model;
 
+import android.location.Address;
+import android.location.Geocoder;
+
+import com.linka.lockapp.aos.AppDelegate;
 import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.i18n._;
 import com.linka.lockapp.aos.module.model.LinkaActivity.LinkaActivityType;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -24,6 +30,10 @@ public class Notification implements Serializable {
     public String from = "";
     public String latitude = "";
     public String longitude = "";
+    private String address = "";
+    private List<Address> addresses;
+
+    private Geocoder geocoder = new Geocoder(AppDelegate.getInstance(), Locale.getDefault());
 
 
     public static List<Notification> fromLinkaActivities(List<LinkaActivity> activities) {
@@ -48,7 +58,13 @@ public class Notification implements Serializable {
                     if (linkaAddress != null) {
                         notification.body = _.i(R.string.act_locked_at) + " " + linkaAddress.address;
                     } else {
-                        notification.body = _.i(R.string.act_locked_at) + " " + activity.latitude + " : " + activity.longitude;
+                        try {
+                            notification.addresses = notification.geocoder.getFromLocation(Double.parseDouble(activity.latitude), Double.parseDouble(activity.longitude), 1);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        notification.address = notification.addresses.get(0).getAddressLine(0);
+                        notification.body = _.i(R.string.act_locked_at) + " " + notification.address;
                     }
                     notification.latitude = activity.latitude;
                     notification.longitude = activity.longitude;

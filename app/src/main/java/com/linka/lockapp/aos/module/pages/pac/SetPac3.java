@@ -112,6 +112,9 @@ public class SetPac3 extends CoreFragment {
             if (bundle.get("linka") != null) {
                 linka = (Linka) bundle.getSerializable("linka");
             }
+            if(getArguments().getInt(NEXT_FRAGMENT) == SETTINGS && getActivity() instanceof AppMainActivity){
+                ((AppMainActivity) getActivity()).setBackIconVisible(true);
+            }
             init();
         }
     }
@@ -120,6 +123,9 @@ public class SetPac3 extends CoreFragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+        if(getArguments().getInt(NEXT_FRAGMENT) == SETTINGS && getActivity() instanceof AppMainActivity){
+            ((AppMainActivity) getActivity()).setBackIconVisible(false);
+        }
 
     }
 
@@ -426,7 +432,7 @@ public class SetPac3 extends CoreFragment {
                             ((WalkthroughActivity) getActivity()).nextTutorial(TutorialDoneFragment.newInstance());
                         }
                     } else {
-                        getAppMainActivity().setFragment(MainTabBarPageFragment.newInstance(linka));
+                        getAppMainActivity().setFragment(MainTabBarPageFragment.newInstance(linka,MainTabBarPageFragment.SETTING_SCREEN));
                     }
 
                 } else {

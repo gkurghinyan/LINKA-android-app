@@ -26,7 +26,6 @@ import com.linka.lockapp.aos.module.model.LinkaNotificationSettings;
 import com.linka.lockapp.aos.module.pages.home.MainTabBarPageFragment;
 import com.linka.lockapp.aos.module.pages.setup.SetupLinka1;
 import com.linka.lockapp.aos.module.widget.LockController;
-import com.linka.lockapp.aos.module.widget.LocksController;
 import com.pixplicity.easyprefs.library.Prefs;
 
 import java.lang.reflect.Method;
@@ -293,7 +292,7 @@ public class DfuManager {
             SetupLinka1 fragment = SetupLinka1.newInstance();
             AppMainActivity.getInstance().pushFragment(fragment);
         }else {
-            AppMainActivity.getInstance().setFragment(MainTabBarPageFragment.newInstance(LinkaNotificationSettings.get_latest_linka()));
+            AppMainActivity.getInstance().setFragment(MainTabBarPageFragment.newInstance(LinkaNotificationSettings.get_latest_linka(),MainTabBarPageFragment.LOCK_SCREEN));
         }
     }
 

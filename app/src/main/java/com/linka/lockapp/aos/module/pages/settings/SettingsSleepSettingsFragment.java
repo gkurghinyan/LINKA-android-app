@@ -4,20 +4,17 @@ import android.app.AlertDialog;
 import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.NumberPicker;
-import android.widget.TextView;
 
-import com.linka.lockapp.aos.AppDelegate;
 import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.core.CoreFragment;
 import com.linka.lockapp.aos.module.helpers.SleepNotificationService;
 import com.linka.lockapp.aos.module.i18n._;
 import com.linka.lockapp.aos.module.model.Linka;
-import com.linka.lockapp.aos.module.widget.LinkaButton;
 import com.linka.lockapp.aos.module.widget.LockController;
 import com.linka.lockapp.aos.module.widget.LocksController;
 
@@ -25,14 +22,10 @@ import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
 
 
 public class SettingsSleepSettingsFragment extends CoreFragment {
-
-    @BindView(R.id.save)
-    LinkaButton save;
 
     @BindView(R.id.unlock_hour_picker)
     NumberPicker unlockHourPicker;
@@ -46,20 +39,21 @@ public class SettingsSleepSettingsFragment extends CoreFragment {
     @BindView(R.id.lock_minute_picker)
     NumberPicker lockMinutePicker;
 
-    @BindView(R.id.lock_sleep_timer_text)
-    TextView lockText;
-
-    @BindView(R.id.unlock_sleep_timer_text)
-    TextView unlockText;
-
-    @BindView(R.id.battery_estimated_days_remaining)
-    TextView battery_estimated_days_remaining;
-
-    @BindView(R.id.sleep_battery_percent)
-    TextView battery_percent;
-
-    @BindView(R.id.sleep_battery_icon)
-    ImageView battery_icon;
+    private Handler pickerHandler = null;
+    private Runnable pickerRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if(unlockHourPicker != null) {
+                if (unlockHourPicker.getValue() == 0 && unlockMinutePicker.getValue() == 0) {
+                    unlockMinutePicker.setValue(1);
+                }
+                if (lockHourPicker.getValue() == 0 && lockMinutePicker.getValue() == 0) {
+                    lockMinutePicker.setValue(1);
+                }
+            }
+            pickerHandler = null;
+        }
+    };
 
     private int lockTime;
     private int unlockTime;
@@ -67,7 +61,7 @@ public class SettingsSleepSettingsFragment extends CoreFragment {
     private Unbinder unbinder;
 
     private String[] minuteValues = new String[12];
-    private HashMap<String,Integer> minutes;
+    private HashMap<String, Integer> minutes;
 
 
     public static SettingsSleepSettingsFragment newInstance(Linka linka) {
@@ -87,8 +81,7 @@ public class SettingsSleepSettingsFragment extends CoreFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_settings_sleep_settings, container, false);
-        ButterKnife.bind(this, rootView);
-
+        unbinder = ButterKnife.bind(this, rootView);
         return rootView;
     }
 
@@ -101,31 +94,60 @@ public class SettingsSleepSettingsFragment extends CoreFragment {
             if (bundle.get("linka") != null) {
                 linka = (Linka) bundle.getSerializable("linka");
             }
+            getAppMainActivity().setBackIconVisible(true);
             init();
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if(unlockTime == 0 || lockTime == 0){
+            pickerHandler = new Handler();
+            pickerHandler.post(pickerRunnable);
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(pickerHandler != null){
+            pickerHandler.removeCallbacks(pickerRunnable);
+            pickerHandler = null;
+        }
+        if(unlockTime != 0 && lockTime != 0) {
+            save(unlockTime, lockTime);
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        getAppMainActivity().setBackIconVisible(false);
+        unbinder.unbind();
     }
 
     void init() {
         initPickers();
 
-        int batteryPercent = linka.batteryPercent;
+//        int batteryPercent = linka.batteryPercent;
 
-        setEstimatedBatteryRemaining(linka.settings_unlocked_sleep, linka.settings_locked_sleep);
-        battery_percent.setText("(" + batteryPercent + "%)");
-
-        if (batteryPercent < AppDelegate.battery_mid && batteryPercent >= AppDelegate.battery_low_below) {
-            battery_icon.setImageResource(R.drawable.icon_activity_battery_mid_x);
-        } else if (batteryPercent < AppDelegate.battery_critically_low_below) {
-            battery_icon.setImageResource(R.drawable.icon_activity_battery_low_critical_x);
-        } else if (batteryPercent < AppDelegate.battery_low_below && batteryPercent >= AppDelegate.battery_critically_low_below) {
-            battery_icon.setImageResource(R.drawable.icon_activity_battery_low_x);
-        } else {
-            battery_icon.setImageResource(R.drawable.icon_activity_battery_high_x);
-        }
+//        setEstimatedBatteryRemaining(linka.settings_unlocked_sleep, linka.settings_locked_sleep);
+//        battery_percent.setText("(" + batteryPercent + "%)");
+//
+//        if (batteryPercent < AppDelegate.battery_mid && batteryPercent >= AppDelegate.battery_low_below) {
+//            battery_icon.setImageResource(R.drawable.icon_activity_battery_mid_x);
+//        } else if (batteryPercent < AppDelegate.battery_critically_low_below) {
+//            battery_icon.setImageResource(R.drawable.icon_activity_battery_low_critical_x);
+//        } else if (batteryPercent < AppDelegate.battery_low_below && batteryPercent >= AppDelegate.battery_critically_low_below) {
+//            battery_icon.setImageResource(R.drawable.icon_activity_battery_low_x);
+//        } else {
+//            battery_icon.setImageResource(R.drawable.icon_activity_battery_high_x);
+//        }
 
         //lock
         lockTime = linka.settings_locked_sleep;
-        lockText.setText(String.valueOf(lockTime));
+//        lockText.setText(String.valueOf(lockTime));
         if (getHourFromSeconds(lockTime) != 0) {
             lockHourPicker.setValue(getHourFromSeconds(lockTime));
         } else {
@@ -139,27 +161,31 @@ public class SettingsSleepSettingsFragment extends CoreFragment {
 
         //unlock
         unlockTime = linka.settings_unlocked_sleep;
-        unlockText.setText(String.valueOf(unlockTime));
-        if (getHourFromSeconds(unlockTime) != 0) {
+//        unlockText.setText(String.valueOf(unlockTime));
+        if (getHourFromSeconds(unlockTime) > 0) {
             unlockHourPicker.setValue(getHourFromSeconds(unlockTime));
         } else {
             unlockHourPicker.setValue(0);
         }
-        if (getMinutesFromSeconds(unlockTime) != 0) {
+        if (getMinutesFromSeconds(unlockTime) > 0) {
             unlockMinutePicker.setValue(minutes.get(String.valueOf(getMinutesFromSeconds(unlockTime))));
         } else {
-            unlockMinutePicker.setValue(0);
+            if (unlockHourPicker.getValue() == 0) {
+                unlockMinutePicker.setValue(1);
+            } else {
+                unlockMinutePicker.setValue(0);
+            }
         }
 
-        updateTimeTexts();
+//        updateTimeTexts();
     }
 
     private void initPickers() {
         minutes = new HashMap<>();
         for (int i = 0; i < minuteValues.length; i++) {
-            String minute = Integer.toString(i*5);
+            String minute = Integer.toString(i * 5);
             minuteValues[i] = minute;
-            minutes.put(minute,i);
+            minutes.put(minute, i);
         }
 
         NumberPicker.OnValueChangeListener onValueChangeListener = new NumberPicker.OnValueChangeListener() {
@@ -183,11 +209,25 @@ public class SettingsSleepSettingsFragment extends CoreFragment {
                         lockTime = lockTime + (newLockVal1 - oldLockVal1) * 60;
                         break;
                 }
-                setEstimatedBatteryRemaining(unlockTime, lockTime);
-                updateTimeTexts();
+//                setEstimatedBatteryRemaining(unlockTime, lockTime);
+//                updateTimeTexts();
             }
         };
 
+        NumberPicker.OnScrollListener onScrollListener = new NumberPicker.OnScrollListener() {
+            @Override
+            public void onScrollStateChange(NumberPicker view, int scrollState) {
+                if (scrollState == SCROLL_STATE_IDLE) {
+                    if(pickerHandler != null){
+                        pickerHandler.removeCallbacks(pickerRunnable);
+                    }
+                    pickerHandler = new Handler();
+                    pickerHandler.postDelayed(pickerRunnable,300);
+                }
+            }
+        };
+
+        unlockMinutePicker.setOnScrollListener(onScrollListener);
 
         unlockHourPicker.setMinValue(0);
         unlockHourPicker.setMaxValue(99);
@@ -220,35 +260,35 @@ public class SettingsSleepSettingsFragment extends CoreFragment {
         return (seconds - getHourFromSeconds(seconds) * 3600) / 60;
     }
 
-    private void updateTimeTexts() {
-        String lockHour;
-        if (lockHourPicker.getValue() != 0) {
-            lockHour = String.valueOf(getHourFromSeconds(lockTime) + " hours ");
-        } else {
-            lockHour = "";
-        }
-        String lockMinute;
-        if (lockMinutePicker.getValue() != 0) {
-            lockMinute = String.valueOf(getMinutesFromSeconds(lockTime)) + " mins";
-        } else {
-            lockMinute = "";
-        }
-        lockText.setText(lockHour + lockMinute);
-
-        String unlockHour;
-        if (unlockHourPicker.getValue() != 0) {
-            unlockHour = String.valueOf(getHourFromSeconds(unlockTime) + " hours ");
-        } else {
-            unlockHour = "";
-        }
-        String unlockMinute;
-        if (unlockMinutePicker.getValue() != 0) {
-            unlockMinute = String.valueOf(getMinutesFromSeconds(unlockTime) + " mins");
-        } else {
-            unlockMinute = "";
-        }
-        unlockText.setText(unlockHour + unlockMinute);
-    }
+//    private void updateTimeTexts() {
+//        String lockHour;
+//        if (lockHourPicker.getValue() != 0) {
+//            lockHour = String.valueOf(getHourFromSeconds(lockTime) + " hours ");
+//        } else {
+//            lockHour = "";
+//        }
+//        String lockMinute;
+//        if (lockMinutePicker.getValue() != 0) {
+//            lockMinute = String.valueOf(getMinutesFromSeconds(lockTime)) + " mins";
+//        } else {
+//            lockMinute = "";
+//        }
+////        lockText.setText(lockHour + lockMinute);
+//
+//        String unlockHour;
+//        if (unlockHourPicker.getValue() != 0) {
+//            unlockHour = String.valueOf(getHourFromSeconds(unlockTime) + " hours ");
+//        } else {
+//            unlockHour = "";
+//        }
+//        String unlockMinute;
+//        if (unlockMinutePicker.getValue() != 0) {
+//            unlockMinute = String.valueOf(getMinutesFromSeconds(unlockTime) + " mins");
+//        } else {
+//            unlockMinute = "";
+//        }
+////        unlockText.setText(unlockHour + unlockMinute);
+//    }
 
 
     private void setDividerColor(NumberPicker picker, int color) {
@@ -272,25 +312,25 @@ public class SettingsSleepSettingsFragment extends CoreFragment {
         }
     }
 
-    private void setEstimatedBatteryRemaining(int unlock_time, int lock_time) {
-        battery_estimated_days_remaining.setText(linka.getEstimatedBatteryRemaining(unlock_time, lock_time));
-    }
+//    private void setEstimatedBatteryRemaining(int unlock_time, int lock_time) {
+//        battery_estimated_days_remaining.setText(linka.getEstimatedBatteryRemaining(unlock_time, lock_time));
+//    }
 
-    @OnClick(R.id.save)
-    void onSave() {
-        save(unlockTime, lockTime);
-    }
-
-    @OnClick(R.id.reset_to_default)
-    void onDefault() {
-        save(AppDelegate.default_unlock_sleep_time, AppDelegate.default_lock_sleep_time);
-        unlockHourPicker.setValue(AppDelegate.default_unlock_sleep_time / 3600);
-        unlockMinutePicker.setValue(AppDelegate.default_unlock_sleep_time / 60);
-        lockHourPicker.setValue(AppDelegate.default_lock_sleep_time / 3600);
-        lockMinutePicker.setValue(AppDelegate.default_lock_sleep_time / 60);
-        setEstimatedBatteryRemaining(unlockTime, lockTime);
-        updateTimeTexts();
-    }
+//    @OnClick(R.id.save)
+//    void onSave() {
+//        save(unlockTime, lockTime);
+//    }
+//
+//    @OnClick(R.id.reset_to_default)
+//    void onDefault() {
+//        save(AppDelegate.default_unlock_sleep_time, AppDelegate.default_lock_sleep_time);
+//        unlockHourPicker.setValue(AppDelegate.default_unlock_sleep_time / 3600);
+//        unlockMinutePicker.setValue(AppDelegate.default_unlock_sleep_time / 60);
+//        lockHourPicker.setValue(AppDelegate.default_lock_sleep_time / 3600);
+//        lockMinutePicker.setValue(AppDelegate.default_lock_sleep_time / 60);
+////        setEstimatedBatteryRemaining(unlockTime, lockTime);
+////        updateTimeTexts();
+//    }
 
     private void save(int unlock_time, int lock_time) {
         boolean isAllCompleted = true;
@@ -311,14 +351,14 @@ public class SettingsSleepSettingsFragment extends CoreFragment {
         // reset the timer
         SleepNotificationService.getInstance().restartTimer();
 
-        getAppMainActivity().popFragment();
-        new AlertDialog.Builder(getAppMainActivity())
-                .setTitle(_.i(R.string.success))
-                .setMessage(_.i(R.string.sleeping_set))
-                .setNegativeButton(_.i(R.string.ok), null)
-                .show();
-
-        getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
+//        getAppMainActivity().popFragment();
+//        new AlertDialog.Builder(getAppMainActivity())
+//                .setTitle(_.i(R.string.success))
+//                .setMessage(_.i(R.string.sleeping_set))
+//                .setNegativeButton(_.i(R.string.ok), null)
+//                .show();
+//
+//        getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
     }
 
     private void displayErrorMessage() {

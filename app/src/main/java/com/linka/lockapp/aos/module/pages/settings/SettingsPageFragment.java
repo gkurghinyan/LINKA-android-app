@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -39,57 +38,75 @@ import static com.linka.lockapp.aos.module.widget.LocksController.LOCKSCONTROLLE
  */
 public class SettingsPageFragment extends CoreFragment {
 
-
-    @BindView(R.id.row_audible_locking_unlocking)
-    RelativeLayout rowAudibleLockingUnlocking;
-    @BindView(R.id.row_auto_unlocking)
-    RelativeLayout rowAutoUnlocking;
-//    @BindView(R.id.row_stall_override)
-//    LinearLayout rowAutoUnlocking;
     @BindView(R.id.row_phoneless_passcode)
     LinearLayout rowPhonelessPasscode;
-    @BindView(R.id.settings_phoneless_pass_code)
-    ImageView settingsPhonelessPassCode;
-    @BindView(R.id.row_tamper_siren)
-    RelativeLayout rowTamperSiren;
-    @BindView(R.id.row_tamper_sensitivity)
-    LinearLayout rowTamperSensitivity;
-    @BindView(R.id.row_sleep_settings)
-    LinearLayout rowSleepSettings;
+    @BindView(R.id.text_phoneless_passcode)
+    TextView textPhonelessPasscode;
+
+    @BindView(R.id.row_quick_lock)
+    RelativeLayout rowQuickLock;
+    @BindView(R.id.text_quick_lock)
+    TextView textQuickLock;
+    @BindView(R.id.switch_quick_lock)
+    Switch switchQuickLock;
+
     @BindView(R.id.row_edit_name)
     EditText editName;
-//    @BindView(R.id.row_mac_id)
-//    LinearLayout rowMacId;
 
-    @BindView(R.id.settings_audible_locking_unlocking)
-    Switch switchAudibleLockingUnlocking;
+    @BindView(R.id.row_auto_unlocking)
+    RelativeLayout rowAutoUnlocking;
+    @BindView(R.id.text_auto_unlock)
+    TextView textAutoUnlock;
     @BindView(R.id.settings_auto_unlocking)
     Switch switchAutoUnlocking;
+
     @BindView(R.id.row_radius_settings)
     LinearLayout rowRadiusSettings;
-//    @BindView(R.id.settings_stall_override)
-//    Switch switchStallOverride;
+    @BindView(R.id.text_radius_settings)
+    TextView textRadiusSettings;
+
+    @BindView(R.id.row_tamper_siren)
+    RelativeLayout rowTamperSiren;
+    @BindView(R.id.text_tamper_siren)
+    TextView textTamperSiren;
     @BindView(R.id.settings_tamper_siren)
     Switch switchTamperSiren;
 
-    Linka linka;
-/*
-    @InjectView(R.id.settings_revoke)
-    ImageView settingsRevoke;
-    @InjectView(R.id.row_revoke)
-    LinearLayout rowRevoke;*/
+    @BindView(R.id.row_tamper_sensitivity)
+    LinearLayout rowTamperSensitivity;
+    @BindView(R.id.text_tamper_sensitivity)
+    TextView textTamperSensitivity;
+
+    @BindView(R.id.row_audible_locking_unlocking)
+    RelativeLayout rowAudibleLockingUnlocking;
+    @BindView(R.id.text_audible_locking_unlocking)
+    TextView textAudibleLockingUnlocking;
+    @BindView(R.id.settings_audible_locking_unlocking)
+    Switch switchAudibleLockingUnlocking;
+
+    @BindView(R.id.row_sleep_settings)
+    LinearLayout rowSleepSettings;
+    @BindView(R.id.text_sleep_settings)
+    TextView textSleepSettings;
+
     @BindView(R.id.row_firmware_version)
     LinearLayout rowFirmwareVersion;
-    @BindView(R.id.firmware_version)
-    TextView firmwareVersion;
     @BindView(R.id.firmware_text)
     TextView firmwareText;
-//    @BindView(R.id.mac_id)
-//    TextView macId;
-//    @BindView(R.id.settings_reset_factory_settings)
-//    ImageView settingsResetFactorySettings;
+    @BindView(R.id.firmware_version)
+    TextView firmwareVersion;
+
     @BindView(R.id.row_reset_to_factory_settings)
     LinearLayout rowResetToFactorySettings;
+    @BindView(R.id.text_reset_to_factory_settings)
+    TextView textResetToFactorySettings;
+
+    @BindView(R.id.row_remove_lock)
+    LinearLayout rowRemoveLock;
+    @BindView(R.id.text_remove_lock)
+    TextView textRemoveLock;
+
+    Linka linka;
 
     RevocationControllerV2 revocationController = new RevocationControllerV2();
 
@@ -146,59 +163,6 @@ public class SettingsPageFragment extends CoreFragment {
 
 
     void init() {
-        refreshDisplay();
-    }
-
-
-    Switch.OnCheckedChangeListener settings_audible_locking_unlocking = new Switch.OnCheckedChangeListener() {
-        @Override
-        public void onCheckedChanged(Switch view, boolean checked) {
-            if (!doNotSendWrite)
-            {
-                linka.settings_audible_locking_unlocking = checked;
-                LockController lockController = LocksController.getInstance().getLockController();
-                if (lockController.doSetAudibility(checked)) {
-                    linka.saveSettings();
-                }
-            }
-            else
-            {
-                linka.settings_audible_locking_unlocking = checked;
-                linka.saveSettings();
-            }
-        }
-    };
-
-    Switch.OnCheckedChangeListener settings_tamper_siren = new Switch.OnCheckedChangeListener() {
-        @Override
-        public void onCheckedChanged(Switch view, boolean checked) {
-            if (!doNotSendWrite)
-            {
-                linka.settings_tamper_siren = checked;
-                LockController lockController = LocksController.getInstance().getLockController();
-                if (lockController.doSetTamperAlert(checked)) {
-                    linka.saveSettings();
-                }
-            }
-            else
-            {
-                linka.settings_tamper_siren = checked;
-                linka.saveSettings();
-            }
-        }
-    };
-
-
-    boolean doNotSendWrite = false;
-
-    void refreshDisplay() {
-        doNotSendWrite = true;
-        switchAudibleLockingUnlocking.setChecked(linka.settings_audible_locking_unlocking);
-        switchTamperSiren.setChecked(linka.settings_tamper_siren);
-        switchAutoUnlocking.setChecked(linka.settings_auto_unlocking);
-        setRadiusLinearVisibility(linka.settings_auto_unlocking);
-        doNotSendWrite = false;
-
         switchAudibleLockingUnlocking.setOnCheckedChangeListener(settings_audible_locking_unlocking);
 
         switchTamperSiren.setOnCheckedChangeListener(settings_tamper_siren);
@@ -211,6 +175,54 @@ public class SettingsPageFragment extends CoreFragment {
                 linka.saveSettings();
             }
         });
+        refreshDisplay();
+    }
+
+
+    Switch.OnCheckedChangeListener settings_audible_locking_unlocking = new Switch.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(Switch view, boolean checked) {
+            if (!doNotSendWrite) {
+                linka.settings_audible_locking_unlocking = checked;
+                LockController lockController = LocksController.getInstance().getLockController();
+                if (lockController.doSetAudibility(checked)) {
+                    linka.saveSettings();
+                }
+            } else {
+                linka.settings_audible_locking_unlocking = checked;
+                linka.saveSettings();
+            }
+        }
+    };
+
+    Switch.OnCheckedChangeListener settings_tamper_siren = new Switch.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(Switch view, boolean checked) {
+            if (!doNotSendWrite) {
+                linka.settings_tamper_siren = checked;
+                LockController lockController = LocksController.getInstance().getLockController();
+                if (lockController.doSetTamperAlert(checked)) {
+                    linka.saveSettings();
+                }
+            } else {
+                linka.settings_tamper_siren = checked;
+                linka.saveSettings();
+            }
+            setTamperSensitivityVisibility(checked);
+        }
+    };
+
+
+    boolean doNotSendWrite = false;
+
+    void refreshDisplay() {
+        doNotSendWrite = true;
+        switchAudibleLockingUnlocking.setChecked(linka.settings_audible_locking_unlocking);
+        switchTamperSiren.setChecked(linka.settings_tamper_siren);
+        switchAutoUnlocking.setChecked(linka.settings_auto_unlocking);
+        setRadiusLinearVisibility(linka.settings_auto_unlocking);
+        setTamperSensitivityVisibility(linka.settings_tamper_siren);
+        doNotSendWrite = false;
 
 //        switchStallOverride.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener() {
 //            @Override
@@ -263,20 +275,13 @@ public class SettingsPageFragment extends CoreFragment {
         LockController lockController = LocksController.getInstance().getLockController();
         String ver = lockController.lockControllerBundle.getFwVersionNumber();
         if (!ver.equals("")) {
-            if (ver.equals("0.76"))
-            {
+            if (ver.equals("0.76")) {
                 firmwareVersion.setText("1.0");
-            }
-            else if (ver.equals("0.77"))
-            {
+            } else if (ver.equals("0.77")) {
                 firmwareVersion.setText("1.1");
-            }
-            else if (ver.equals("0.83"))
-            {
+            } else if (ver.equals("0.83")) {
                 firmwareVersion.setText("1.2");
-            }
-            else
-            {
+            } else {
                 firmwareVersion.setText(ver);
             }
         } else {
@@ -285,121 +290,115 @@ public class SettingsPageFragment extends CoreFragment {
 
 //        macId.setText(linka.lock_mac_address);
 
-        if(isAdmin && linka.isLockSettled) {
+        if (isAdmin && linka.isLockSettled) {
             //Set PAC values into settings page
-            if(linka.pac == 0 || linka.pac == 1234) {
-                if(!lockController.hasReadPac) {
+            if (linka.pac == 0 || linka.pac == 1234) {
+                if (!lockController.hasReadPac) {
                     lockController.doReadPAC();
                 }
-            }else {
-//                777777777777777777777777777
             }
         }
-        else {
-//           777777777777777777777777777
-        }
 
-        //if (linka != null && linka.isConnected && linka.isLockSettled && isAdmin) {
-         if(true){
-            rowPhonelessPasscode.setAlpha(1.0f);
+        if (linka != null && linka.isConnected && linka.isLockSettled && isAdmin) {
+            int color = getResources().getColor(R.color.linka_blue);
+
             rowPhonelessPasscode.setClickable(true);
+            textPhonelessPasscode.setTextColor(color);
+
+            switchQuickLock.setClickable(false);
+            switchQuickLock.setAlpha(0.4f);
+
             editName.setAlpha(1.0f);
             editName.setEnabled(true);
             editName.setText(linka.getName());
-            rowTamperSensitivity.setAlpha(1.0f);
-            rowTamperSensitivity.setClickable(true);
-            rowSleepSettings.setAlpha(1.0f);
-            rowSleepSettings.setClickable(true);
-            settingsPhonelessPassCode.setAlpha(1.0f);
-            settingsPhonelessPassCode.setClickable(true);
-            switchAudibleLockingUnlocking.setEnabled(true);
-            switchAudibleLockingUnlocking.setAlpha(1.0f);
-            rowAudibleLockingUnlocking.setAlpha(1.0f);
-            switchTamperSiren.setEnabled(true);
-            switchTamperSiren.setAlpha(1.0f);
-            rowTamperSiren.setAlpha(1.0f);
-            switchAutoUnlocking.setEnabled(true);
+
+            textAutoUnlock.setTextColor(color);
+            switchAutoUnlocking.setClickable(true);
             switchAutoUnlocking.setAlpha(1.0f);
-            setRadiusLinearVisibility(switchAutoUnlocking.isChecked());
-//            switchStallOverride.setEnabled(true);
-//            switchStallOverride.setAlpha(1.0f);
-            rowAutoUnlocking.setAlpha(1.0f);
+
+            textTamperSiren.setTextColor(color);
+            switchTamperSiren.setClickable(true);
+            switchTamperSiren.setAlpha(1.0f);
+
+            textAudibleLockingUnlocking.setTextColor(color);
+            switchAudibleLockingUnlocking.setClickable(true);
+            switchAudibleLockingUnlocking.setAlpha(1.0f);
+
+            textSleepSettings.setTextColor(color);
+            rowSleepSettings.setClickable(true);
+
+            textResetToFactorySettings.setTextColor(color);
             rowResetToFactorySettings.setClickable(true);
-            rowResetToFactorySettings.setAlpha(1.0f);
-  //          rowRevoke.setClickable(true);
-//            rowRevoke.setAlpha(1.0f);
+
+            textRemoveLock.setTextColor(getResources().getColor(R.color.red));
+            rowRemoveLock.setClickable(true);
 
             firmwareText.setText(getString(R.string.firmware_version));
             firmwareText.setTextColor(getResources().getColor(R.color.search_text));
             rowFirmwareVersion.setClickable(false);
 
             String no = lockController.lockControllerBundle.getFwVersionNumber();
-            if (true)
-            {
+            if (true) {
                 firmwareText.setText(getString(R.string.firmware_update_available));
                 firmwareText.setTextColor(getResources().getColor(R.color.red));
                 rowFirmwareVersion.setClickable(true);
-
             }
 
-            if (AppDelegate.shouldAlwaysEnableFwUpgradeButton)
-            {
+            if (AppDelegate.shouldAlwaysEnableFwUpgradeButton) {
                 firmwareText.setText(getString(R.string.firmware_update_available));
                 firmwareText.setTextColor(getResources().getColor(R.color.red));
                 rowFirmwareVersion.setClickable(true);
             }
 
         } else {
+            int color = getResources().getColor(R.color.search_text);
 
-            rowPhonelessPasscode.setAlpha(0.35f);
             rowPhonelessPasscode.setClickable(false);
-            editName.setAlpha(0.35f);
-            editName.setEnabled(false);
-            editName.setText("");
-            rowTamperSensitivity.setAlpha(0.35f);
-            rowTamperSensitivity.setClickable(false);
-            rowSleepSettings.setAlpha(0.35f);
-            rowSleepSettings.setClickable(false);
-            settingsPhonelessPassCode.setAlpha(0.35f);
-            settingsPhonelessPassCode.setClickable(false);
-            switchAudibleLockingUnlocking.setEnabled(false);
-            switchAudibleLockingUnlocking.setAlpha(0.35f);
-            rowAudibleLockingUnlocking.setAlpha(0.35f);
-            switchTamperSiren.setEnabled(false);
-            switchTamperSiren.setAlpha(0.35f);
-            rowTamperSiren.setAlpha(0.35f);
-            switchAutoUnlocking.setEnabled(false);
-            switchAutoUnlocking.setAlpha(0.35f);
-            setRadiusLinearVisibility(false);
-//            switchStallOverride.setEnabled(false);
-//            switchStallOverride.setAlpha(0.35f);
-            rowAutoUnlocking.setAlpha(0.35f);
-            rowResetToFactorySettings.setAlpha(0.35f);
-            rowResetToFactorySettings.setClickable(false);
-    //        rowRevoke.setAlpha(0.35f);
-      //      rowRevoke.setClickable(false);
+            textPhonelessPasscode.setTextColor(color);
 
-             firmwareText.setText(getString(R.string.firmware_version));
-             firmwareText.setTextColor(getResources().getColor(R.color.search_text));
-             rowFirmwareVersion.setClickable(false);
+            switchQuickLock.setClickable(false);
+            switchQuickLock.setAlpha(0.4f);
+
+            editName.setAlpha(1.0f);
+            editName.setEnabled(false);
+            editName.setText(linka.getName());
+
+            textAutoUnlock.setTextColor(color);
+            switchAutoUnlocking.setClickable(false);
+            switchAutoUnlocking.setAlpha(0.4f);
+
+            textTamperSiren.setTextColor(color);
+            switchTamperSiren.setClickable(false);
+            switchTamperSiren.setAlpha(0.4f);
+
+            textAudibleLockingUnlocking.setTextColor(color);
+            switchAudibleLockingUnlocking.setClickable(false);
+            switchAudibleLockingUnlocking.setAlpha(0.4f);
+
+            textSleepSettings.setTextColor(color);
+            rowSleepSettings.setClickable(false);
+
+            textResetToFactorySettings.setTextColor(color);
+            rowResetToFactorySettings.setClickable(false);
+
+            textRemoveLock.setTextColor(color);
+            rowRemoveLock.setClickable(false);
+
+            firmwareText.setText(getString(R.string.firmware_version));
+            firmwareText.setTextColor(getResources().getColor(R.color.search_text));
+            rowFirmwareVersion.setEnabled(false);
         }
 
-//        fieldLockName.setText(linka.getName());
-//        77777777777
-
-        switchAudibleLockingUnlocking.setChecked(linka.settings_audible_locking_unlocking);
-        switchTamperSiren.setChecked(linka.settings_tamper_siren);
-        switchAutoUnlocking.setChecked(linka.settings_auto_unlocking);
-        setRadiusLinearVisibility(linka.settings_auto_unlocking);
+//        switchAudibleLockingUnlocking.setChecked(linka.settings_audible_locking_unlocking);
+//        switchTamperSiren.setChecked(linka.settings_tamper_siren);
+//        switchAutoUnlocking.setChecked(linka.settings_auto_unlocking);
+//        setRadiusLinearVisibility(linka.settings_auto_unlocking);
 
 
         if (linka != null && !linka.isUnlocked()) {
-       //     rowRevoke.setAlpha(0.35f);
-            rowResetToFactorySettings.setAlpha(0.35f);
-         //   rowRevoke.setClickable(false);
+            rowRemoveLock.setClickable(false);
             rowResetToFactorySettings.setClickable(false);
-
-            rowFirmwareVersion.setEnabled(false);
+            rowFirmwareVersion.setClickable(false);
         }
     }
 
@@ -432,7 +431,7 @@ public class SettingsPageFragment extends CoreFragment {
 
     @OnClick(R.id.row_sleep_settings)
     void OnClick_row_sleep_settings() {
-        getAppMainActivity().pushFragment(SettingsSleepSettingsFragment.newInstance(linka));
+        getAppMainActivity().pushFragment(SettingsBatteryFragment.newInstance(linka));
     }
 
     @OnClick(R.id.row_tamper_siren)
@@ -457,8 +456,8 @@ public class SettingsPageFragment extends CoreFragment {
     }
 
     @OnClick(R.id.row_radius_settings)
-    void onClick_row_radius_settings(){
-        getAppMainActivity().curFragmentCount ++;
+    void onClick_row_radius_settings() {
+        getAppMainActivity().curFragmentCount++;
         getActivity().getSupportFragmentManager().beginTransaction()
                 .addToBackStack(null)
                 .replace(R.id.settings_page_root, CheckRadiusFragment.newInstance(linka))
@@ -470,8 +469,8 @@ public class SettingsPageFragment extends CoreFragment {
 
 
 //            DfuManagerPageFragment fragment = DfuManagerPageFragment.newInstance(linka);
-        AutoUpdateFragment fragment = AutoUpdateFragment.newInstance(linka,AutoUpdateFragment.SETTINGS);
-            getAppMainActivity().pushFragment(fragment);
+        AutoUpdateFragment fragment = AutoUpdateFragment.newInstance(linka, AutoUpdateFragment.SETTINGS);
+        getAppMainActivity().pushFragment(fragment);
 
     }
 
@@ -506,13 +505,24 @@ public class SettingsPageFragment extends CoreFragment {
         }
     }
 
-    private void setRadiusLinearVisibility(boolean visibility){
-        if(visibility){
-            rowRadiusSettings.setEnabled(true);
-            rowRadiusSettings.setAlpha(1.0f);
-        }else {
-            rowRadiusSettings.setEnabled(false);
-            rowRadiusSettings.setAlpha(0.35f);
+    private void setRadiusLinearVisibility(boolean visibility) {
+        if (visibility) {
+            textRadiusSettings.setTextColor(getResources().getColor(R.color.linka_blue));
+            rowRadiusSettings.setClickable(true);
+        } else {
+            textRadiusSettings.setTextColor(getResources().getColor(R.color.search_text));
+            rowRadiusSettings.setClickable(false);
         }
     }
+
+    private void setTamperSensitivityVisibility(boolean visibility){
+        if(visibility){
+            textTamperSensitivity.setTextColor(getResources().getColor(R.color.linka_blue));
+            rowTamperSensitivity.setClickable(true);
+        }else {
+            textTamperSensitivity.setTextColor(getResources().getColor(R.color.search_text));
+            rowTamperSensitivity.setClickable(false);
+        }
+    }
+
 }

@@ -407,11 +407,11 @@ public class AppMainActivity extends CoreActivity {
                 Fragment fragment = null;
 
                 if(getIntent().getBooleanExtra(Constants.IS_IT_OPEN_FROM_NOTIFICATION,false)){
-                    fragment = MainTabBarPageFragment.newInstance(LinkaNotificationSettings.get_latest_linka());
+                    fragment = MainTabBarPageFragment.newInstance(LinkaNotificationSettings.get_latest_linka(),MainTabBarPageFragment.LOCK_SCREEN);
                 }else {
                     switch (Prefs.getInt(Constants.SHOWING_FRAGMENT, Constants.LAUNCHER_FRAGMENT)) {
                         case Constants.LAUNCHER_FRAGMENT:
-                            fragment = MainTabBarPageFragment.newInstance(LinkaNotificationSettings.get_latest_linka());
+                            fragment = MainTabBarPageFragment.newInstance(LinkaNotificationSettings.get_latest_linka(),MainTabBarPageFragment.LOCK_SCREEN);
                             break;
                         case Constants.SET_NAME_FRAGMENT:
                             fragment = SetupLinka3.newInstance(SetupLinka3.WALKTHROUGH);
@@ -507,7 +507,7 @@ public class AppMainActivity extends CoreActivity {
 
     public void gotoLinka(Linka linka) {
         saveLatestLinka(linka);
-        drawerFragment = MainTabBarPageFragment.newInstance(linka);
+        drawerFragment = MainTabBarPageFragment.newInstance(linka,MainTabBarPageFragment.LOCK_SCREEN);
         drawerLayout.closeDrawers();
 //        setFragment(fragment);
     }
@@ -829,7 +829,7 @@ public class AppMainActivity extends CoreActivity {
             drawerFragment = SetupLinka1.newInstance();
 //            pushFragment(fragment);
         } else {
-            drawerFragment = MainTabBarPageFragment.newInstance(LinkaNotificationSettings.get_latest_linka());
+            drawerFragment = MainTabBarPageFragment.newInstance(LinkaNotificationSettings.get_latest_linka(),MainTabBarPageFragment.LOCK_SCREEN);
         }
         drawerLayout.closeDrawers();
     }

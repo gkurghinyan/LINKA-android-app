@@ -62,6 +62,11 @@ import retrofit2.Response;
  */
 public class MainTabBarPageFragment extends CoreFragment {
     public static final String CLOSE_PAGES_IN_USERS_SCREEN = "ClosePagesInUsersScreen";
+    private static final String SCREEN_ARGUMENT = "ScreenArgument";
+    public static final int LOCK_SCREEN = 0;
+    public static final int USER_SCREEN = 1;
+    public static final int NOTIFICATION_SCREEN = 2;
+    public static final int SETTING_SCREEN = 3;
 
     @BindView(R.id.viewPager)
     ToggleSwipeableViewPager viewPager;
@@ -90,10 +95,11 @@ public class MainTabBarPageFragment extends CoreFragment {
 
     public boolean awaitsForLinkaSetPasscode = true;
 
-    public static MainTabBarPageFragment newInstance(Linka linka) {
+    public static MainTabBarPageFragment newInstance(Linka linka,int screen) {
         Bundle bundle = new Bundle();
         MainTabBarPageFragment fragment = new MainTabBarPageFragment();
         bundle.putSerializable("linka", linka);
+        bundle.putInt(SCREEN_ARGUMENT,screen);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -126,6 +132,7 @@ public class MainTabBarPageFragment extends CoreFragment {
                 } else {
                     init(savedInstanceState);
                 }
+                currentPosition = getArguments().getInt(SCREEN_ARGUMENT);
             } else if (savedInstanceState != null && savedInstanceState.getLong("linka_id", 0) != 0) {
                 linka = Linka.getLinkaById(savedInstanceState.getLong("linka_id", 0));
                 init(savedInstanceState);
@@ -145,6 +152,7 @@ public class MainTabBarPageFragment extends CoreFragment {
                 changeButtonsState(false, false, false, true);
                 break;
         }
+        viewPager.setCurrentItem(currentPosition);
     }
 
     @Override

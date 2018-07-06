@@ -523,4 +523,6 @@
     <string name="firmware_update_available">Firmware Update Available</string>
     <string name="account">account</string>
     <string name="account_settings">Account Settings</string>
+    <string name="save_battery_by_enabling_linka">Save battery by enabling LINKA to enter sleep mode when not active. To wake LINKA, simply press the Power button. Note: Auto-unlock will not work in sleep mode.</string>
+    <string name="linka_will_automatically_sleep">LINKA will automatically go to sleep within the time selected above. To wake LINKA, simply press the Power button. NOTE:Auto-unlock will not work in sleep mode.</string>
 </resources>

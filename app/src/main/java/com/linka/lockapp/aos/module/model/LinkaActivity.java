@@ -142,10 +142,10 @@ public class LinkaActivity extends Model implements Serializable {
     public String getFormattedDate() {
         if (timestamp != null && !timestamp.equals("")) {
             Date date = new Date(Long.parseLong(timestamp));
-            SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy - hh:mm aaa", Locale.ENGLISH);
+            SimpleDateFormat format = new SimpleDateFormat("MMM dd', ' yyyy', 'h:mm a", Locale.ENGLISH);
             String date_string = format.format(date);
             String time = date_string;
-            time = time.toLowerCase();
+//            time = time.toLowerCase();
             return time;
         }
         return "";
