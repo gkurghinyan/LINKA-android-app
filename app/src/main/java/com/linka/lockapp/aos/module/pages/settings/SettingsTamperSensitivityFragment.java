@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.core.CoreFragment;
@@ -16,13 +17,33 @@ import com.linka.lockapp.aos.module.widget.LocksController;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
+import butterknife.Unbinder;
 
 
 public class SettingsTamperSensitivityFragment extends CoreFragment {
 
     @BindView(R.id.tamper_slider)
     SeekBar tamper_slider;
+
+    @BindView(R.id.high)
+    TextView high;
+
+    @BindView(R.id.high_text)
+    TextView highText;
+
+    @BindView(R.id.medium)
+    TextView medium;
+
+    @BindView(R.id.medium_text)
+    TextView mediumText;
+
+    @BindView(R.id.low)
+    TextView low;
+
+    @BindView(R.id.low_text)
+    TextView lowText;
+
+    private Unbinder unbinder;
 
     private TamperSensitivity mTamperSensitivity;
 
@@ -44,7 +65,7 @@ public class SettingsTamperSensitivityFragment extends CoreFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_settings_tamper_sensitivity, container, false);
-        ButterKnife.bind(this, rootView);
+        unbinder = ButterKnife.bind(this, rootView);
 
         return rootView;
     }
@@ -60,47 +81,96 @@ public class SettingsTamperSensitivityFragment extends CoreFragment {
             }
             init();
         }
+        getAppMainActivity().setBackIconVisible(true);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        getAppMainActivity().setBackIconVisible(false);
+        unbinder.unbind();
     }
 
     void init() {
+        tamper_slider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                setTextsVisibility(progress);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                save(seekBar.getProgress());
+            }
+        });
 
         TamperSensitivity linkSavedMode = TamperSensitivity.lookUpValue(linka.settings_alarm_delay,
                 linka.settings_alarm_time, linka.settings_bump_threshold, linka.settings_jostle_ms,
                 linka.settings_roll_alrm_deg, linka.settings_pitch_alrm_deg);
 
-        if(linkSavedMode.equals(TamperSensitivity.QUIET_GARAGE)){
+        if (linkSavedMode.equals(TamperSensitivity.QUIET_GARAGE)) {
             tamper_slider.setProgress(2);
+            setTextsVisibility(2);
             return;
         }
 
-        if(linkSavedMode.equals(TamperSensitivity.SUBURBAN_NEIGHBORHOOD) || linkSavedMode.equals(TamperSensitivity.DEFAULT)){
+        if (linkSavedMode.equals(TamperSensitivity.SUBURBAN_NEIGHBORHOOD) || linkSavedMode.equals(TamperSensitivity.DEFAULT)) {
             tamper_slider.setProgress(1);
+            setTextsVisibility(1);
             return;
         }
 
-        if(linkSavedMode.equals(TamperSensitivity.METROPOLIAN_HIGH_TRAFFIC)){
+        if (linkSavedMode.equals(TamperSensitivity.METROPOLIAN_HIGH_TRAFFIC)) {
             tamper_slider.setProgress(0);
-            return;
+            setTextsVisibility(0);
         }
 
     }
 
-    @OnClick(R.id.save)
-    void onSave() {
-        save(tamper_slider.getProgress());
+    private void setTextsVisibility(int progress) {
+        high.setVisibility(View.INVISIBLE);
+        highText.setVisibility(View.INVISIBLE);
+        medium.setVisibility(View.INVISIBLE);
+        mediumText.setVisibility(View.INVISIBLE);
+        low.setVisibility(View.INVISIBLE);
+        lowText.setVisibility(View.INVISIBLE);
+        switch (progress) {
+            case 0:
+                high.setVisibility(View.VISIBLE);
+                highText.setVisibility(View.VISIBLE);
+                break;
+            case 1:
+                medium.setVisibility(View.VISIBLE);
+                mediumText.setVisibility(View.VISIBLE);
+                break;
+            case 2:
+                low.setVisibility(View.VISIBLE);
+                lowText.setVisibility(View.VISIBLE);
+                break;
+        }
     }
 
-    @OnClick(R.id.reset_to_default)
-    void onDefault() {
-        tamper_slider.setProgress(1);
-    }
+//    @OnClick(R.id.save)
+//    void onSave() {
+//        save(tamper_slider.getProgress());
+//    }
 
+    //    @OnClick(R.id.reset_to_default)
+//    void onDefault() {
+//        tamper_slider.setProgress(1);
+//    }
+//
     private void save(int slider_position) {
-        if( slider_position == 2){
+        if (slider_position == 2) {
             mTamperSensitivity = TamperSensitivity.QUIET_GARAGE;
-        }else if( slider_position == 1){
+        } else if (slider_position == 1) {
             mTamperSensitivity = TamperSensitivity.SUBURBAN_NEIGHBORHOOD;
-        }else if( slider_position == 0){
+        } else if (slider_position == 0) {
             mTamperSensitivity = TamperSensitivity.METROPOLIAN_HIGH_TRAFFIC;
         }
         // set lock settings
@@ -131,17 +201,10 @@ public class SettingsTamperSensitivityFragment extends CoreFragment {
         //linka.settings_accel_datarate = mTamperSensitivity.accelDatarate;
         linka.saveSettings();
 
-        getAppMainActivity().popFragment();
-        new AlertDialog.Builder(getAppMainActivity())
-                .setTitle(_.i(R.string.success))
-                .setMessage(_.i(R.string.tamper_sensitivity_set))
-                .setNegativeButton(_.i(R.string.ok), null)
-                .show();
 
-        getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
     }
 
-    private void displayErrorMessage(){
+    private void displayErrorMessage() {
         new AlertDialog.Builder(getAppMainActivity())
                 .setTitle(_.i(R.string.fail_to_communicate))
                 .setMessage(_.i(R.string.check_connection))
@@ -150,12 +213,11 @@ public class SettingsTamperSensitivityFragment extends CoreFragment {
     }
 
 
-
     private enum TamperSensitivity {
-        QUIET_GARAGE(5,4,4,5,33,7,7,2),
-        SUBURBAN_NEIGHBORHOOD(6,5,5,5,34,9,9,2),
-        METROPOLIAN_HIGH_TRAFFIC(6,5,6,5,35,11,11,2),
-        DEFAULT(6,5,5,5,35,9,9,2);
+        QUIET_GARAGE(5, 4, 4, 5, 33, 7, 7, 2),
+        SUBURBAN_NEIGHBORHOOD(6, 5, 5, 5, 34, 9, 9, 2),
+        METROPOLIAN_HIGH_TRAFFIC(6, 5, 6, 5, 35, 11, 11, 2),
+        DEFAULT(6, 5, 5, 5, 35, 9, 9, 2);
 
         private int alarmDelay;
         private int alarmTime;
@@ -166,8 +228,8 @@ public class SettingsTamperSensitivityFragment extends CoreFragment {
         private int pitchAlrmDeg;
         //private int accelDatarate;
 
-        private TamperSensitivity(int alarmDelay,int alarmTime,int bumpThreshold,int pulseTap,
-                                    int jostleMs,int rollAlrmDeg,int pitchAlrmDeg,int accelDatarate) {
+        private TamperSensitivity(int alarmDelay, int alarmTime, int bumpThreshold, int pulseTap,
+                                  int jostleMs, int rollAlrmDeg, int pitchAlrmDeg, int accelDatarate) {
             this.alarmDelay = alarmDelay;
             this.alarmTime = alarmTime;
             this.bumpThreshold = bumpThreshold;
@@ -178,35 +240,35 @@ public class SettingsTamperSensitivityFragment extends CoreFragment {
             //this.accelDatarate = accelDatarate;
         }
 
-        public static TamperSensitivity lookUpValue(int alarmDelay,int alarmTime,int bumpThreshold,
-                                                    int jostleMs,int rollAlrmDeg,int pitchAlrmDeg){
-            if(compareValue(TamperSensitivity.METROPOLIAN_HIGH_TRAFFIC, alarmDelay,alarmTime,bumpThreshold,
-                    jostleMs,rollAlrmDeg, pitchAlrmDeg)){
-                return    TamperSensitivity.METROPOLIAN_HIGH_TRAFFIC;
+        public static TamperSensitivity lookUpValue(int alarmDelay, int alarmTime, int bumpThreshold,
+                                                    int jostleMs, int rollAlrmDeg, int pitchAlrmDeg) {
+            if (compareValue(TamperSensitivity.METROPOLIAN_HIGH_TRAFFIC, alarmDelay, alarmTime, bumpThreshold,
+                    jostleMs, rollAlrmDeg, pitchAlrmDeg)) {
+                return TamperSensitivity.METROPOLIAN_HIGH_TRAFFIC;
             }
-            if(compareValue(TamperSensitivity.QUIET_GARAGE, alarmDelay,alarmTime,bumpThreshold,
-                    jostleMs,rollAlrmDeg, pitchAlrmDeg)){
-                return    TamperSensitivity.QUIET_GARAGE;
+            if (compareValue(TamperSensitivity.QUIET_GARAGE, alarmDelay, alarmTime, bumpThreshold,
+                    jostleMs, rollAlrmDeg, pitchAlrmDeg)) {
+                return TamperSensitivity.QUIET_GARAGE;
             }
-            if(compareValue(TamperSensitivity.SUBURBAN_NEIGHBORHOOD, alarmDelay,alarmTime,bumpThreshold,
-                    jostleMs,rollAlrmDeg, pitchAlrmDeg)){
-                return    TamperSensitivity.SUBURBAN_NEIGHBORHOOD;
+            if (compareValue(TamperSensitivity.SUBURBAN_NEIGHBORHOOD, alarmDelay, alarmTime, bumpThreshold,
+                    jostleMs, rollAlrmDeg, pitchAlrmDeg)) {
+                return TamperSensitivity.SUBURBAN_NEIGHBORHOOD;
             }
             return TamperSensitivity.DEFAULT;
         }
 
 
-        private static boolean compareValue(TamperSensitivity tamperSensitivity, int alarmDelay,int alarmTime,int bumpThreshold,
-                                            int jostleMs,int rollAlrmDeg,int pitchAlrmDeg) {
+        private static boolean compareValue(TamperSensitivity tamperSensitivity, int alarmDelay, int alarmTime, int bumpThreshold,
+                                            int jostleMs, int rollAlrmDeg, int pitchAlrmDeg) {
 
             if (//alarmDelay == tamperSensitivity.alarmDelay &&
-                    //alarmTime == tamperSensitivity.alarmTime &&
-                    bumpThreshold == tamperSensitivity.bumpThreshold){
-                    //pulseTap == tamperSensitivity.pulseTap &&
-                    //jostleMs == tamperSensitivity.jostleMs &&
-                    //rollAlrmDeg == tamperSensitivity.rollAlrmDeg &&
-                    //pitchAlrmDeg == tamperSensitivity.pitchAlrmDeg){
-                    //accelDatarate == tamperSensitivity.accelDatarate{
+                //alarmTime == tamperSensitivity.alarmTime &&
+                    bumpThreshold == tamperSensitivity.bumpThreshold) {
+                //pulseTap == tamperSensitivity.pulseTap &&
+                //jostleMs == tamperSensitivity.jostleMs &&
+                //rollAlrmDeg == tamperSensitivity.rollAlrmDeg &&
+                //pitchAlrmDeg == tamperSensitivity.pitchAlrmDeg){
+                //accelDatarate == tamperSensitivity.accelDatarate{
                 return true;
             }
             return false;

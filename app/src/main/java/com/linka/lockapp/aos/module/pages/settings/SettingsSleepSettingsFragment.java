@@ -46,9 +46,11 @@ public class SettingsSleepSettingsFragment extends CoreFragment {
             if(unlockHourPicker != null) {
                 if (unlockHourPicker.getValue() == 0 && unlockMinutePicker.getValue() == 0) {
                     unlockMinutePicker.setValue(1);
+                    unlockTime = 5 * 60;
                 }
                 if (lockHourPicker.getValue() == 0 && lockMinutePicker.getValue() == 0) {
                     lockMinutePicker.setValue(1);
+                    lockTime = 5 * 60;
                 }
             }
             pickerHandler = null;
@@ -115,7 +117,7 @@ public class SettingsSleepSettingsFragment extends CoreFragment {
             pickerHandler.removeCallbacks(pickerRunnable);
             pickerHandler = null;
         }
-        if(unlockTime != 0 && lockTime != 0) {
+        if(unlockTime > 0 && lockTime > 0) {
             save(unlockTime, lockTime);
         }
     }
@@ -148,15 +150,20 @@ public class SettingsSleepSettingsFragment extends CoreFragment {
         //lock
         lockTime = linka.settings_locked_sleep;
 //        lockText.setText(String.valueOf(lockTime));
-        if (getHourFromSeconds(lockTime) != 0) {
+        if (getHourFromSeconds(lockTime) > 0) {
             lockHourPicker.setValue(getHourFromSeconds(lockTime));
         } else {
             lockHourPicker.setValue(0);
         }
-        if (getMinutesFromSeconds(lockTime) != 0) {
+        if (getMinutesFromSeconds(lockTime) > 0) {
             lockMinutePicker.setValue(minutes.get(String.valueOf(getMinutesFromSeconds(lockTime))));
         } else {
-            lockMinutePicker.setValue(0);
+            if(lockHourPicker.getValue() == 0){
+                lockTime = 5 * 60;
+                lockMinutePicker.setValue(1);
+            }else {
+                lockMinutePicker.setValue(0);
+            }
         }
 
         //unlock
@@ -171,6 +178,7 @@ public class SettingsSleepSettingsFragment extends CoreFragment {
             unlockMinutePicker.setValue(minutes.get(String.valueOf(getMinutesFromSeconds(unlockTime))));
         } else {
             if (unlockHourPicker.getValue() == 0) {
+                unlockTime = 5 * 60;
                 unlockMinutePicker.setValue(1);
             } else {
                 unlockMinutePicker.setValue(0);
@@ -227,29 +235,31 @@ public class SettingsSleepSettingsFragment extends CoreFragment {
             }
         };
 
-        unlockMinutePicker.setOnScrollListener(onScrollListener);
-
         unlockHourPicker.setMinValue(0);
         unlockHourPicker.setMaxValue(99);
         setDividerColor(unlockHourPicker, getResources().getColor(R.color.linka_blue));
         unlockHourPicker.setOnValueChangedListener(onValueChangeListener);
+        unlockHourPicker.setOnScrollListener(onScrollListener);
 
         unlockMinutePicker.setMinValue(0);
         unlockMinutePicker.setMaxValue(11);
         unlockMinutePicker.setDisplayedValues(minuteValues);
         setDividerColor(unlockMinutePicker, getResources().getColor(R.color.linka_blue));
         unlockMinutePicker.setOnValueChangedListener(onValueChangeListener);
+        unlockMinutePicker.setOnScrollListener(onScrollListener);
 
         lockHourPicker.setMinValue(0);
         lockHourPicker.setMaxValue(99);
         setDividerColor(lockHourPicker, getResources().getColor(R.color.linka_blue));
         lockHourPicker.setOnValueChangedListener(onValueChangeListener);
+        lockHourPicker.setOnScrollListener(onScrollListener);
 
         lockMinutePicker.setMinValue(0);
         lockMinutePicker.setMaxValue(11);
         lockMinutePicker.setDisplayedValues(minuteValues);
         setDividerColor(lockMinutePicker, getResources().getColor(R.color.linka_blue));
         lockMinutePicker.setOnValueChangedListener(onValueChangeListener);
+        lockMinutePicker.setOnScrollListener(onScrollListener);
     }
 
     private int getHourFromSeconds(int seconds) {
@@ -346,7 +356,7 @@ public class SettingsSleepSettingsFragment extends CoreFragment {
         linka.settings_unlocked_sleep = unlock_time;
 
         //save to local db
-        linka.saveSettings();
+        linka.save();
 
         // reset the timer
         SleepNotificationService.getInstance().restartTimer();

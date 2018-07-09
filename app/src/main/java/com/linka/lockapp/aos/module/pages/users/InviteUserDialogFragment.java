@@ -70,12 +70,6 @@ public class InviteUserDialogFragment extends Fragment {
         emailEdit.getBackground().setColorFilter(getResources().getColor(R.color.linka_white), PorterDuff.Mode.SRC_IN);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-    }
-
     @OnClick(R.id.cancel_button)
     void onCancelClicked(){
         getFragmentManager().popBackStack();

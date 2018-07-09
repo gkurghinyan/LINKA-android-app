@@ -525,4 +525,11 @@
     <string name="account_settings">Account Settings</string>
     <string name="save_battery_by_enabling_linka">Save battery by enabling LINKA to enter sleep mode when not active. To wake LINKA, simply press the Power button. Note: Auto-unlock will not work in sleep mode.</string>
     <string name="linka_will_automatically_sleep">LINKA will automatically go to sleep within the time selected above. To wake LINKA, simply press the Power button. NOTE:Auto-unlock will not work in sleep mode.</string>
+    <string name="sensitivity">Sensitivity</string>
+    <string name="medium">medium</string>
+    <string name="medium_text">For areas with low to medium traffic, like suburbs</string>
+    <string name="high">high</string>
+    <string name="high_text">For areas with zero to low traffic, like garages</string>
+    <string name="low">low</string>
+    <string name="low_text">For areas with high traffic, like cities</string>
 </resources>

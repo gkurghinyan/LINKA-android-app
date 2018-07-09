@@ -293,8 +293,8 @@ public class SharingPageFragment extends CoreFragment {
             }*/
         }
         if (object instanceof String && object.equals(MainTabBarPageFragment.CLOSE_PAGES_IN_USERS_SCREEN)) {
-            if (getFragmentManager().findFragmentById(R.id.users_page_root) != null) {
-                getFragmentManager().popBackStack();
+            if (getActivity().getSupportFragmentManager().findFragmentById(R.id.users_page_root) != null) {
+                getActivity().getSupportFragmentManager().popBackStack();
             }
         }
         if (object instanceof String && object.equals(REFRESH_LIST_OF_USERS)) {

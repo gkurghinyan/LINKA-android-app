@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.linka.lockapp.aos.AppDelegate;
@@ -37,6 +38,9 @@ import static com.linka.lockapp.aos.module.widget.LocksController.LOCKSCONTROLLE
  * Created by Vanson on 17/2/16.
  */
 public class SettingsPageFragment extends CoreFragment {
+
+    @BindView(R.id.scroll_view)
+    ScrollView scrollView;
 
     @BindView(R.id.row_phoneless_passcode)
     LinearLayout rowPhonelessPasscode;
@@ -150,6 +154,15 @@ public class SettingsPageFragment extends CoreFragment {
                 LockController lockController = LocksController.getInstance().getLockController();
                 revocationController.implement(getAppMainActivity(), linka, lockController);
             }
+            if(savedInstanceState != null && savedInstanceState.getIntArray("position") != null){
+                final int[] array = savedInstanceState.getIntArray("position");
+                scrollView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        scrollView.scrollTo(array[0],array[1]);
+                    }
+                });
+            }
             init();
         }
     }
@@ -159,6 +172,14 @@ public class SettingsPageFragment extends CoreFragment {
         super.onDestroyView();
         unbinder.unbind();
         revocationController.onPause();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (scrollView != null) {
+            outState.putIntArray("position", new int[]{scrollView.getScrollX(),scrollView.getScrollY()});
+        }
     }
 
 

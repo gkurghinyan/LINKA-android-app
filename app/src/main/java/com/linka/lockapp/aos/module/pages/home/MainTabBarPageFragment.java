@@ -95,11 +95,11 @@ public class MainTabBarPageFragment extends CoreFragment {
 
     public boolean awaitsForLinkaSetPasscode = true;
 
-    public static MainTabBarPageFragment newInstance(Linka linka,int screen) {
+    public static MainTabBarPageFragment newInstance(Linka linka, int screen) {
         Bundle bundle = new Bundle();
         MainTabBarPageFragment fragment = new MainTabBarPageFragment();
         bundle.putSerializable("linka", linka);
-        bundle.putInt(SCREEN_ARGUMENT,screen);
+        bundle.putInt(SCREEN_ARGUMENT, screen);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -132,27 +132,16 @@ public class MainTabBarPageFragment extends CoreFragment {
                 } else {
                     init(savedInstanceState);
                 }
-                currentPosition = getArguments().getInt(SCREEN_ARGUMENT);
+                if(getArguments().getInt(SCREEN_ARGUMENT) != -1) {
+                    currentPosition = getArguments().getInt(SCREEN_ARGUMENT);
+                    getArguments().putInt(SCREEN_ARGUMENT,-1);
+                }
             } else if (savedInstanceState != null && savedInstanceState.getLong("linka_id", 0) != 0) {
                 linka = Linka.getLinkaById(savedInstanceState.getLong("linka_id", 0));
                 init(savedInstanceState);
             }
         }
-        switch (currentPosition) {
-            case 0:
-                changeButtonsState(true, false, false, false);
-                break;
-            case 1:
-                changeButtonsState(false, true, false, false);
-                break;
-            case 2:
-                changeButtonsState(false, false, true, false);
-                break;
-            case 3:
-                changeButtonsState(false, false, false, true);
-                break;
-        }
-        viewPager.setCurrentItem(currentPosition);
+//        viewPager.setCurrentItem(currentPosition);
     }
 
     @Override
@@ -169,11 +158,11 @@ public class MainTabBarPageFragment extends CoreFragment {
         unbinder.unbind();
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        currentPosition = 0;
-    }
+//    @Override
+//    public void onDestroy() {
+//        super.onDestroy();
+//        currentPosition = 0;
+//    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -184,6 +173,7 @@ public class MainTabBarPageFragment extends CoreFragment {
         if (linka != null) {
             outState.putLong("linka_id", linka.getId());
         }
+        outState.putInt("current_position", currentPosition + 1);
     }
 
     List<Notification> notifications = new ArrayList<>();
@@ -197,6 +187,10 @@ public class MainTabBarPageFragment extends CoreFragment {
                 Parcelable ss = savedInstanceState.getParcelable("ss");
                 viewPager.onRestoreInstanceState(ss);
             }
+        }
+
+        if(savedInstanceState != null && savedInstanceState.getInt("current_position") != 0){
+            currentPosition = savedInstanceState.getInt("current_position") - 1;
         }
 
         viewPager.isSwipable = false;
@@ -219,8 +213,25 @@ public class MainTabBarPageFragment extends CoreFragment {
 
         if (adapter != null) {
             viewPager.setAdapter(adapter);
-            viewPager.setCurrentItem(0, false); //Circle view is default
-            t1.setSelected(true);
+            viewPager.setCurrentItem(currentPosition, false); //Circle view is default
+            switch (currentPosition){
+                case 0:
+                    t1.setSelected(true);
+                    changeButtonsState(true,false,false,false);
+                    break;
+                case 1:
+                    t2.setSelected(true);
+                    changeButtonsState(false,true,false,false);
+                    break;
+                case 2:
+                    t3.setSelected(true);
+                    changeButtonsState(false,false,true,false);
+                    break;
+                case 3:
+                    t4.setSelected(true);
+                    changeButtonsState(false,false,false,true);
+                    break;
+            }
 
             getAppMainActivity().onChangeFragment(getSelectedPageFragment(viewPager, adapter));
 
@@ -243,7 +254,7 @@ public class MainTabBarPageFragment extends CoreFragment {
                     }
                     if (position == 1) {
                         t2.setSelected(true);
-                    }else {
+                    } else {
                         if (getActivity().getSupportFragmentManager().findFragmentById(R.id.users_page_root) instanceof InviteUserDialogFragment) {
                             getAppMainActivity().popFragment();
                         }

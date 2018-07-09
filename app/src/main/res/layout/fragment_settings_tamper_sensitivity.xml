@@ -1,198 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.2" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.8" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.58" />
+
+    <TextView
+        android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="25dp"
-        android:paddingBottom="25dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
+        android:layout_marginTop="@dimen/margin_dx"
+        android:gravity="center"
+        android:text="@string/sensitivity"
+        android:textColor="@color/linka_blue"
+        android:textSize="@dimen/text_size_normal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <com.linka.lockapp.aos.module.widget.LinkaTextView
-            android:id="@+id/linkaTextViewRegular"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/tamper_sensitivity_desc"
-            android:textColor="@color/linka_gray"
-            android:textSize="18sp" />
+    <TextView
+        android:id="@+id/high"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/high"
+        android:textAllCaps="true"
+        android:textColor="@color/search_text"
+        android:textSize="@dimen/text_size_xm"
+        app:layout_constraintStart_toStartOf="parent"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="@id/guideline"
+        app:layout_constraintEnd_toEndOf="@id/guideline3"
+        app:layout_constraintTop_toTopOf="@id/guideline"
+        android:visibility="invisible"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="15dp"
-            android:orientation="vertical">
+    <TextView
+        android:id="@+id/high_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/high_text"
+        android:textColor="@color/search_text"
+        android:textSize="@dimen/text_size_mm"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:gravity="center"
+        android:layout_marginEnd="@dimen/margin"
+        app:layout_constraintBottom_toBottomOf="@id/guideline"
+        app:layout_constraintStart_toStartOf="@id/guideline4"
+        app:layout_constraintTop_toTopOf="@id/guideline"
+        android:visibility="invisible"/>
 
-            <SeekBar
-                style="android:style/Theme.Holo.Light.DarkActionBar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="20dp"
-                android:paddingBottom="20dp"
-                android:max="2"
-                android:progress="1"
-                android:thumbTint="@color/linka_blue"
-                android:progressTint="@color/linka_blue"
-                android:id="@+id/tamper_slider" />
+    <TextView
+        android:id="@+id/medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/medium"
+        android:textAllCaps="true"
+        android:textColor="@color/search_text"
+        android:textSize="@dimen/text_size_xm"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/guideline1"
+        app:layout_constraintEnd_toEndOf="@id/guideline3"
+        app:layout_constraintTop_toTopOf="@id/guideline1"
+        android:visibility="invisible"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+    <TextView
+        android:id="@+id/medium_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/medium_text"
+        android:textColor="@color/search_text"
+        android:textSize="@dimen/text_size_mm"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:gravity="center"
+        android:layout_marginEnd="@dimen/margin"
+        app:layout_constraintBottom_toBottomOf="@id/guideline1"
+        app:layout_constraintStart_toStartOf="@id/guideline4"
+        app:layout_constraintTop_toTopOf="@id/guideline1"
+        android:visibility="invisible"/>
 
-                <com.linka.lockapp.aos.module.widget.LinkaTextViewRegular
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="left"
-                    android:textColor="@color/linka_blue"
-                    android:textSize="20sp"
-                    android:text="@string/metro"/>
+    <TextView
+        android:id="@+id/low"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/low"
+        android:textAllCaps="true"
+        android:textColor="@color/search_text"
+        android:textSize="@dimen/text_size_xm"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/guideline2"
+        app:layout_constraintEnd_toEndOf="@id/guideline3"
+        app:layout_constraintTop_toTopOf="@id/guideline2"
+        android:visibility="invisible"/>
 
-                <com.linka.lockapp.aos.module.widget.LinkaTextViewRegular
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:textColor="@color/linka_blue"
-                    android:textSize="20sp"
-                    android:text="@string/suburbs"/>
+    <TextView
+        android:id="@+id/low_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/low_text"
+        android:textColor="@color/search_text"
+        android:textSize="@dimen/text_size_mm"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:gravity="center"
+        android:layout_marginEnd="@dimen/margin"
+        app:layout_constraintBottom_toBottomOf="@id/guideline2"
+        app:layout_constraintStart_toStartOf="@id/guideline4"
+        app:layout_constraintTop_toTopOf="@id/guideline2"
+        android:visibility="invisible"/>
 
-                <com.linka.lockapp.aos.module.widget.LinkaTextViewRegular
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="end"
-                    android:textColor="@color/linka_blue"
-                    android:textSize="20sp"
-                    android:text="@string/garage"/>
+    <SeekBar
+        android:id="@+id/tamper_slider"
+        style="android:style/Theme.Holo.Light.DarkActionBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:max="2"
+        android:maxHeight="@dimen/margin_mm"
+        android:minHeight="@dimen/margin_mm"
+        android:paddingBottom="20dp"
+        android:paddingTop="20dp"
+        android:progress="1"
+        android:progressDrawable="@color/linka_blue"
+        android:rotation="90"
+        android:splitTrack="false"
+        android:thumb="@drawable/sensitivity_seek_bar_thumb"
+        app:layout_constraintBottom_toBottomOf="@id/guideline2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/guideline" />
 
-            </LinearLayout>
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="15dp"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="10dp"
-                android:orientation="vertical">
-
-                <com.linka.lockapp.aos.module.widget.LinkaTextViewRegular
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:textColor="@color/linka_blue"
-                    android:textSize="20sp"
-                    android:text="@string/metro"/>
-
-                <com.linka.lockapp.aos.module.widget.LinkaTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:layout_marginTop="3dp"
-                    android:textColor="@color/linka_gray"
-                    android:textSize="16sp"
-                    android:text="@string/metro_desc"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="10dp"
-                android:orientation="vertical">
-
-                <com.linka.lockapp.aos.module.widget.LinkaTextViewRegular
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:textColor="@color/linka_blue"
-                    android:textSize="20sp"
-                    android:text="@string/suburbs"/>
-
-                <com.linka.lockapp.aos.module.widget.LinkaTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:layout_marginTop="3dp"
-                    android:textColor="@color/linka_gray"
-                    android:textSize="16sp"
-                    android:text="@string/suburbs_desc"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="10dp"
-                android:orientation="vertical">
-
-                <com.linka.lockapp.aos.module.widget.LinkaTextViewRegular
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:textColor="@color/linka_blue"
-                    android:textSize="20sp"
-                    android:text="@string/garage"/>
-
-                <com.linka.lockapp.aos.module.widget.LinkaTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:layout_marginTop="3dp"
-                    android:textColor="@color/linka_gray"
-                    android:textSize="16sp"
-                    android:text="@string/garage_desc"/>
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="15dp"
-            android:orientation="horizontal">
-
-            <com.linka.lockapp.aos.module.widget.LinkaButton
-                android:id="@+id/save"
-                android:layout_width="160dp"
-                android:layout_height="40dp"
-                android:layout_marginEnd="10dp"
-                android:textSize="16sp"
-                android:text="@string/save"
-                style="@style/linka_blue_button_nomargin"/>
-
-            <com.linka.lockapp.aos.module.widget.LinkaButton
-                android:id="@+id/reset_to_default"
-                android:layout_width="160dp"
-                android:layout_height="40dp"
-                android:textSize="16sp"
-                android:text="@string/reset_default"
-                style="@style/linka_blue_button_nomargin"/>
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-</ScrollView>
+</android.support.constraint.ConstraintLayout>

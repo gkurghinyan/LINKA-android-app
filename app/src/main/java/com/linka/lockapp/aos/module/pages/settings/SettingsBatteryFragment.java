@@ -83,6 +83,10 @@ public class SettingsBatteryFragment extends CoreFragment {
                     linka.saveSettings();
 
                     lockController.doAction_SetLockSleep(linka.settings_locked_sleep);
+                    if(linka.settings_unlocked_sleep == 960){
+                        linka.settings_unlocked_sleep = 1800;
+                        linka.save();
+                    }
                     lockController.doAction_SetUnlockSleep(linka.settings_unlocked_sleep);
                 } else {
                     setSleepIn.setVisibility(View.GONE);
