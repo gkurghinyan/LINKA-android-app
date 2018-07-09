@@ -2,22 +2,29 @@ package com.linka.lockapp.aos.module.pages.settings;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.Space;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.linka.lockapp.aos.AppDelegate;
+import com.linka.lockapp.aos.AppMainActivity;
 import com.linka.lockapp.aos.R;
+import com.linka.lockapp.aos.module.api.LinkaAPIServiceImpl;
+import com.linka.lockapp.aos.module.api.LinkaAPIServiceResponse;
 import com.linka.lockapp.aos.module.core.CoreFragment;
 import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.model.LinkaAccessKey;
 import com.linka.lockapp.aos.module.model.LinkaActivity;
+import com.linka.lockapp.aos.module.pages.dialogs.ThreeDotsDialogFragment;
 import com.linka.lockapp.aos.module.pages.pac.PacTutorialFragment;
 import com.linka.lockapp.aos.module.pages.setup.AutoUpdateFragment;
 import com.linka.lockapp.aos.module.widget.LockController;
@@ -31,6 +38,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.linka.lockapp.aos.module.widget.LocksController.LOCKSCONTROLLER_NOTIFY_REFRESHED_SETTINGS;
 
@@ -39,6 +49,8 @@ import static com.linka.lockapp.aos.module.widget.LocksController.LOCKSCONTROLLE
  */
 public class SettingsPageFragment extends CoreFragment {
 
+    @BindView(R.id.root)
+    FrameLayout root;
     @BindView(R.id.scroll_view)
     ScrollView scrollView;
 
@@ -53,6 +65,8 @@ public class SettingsPageFragment extends CoreFragment {
     TextView textQuickLock;
     @BindView(R.id.switch_quick_lock)
     Switch switchQuickLock;
+    @BindView(R.id.quick_switch_view)
+    View quickSwitchView;
 
     @BindView(R.id.row_edit_name)
     EditText editName;
@@ -63,6 +77,8 @@ public class SettingsPageFragment extends CoreFragment {
     TextView textAutoUnlock;
     @BindView(R.id.settings_auto_unlocking)
     Switch switchAutoUnlocking;
+    @BindView(R.id.auto_switch_view)
+    View autoSwitchView;
 
     @BindView(R.id.row_radius_settings)
     LinearLayout rowRadiusSettings;
@@ -75,6 +91,8 @@ public class SettingsPageFragment extends CoreFragment {
     TextView textTamperSiren;
     @BindView(R.id.settings_tamper_siren)
     Switch switchTamperSiren;
+    @BindView(R.id.tamper_switch_view)
+    View tamperSwitchView;
 
     @BindView(R.id.row_tamper_sensitivity)
     LinearLayout rowTamperSensitivity;
@@ -87,6 +105,8 @@ public class SettingsPageFragment extends CoreFragment {
     TextView textAudibleLockingUnlocking;
     @BindView(R.id.settings_audible_locking_unlocking)
     Switch switchAudibleLockingUnlocking;
+    @BindView(R.id.tone_switch_view)
+    View toneSwitchView;
 
     @BindView(R.id.row_sleep_settings)
     LinearLayout rowSleepSettings;
@@ -105,12 +125,18 @@ public class SettingsPageFragment extends CoreFragment {
     @BindView(R.id.text_reset_to_factory_settings)
     TextView textResetToFactorySettings;
 
-    @BindView(R.id.row_remove_lock)
-    LinearLayout rowRemoveLock;
     @BindView(R.id.text_remove_lock)
-    TextView textRemoveLock;
+    TextView removeLock;
+    @BindView(R.id.remove_space)
+    Space removeSpace;
+    @BindView(R.id.remove_top_divider)
+    View removeTopDivider;
+    @BindView(R.id.remove_bottom_divider)
+    View removeBottomDivider;
 
     Linka linka;
+
+    private ThreeDotsDialogFragment threeDotsDialogFragment = null;
 
     RevocationControllerV2 revocationController = new RevocationControllerV2();
 
@@ -154,12 +180,12 @@ public class SettingsPageFragment extends CoreFragment {
                 LockController lockController = LocksController.getInstance().getLockController();
                 revocationController.implement(getAppMainActivity(), linka, lockController);
             }
-            if(savedInstanceState != null && savedInstanceState.getIntArray("position") != null){
+            if (savedInstanceState != null && savedInstanceState.getIntArray("position") != null) {
                 final int[] array = savedInstanceState.getIntArray("position");
                 scrollView.post(new Runnable() {
                     @Override
                     public void run() {
-                        scrollView.scrollTo(array[0],array[1]);
+                        scrollView.scrollTo(array[0], array[1]);
                     }
                 });
             }
@@ -178,7 +204,7 @@ public class SettingsPageFragment extends CoreFragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         if (scrollView != null) {
-            outState.putIntArray("position", new int[]{scrollView.getScrollX(),scrollView.getScrollY()});
+            outState.putIntArray("position", new int[]{scrollView.getScrollX(), scrollView.getScrollY()});
         }
     }
 
@@ -293,6 +319,18 @@ public class SettingsPageFragment extends CoreFragment {
             isAdmin = false;
         }
 
+        if(isAdmin){
+            removeLock.setVisibility(View.GONE);
+            removeTopDivider.setVisibility(View.GONE);
+            removeBottomDivider.setVisibility(View.GONE);
+            removeSpace.setVisibility(View.GONE);
+        }else {
+            removeLock.setVisibility(View.VISIBLE);
+            removeTopDivider.setVisibility(View.VISIBLE);
+            removeBottomDivider.setVisibility(View.VISIBLE);
+            removeSpace.setVisibility(View.VISIBLE);
+        }
+
         LockController lockController = LocksController.getInstance().getLockController();
         String ver = lockController.lockControllerBundle.getFwVersionNumber();
         if (!ver.equals("")) {
@@ -311,7 +349,7 @@ public class SettingsPageFragment extends CoreFragment {
 
 //        macId.setText(linka.lock_mac_address);
 
-        if (isAdmin && linka.isLockSettled) {
+        if (linka.isLockSettled) {
             //Set PAC values into settings page
             if (linka.pac == 0 || linka.pac == 1234) {
                 if (!lockController.hasReadPac) {
@@ -320,13 +358,13 @@ public class SettingsPageFragment extends CoreFragment {
             }
         }
 
-        if (linka != null && linka.isConnected && linka.isLockSettled && isAdmin) {
+        if (linka != null && linka.isConnected && linka.isLockSettled) {
             int color = getResources().getColor(R.color.linka_blue);
 
             rowPhonelessPasscode.setClickable(true);
             textPhonelessPasscode.setTextColor(color);
 
-            switchQuickLock.setClickable(false);
+            quickSwitchView.setVisibility(View.VISIBLE);
             switchQuickLock.setAlpha(0.4f);
 
             editName.setAlpha(1.0f);
@@ -334,15 +372,15 @@ public class SettingsPageFragment extends CoreFragment {
             editName.setText(linka.getName());
 
             textAutoUnlock.setTextColor(color);
-            switchAutoUnlocking.setClickable(true);
+            autoSwitchView.setVisibility(View.GONE);
             switchAutoUnlocking.setAlpha(1.0f);
 
             textTamperSiren.setTextColor(color);
-            switchTamperSiren.setClickable(true);
+            tamperSwitchView.setVisibility(View.GONE);
             switchTamperSiren.setAlpha(1.0f);
 
             textAudibleLockingUnlocking.setTextColor(color);
-            switchAudibleLockingUnlocking.setClickable(true);
+            toneSwitchView.setVisibility(View.GONE);
             switchAudibleLockingUnlocking.setAlpha(1.0f);
 
             textSleepSettings.setTextColor(color);
@@ -351,8 +389,10 @@ public class SettingsPageFragment extends CoreFragment {
             textResetToFactorySettings.setTextColor(color);
             rowResetToFactorySettings.setClickable(true);
 
-            textRemoveLock.setTextColor(getResources().getColor(R.color.red));
-            rowRemoveLock.setClickable(true);
+            if(!isAdmin){
+                removeLock.setTextColor(getResources().getColor(R.color.red));
+                removeLock.setClickable(true);
+            }
 
             firmwareText.setText(getString(R.string.firmware_version));
             firmwareText.setTextColor(getResources().getColor(R.color.search_text));
@@ -377,7 +417,7 @@ public class SettingsPageFragment extends CoreFragment {
             rowPhonelessPasscode.setClickable(false);
             textPhonelessPasscode.setTextColor(color);
 
-            switchQuickLock.setClickable(false);
+            switchQuickLock.setVisibility(View.VISIBLE);
             switchQuickLock.setAlpha(0.4f);
 
             editName.setAlpha(1.0f);
@@ -385,15 +425,15 @@ public class SettingsPageFragment extends CoreFragment {
             editName.setText(linka.getName());
 
             textAutoUnlock.setTextColor(color);
-            switchAutoUnlocking.setClickable(false);
+            autoSwitchView.setVisibility(View.VISIBLE);
             switchAutoUnlocking.setAlpha(0.4f);
 
             textTamperSiren.setTextColor(color);
-            switchTamperSiren.setClickable(false);
+            tamperSwitchView.setVisibility(View.VISIBLE);
             switchTamperSiren.setAlpha(0.4f);
 
             textAudibleLockingUnlocking.setTextColor(color);
-            switchAudibleLockingUnlocking.setClickable(false);
+            toneSwitchView.setVisibility(View.VISIBLE);
             switchAudibleLockingUnlocking.setAlpha(0.4f);
 
             textSleepSettings.setTextColor(color);
@@ -402,8 +442,10 @@ public class SettingsPageFragment extends CoreFragment {
             textResetToFactorySettings.setTextColor(color);
             rowResetToFactorySettings.setClickable(false);
 
-            textRemoveLock.setTextColor(color);
-            rowRemoveLock.setClickable(false);
+            if(!isAdmin){
+                removeLock.setTextColor(color);
+                removeLock.setClickable(false);
+            }
 
             firmwareText.setText(getString(R.string.firmware_version));
             firmwareText.setTextColor(getResources().getColor(R.color.search_text));
@@ -417,7 +459,7 @@ public class SettingsPageFragment extends CoreFragment {
 
 
         if (linka != null && !linka.isUnlocked()) {
-            rowRemoveLock.setClickable(false);
+            removeLock.setClickable(false);
             rowResetToFactorySettings.setClickable(false);
             rowFirmwareVersion.setClickable(false);
         }
@@ -495,6 +537,53 @@ public class SettingsPageFragment extends CoreFragment {
 
     }
 
+    @OnClick(R.id.text_remove_lock)
+    void onRemoveLockClicked(){
+        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getActivity());
+        builder.setTitle("Remove this lock?").
+                setMessage("The lock will no longer appear in the app until you add it back.").
+                setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setPositiveButton("Remove", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        removeLock();
+                        threeDotsDialogFragment = ThreeDotsDialogFragment.newInstance().setConnectingText(false,null);
+                        threeDotsDialogFragment.show(getFragmentManager(),null);
+                    }
+                });
+        builder.create().show();
+    }
+
+    private void removeLock(){
+        LinkaAPIServiceImpl.revoke_access(getActivity(), linka, LinkaAPIServiceImpl.getUserID(), new Callback<LinkaAPIServiceResponse>() {
+            @Override
+            public void onResponse(Call<LinkaAPIServiceResponse> call, Response<LinkaAPIServiceResponse> response) {
+                if(threeDotsDialogFragment != null){
+                    threeDotsDialogFragment.dismiss();
+                    threeDotsDialogFragment = null;
+                }
+                if (LinkaAPIServiceImpl.check(response, false, null)) {
+                    Linka.removeLinka(linka);
+                    getActivity().finish();
+                    startActivity(new Intent(getActivity(), AppMainActivity.class));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LinkaAPIServiceResponse> call, Throwable t) {
+                if(threeDotsDialogFragment != null){
+                    threeDotsDialogFragment.dismiss();
+                    threeDotsDialogFragment = null;
+                }
+            }
+        });
+    }
+
 
     @Override
     public void onResume() {
@@ -536,11 +625,11 @@ public class SettingsPageFragment extends CoreFragment {
         }
     }
 
-    private void setTamperSensitivityVisibility(boolean visibility){
-        if(visibility){
+    private void setTamperSensitivityVisibility(boolean visibility) {
+        if (visibility) {
             textTamperSensitivity.setTextColor(getResources().getColor(R.color.linka_blue));
             rowTamperSensitivity.setClickable(true);
-        }else {
+        } else {
             textTamperSensitivity.setTextColor(getResources().getColor(R.color.search_text));
             rowTamperSensitivity.setClickable(false);
         }

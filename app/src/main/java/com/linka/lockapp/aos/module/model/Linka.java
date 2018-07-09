@@ -9,6 +9,7 @@ import android.provider.BaseColumns;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Delete;
 import com.activeandroid.query.From;
 import com.activeandroid.query.Select;
 import com.linka.Lock.BLE.BluetoothLEDevice;
@@ -791,6 +792,10 @@ public class Linka extends Model implements Serializable {
     /*public boolean isTamperAlert() {
         return tamperStatus == LockAdV1.VLS_FLAG_ALARM_TIP;
     }*/
+
+    public static void removeLinka(Linka linka){
+        new Delete().from(Linka.class).where("lock_mac_address = ?",linka.getMACAddress()).execute();
+    }
 
 
     public boolean saveName(String name) {

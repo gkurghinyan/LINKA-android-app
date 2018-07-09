@@ -2,7 +2,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:focusableInTouchMode="true">
+    android:focusableInTouchMode="true"
+    android:id="@+id/root">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -74,19 +75,32 @@
                         android:textColor="@color/search_text"
                         android:textSize="@dimen/text_size_normal" />
 
-                    <com.rey.material.widget.Switch xmlns:custom="http://schemas.android.com/apk/res-auto"
-                        android:id="@+id/switch_quick_lock"
+                    <FrameLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginEnd="@dimen/margin_x"
-                        android:checked="false"
-                        custom:sw_thumbColor="@color/linka_white"
-                        custom:sw_thumbElevation="2dp"
-                        custom:sw_thumbRadius="17dp"
-                        custom:sw_trackColor="@color/colorstate_switch"
-                        custom:sw_trackSize="33dp" />
+                        android:layout_marginEnd="@dimen/margin_x">
+
+                        <com.rey.material.widget.Switch xmlns:custom="http://schemas.android.com/apk/res-auto"
+                            android:id="@+id/switch_quick_lock"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:checked="false"
+                            custom:sw_thumbColor="@color/linka_white"
+                            custom:sw_thumbElevation="2dp"
+                            custom:sw_thumbRadius="17dp"
+                            custom:sw_trackColor="@color/colorstate_switch"
+                            custom:sw_trackSize="33dp" />
+
+                        <View
+                            android:id="@+id/quick_switch_view"
+                            android:layout_width="@dimen/margin_xl"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/transparent"
+                            android:clickable="true" />
+                    </FrameLayout>
                 </RelativeLayout>
 
                 <View style="@style/menu_divider" />
@@ -146,19 +160,32 @@
                         android:textColor="@color/search_text"
                         android:textSize="@dimen/text_size_normal" />
 
-                    <com.rey.material.widget.Switch xmlns:custom="http://schemas.android.com/apk/res-auto"
-                        android:id="@+id/settings_auto_unlocking"
+                    <FrameLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginEnd="@dimen/margin_x"
-                        android:checked="false"
-                        custom:sw_thumbColor="@color/linka_white"
-                        custom:sw_thumbElevation="2dp"
-                        custom:sw_thumbRadius="17dp"
-                        custom:sw_trackColor="@color/colorstate_switch"
-                        custom:sw_trackSize="33dp" />
+                        android:layout_marginEnd="@dimen/margin_x">
+
+                        <com.rey.material.widget.Switch xmlns:custom="http://schemas.android.com/apk/res-auto"
+                            android:id="@+id/settings_auto_unlocking"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:checked="false"
+                            custom:sw_thumbColor="@color/linka_white"
+                            custom:sw_thumbElevation="2dp"
+                            custom:sw_thumbRadius="17dp"
+                            custom:sw_trackColor="@color/colorstate_switch"
+                            custom:sw_trackSize="33dp" />
+
+                        <View
+                            android:id="@+id/auto_switch_view"
+                            android:layout_width="@dimen/margin_xl"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/transparent"
+                            android:clickable="true" />
+                    </FrameLayout>
                 </RelativeLayout>
 
                 <View
@@ -224,19 +251,32 @@
                         android:textColor="@color/search_text"
                         android:textSize="@dimen/text_size_normal" />
 
-                    <com.rey.material.widget.Switch xmlns:custom="http://schemas.android.com/apk/res-auto"
-                        android:id="@+id/settings_tamper_siren"
+                    <FrameLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginEnd="@dimen/margin_x"
-                        android:checked="false"
-                        custom:sw_thumbColor="@color/linka_white"
-                        custom:sw_thumbElevation="2dp"
-                        custom:sw_thumbRadius="17dp"
-                        custom:sw_trackColor="@color/colorstate_switch"
-                        custom:sw_trackSize="33dp" />
+                        android:layout_marginEnd="@dimen/margin_x">
+
+                        <com.rey.material.widget.Switch xmlns:custom="http://schemas.android.com/apk/res-auto"
+                            android:id="@+id/settings_tamper_siren"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:checked="false"
+                            custom:sw_thumbColor="@color/linka_white"
+                            custom:sw_thumbElevation="2dp"
+                            custom:sw_thumbRadius="17dp"
+                            custom:sw_trackColor="@color/colorstate_switch"
+                            custom:sw_trackSize="33dp" />
+
+                        <View
+                            android:id="@+id/tamper_switch_view"
+                            android:layout_width="@dimen/margin_xl"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/transparent"
+                            android:clickable="true" />
+                    </FrameLayout>
                 </RelativeLayout>
 
                 <View
@@ -291,19 +331,34 @@
                         android:textColor="@color/search_text"
                         android:textSize="@dimen/text_size_normal" />
 
-                    <com.rey.material.widget.Switch xmlns:custom="http://schemas.android.com/apk/res-auto"
-                        android:id="@+id/settings_audible_locking_unlocking"
+
+                    <FrameLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginEnd="@dimen/margin_x"
-                        android:checked="false"
-                        custom:sw_thumbColor="@color/linka_white"
-                        custom:sw_thumbElevation="2dp"
-                        custom:sw_thumbRadius="17dp"
-                        custom:sw_trackColor="@color/colorstate_switch"
-                        custom:sw_trackSize="33dp" />
+                        android:layout_marginEnd="@dimen/margin_x">
+
+                        <com.rey.material.widget.Switch xmlns:custom="http://schemas.android.com/apk/res-auto"
+                            android:id="@+id/settings_audible_locking_unlocking"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:checked="false"
+                            custom:sw_thumbColor="@color/linka_white"
+                            custom:sw_thumbElevation="2dp"
+                            custom:sw_thumbRadius="17dp"
+                            custom:sw_trackColor="@color/colorstate_switch"
+                            custom:sw_trackSize="33dp" />
+
+                        <View
+                            android:id="@+id/tone_switch_view"
+                            android:layout_width="@dimen/margin_xl"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/transparent"
+                            android:clickable="true" />
+                    </FrameLayout>
+
                 </RelativeLayout>
 
                 <View style="@style/menu_divider" />
@@ -410,31 +465,28 @@
                 <View style="@style/menu_divider" />
 
                 <android.support.v4.widget.Space
+                    android:id="@+id/remove_space"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/margin_dx"
                     android:background="@color/title_back_color" />
 
-                <View style="@style/menu_divider" />
+                <View style="@style/menu_divider"
+                    android:id="@+id/remove_top_divider"/>
 
-                <LinearLayout
-                    android:id="@+id/row_remove_lock"
+                <TextView
+                    android:id="@+id/text_remove_lock"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/margin_l"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/margin_x"
                     android:background="@color/linka_white"
-                    android:orientation="horizontal">
+                    android:text="Remove Lock"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/search_text"
+                    android:textSize="@dimen/text_size_normal" />
 
-                    <TextView
-                        android:id="@+id/text_remove_lock"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="@dimen/margin_x"
-                        android:text="Remove Lock"
-                        android:textColor="@color/search_text"
-                        android:textSize="@dimen/text_size_normal" />
-                </LinearLayout>
-
-                <View style="@style/menu_divider" />
+                <View style="@style/menu_divider"
+                    android:id="@+id/remove_bottom_divider"/>
 
                 <android.support.v4.widget.Space
                     android:layout_width="match_parent"

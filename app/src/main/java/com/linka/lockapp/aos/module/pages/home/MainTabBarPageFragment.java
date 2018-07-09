@@ -156,6 +156,7 @@ public class MainTabBarPageFragment extends CoreFragment {
             adapter.f4 = null;
         }
         unbinder.unbind();
+        currentPosition = 0;
     }
 
 //    @Override
@@ -286,21 +287,25 @@ public class MainTabBarPageFragment extends CoreFragment {
     private void changeButtonsState(boolean first, boolean second, boolean third, boolean fourth) {
         if (first) {
             t1Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_linka_select));
+            getAppMainActivity().setTitleNoUpperCase(linka.getName());
         } else {
             t1Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_linka));
         }
         if (second) {
             t2Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_user_select));
+            getAppMainActivity().setTitle("USERS");
         } else {
             t2Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_user));
         }
         if (third) {
             t3Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_notif_select));
+            getAppMainActivity().setTitle("NOTIFICATIONS");
         } else {
             t3Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_notif));
         }
         if (fourth) {
             t4Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_setting_select));
+            getAppMainActivity().setTitle(getString(R.string.big_settings));
         } else {
             t4Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_setting));
         }
@@ -312,7 +317,6 @@ public class MainTabBarPageFragment extends CoreFragment {
         currentPosition = 0;
         viewPager.setCurrentItem(0, true);
         changeButtonsState(true, false, false, false);
-        getAppMainActivity().setTitle(linka.lock_name);
     }
 
     @OnClick(R.id.t2)
@@ -320,7 +324,6 @@ public class MainTabBarPageFragment extends CoreFragment {
         currentPosition = 1;
         viewPager.setCurrentItem(1, true);
         changeButtonsState(false, true, false, false);
-        getAppMainActivity().setTitle("USERS");
     }
 
     @OnClick(R.id.t3)
@@ -328,7 +331,6 @@ public class MainTabBarPageFragment extends CoreFragment {
         currentPosition = 2;
         viewPager.setCurrentItem(2, true);
         changeButtonsState(false, false, true, false);
-        getAppMainActivity().setTitle("NOTIFICATIONS");
     }
 
     @OnClick(R.id.t4)
@@ -339,7 +341,6 @@ public class MainTabBarPageFragment extends CoreFragment {
 
         viewPager.setCurrentItem(3, true);
         changeButtonsState(false, false, false, true);
-        getAppMainActivity().setTitle(getString(R.string.big_settings));
     }
 
 
