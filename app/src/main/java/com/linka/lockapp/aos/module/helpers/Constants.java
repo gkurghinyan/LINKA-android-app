@@ -39,6 +39,10 @@ public class Constants {
     //Constants for extras name
     public static final String IS_IT_OPEN_FROM_NOTIFICATION = "IsItOpenFromNotification";
 
+    //Constants for notifications identifiers
+    public static final int UPDATE_AVAILABLE_NOTIFICATION = 41;
+    public static final String OPEN_SETTINGS = "OpenSettings";
+
     public enum NotificationType {
 
         //TODO: try to get this as capitalized. Currently doesn't work with all caps

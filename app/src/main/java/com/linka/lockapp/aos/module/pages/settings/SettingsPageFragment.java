@@ -1,10 +1,10 @@
 package com.linka.lockapp.aos.module.pages.settings;
 
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.Space;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +21,7 @@ import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceImpl;
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceResponse;
 import com.linka.lockapp.aos.module.core.CoreFragment;
+import com.linka.lockapp.aos.module.helpers.LogHelper;
 import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.model.LinkaAccessKey;
 import com.linka.lockapp.aos.module.model.LinkaActivity;
@@ -319,12 +320,12 @@ public class SettingsPageFragment extends CoreFragment {
             isAdmin = false;
         }
 
-        if(isAdmin){
+        if (isAdmin) {
             removeLock.setVisibility(View.GONE);
             removeTopDivider.setVisibility(View.GONE);
             removeBottomDivider.setVisibility(View.GONE);
             removeSpace.setVisibility(View.GONE);
-        }else {
+        } else {
             removeLock.setVisibility(View.VISIBLE);
             removeTopDivider.setVisibility(View.VISIBLE);
             removeBottomDivider.setVisibility(View.VISIBLE);
@@ -389,7 +390,7 @@ public class SettingsPageFragment extends CoreFragment {
             textResetToFactorySettings.setTextColor(color);
             rowResetToFactorySettings.setClickable(true);
 
-            if(!isAdmin){
+            if (!isAdmin) {
                 removeLock.setTextColor(getResources().getColor(R.color.red));
                 removeLock.setClickable(true);
             }
@@ -398,18 +399,13 @@ public class SettingsPageFragment extends CoreFragment {
             firmwareText.setTextColor(getResources().getColor(R.color.search_text));
             rowFirmwareVersion.setClickable(false);
 
-            String no = lockController.lockControllerBundle.getFwVersionNumber();
-            if (true) {
-                firmwareText.setText(getString(R.string.firmware_update_available));
-                firmwareText.setTextColor(getResources().getColor(R.color.red));
-                rowFirmwareVersion.setClickable(true);
-            }
+            checkUpdates();
 
-            if (AppDelegate.shouldAlwaysEnableFwUpgradeButton) {
-                firmwareText.setText(getString(R.string.firmware_update_available));
-                firmwareText.setTextColor(getResources().getColor(R.color.red));
-                rowFirmwareVersion.setClickable(true);
-            }
+//            if (AppDelegate.shouldAlwaysEnableFwUpgradeButton) {
+//                firmwareText.setText(getString(R.string.firmware_update_available));
+//                firmwareText.setTextColor(getResources().getColor(R.color.red));
+//                rowFirmwareVersion.setClickable(true);
+//            }
 
         } else {
             int color = getResources().getColor(R.color.search_text);
@@ -442,13 +438,14 @@ public class SettingsPageFragment extends CoreFragment {
             textResetToFactorySettings.setTextColor(color);
             rowResetToFactorySettings.setClickable(false);
 
-            if(!isAdmin){
+            if (!isAdmin) {
                 removeLock.setTextColor(color);
                 removeLock.setClickable(false);
             }
 
             firmwareText.setText(getString(R.string.firmware_version));
             firmwareText.setTextColor(getResources().getColor(R.color.search_text));
+            firmwareVersion.setTextColor(getResources().getColor(R.color.search_text));
             rowFirmwareVersion.setEnabled(false);
         }
 
@@ -462,6 +459,35 @@ public class SettingsPageFragment extends CoreFragment {
             removeLock.setClickable(false);
             rowResetToFactorySettings.setClickable(false);
             rowFirmwareVersion.setClickable(false);
+        }
+    }
+
+    private void checkUpdates() {
+        LockController lockController = LocksController.getInstance().getLockController();
+        if (linka != null && lockController != null &&
+                linka.isLockSettled && linka.pacIsSet) {
+            if (lockController.lockControllerBundle != null) {
+                String ver = lockController.lockControllerBundle.getFwVersionNumber();
+                if (!ver.equals("")) {
+                    linka.canAlertCriticalFirmwareUpdate = false;
+                    if (!ver.equals(AppDelegate.linkaMinRequiredFirmwareVersion) && !ver.equals("1.5.9") && AppDelegate.linkaMinRequiredFirmwareVersionIsCriticalUpdate) {
+                        LogHelper.e("MainTabBarPageFrag", "FW version of " + ver + " does not equal " + AppDelegate.linkaMinRequiredFirmwareVersion);
+                        LinkaAccessKey accessKey = LinkaAccessKey.getKeyFromLinka(linka);
+                        if (accessKey != null && accessKey.isAdmin()) {
+                            firmwareText.setText(getString(R.string.firmware_update_available));
+                            firmwareText.setTextColor(getResources().getColor(R.color.red));
+                            firmwareVersion.setTextColor(getResources().getColor(R.color.red));
+                            rowFirmwareVersion.setClickable(true);
+
+                        }
+                    }
+                }
+            }
+        }else {
+            firmwareText.setText(getString(R.string.firmware_version));
+            firmwareText.setTextColor(getResources().getColor(R.color.search_text));
+            firmwareVersion.setTextColor(getResources().getColor(R.color.search_text));
+            rowFirmwareVersion.setEnabled(false);
         }
     }
 
@@ -504,10 +530,10 @@ public class SettingsPageFragment extends CoreFragment {
 
     @OnClick(R.id.row_reset_to_factory_settings)
     void onClick_row_reset_to_factory_settings() {
-
-        new AlertDialog.Builder(getAppMainActivity())
-                .setTitle("Are you sure you want to factory reset?")
-                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Are you sure you want to reset?")
+                        .setMessage("This will delete all data and revoke all access to this lock")
+                .setPositiveButton("Reset", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         revocationController.confirmConnected();
@@ -538,8 +564,8 @@ public class SettingsPageFragment extends CoreFragment {
     }
 
     @OnClick(R.id.text_remove_lock)
-    void onRemoveLockClicked(){
-        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getActivity());
+    void onRemoveLockClicked() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Remove this lock?").
                 setMessage("The lock will no longer appear in the app until you add it back.").
                 setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -552,18 +578,18 @@ public class SettingsPageFragment extends CoreFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         removeLock();
-                        threeDotsDialogFragment = ThreeDotsDialogFragment.newInstance().setConnectingText(false,null);
-                        threeDotsDialogFragment.show(getFragmentManager(),null);
+                        threeDotsDialogFragment = ThreeDotsDialogFragment.newInstance().setConnectingText(false, null);
+                        threeDotsDialogFragment.show(getFragmentManager(), null);
                     }
                 });
         builder.create().show();
     }
 
-    private void removeLock(){
+    private void removeLock() {
         LinkaAPIServiceImpl.revoke_access(getActivity(), linka, LinkaAPIServiceImpl.getUserID(), new Callback<LinkaAPIServiceResponse>() {
             @Override
             public void onResponse(Call<LinkaAPIServiceResponse> call, Response<LinkaAPIServiceResponse> response) {
-                if(threeDotsDialogFragment != null){
+                if (threeDotsDialogFragment != null) {
                     threeDotsDialogFragment.dismiss();
                     threeDotsDialogFragment = null;
                 }
@@ -576,7 +602,7 @@ public class SettingsPageFragment extends CoreFragment {
 
             @Override
             public void onFailure(Call<LinkaAPIServiceResponse> call, Throwable t) {
-                if(threeDotsDialogFragment != null){
+                if (threeDotsDialogFragment != null) {
                     threeDotsDialogFragment.dismiss();
                     threeDotsDialogFragment = null;
                 }

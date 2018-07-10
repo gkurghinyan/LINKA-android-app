@@ -296,7 +296,7 @@ public class AppMainActivity extends CoreActivity {
         initDrawer();
         initNavBar();
 
-        setFragment(decide());
+        setFragment(decide(getIntent()));
 
         MyFirebaseInstanceIdService.getFcmToken();
 
@@ -323,6 +323,12 @@ public class AppMainActivity extends CoreActivity {
         LogHelper.e("GEOFENCE", "Intent");
         startService(new Intent(this, GeofencingService.class));
         GeofencingService.init(AppMainActivity.this);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setFragment(decide(intent));
     }
 
 
@@ -390,7 +396,7 @@ public class AppMainActivity extends CoreActivity {
     }
 
 
-    public Fragment decide() {
+    public Fragment decide(Intent intent) {
         LinkaNotificationSettings.refresh_for_latest_linka();
         LocksController.getInstance().refresh();
 
@@ -406,9 +412,11 @@ public class AppMainActivity extends CoreActivity {
                 }
                 Fragment fragment = null;
 
-                if(getIntent().getBooleanExtra(Constants.IS_IT_OPEN_FROM_NOTIFICATION,false)){
+                if(intent.getBooleanExtra(Constants.IS_IT_OPEN_FROM_NOTIFICATION,false)){
                     fragment = MainTabBarPageFragment.newInstance(LinkaNotificationSettings.get_latest_linka(),MainTabBarPageFragment.LOCK_SCREEN);
-                }else {
+                }else if(intent.getBooleanExtra(Constants.OPEN_SETTINGS,false)){
+                    fragment = MainTabBarPageFragment.newInstance(LinkaNotificationSettings.get_latest_linka(),MainTabBarPageFragment.SETTING_SCREEN);
+                } else {
                     switch (Prefs.getInt(Constants.SHOWING_FRAGMENT, Constants.LAUNCHER_FRAGMENT)) {
                         case Constants.LAUNCHER_FRAGMENT:
                             fragment = MainTabBarPageFragment.newInstance(LinkaNotificationSettings.get_latest_linka(),MainTabBarPageFragment.LOCK_SCREEN);

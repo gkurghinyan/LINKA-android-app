@@ -103,11 +103,8 @@ public class AutoUpdateFragment extends CoreFragment {
                 }
                 openWalkthrough();
                 return;
-            }else if (Linka.getLinkas().size() == 0) {
-                SetupLinka1 fragment = SetupLinka1.newInstance();
-                AppMainActivity.getInstance().pushFragment(fragment);
-            } else {
-                AppMainActivity.getInstance().setFragment(MainTabBarPageFragment.newInstance(LinkaNotificationSettings.get_latest_linka(),MainTabBarPageFragment.LOCK_SCREEN));
+            }else{
+               init();
             }
         }
 

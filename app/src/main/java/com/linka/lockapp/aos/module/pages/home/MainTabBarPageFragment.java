@@ -1,10 +1,12 @@
 package com.linka.lockapp.aos.module.pages.home;
 
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -17,6 +19,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.linka.lockapp.aos.AppDelegate;
 import com.linka.lockapp.aos.AppMainActivity;
@@ -24,6 +27,7 @@ import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceImpl;
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceResponse;
 import com.linka.lockapp.aos.module.core.CoreFragment;
+import com.linka.lockapp.aos.module.helpers.Constants;
 import com.linka.lockapp.aos.module.helpers.LogHelper;
 import com.linka.lockapp.aos.module.i18n._;
 import com.linka.lockapp.aos.module.model.Linka;
@@ -49,6 +53,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import br.com.goncalves.pugnotification.notification.PugNotification;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -77,7 +82,7 @@ public class MainTabBarPageFragment extends CoreFragment {
     @BindView(R.id.t3)
     LinearLayout t3;
     @BindView(R.id.t4)
-    LinearLayout t4;
+    ConstraintLayout t4;
     @BindView(R.id.tab_bar)
     LinearLayout tabBar;
     @BindView(R.id.t1_img)
@@ -88,6 +93,8 @@ public class MainTabBarPageFragment extends CoreFragment {
     ImageView t3Img;
     @BindView(R.id.t4_img)
     ImageView t4Img;
+    @BindView(R.id.settings_update)
+    TextView settingsUpdate;
 
     public static int currentPosition = 0;
     Linka linka;
@@ -126,15 +133,15 @@ public class MainTabBarPageFragment extends CoreFragment {
             Bundle bundle = getArguments();
             if (bundle.get("linka") != null) {
                 linka = (Linka) bundle.getSerializable("linka");
+                if(getArguments().getInt(SCREEN_ARGUMENT) != -1) {
+                    currentPosition = getArguments().getInt(SCREEN_ARGUMENT);
+                    getArguments().putInt(SCREEN_ARGUMENT,-1);
+                }
                 if (linka != null && linka.getId() != null) {
                     linka = Linka.getLinkaById(linka.getId());
                     init(savedInstanceState);
                 } else {
                     init(savedInstanceState);
-                }
-                if(getArguments().getInt(SCREEN_ARGUMENT) != -1) {
-                    currentPosition = getArguments().getInt(SCREEN_ARGUMENT);
-                    getArguments().putInt(SCREEN_ARGUMENT,-1);
                 }
             } else if (savedInstanceState != null && savedInstanceState.getLong("linka_id", 0) != 0) {
                 linka = Linka.getLinkaById(savedInstanceState.getLong("linka_id", 0));
@@ -550,31 +557,38 @@ public class MainTabBarPageFragment extends CoreFragment {
             // Make sure PAC is set before any attempts to update firmware
             // TODO: This is becoming spaghetti, need to be completely reworked in the future
             if (linka != null && lockController != null &&
-                    linka.isLockSettled && linka.pacIsSet &&
-                    linka.canAlertCriticalFirmwareUpdate) {
-                if (lockController.lockControllerBundle != null) {
-                    String ver = lockController.lockControllerBundle.getFwVersionNumber();
-                    if (!ver.equals("")) {
-                        linka.canAlertCriticalFirmwareUpdate = false;
-                        if (!ver.equals(AppDelegate.linkaMinRequiredFirmwareVersion) && !ver.equals("1.5.9") && AppDelegate.linkaMinRequiredFirmwareVersionIsCriticalUpdate) {
-                            LogHelper.e("MainTabBarPageFrag", "FW version of " + ver + " does not equal " + AppDelegate.linkaMinRequiredFirmwareVersion);
-                            LinkaAccessKey accessKey = LinkaAccessKey.getKeyFromLinka(linka);
-                            if (accessKey != null && accessKey.isAdmin()) {
-                                new AlertDialog.Builder(getAppMainActivity())
-                                        .setMessage(R.string.critical_firmware_update)
-                                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-//                                                getAppMainActivity().pushFragment(DfuManagerPageFragment.newInstance(linka));
-                                                getAppMainActivity().pushFragment(AutoUpdateFragment.newInstance(linka, AutoUpdateFragment.SETTINGS));
-                                            }
-                                        })
-                                        .setNegativeButton(R.string.maybe_later, null)
-                                        .show();
+                    linka.isLockSettled && linka.pacIsSet) {
+                settingsUpdate.setVisibility(View.VISIBLE);
+                if (linka.canAlertCriticalFirmwareUpdate) {
+                    if (lockController.lockControllerBundle != null) {
+                        String ver = lockController.lockControllerBundle.getFwVersionNumber();
+                        if (!ver.equals("")) {
+                            linka.canAlertCriticalFirmwareUpdate = false;
+                            if (!ver.equals(AppDelegate.linkaMinRequiredFirmwareVersion) && !ver.equals("1.5.9") && AppDelegate.linkaMinRequiredFirmwareVersionIsCriticalUpdate) {
+                                LogHelper.e("MainTabBarPageFrag", "FW version of " + ver + " does not equal " + AppDelegate.linkaMinRequiredFirmwareVersion);
+                                LinkaAccessKey accessKey = LinkaAccessKey.getKeyFromLinka(linka);
+                                if (accessKey != null && accessKey.isAdmin()) {
+                                    Bundle args = new Bundle();
+                                    args.putBoolean(Constants.OPEN_SETTINGS, true);
+                                    PugNotification.with(AppDelegate.getInstance())
+                                            .load()
+                                            .autoCancel(true)
+                                            .identifier(Constants.UPDATE_AVAILABLE_NOTIFICATION)
+                                            .title("Update Available")
+                                            .message(R.string.critical_firmware_update)
+                                            .smallIcon(R.drawable.ic_action_name)
+                                            .largeIcon(R.mipmap.ic_launcher)
+                                            .flags(PendingIntent.FLAG_UPDATE_CURRENT)
+                                            .click(AppMainActivity.class, args)
+                                            .simple()
+                                            .build();
+                                }
                             }
                         }
                     }
                 }
+            }else {
+                settingsUpdate.setVisibility(View.GONE);
             }
 
 
