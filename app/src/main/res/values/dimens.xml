@@ -62,6 +62,7 @@
     <dimen name="margin_mm">6dp</dimen>
     <dimen name="margin_xm">8dp</dimen>
     <dimen name="margin">10dp</dimen>
+    <dimen name="margin_15">15dp</dimen>
     <dimen name="margin_x">20dp</dimen>
     <dimen name="margin_px">30dp</dimen>
     <dimen name="margin_dx">40dp</dimen>

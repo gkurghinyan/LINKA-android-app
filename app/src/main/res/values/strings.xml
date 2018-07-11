@@ -532,4 +532,6 @@
     <string name="high_text">For areas with zero to low traffic, like garages</string>
     <string name="low">low</string>
     <string name="low_text">For areas with high traffic, like cities</string>
+    <string name="remove_by_owner_text">If you remove a lock that you own, you will remain the owner but the lock will no longer appear in the app. To access it again, go to Add Lock in the side menu and re-connect to it. If you wish to clear ownership of the lock,do a factory reset on it.</string>
+    <string name="remove_by_guest_text">If you remove a lock that you\'re a guest of, your access to it will be revoked and the lock will no longer appear in the app. To regain access to the lock, go to Add Lock and re-connect to it. The owner of the lock will have to grant access again before you can use it.</string>
 </resources>

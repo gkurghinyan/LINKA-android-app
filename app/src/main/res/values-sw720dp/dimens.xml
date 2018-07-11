@@ -14,6 +14,7 @@
     <dimen name="margin_mm">18dp</dimen>
     <dimen name="margin_xm">25dp</dimen>
     <dimen name="margin">27dp</dimen>
+    <dimen name="margin_15">29dp</dimen>
     <dimen name="margin_x">34dp</dimen>
     <dimen name="margin_px">47dp</dimen>
     <dimen name="margin_dx">57dp</dimen>

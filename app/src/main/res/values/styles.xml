@@ -235,11 +235,7 @@
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_weight">1</item>
-        <item name="android:gravity">center</item>
-        <item name="android:textSize">@dimen/item_text_large_sp</item>
-        <item name="android:background">@drawable/white_rounded_back</item>
-        <item name="android:layout_marginEnd">3dp</item>
-        <item name="android:layout_marginStart">3dp</item>
+        <item name="android:background">@color/linka_white</item>
 
     </style>
 

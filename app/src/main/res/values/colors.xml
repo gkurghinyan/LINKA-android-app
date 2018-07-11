@@ -61,6 +61,7 @@
     <color name="search_bg">#2f2f2f</color>
     <color name="search_field_bg">#4e4e4e</color>
     <color name="search_text">#848484</color>
+    <color name="bright_text">#797979</color>
     <color name="bright_gray_text">#9f9f9f</color>
 
     <color name="heatmap_low_gradient">#f9f0af</color>

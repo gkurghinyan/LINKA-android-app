@@ -2,10 +2,9 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/blue_gradient"
-    android:id="@+id/root"
     tools:context=".module.pages.pac.SetPac3">
 
     <android.support.constraint.Guideline
@@ -20,14 +19,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.4" />
+        app:layout_constraintGuide_percent="0.35" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.65" />
+        app:layout_constraintGuide_percent="0.6" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline3"
@@ -40,60 +39,52 @@
         android:id="@+id/back_button"
         android:layout_width="@dimen/margin_px"
         android:layout_height="@dimen/margin_px"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="@dimen/margin"
         android:layout_marginTop="@dimen/margin_dx"
         android:src="@drawable/arrow_left"
-        android:visibility="invisible"/>
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:src="@drawable/purple_linka"
-        app:layout_constraintBottom_toBottomOf="@id/guideline1"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/guideline" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/title_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin"
+        android:layout_marginBottom="@dimen/margin_x"
         android:gravity="center"
         android:text="@string/set_your_phoneless_access_code"
-        android:textColor="@color/linka_white"
-        android:textSize="@dimen/text_size_xm"
+        android:textAllCaps="true"
+        android:textColor="@color/linka_blue"
+        android:textSize="@dimen/text_size_xxm"
+        app:layout_constraintBottom_toBottomOf="@id/guideline1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/guideline1" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="@dimen/margin_dx"
         android:gravity="center"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/title_text">
+        app:layout_constraintTop_toTopOf="@id/guideline1">
 
 
         <Space
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="2" />
+            android:layout_weight="1" />
 
         <ImageView
             android:id="@+id/pin_value_1"
-            android:layout_width="@dimen/margin_x"
-            android:layout_height="@dimen/margin_x"
+            android:layout_width="@dimen/margin_15"
+            android:layout_height="@dimen/margin_15"
             android:background="@drawable/pac_digit_blue2"
             android:gravity="center" />
 
         <ImageView
             android:id="@+id/pin_value_1_filled"
-            android:layout_width="@dimen/margin_x"
-            android:layout_height="@dimen/margin_x"
+            android:layout_width="@dimen/margin_15"
+            android:layout_height="@dimen/margin_15"
             android:background="@drawable/pac_digit_white1"
             android:gravity="center"
             android:visibility="gone" />
@@ -105,15 +96,15 @@
 
         <ImageView
             android:id="@+id/pin_value_2"
-            android:layout_width="@dimen/margin_x"
-            android:layout_height="@dimen/margin_x"
+            android:layout_width="@dimen/margin_15"
+            android:layout_height="@dimen/margin_15"
             android:background="@drawable/pac_digit_blue2"
             android:gravity="center" />
 
         <ImageView
             android:id="@+id/pin_value_2_filled"
-            android:layout_width="@dimen/margin_x"
-            android:layout_height="@dimen/margin_x"
+            android:layout_width="@dimen/margin_15"
+            android:layout_height="@dimen/margin_15"
             android:background="@drawable/pac_digit_white1"
             android:gravity="center"
             android:visibility="gone" />
@@ -125,15 +116,15 @@
 
         <ImageView
             android:id="@+id/pin_value_3"
-            android:layout_width="@dimen/margin_x"
-            android:layout_height="@dimen/margin_x"
+            android:layout_width="@dimen/margin_15"
+            android:layout_height="@dimen/margin_15"
             android:background="@drawable/pac_digit_blue2"
             android:gravity="center" />
 
         <ImageView
             android:id="@+id/pin_value_3_filled"
-            android:layout_width="@dimen/margin_x"
-            android:layout_height="@dimen/margin_x"
+            android:layout_width="@dimen/margin_15"
+            android:layout_height="@dimen/margin_15"
             android:background="@drawable/pac_digit_white1"
             android:gravity="center"
             android:visibility="gone" />
@@ -145,15 +136,15 @@
 
         <ImageView
             android:id="@+id/pin_value_4"
-            android:layout_width="@dimen/margin_x"
-            android:layout_height="@dimen/margin_x"
+            android:layout_width="@dimen/margin_15"
+            android:layout_height="@dimen/margin_15"
             android:background="@drawable/pac_digit_blue2"
             android:gravity="center" />
 
         <ImageView
             android:id="@+id/pin_value_4_filled"
-            android:layout_width="@dimen/margin_x"
-            android:layout_height="@dimen/margin_x"
+            android:layout_width="@dimen/margin_15"
+            android:layout_height="@dimen/margin_15"
             android:background="@drawable/pac_digit_white1"
             android:gravity="center"
             android:visibility="gone" />
@@ -161,7 +152,7 @@
         <Space
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="2" />
+            android:layout_weight="1" />
 
 
     </LinearLayout>
@@ -169,8 +160,8 @@
     <TableLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_weight=".4"
-        android:background="@color/keyboard_color"
+        android:layout_weight="4"
+        android:background="@color/linka_black_transparent"
         android:shrinkColumns="1"
         android:weightSum="4"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -180,111 +171,271 @@
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_marginBottom="3dp"
-            android:layout_marginEnd="3dp"
-            android:layout_marginStart="3dp"
-            android:layout_marginTop="3dp"
             android:layout_weight="1">
 
-            <com.linka.lockapp.aos.module.widget.LinkaTextView
+            <LinearLayout
                 android:id="@+id/pin_key_1"
                 style="@style/key_pad_cell"
-                android:text="1" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="1"
+                    android:textColor="@color/linka_black_transparent"
+                    android:textSize="@dimen/text_size_x" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="@color/linka_black_transparent"
+                    android:textSize="@dimen/text_size_xm" />
+            </LinearLayout>
 
 
-            <com.linka.lockapp.aos.module.widget.LinkaTextView
+            <LinearLayout
                 android:id="@+id/pin_key_2"
                 style="@style/key_pad_cell"
-                android:text="2" />
+                android:layout_marginEnd="0.2dp"
+                android:layout_marginStart="0.2dp"
+                android:orientation="vertical">
 
-            <com.linka.lockapp.aos.module.widget.LinkaTextView
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="2"
+                    android:textColor="@color/linka_black_transparent"
+                    android:textSize="@dimen/text_size_x" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="ABC"
+                    android:textColor="@color/linka_black_transparent"
+                    android:textSize="@dimen/text_size_mm" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/pin_key_3"
                 style="@style/key_pad_cell"
-                android:text="3" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="3"
+                    android:textColor="@color/linka_black_transparent"
+                    android:textSize="@dimen/text_size_x" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="DEF"
+                    android:textColor="@color/linka_black_transparent"
+                    android:textSize="@dimen/text_size_xm" />
+            </LinearLayout>
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_marginBottom="3dp"
-            android:layout_marginEnd="3dp"
-            android:layout_marginStart="3dp"
-            android:layout_marginTop="3dp"
+            android:layout_marginTop="0.2dp"
             android:layout_weight="1">
 
-            <com.linka.lockapp.aos.module.widget.LinkaTextView
+            <LinearLayout
                 android:id="@+id/pin_key_4"
                 style="@style/key_pad_cell"
-                android:layout_marginEnd="3dp"
-                android:layout_marginStart="3dp"
-                android:text="4" />
+                android:orientation="vertical">
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="4"
+                    android:textColor="@color/linka_black_transparent"
+                    android:textSize="@dimen/text_size_x" />
 
-            <com.linka.lockapp.aos.module.widget.LinkaTextView
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="GHI"
+                    android:textColor="@color/linka_black_transparent"
+                    android:textSize="@dimen/text_size_xm" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/pin_key_5"
                 style="@style/key_pad_cell"
-                android:layout_marginEnd="3dp"
-                android:layout_marginStart="3dp"
-                android:text="5" />
+                android:layout_marginEnd="0.2dp"
+                android:layout_marginStart="0.2dp"
+                android:orientation="vertical">
 
 
-            <com.linka.lockapp.aos.module.widget.LinkaTextView
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="5"
+                    android:textColor="@color/linka_black_transparent"
+                    android:textSize="@dimen/text_size_x" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="JKL"
+                    android:textColor="@color/linka_black_transparent"
+                    android:textSize="@dimen/text_size_xm" />
+            </LinearLayout>
+
+
+            <LinearLayout
                 android:id="@+id/pin_key_6"
                 style="@style/key_pad_cell"
-                android:layout_marginEnd="3dp"
-                android:layout_marginStart="3dp"
-                android:text="6" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="6"
+                    android:textColor="@color/linka_black_transparent"
+                    android:textSize="@dimen/text_size_x" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="MNO"
+                    android:textColor="@color/linka_black_transparent"
+                    android:textSize="@dimen/text_size_xm" />
+            </LinearLayout>
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_marginBottom="3dp"
-            android:layout_marginEnd="3dp"
-            android:layout_marginStart="3dp"
-            android:layout_marginTop="3dp"
+            android:layout_marginTop="0.2dp"
             android:layout_weight="1">
 
-            <com.linka.lockapp.aos.module.widget.LinkaTextView
+            <LinearLayout
                 android:id="@+id/pin_key_7"
                 style="@style/key_pad_cell"
-                android:text="7" />
+                android:orientation="vertical">
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="7"
+                    android:textColor="@color/linka_black_transparent"
+                    android:textSize="@dimen/text_size_x" />
 
-            <com.linka.lockapp.aos.module.widget.LinkaTextView
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="PQRS"
+                    android:textColor="@color/linka_black_transparent"
+                    android:textSize="@dimen/text_size_xm" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/pin_key_8"
                 style="@style/key_pad_cell"
-                android:text="8" />
+                android:layout_marginEnd="0.2dp"
+                android:layout_marginStart="0.2dp"
+                android:orientation="vertical">
 
 
-            <com.linka.lockapp.aos.module.widget.LinkaTextView
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="8"
+                    android:textColor="@color/linka_black_transparent"
+                    android:textSize="@dimen/text_size_x" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="TUV"
+                    android:textColor="@color/linka_black_transparent"
+                    android:textSize="@dimen/text_size_xm" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/pin_key_9"
                 style="@style/key_pad_cell"
-                android:text="9" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="9"
+                    android:textColor="@color/linka_black_transparent"
+                    android:textSize="@dimen/text_size_x" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="WXYZ"
+                    android:textColor="@color/linka_black_transparent"
+                    android:textSize="@dimen/text_size_mm" />
+            </LinearLayout>
         </TableRow>
 
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_marginBottom="3dp"
-            android:layout_marginEnd="3dp"
-            android:layout_marginStart="3dp"
-            android:layout_marginTop="3dp"
+            android:layout_marginTop="0.2dp"
             android:layout_weight="1">
 
-
-            <com.linka.lockapp.aos.module.widget.LinkaTextView
+            <LinearLayout
                 android:id="@+id/pin_key_cancel"
                 style="@style/key_pad_cell"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:text="" />
+                android:background="@color/keyboard_color"
+                android:orientation="vertical">
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="@color/linka_dark_gray"
+                    android:textSize="@dimen/text_size_x" />
 
-            <com.linka.lockapp.aos.module.widget.LinkaTextView
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="@color/linka_dark_gray"
+                    android:textSize="@dimen/text_size_xm" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/pin_key_0"
                 style="@style/key_pad_cell"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:text="0" />
+                android:layout_marginEnd="0.2dp"
+                android:layout_marginStart="0.2dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textColor="@color/linka_black_transparent"
+                    android:textSize="@dimen/text_size_x" />
+            </LinearLayout>
 
 
             <ImageView
@@ -292,6 +443,7 @@
                 style="@style/key_pad_cell"
                 android:layout_width="0dp"
                 android:layout_weight="1"
+                android:background="@color/keyboard_color"
                 android:scaleType="centerInside"
                 android:src="@drawable/numpad_back" />
         </TableRow>

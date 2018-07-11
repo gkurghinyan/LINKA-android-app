@@ -3,13 +3,13 @@ package com.linka.lockapp.aos.module.pages.settings;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.linka.lockapp.aos.R;
+import com.linka.lockapp.aos.module.core.CoreFragment;
 import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.widget.RadarView;
 
@@ -18,7 +18,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 
-public class CheckRadiusFragment extends Fragment {
+public class CheckRadiusFragment extends CoreFragment {
     private static final String LINKA_ARGUMENT = "LinkaArgument";
 
     @BindView(R.id.radar)
@@ -49,6 +49,7 @@ public class CheckRadiusFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        getAppMainActivity().setBackIconVisible(true);
         unbinder = ButterKnife.bind(this, view);
         linka = ((Linka) getArguments().getSerializable(LINKA_ARGUMENT));
         init();
@@ -58,6 +59,7 @@ public class CheckRadiusFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+        getAppMainActivity().setBackIconVisible(false);
     }
 
     private void init() {

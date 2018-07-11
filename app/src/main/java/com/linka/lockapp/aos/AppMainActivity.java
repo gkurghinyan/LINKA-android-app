@@ -17,6 +17,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -563,6 +564,43 @@ public class AppMainActivity extends CoreActivity {
     private void initDrawer() {
         drawerLayout.addDrawerListener(drawerListener);
         setDrawer();
+        back.setOnClickListener(defaultBackListener);
+        menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (drawerLayout.isDrawerOpen(drawer)) {
+                    drawerLayout.closeDrawers();
+                } else {
+                    drawerLayout.openDrawer(drawer);
+                }
+            }
+        });
+        back.setVisibility(View.GONE);
+    }
+
+    View.OnClickListener defaultBackListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            onBackPressed();
+        }
+    };
+
+    private boolean isOtherBackListener = false;
+
+    public void setOnBackListener(View.OnClickListener clickListener){
+        if(clickListener != null) {
+            menu.setVisibility(View.GONE);
+            back.setVisibility(View.VISIBLE);
+            isOtherBackListener = true;
+            back.setOnClickListener(clickListener);
+        }
+    }
+
+    public void removeBackListener(){
+        back.setVisibility(View.GONE);
+        menu.setVisibility(View.VISIBLE);
+        isOtherBackListener = false;
+        back.setOnClickListener(defaultBackListener);
     }
 
     public void setDrawer() {
@@ -632,6 +670,10 @@ public class AppMainActivity extends CoreActivity {
 
     @Override
     public void onBackPressed() {
+        if(isOtherBackListener){
+            back.callOnClick();
+            return;
+        }
         if(drawerLayout.isDrawerOpen(drawer)){
             drawerLayout.closeDrawer(drawer);
             return;
@@ -689,29 +731,14 @@ public class AppMainActivity extends CoreActivity {
             fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         }
 
-        if (curFragmentCount <= 0) {
-            menu.setVisibility(View.VISIBLE);
-            menu.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (drawerLayout.isDrawerOpen(drawer)) {
-                        drawerLayout.closeDrawers();
-                    } else {
-                        drawerLayout.openDrawer(drawer);
-                    }
-                }
-            });
-            back.setVisibility(View.GONE);
-        } else {
-//            menu.setVisibility(View.GONE);
-//            back.setVisibility(View.VISIBLE);
-            back.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    onBackPressed();
-                }
-            });
-        }
+//        if (curFragmentCount <= 0) {
+//            menu.setVisibility(View.VISIBLE);
+//
+//            back.setVisibility(View.GONE);
+//        } else {
+////            menu.setVisibility(View.GONE);
+////            back.setVisibility(View.VISIBLE);
+//        }
 
         refreshDevices();
 

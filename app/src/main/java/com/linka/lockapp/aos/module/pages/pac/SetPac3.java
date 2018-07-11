@@ -1,14 +1,17 @@
 package com.linka.lockapp.aos.module.pages.pac;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,11 +21,9 @@ import com.linka.lockapp.aos.module.core.CoreFragment;
 import com.linka.lockapp.aos.module.helpers.Constants;
 import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.pages.dialogs.ThreeDotsDialogFragment;
-import com.linka.lockapp.aos.module.pages.home.MainTabBarPageFragment;
 import com.linka.lockapp.aos.module.pages.walkthrough.TutorialDoneFragment;
 import com.linka.lockapp.aos.module.pages.walkthrough.TutorialsPagerFragment;
 import com.linka.lockapp.aos.module.pages.walkthrough.WalkthroughActivity;
-import com.linka.lockapp.aos.module.widget.LinkaTextView;
 import com.linka.lockapp.aos.module.widget.LockController;
 import com.linka.lockapp.aos.module.widget.LocksController;
 import com.pixplicity.easyprefs.library.Prefs;
@@ -103,10 +104,6 @@ public class SetPac3 extends CoreFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if(getActivity() instanceof AppMainActivity){
-            ((AppMainActivity) getActivity()).setTitle(getString(R.string.set_pac));
-        }
-
         if (getArguments() != null) {
             Bundle bundle = getArguments();
             if (bundle.get("linka") != null) {
@@ -147,7 +144,7 @@ public class SetPac3 extends CoreFragment {
         back.setVisibility(View.INVISIBLE);
 
 
-        caption.setText(R.string.enter_pin_text);
+        caption.setText(R.string.set_your_phoneless_access_code);
     }
 
     void initReenter() {
@@ -167,7 +164,7 @@ public class SetPac3 extends CoreFragment {
     }
 
 
-    public void setPinBackgroundColor(LinkaTextView view, MotionEvent event) {
+    public void setPinBackgroundColor(LinearLayout view, MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 view.setBackgroundColor(Color.parseColor("#efefef"));
@@ -179,61 +176,61 @@ public class SetPac3 extends CoreFragment {
     }
 
     @OnTouch(R.id.pin_key_0)
-    public boolean pin0clicked(LinkaTextView view, MotionEvent event){
+    public boolean pin0clicked(LinearLayout view, MotionEvent event){
         setPinBackgroundColor(view, event);
         return false;
     }
 
     @OnTouch(R.id.pin_key_1)
-    public boolean pin1clicked(LinkaTextView view, MotionEvent event) {
+    public boolean pin1clicked(LinearLayout view, MotionEvent event) {
         setPinBackgroundColor(view, event);
         return false;
     }
 
     @OnTouch(R.id.pin_key_2)
-    public boolean pin2clicked(LinkaTextView view, MotionEvent event) {
+    public boolean pin2clicked(LinearLayout view, MotionEvent event) {
         setPinBackgroundColor(view, event);
         return false;
     }
 
     @OnTouch(R.id.pin_key_3)
-    public boolean pin3clicked(LinkaTextView view, MotionEvent event) {
+    public boolean pin3clicked(LinearLayout view, MotionEvent event) {
         setPinBackgroundColor(view, event);
         return false;
     }
 
     @OnTouch(R.id.pin_key_4)
-    public boolean pin4clicked(LinkaTextView view, MotionEvent event) {
+    public boolean pin4clicked(LinearLayout view, MotionEvent event) {
         setPinBackgroundColor(view, event);
         return false;
     }
 
     @OnTouch(R.id.pin_key_5)
-    public boolean pin5clicked(LinkaTextView view, MotionEvent event) {
+    public boolean pin5clicked(LinearLayout view, MotionEvent event) {
         setPinBackgroundColor(view, event);
         return false;
     }
 
     @OnTouch(R.id.pin_key_6)
-    public boolean pin6clicked(LinkaTextView view, MotionEvent event) {
+    public boolean pin6clicked(LinearLayout view, MotionEvent event) {
         setPinBackgroundColor(view, event);
         return false;
     }
 
     @OnTouch(R.id.pin_key_7)
-    public boolean pin7clicked(LinkaTextView view, MotionEvent event) {
+    public boolean pin7clicked(LinearLayout view, MotionEvent event) {
         setPinBackgroundColor(view, event);
         return false;
     }
 
     @OnTouch(R.id.pin_key_8)
-    public boolean pin8clicked(LinkaTextView view, MotionEvent event) {
+    public boolean pin8clicked(LinearLayout view, MotionEvent event) {
         setPinBackgroundColor(view, event);
         return false;
     }
 
     @OnTouch(R.id.pin_key_9)
-    public boolean pin9clicked(LinkaTextView view, MotionEvent event) {
+    public boolean pin9clicked(LinearLayout view, MotionEvent event) {
         setPinBackgroundColor(view, event);
         return false;
     }
@@ -424,15 +421,25 @@ public class SetPac3 extends CoreFragment {
                     linka.pacIsSet = true;
                     linka.saveSettings();
 
-                    Toast.makeText(getActivity(), "Success Pac", Toast.LENGTH_SHORT).show();
                     if (getArguments().getInt(NEXT_FRAGMENT) == WALKTHROUGH) {
+                        Toast.makeText(getActivity(), "Success Pac", Toast.LENGTH_SHORT).show();
                         if (Prefs.getBoolean("show-walkthrough", false) || Prefs.getBoolean(Constants.SHOW_TUTORIAL_WALKTHROUGH,false)) {
                             ((WalkthroughActivity) getActivity()).nextTutorial(TutorialsPagerFragment.newInstance());
                         } else {
                             ((WalkthroughActivity) getActivity()).nextTutorial(TutorialDoneFragment.newInstance());
                         }
                     } else {
-                        getAppMainActivity().setFragment(MainTabBarPageFragment.newInstance(linka,MainTabBarPageFragment.SETTING_SCREEN));
+                        new AlertDialog.Builder(getActivity())
+                                .setMessage("Your PAC has been saved")
+                                .setCancelable(false)
+                                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                        getAppMainActivity().popFragment();
+                                    }
+                                }).create().show();
+//                        getAppMainActivity().setFragment(MainTabBarPageFragment.newInstance(linka,MainTabBarPageFragment.SETTING_SCREEN));
                     }
 
                 } else {

@@ -15,6 +15,8 @@ import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.widget.LockController;
 import com.linka.lockapp.aos.module.widget.LocksController;
 
+import org.greenrobot.eventbus.EventBus;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -81,13 +83,21 @@ public class SettingsTamperSensitivityFragment extends CoreFragment {
             }
             init();
         }
-        getAppMainActivity().setBackIconVisible(true);
+        getAppMainActivity().setTitle("");
+        EventBus.getDefault().post(SettingsPageFragment.FRAGMENT_ADDED);
+        getAppMainActivity().setOnBackListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SettingsPageFragment.currentFragment = SettingsPageFragment.NO_FRAGMENT;
+                getFragmentManager().popBackStack();
+            }
+        });
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        getAppMainActivity().setBackIconVisible(false);
+        getAppMainActivity().removeBackListener();
         unbinder.unbind();
     }
 

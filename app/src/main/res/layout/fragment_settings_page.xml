@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:focusableInTouchMode="true"
-    android:id="@+id/root">
+    android:focusableInTouchMode="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,7 +27,7 @@
 
                 <View style="@style/menu_divider" />
 
-                <LinearLayout
+                <RelativeLayout
                     android:id="@+id/row_phoneless_passcode"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/margin_l"
@@ -38,22 +38,36 @@
                         android:id="@+id/text_phoneless_passcode"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
+                        android:layout_centerVertical="true"
                         android:layout_marginStart="@dimen/margin_x"
                         android:text="@string/phoneless_passcode"
                         android:textColor="@color/search_text"
                         android:textSize="@dimen/text_size_normal" />
 
+                    <TextView
+                        android:id="@+id/passcode_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center"
+                        android:layout_toStartOf="@+id/passcode_icon"
+                        android:gravity="end"
+                        android:text="1256"
+                        android:textColor="@color/search_text"
+                        android:textSize="@dimen/text_size_normal" />
+
                     <ImageView
-                        android:layout_width="match_parent"
+                        android:id="@+id/passcode_icon"
+                        android:layout_width="wrap_content"
                         android:layout_height="@dimen/margin_x"
-                        android:layout_gravity="center_vertical"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
                         android:layout_marginEnd="@dimen/margin_x"
                         android:paddingLeft="@dimen/activity_horizontal_margin_xsm"
                         android:paddingRight="@dimen/activity_horizontal_margin_xsm"
                         android:scaleType="fitEnd"
                         android:src="@drawable/right_gray_arrow" />
-                </LinearLayout>
+                </RelativeLayout>
 
                 <View
                     style="@style/menu_divider"
@@ -470,23 +484,42 @@
                     android:layout_height="@dimen/margin_dx"
                     android:background="@color/title_back_color" />
 
-                <View style="@style/menu_divider"
-                    android:id="@+id/remove_top_divider"/>
+                <View
+                    android:id="@+id/remove_top_divider"
+                    style="@style/menu_divider" />
 
-                <TextView
-                    android:id="@+id/text_remove_lock"
+                <RelativeLayout
+                    android:id="@+id/row_remove_lock"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/margin_l"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="@dimen/margin_x"
-                    android:background="@color/linka_white"
-                    android:text="Remove Lock"
-                    android:gravity="center_vertical"
-                    android:textColor="@color/search_text"
-                    android:textSize="@dimen/text_size_normal" />
+                    android:background="@color/linka_white">
 
-                <View style="@style/menu_divider"
-                    android:id="@+id/remove_bottom_divider"/>
+                    <TextView
+                        android:id="@+id/text_remove_lock"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/margin_l"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="@dimen/margin_x"
+                        android:background="@color/linka_white"
+                        android:gravity="center_vertical"
+                        android:text="Remove Lock"
+                        android:textColor="@color/search_text"
+                        android:textSize="@dimen/text_size_normal" />
+
+                    <ImageView
+                        android:id="@+id/remove_info"
+                        android:layout_width="@dimen/margin_px"
+                        android:layout_height="@dimen/margin_px"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="@dimen/margin_x"
+                        android:scaleType="fitEnd"
+                        android:src="@drawable/danger_icon" />
+                </RelativeLayout>
+
+                <View
+                    android:id="@+id/remove_bottom_divider"
+                    style="@style/menu_divider" />
 
                 <android.support.v4.widget.Space
                     android:layout_width="match_parent"
@@ -502,6 +535,7 @@
     <FrameLayout
         android:id="@+id/settings_page_root"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:background="@color/linka_white"/>
 
 </FrameLayout>

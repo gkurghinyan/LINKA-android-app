@@ -162,8 +162,9 @@ public class MainTabBarPageFragment extends CoreFragment {
             adapter.f3 = null;
             adapter.f4 = null;
         }
+        adapter = null;
         unbinder.unbind();
-        currentPosition = 0;
+//        currentPosition = 0;
     }
 
 //    @Override
@@ -272,6 +273,12 @@ public class MainTabBarPageFragment extends CoreFragment {
                     }
                     if (position == 3) {
                         t4.setSelected(true);
+                        if(SettingsPageFragment.currentFragment != SettingsPageFragment.NO_FRAGMENT){
+                            getAppMainActivity().setBackIconVisible(true);
+                        }
+                    }else {
+                        Log.d("lok_j","remove from activity");
+                        getAppMainActivity().setBackIconVisible(false);
                     }
                 }
 

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/linka_white"
+    tools:context=".module.pages.settings.RemovingInfoFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Removing a Lock"
+        android:textColor="@color/linka_dark_gray"
+        android:textSize="@dimen/text_size_l"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/margin_px"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="OWNER"
+        android:textStyle="bold"
+        android:textSize="@dimen/text_size_xm"
+        android:textColor="@color/linka_dark_gray"
+        android:layout_marginStart="@dimen/margin_x"
+        android:layout_marginTop="@dimen/margin_px"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/remove_by_owner_text"
+        android:layout_marginTop="@dimen/margin_x"
+        android:layout_marginStart="@dimen/margin_x"
+        android:layout_marginEnd="@dimen/margin_x"
+        android:textColor="@color/bright_text"
+        android:textSize="@dimen/text_size_xm"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GUEST"
+        android:textStyle="bold"
+        android:textSize="@dimen/text_size_xm"
+        android:textColor="@color/linka_dark_gray"
+        android:layout_marginStart="@dimen/margin_x"
+        android:layout_marginTop="@dimen/margin_px"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/remove_by_guest_text"
+        android:layout_marginTop="@dimen/margin_x"
+        android:layout_marginStart="@dimen/margin_x"
+        android:layout_marginEnd="@dimen/margin_x"
+        android:textColor="@color/bright_text"
+        android:textSize="@dimen/text_size_xm"/>
+</LinearLayout>
