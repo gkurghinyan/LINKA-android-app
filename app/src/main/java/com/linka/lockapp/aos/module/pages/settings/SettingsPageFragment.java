@@ -198,6 +198,7 @@ public class SettingsPageFragment extends CoreFragment {
                 LockController lockController = LocksController.getInstance().getLockController();
                 revocationController.implement(getAppMainActivity(), linka, lockController);
             }
+            getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             switch(currentFragment){
                 case TAMPER_SENSITIVITY_FRAGMENT:
                     getFragmentManager().beginTransaction()
@@ -239,7 +240,6 @@ public class SettingsPageFragment extends CoreFragment {
         super.onDestroyView();
         unbinder.unbind();
         revocationController.onPause();
-        getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
     @Override
