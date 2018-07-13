@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.linka.lockapp.aos.R;
+import com.linka.lockapp.aos.module.model.LinkaActivity;
 import com.linka.lockapp.aos.module.model.LinkaActivity.LinkaActivityType;
 import com.linka.lockapp.aos.module.model.Notification;
 import com.linka.lockapp.aos.module.widget.GenericLoadMoreAdapter;
@@ -92,11 +93,26 @@ public class NotificationListAdapter extends GenericLoadMoreAdapter<Notification
         holder.container.setTag(item);
         holder.container.setOnClickListener(mOnclickListener);
         holder.notificationIcon.setImageResource(icon);
+        if(mItems.get(position).isRead){
+            holder.container.setBackgroundColor(context.getResources().getColor(R.color.linka_white));
+        }else {
+            holder.container.setBackgroundColor(context.getResources().getColor(R.color.linka_light_gray));
+        }
     }
 
     @Override
     public int getItemCount() {
         return super.getItemCount();
+    }
+
+    public void updateReadState(){
+       List<Long> list = new ArrayList<>();
+        for(Notification notification:mItems){
+            if(!notification.isRead) {
+                list.add(notification.id);
+            }
+        }
+        LinkaActivity.updateReadState(list);
     }
 
 

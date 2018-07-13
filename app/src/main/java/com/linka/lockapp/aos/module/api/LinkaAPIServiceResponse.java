@@ -281,6 +281,10 @@ public class LinkaAPIServiceResponse {
                 activity.lock_name = linka.getName();
                 activity.lock_address = linka.getUUIDAddress();
                 activity.linka_id = linka.getId();
+                LinkaActivity linkaActivity = LinkaActivity.getActivityByTimestamp(Long.parseLong(timestamp));
+                if(linkaActivity != null){
+                    activity.isRead = linkaActivity.isRead;
+                }
                 activity.linka_activity_status = linka_activity_status;
                 if (timestamp != null) { activity.timestamp = timestamp; };
                 if (timestamp_locked != null) { activity.timestamp_locked = timestamp_locked; };

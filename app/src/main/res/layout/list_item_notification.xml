@@ -4,7 +4,7 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?android:attr/selectableItemBackground">
+    android:background="@color/linka_white">
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline"

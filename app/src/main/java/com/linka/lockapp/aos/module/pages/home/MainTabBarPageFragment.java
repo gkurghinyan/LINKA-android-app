@@ -67,6 +67,7 @@ import retrofit2.Response;
  */
 public class MainTabBarPageFragment extends CoreFragment {
     public static final String CLOSE_PAGES_IN_USERS_SCREEN = "ClosePagesInUsersScreen";
+    public static final String UPDATE_NOTIFICATIONS = "UpdateNotifications";
     private static final String SCREEN_ARGUMENT = "ScreenArgument";
     public static final int LOCK_SCREEN = 0;
     public static final int USER_SCREEN = 1;
@@ -80,7 +81,7 @@ public class MainTabBarPageFragment extends CoreFragment {
     @BindView(R.id.t2)
     LinearLayout t2;
     @BindView(R.id.t3)
-    LinearLayout t3;
+    ConstraintLayout t3;
     @BindView(R.id.t4)
     ConstraintLayout t4;
     @BindView(R.id.tab_bar)
@@ -95,8 +96,11 @@ public class MainTabBarPageFragment extends CoreFragment {
     ImageView t4Img;
     @BindView(R.id.settings_update)
     TextView settingsUpdate;
+    @BindView(R.id.notifications_update)
+    TextView notificationsUpdate;
 
     public static int currentPosition = 0;
+    private int newNotificationsCount = 0;
     Linka linka;
     Unbinder unbinder;
 
@@ -190,6 +194,7 @@ public class MainTabBarPageFragment extends CoreFragment {
 
 
     void init(Bundle savedInstanceState) {
+        checkNewNotifications();
 
         if (savedInstanceState != null) {
             if (viewPager != null) {
@@ -270,6 +275,9 @@ public class MainTabBarPageFragment extends CoreFragment {
                     }
                     if (position == 2) {
                         t3.setSelected(true);
+                        newNotificationsCount = 0;
+                        notificationsUpdate.setText("");
+                        notificationsUpdate.setVisibility(View.GONE);
                     }
                     if (position == 3) {
                         t4.setSelected(true);
@@ -280,10 +288,60 @@ public class MainTabBarPageFragment extends CoreFragment {
                         Log.d("lok_j","remove from activity");
                         getAppMainActivity().setBackIconVisible(false);
                     }
+                    EventBus.getDefault().post("Selected-" + String.valueOf(position));
                 }
 
                 @Override
                 public void onPageScrollStateChanged(int state) {
+
+                }
+            });
+        }
+    }
+
+    private void checkNewNotifications() {
+        if (!isAdded()) return;
+
+        if (linka == null) {
+            return;
+        }
+        if (getAppMainActivity().isNetworkAvailable()) {
+            LinkaAPIServiceImpl.fetch_activities(getAppMainActivity(), linka, new Callback<LinkaAPIServiceResponse.ActivitiesResponse>() {
+                @Override
+                public void onResponse(Call<LinkaAPIServiceResponse.ActivitiesResponse> call, Response<LinkaAPIServiceResponse.ActivitiesResponse> response) {
+                    if (LinkaAPIServiceImpl.check(response, false, getAppMainActivity())) {
+                        LinkaAPIServiceResponse.ActivitiesResponse body = response.body();
+                        List<LinkaActivity> activities = new ArrayList<LinkaActivity>();
+
+                        if (body == null || body.data == null) {
+                            return;
+                        }
+
+                        for (LinkaAPIServiceResponse.ActivitiesResponse.Data data : body.data) {
+                            LinkaActivity activity = data.makeLinkaActivity(linka);
+                            activities.add(activity);
+                        }
+                        LinkaActivity.saveAndOverwriteActivities(activities, linka);
+
+                        List<LinkaActivity> activities2 = LinkaActivity.getLinkaActivitiesByLinka(linka);
+                        List<Notification> notifications = Notification.fromLinkaActivities(activities2);
+
+                        for (Notification notification : notifications) {
+                            if(!notification.isRead){
+                                newNotificationsCount ++;
+                            }
+                        }
+                        if(newNotificationsCount != 0){
+                            notificationsUpdate.setVisibility(View.VISIBLE);
+                            notificationsUpdate.setText(String.valueOf(newNotificationsCount));
+                        }else {
+                            notificationsUpdate.setVisibility(View.GONE);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<LinkaAPIServiceResponse.ActivitiesResponse> call, Throwable t) {
 
                 }
             });
@@ -482,6 +540,15 @@ public class MainTabBarPageFragment extends CoreFragment {
 
     @Subscribe
     public void onEvent(Object object) {
+        if(object != null && object instanceof String){
+            if(object.equals(UPDATE_NOTIFICATIONS)){
+                if(currentPosition != NOTIFICATION_SCREEN) {
+                    newNotificationsCount++;
+                    notificationsUpdate.setVisibility(View.VISIBLE);
+                    notificationsUpdate.setText(String.valueOf(newNotificationsCount));
+                }
+            }
+        }
         if (object != null && object instanceof String && object.equals(LocksController.LOCKSCONTROLLER_NOTIFY_REFRESHED)) {
             LockController lockController = LocksController.getInstance().getLockController();
             if (linka.isLockSettled) {

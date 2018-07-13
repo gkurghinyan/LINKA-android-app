@@ -24,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Notification implements Serializable {
 
+    public long id;
     public String body = "";
     public String time = "";
     public LinkaActivityType type = LinkaActivityType.isUnknown;
@@ -31,6 +32,7 @@ public class Notification implements Serializable {
     public String latitude = "";
     public String longitude = "";
     private String address = "";
+    public boolean isRead = false;
     private List<Address> addresses;
 
     private Geocoder geocoder = new Geocoder(AppDelegate.getInstance(), Locale.getDefault());
@@ -45,7 +47,8 @@ public class Notification implements Serializable {
             notification.time = activity.getFormattedDate();
             notification.from = activity.lock_name;
             notification.type = type;
-
+            notification.isRead = activity.isRead;
+            notification.id = activity.getId();
 
             if (type == LinkaActivityType.isLocked) {
 

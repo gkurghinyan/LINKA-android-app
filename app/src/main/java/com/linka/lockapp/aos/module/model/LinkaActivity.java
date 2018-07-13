@@ -2,6 +2,7 @@ package com.linka.lockapp.aos.module.model;
 
 import android.location.Location;
 import android.os.Build;
+import android.os.Handler;
 import android.provider.BaseColumns;
 import android.provider.Settings;
 
@@ -15,6 +16,7 @@ import com.linka.lockapp.aos.BuildConfig;
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceImpl;
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceResponse;
 import com.linka.lockapp.aos.module.helpers.NotificationsHelper;
+import com.linka.lockapp.aos.module.pages.home.MainTabBarPageFragment;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -109,6 +111,9 @@ public class LinkaActivity extends Model implements Serializable {
     @Column(name = "alarm")
     public boolean alarm = false;
 
+    @Column(name = "isRead")
+    public boolean isRead = false;
+
     // Telemetry
     public String linka_uuid = "";
     public String platform = "Android " + Build.MANUFACTURER + " " + Build.MODEL;
@@ -197,6 +202,28 @@ public class LinkaActivity extends Model implements Serializable {
         }
     }
 
+    public static void updateReadState(final List<Long> ids){
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                LinkaActivity activity;
+                for(Long id:ids){
+                    activity = getActivityById(id);
+                    activity.isRead = true;
+                    activity.save();
+                }
+            }
+        });
+    }
+
+    public static LinkaActivity getActivityById(Long id){
+        return new Select().from(LinkaActivity.class).where("_id = ?", id).executeSingle();
+    }
+
+    public static LinkaActivity getActivityByTimestamp(Long time){
+        return new Select().from(LinkaActivity.class).where("timestamp = ?", time).executeSingle();
+    }
+
 
 
 
@@ -216,6 +243,7 @@ public class LinkaActivity extends Model implements Serializable {
         activity.new_lock_name = new_lock_name;
         activity.sleep_lock_sec = linka.settings_locked_sleep;
         activity.sleep_unlock_sec = linka.settings_unlocked_sleep;
+        activity.isRead = false;
 
         // Handle Android Specific Telemetry
         // UUID is Secure.ANDROID_ID - Should exist over the life of the phone unless factory reset occurs
@@ -319,7 +347,7 @@ public class LinkaActivity extends Model implements Serializable {
         LinkaAPIServiceImpl.add_activity(AppDelegate.getInstance(), linka, activity, new Callback<LinkaAPIServiceResponse>() {
             @Override
             public void onResponse(Call<LinkaAPIServiceResponse> call, Response<LinkaAPIServiceResponse> response) {
-
+                EventBus.getDefault().post(MainTabBarPageFragment.UPDATE_NOTIFICATIONS);
             }
 
             @Override

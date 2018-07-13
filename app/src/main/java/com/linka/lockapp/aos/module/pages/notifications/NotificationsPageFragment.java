@@ -3,6 +3,7 @@ package com.linka.lockapp.aos.module.pages.notifications;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,6 +22,7 @@ import com.linka.lockapp.aos.module.core.CoreFragment;
 import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.model.LinkaActivity;
 import com.linka.lockapp.aos.module.model.Notification;
+import com.linka.lockapp.aos.module.pages.home.MainTabBarPageFragment;
 import com.linka.lockapp.aos.module.widget.SuperBackToTopRecyclerView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -50,6 +52,8 @@ public class NotificationsPageFragment extends CoreFragment {
     RelativeLayout loading;
 
     Unbinder unbinder;
+
+    private boolean isSaveReadState = false;
 
     boolean shouldLoadSettings = true;
     View.OnClickListener mOnClickListener;
@@ -91,8 +95,10 @@ public class NotificationsPageFragment extends CoreFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (adapter != null)
-        {
+        if (adapter != null) {
+            if (isSaveReadState) {
+                adapter.updateReadState();
+            }
             adapter.context = null;
         }
         unbinder.unbind();
@@ -120,8 +126,7 @@ public class NotificationsPageFragment extends CoreFragment {
             }
         }
 
-        if (recyclerView != null && recyclerView.getRecyclerView().getLayoutManager() == null)
-        {
+        if (recyclerView != null && recyclerView.getRecyclerView().getLayoutManager() == null) {
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
             recyclerView.setLayoutManager(layoutManager);
         }
@@ -137,9 +142,9 @@ public class NotificationsPageFragment extends CoreFragment {
         mOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(v.getTag() instanceof Notification){
+                if (v.getTag() instanceof Notification) {
                     onItemClick((Notification) v.getTag());
-                }else{
+                } else {
                     //no correct data
                 }
 
@@ -155,8 +160,8 @@ public class NotificationsPageFragment extends CoreFragment {
         refresh();
     }
 
-    private void onItemClick(Notification notification){
-        if(TextUtils.isEmpty(notification.longitude)||TextUtils.isEmpty(notification.latitude)){
+    private void onItemClick(Notification notification) {
+        if (TextUtils.isEmpty(notification.longitude) || TextUtils.isEmpty(notification.latitude)) {
             return;
         }
         try {
@@ -165,12 +170,10 @@ public class NotificationsPageFragment extends CoreFragment {
             String uri = String.format(Locale.ENGLISH, "geo:%f,%f", latitude, longitude);
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
             getActivity().startActivity(intent);
-        }catch (Exception ex){
+        } catch (Exception ex) {
 
         }
     }
-
-
 
 
     void refresh() {
@@ -180,13 +183,11 @@ public class NotificationsPageFragment extends CoreFragment {
             @Override
             public void run() {
                 if (!isAdded()) return;
-                if (recyclerView == null)
-                {
+                if (recyclerView == null) {
                     return;
                 }
 
-                if (adapter == null)
-                {
+                if (adapter == null) {
                     return;
                 }
 
@@ -197,8 +198,7 @@ public class NotificationsPageFragment extends CoreFragment {
                 adapter.setList(notifications);
                 adapter.notifyDataSetChanged();
 
-                if (shouldLoadSettings)
-                {
+                if (shouldLoadSettings) {
                     fetch_activities();
                 }
             }
@@ -206,35 +206,42 @@ public class NotificationsPageFragment extends CoreFragment {
     }
 
 
-
-
-    void fetch_activities()
-    {
+    void fetch_activities() {
         if (!isAdded()) return;
 
         if (linka == null) {
             return;
         }
-        if(getAppMainActivity().isNetworkAvailable()) {
+        if (getAppMainActivity().isNetworkAvailable()) {
             LinkaAPIServiceImpl.fetch_activities(getAppMainActivity(), linka, new Callback<LinkaAPIServiceResponse.ActivitiesResponse>() {
                 @Override
-                public void onResponse(Call<LinkaAPIServiceResponse.ActivitiesResponse> call, Response<LinkaAPIServiceResponse.ActivitiesResponse> response) {
+                public void onResponse(Call<LinkaAPIServiceResponse.ActivitiesResponse> call, final Response<LinkaAPIServiceResponse.ActivitiesResponse> response) {
                     if (LinkaAPIServiceImpl.check(response, false, getAppMainActivity())) {
-                        shouldLoadSettings = false;
-                        LinkaAPIServiceResponse.ActivitiesResponse body = response.body();
-                        List<LinkaActivity> activities = new ArrayList<LinkaActivity>();
+                        new Handler().post(new Runnable() {
+                            @Override
+                            public void run() {
+                                shouldLoadSettings = false;
+                                LinkaAPIServiceResponse.ActivitiesResponse body = response.body();
+                                List<LinkaActivity> activities = new ArrayList<LinkaActivity>();
 
-                        if (body == null || body.data == null) {
-                            return;
-                        }
+                                if (body == null || body.data == null) {
+                                    return;
+                                }
 
-                        for (LinkaAPIServiceResponse.ActivitiesResponse.Data data : body.data) {
-                            LinkaActivity activity = data.makeLinkaActivity(linka);
-                            activities.add(activity);
-                        }
+                                for (LinkaAPIServiceResponse.ActivitiesResponse.Data data : body.data) {
+                                    LinkaActivity activity = data.makeLinkaActivity(linka);
+                                    activities.add(activity);
+                                }
 
-                        LinkaActivity.saveAndOverwriteActivities(activities, linka);
-                        refresh();
+                                LinkaActivity.saveAndOverwriteActivities(activities, linka);
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        refresh();
+                                    }
+                                });
+                            }
+                        });
                     }
                 }
 
@@ -245,9 +252,6 @@ public class NotificationsPageFragment extends CoreFragment {
             });
         }
     }
-
-
-
 
 
     @Override
@@ -265,8 +269,22 @@ public class NotificationsPageFragment extends CoreFragment {
 
     @Subscribe
     public void onEvent(Object object) {
-        if (object != null && object.equals(LinkaActivity.LINKA_ACTIVITY_ON_CHANGE)) {
-            refresh();
+        if (object != null && object instanceof String) {
+            if (object.equals(LinkaActivity.LINKA_ACTIVITY_ON_CHANGE)) {
+                refresh();
+            } else if (((String) object).substring(0, 8).equals("Selected")) {
+                if (object.equals("Selected-" + String.valueOf(MainTabBarPageFragment.NOTIFICATION_SCREEN))) {
+                    isSaveReadState = true;
+                } else if (isSaveReadState) {
+                    adapter.updateReadState();
+                    fetch_activities();
+                    isSaveReadState = false;
+                }
+            }else if(object.equals(MainTabBarPageFragment.UPDATE_NOTIFICATIONS)){
+                if(MainTabBarPageFragment.currentPosition == MainTabBarPageFragment.NOTIFICATION_SCREEN){
+                    fetch_activities();
+                }
+            }
         }
     }
 }
