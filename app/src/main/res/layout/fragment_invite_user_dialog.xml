@@ -8,7 +8,8 @@
     android:background="@color/linka_white"
     tools:context=".module.pages.users.InviteUserDialogFragment"
     android:fitsSystemWindows="true"
-    android:focusable="true">
+    android:focusable="true"
+   >
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline5"
@@ -46,7 +47,8 @@
         app:layout_constraintStart_toStartOf="@id/guideline5"
         app:layout_constraintEnd_toEndOf="@id/guideline6"
         app:cardCornerRadius="20dp"
-        app:cardElevation="5dp">
+        app:cardElevation="5dp"
+        android:id="@+id/root">
 
 
     <android.support.constraint.ConstraintLayout

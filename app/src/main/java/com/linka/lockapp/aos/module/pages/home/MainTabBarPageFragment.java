@@ -40,7 +40,6 @@ import com.linka.lockapp.aos.module.pages.notifications.NotificationsPageFragmen
 import com.linka.lockapp.aos.module.pages.pac.SetPac3;
 import com.linka.lockapp.aos.module.pages.settings.SettingsPageFragment;
 import com.linka.lockapp.aos.module.pages.setup.AutoUpdateFragment;
-import com.linka.lockapp.aos.module.pages.users.InviteUserDialogFragment;
 import com.linka.lockapp.aos.module.pages.users.SharingPageFragment;
 import com.linka.lockapp.aos.module.widget.LockController;
 import com.linka.lockapp.aos.module.widget.LocksController;
@@ -271,7 +270,7 @@ public class MainTabBarPageFragment extends CoreFragment {
                     if (position == 1) {
                         t2.setSelected(true);
                     } else {
-                        if (getActivity().getSupportFragmentManager().findFragmentById(R.id.users_page_root) instanceof InviteUserDialogFragment) {
+                        if (getActivity().getSupportFragmentManager().findFragmentById(R.id.users_page_root) != null) {
                             getAppMainActivity().popFragment();
                         }
                     }

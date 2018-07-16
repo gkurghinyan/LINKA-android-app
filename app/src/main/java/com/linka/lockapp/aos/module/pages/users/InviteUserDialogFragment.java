@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceImpl;
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceResponse;
 import com.linka.lockapp.aos.module.model.Linka;
+import com.linka.lockapp.aos.module.other.Utils;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -38,10 +40,15 @@ public class InviteUserDialogFragment extends Fragment {
     private static final String EMAIL_ADDRESSES = "EmailAddresses";
     private static final String LINKA_ARGUMENT = "LinkaArgument";
 
+    @BindView(R.id.root)
+    CardView root;
+
     @BindView(R.id.email_edit)
     EditText emailEdit;
+
     @BindView(R.id.cancel_button)
     TextView cancel;
+
     @BindView(R.id.invite_button)
     TextView invite;
 
@@ -79,12 +86,13 @@ public class InviteUserDialogFragment extends Fragment {
     void onInviteClicked(){
         if(!emailEdit.getText().toString().equals("") && emailEdit.getText().toString().matches(emailPattern)) {
             if(!isUserExisting(Objects.requireNonNull(getArguments().getStringArrayList(EMAIL_ADDRESSES)))) {
-                inviteUser(emailEdit.getText().toString());
                 View view = getActivity().getCurrentFocus();
                 if (view != null) {
                     InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 }
+                Utils.showLoading(getContext(),root);
+                inviteUser(emailEdit.getText().toString());
             }else {
                 Toast.makeText(getActivity(), getString(R.string.user_exist), Toast.LENGTH_SHORT).show();
             }
@@ -130,11 +138,12 @@ public class InviteUserDialogFragment extends Fragment {
                             });
                     builder.create().show();
                 }
+                Utils.cancelLoading();
             }
 
             @Override
             public void onFailure(Call<LinkaAPIServiceResponse> call, Throwable t) {
-
+                Utils.cancelLoading();
             }
         });
     }
