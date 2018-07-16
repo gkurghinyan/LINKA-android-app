@@ -276,6 +276,7 @@ public class MainTabBarPageFragment extends CoreFragment {
                     }
                     if (position == 2) {
                         t3.setSelected(true);
+                    }else if(NotificationsPageFragment.isSaveReadState){
                         newNotificationsCount = 0;
                         notificationsUpdate.setText("");
                         notificationsUpdate.setVisibility(View.GONE);
@@ -289,12 +290,14 @@ public class MainTabBarPageFragment extends CoreFragment {
                         Log.d("lok_j","remove from activity");
                         getAppMainActivity().setBackIconVisible(false);
                     }
-                    EventBus.getDefault().post("Selected-" + String.valueOf(position));
                 }
 
                 @Override
                 public void onPageScrollStateChanged(int state) {
-
+                    if(state == ViewPager.SCROLL_STATE_IDLE){
+                        Log.d("scrol_state","IDLE");
+                        EventBus.getDefault().post("Selected-" + String.valueOf(currentPosition));
+                    }
                 }
             });
         }

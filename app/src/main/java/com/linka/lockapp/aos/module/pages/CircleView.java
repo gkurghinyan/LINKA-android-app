@@ -406,19 +406,29 @@ public class CircleView extends CoreFragment {
 
             linka = Linka.getLinkaFromLockController(linka);
 
-            refreshDisplay();
+            if(MainTabBarPageFragment.currentPosition == MainTabBarPageFragment.LOCK_SCREEN) {
+                refreshDisplay();
+            }
 
         } else if (object != null && object.equals(LinkaActivity.LINKA_ACTIVITY_ON_CHANGE)) {
 
             linka = Linka.getLinkaFromLockController(linka);
 
-            refreshDisplay();
+            if(MainTabBarPageFragment.currentPosition == MainTabBarPageFragment.LOCK_SCREEN) {
+                refreshDisplay();
+            }
         } else if (object != null && object.equals(LockGattUpdateReceiver.GATT_UPDATE_RECEIVER_NOTIFY_DISCONNECTED)) {
             LogHelper.e("MyLinkasPageFrag", "[EVENTBUS] GATT DISCONNECT Notified");
 
             linka = Linka.getLinkaFromLockController(linka);
-            refreshDisplay();
-        } else if (object != null && object.equals(NotificationsHelper.LINKA_NOT_LOCKED)) {
+            if(MainTabBarPageFragment.currentPosition == MainTabBarPageFragment.LOCK_SCREEN) {
+                refreshDisplay();
+            }
+        }else if (object instanceof String && ((String) object).substring(0, 8).equals("Selected")) {
+            if (object.equals("Selected-" + String.valueOf(MainTabBarPageFragment.LOCK_SCREEN))) {
+                refreshDisplay();
+            }
+        }else if (object != null && object.equals(NotificationsHelper.LINKA_NOT_LOCKED)) {
             isWarningShow = true;
             swipeButton.setCircleClickable(false);
             panicButton.setVisibility(View.GONE);

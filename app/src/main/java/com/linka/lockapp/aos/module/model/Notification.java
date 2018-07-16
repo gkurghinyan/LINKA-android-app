@@ -66,7 +66,9 @@ public class Notification implements Serializable {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        notification.address = notification.addresses.get(0).getAddressLine(0);
+                        if(notification.addresses != null) {
+                            notification.address = notification.addresses.get(0).getAddressLine(0);
+                        }
                         notification.body = _.i(R.string.act_locked_at) + " " + notification.address;
                     }
                     notification.latitude = activity.latitude;

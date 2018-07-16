@@ -1,8 +1,8 @@
 package com.linka.lockapp.aos.module.pages.users;
 
 import android.graphics.PorterDuff;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -186,103 +186,13 @@ public class SharingPageFragment extends CoreFragment {
         recyclerView.setAdapter(adapter);
     }
 
-    private Handler lockPermissionsHandler = null;
-    private Runnable lockPermissionsRunnable = new Runnable() {
-        @Override
-        public void run() {
-            //Get lock permissions
-            LinkaAPIServiceImpl.lock_permissions(getAppMainActivity(), linka, new Callback<LinkaAPIServiceResponse.LockPermissionsResponse>() {
-                @Override
-                public void onResponse(Call<LinkaAPIServiceResponse.LockPermissionsResponse> call, Response<LinkaAPIServiceResponse.LockPermissionsResponse> response) {
-
-                    if (LinkaAPIServiceImpl.check(response, false, null)) {
-
-                        for (final LinkaAPIServiceResponse.LockPermissionsResponse.Data userData : response.body().data) {
-                            User newUser = User.saveUserForEmail(userData.email,
-                                    userData.first_name,
-                                    userData.last_name,
-                                    userData.name,
-                                    userData.userId,
-                                    userData.owner,
-                                    userData.isPendingApproval,
-                                    userData.lastUsed);
-
-                            if (ownerName == null) {
-                                unbinder = ButterKnife.bind(SharingPageFragment.this, rootView);
-                            }
-
-                            if (userData.owner) {
-                                if (getActivity() != null) {
-                                    getActivity().runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            ownerAvatar.setVisibility(View.VISIBLE);
-                                            ownerAvatar.setColorFilter(getResources().getColor(R.color.linka_black_transparent), PorterDuff.Mode.MULTIPLY);
-                                            ownerName.setVisibility(View.VISIBLE);
-                                            ownerName.setText(userData.name);
-                                            ownerLastUsed.setVisibility(View.VISIBLE);
-                                            if (userData.lastUsed != null) {
-                                                Date date = null;
-                                                try {
-                                                    date = allDateFormat.parse(userData.lastUsed);
-                                                } catch (ParseException e) {
-                                                    e.printStackTrace();
-                                                }
-                                                if (date != null) {
-                                                    ownerLastUsed.setText("Last used: " + dateFormat.format(date));
-                                                }
-                                            }
-
-                                            //If we are the owner, then add the add user button
-                                            if (userData.email.equals(LinkaAPIServiceImpl.getUserEmail())) {
-                                                adapter.setAddButtonVisibility(SharingAdapter.VISIBLE);
-
-                                                selfIsOwner = true;
-                                            }
-                                        }
-                                    });
-                                }
-
-                            } else {
-                                userList.add(newUser);
-                            }
-
-                        }
-
-                        if (adapter == null) return;
-                        adapter.setList(userList);
-
-
-                    }
-                    if (getActivity() != null) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                adapter.notifyDataSetChanged();
-                                threeDotsView.setVisibility(View.GONE);
-                            }
-                        });
-                    }
-                    lockPermissionsHandler = null;
-                }
-
-                @Override
-                public void onFailure(Call<LinkaAPIServiceResponse.LockPermissionsResponse> call, Throwable t) {
-                    if (getActivity() != null) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                threeDotsView.setVisibility(View.GONE);
-                            }
-                        });
-                    }
-                    lockPermissionsHandler = null;
-                }
-            });
-        }
-    };
+    private LockTask lockTask = null;
+    private boolean isLockTaskRunning = false;
 
     void getLockPermissions() {
+        if (isLockTaskRunning) {
+            return;
+        }
         if (MainTabBarPageFragment.currentPosition == thisPage) {
             threeDotsView.setVisibility(View.VISIBLE);
         } else {
@@ -290,10 +200,25 @@ public class SharingPageFragment extends CoreFragment {
         }
         userList.clear();
         selfIsOwner = false;
-        if(lockPermissionsHandler == null){
-            lockPermissionsHandler = new Handler();
-            lockPermissionsHandler.post(lockPermissionsRunnable);
-        }
+        isLockTaskRunning = true;
+        //Get lock permissions
+        LinkaAPIServiceImpl.lock_permissions(getAppMainActivity(), linka, new Callback<LinkaAPIServiceResponse.LockPermissionsResponse>() {
+            @Override
+            public void onResponse(Call<LinkaAPIServiceResponse.LockPermissionsResponse> call, Response<LinkaAPIServiceResponse.LockPermissionsResponse> response) {
+
+                if (LinkaAPIServiceImpl.check(response, false, null)) {
+                    lockTask = new LockTask();
+                    lockTask.execute(response);
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LinkaAPIServiceResponse.LockPermissionsResponse> call, Throwable t) {
+                threeDotsView.setVisibility(View.GONE);
+                isLockTaskRunning = false;
+            }
+        });
 
     }
 
@@ -312,9 +237,10 @@ public class SharingPageFragment extends CoreFragment {
     @Override
     public void onStop() {
         super.onStop();
-        if(lockPermissionsHandler != null){
-            lockPermissionsHandler.removeCallbacks(lockPermissionsRunnable);
-            lockPermissionsHandler = null;
+        if(isLockTaskRunning){
+            lockTask.cancel(true);
+            lockTask = null;
+            isLockTaskRunning = false;
         }
     }
 
@@ -335,6 +261,84 @@ public class SharingPageFragment extends CoreFragment {
         }
         if (object instanceof String && object.equals(REFRESH_LIST_OF_USERS)) {
             getLockPermissions();
+        }
+    }
+
+    private class LockTask extends AsyncTask<Response<LinkaAPIServiceResponse.LockPermissionsResponse>, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Response<LinkaAPIServiceResponse.LockPermissionsResponse>... responses) {
+            for (final LinkaAPIServiceResponse.LockPermissionsResponse.Data userData : responses[0].body().data) {
+                User newUser = User.saveUserForEmail(userData.email,
+                        userData.first_name,
+                        userData.last_name,
+                        userData.name,
+                        userData.userId,
+                        userData.owner,
+                        userData.isPendingApproval,
+                        userData.lastUsed);
+
+                if (ownerName == null) {
+                    unbinder = ButterKnife.bind(SharingPageFragment.this, rootView);
+                }
+
+                if (userData.owner) {
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ownerAvatar.setVisibility(View.VISIBLE);
+                                ownerAvatar.setColorFilter(getResources().getColor(R.color.linka_black_transparent), PorterDuff.Mode.MULTIPLY);
+                                ownerName.setVisibility(View.VISIBLE);
+                                ownerName.setText(userData.name);
+                                ownerLastUsed.setVisibility(View.VISIBLE);
+                                if (userData.lastUsed != null) {
+                                    Date date = null;
+                                    try {
+                                        date = allDateFormat.parse(userData.lastUsed);
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                    if (date != null) {
+                                        ownerLastUsed.setText("Last used: " + dateFormat.format(date));
+                                    }
+                                }
+
+                                //If we are the owner, then add the add user button
+                                if (userData.email.equals(LinkaAPIServiceImpl.getUserEmail())) {
+                                    adapter.setAddButtonVisibility(SharingAdapter.VISIBLE);
+
+                                    selfIsOwner = true;
+                                }
+                            }
+                        });
+                    }
+
+                } else {
+                    userList.add(newUser);
+                }
+
+            }
+
+            if (adapter == null) return null;
+            adapter.setList(userList);
+            if (getActivity() != null) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.notifyDataSetChanged();
+                        threeDotsView.setVisibility(View.GONE);
+                    }
+                });
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            lockTask = null;
+            isLockTaskRunning = false;
         }
     }
 }

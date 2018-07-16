@@ -2,6 +2,7 @@ package com.linka.lockapp.aos.module.pages.notifications;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.adapters.NotificationListAdapter;
@@ -24,6 +26,7 @@ import com.linka.lockapp.aos.module.model.LinkaActivity;
 import com.linka.lockapp.aos.module.model.Notification;
 import com.linka.lockapp.aos.module.pages.home.MainTabBarPageFragment;
 import com.linka.lockapp.aos.module.widget.SuperBackToTopRecyclerView;
+import com.linka.lockapp.aos.module.widget.ThreeDotsView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -48,12 +51,19 @@ public class NotificationsPageFragment extends CoreFragment {
 
     @BindView(R.id.recycler_view)
     SuperBackToTopRecyclerView recyclerView;
+
     @BindView(R.id.loading)
     RelativeLayout loading;
 
+    @BindView(R.id.three_dots)
+    ThreeDotsView threeDotsView;
+
+    @BindView(R.id.textView)
+    TextView noRecordsText;
+
     Unbinder unbinder;
 
-    private boolean isSaveReadState = false;
+    public static boolean isSaveReadState = false;
 
     boolean shouldLoadSettings = true;
     View.OnClickListener mOnClickListener;
@@ -156,8 +166,7 @@ public class NotificationsPageFragment extends CoreFragment {
 
         adapter.setLoadMore(false);
 
-
-        refresh();
+        fetch_activities();
     }
 
     private void onItemClick(Notification notification) {
@@ -175,79 +184,77 @@ public class NotificationsPageFragment extends CoreFragment {
         }
     }
 
+    private Handler refreshHandler = null;
+    private Runnable refreshRunnable = new Runnable() {
+        @Override
+        public void run() {
+            List<LinkaActivity> activities = LinkaActivity.getLinkaActivitiesByLinka(linka);
+            notifications = Notification.fromLinkaActivities(activities);
+
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (!isAdded()) return;
+                    if (recyclerView == null) {
+                        return;
+                    }
+
+                    if (adapter == null) {
+                        return;
+                    }
+
+                    recyclerView.getSwipeToRefresh().setRefreshing(false);
+
+                    if(notifications.isEmpty()){
+                        threeDotsView.setVisibility(View.INVISIBLE);
+                        noRecordsText.setVisibility(View.VISIBLE);
+                    }else {
+                        threeDotsView.setVisibility(View.VISIBLE);
+                        noRecordsText.setVisibility(View.INVISIBLE);
+                    }
+                    adapter.setList(notifications);
+                    adapter.notifyDataSetChanged();
+
+                    if (shouldLoadSettings) {
+                        fetch_activities();
+                    }
+                }
+            });
+            refreshHandler = null;
+        }
+    };
 
     void refresh() {
         if (!isAdded()) return;
-
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (!isAdded()) return;
-                if (recyclerView == null) {
-                    return;
-                }
-
-                if (adapter == null) {
-                    return;
-                }
-
-                recyclerView.getSwipeToRefresh().setRefreshing(false);
-                List<LinkaActivity> activities = LinkaActivity.getLinkaActivitiesByLinka(linka);
-                notifications = Notification.fromLinkaActivities(activities);
-
-                adapter.setList(notifications);
-                adapter.notifyDataSetChanged();
-
-                if (shouldLoadSettings) {
-                    fetch_activities();
-                }
-            }
-        });
+        if (refreshHandler == null) {
+            refreshHandler = new Handler();
+            refreshHandler.post(refreshRunnable);
+        }
     }
 
+    private FetchTask fetchTask = null;
+    private boolean isFetchTaskRunning = false;
 
     void fetch_activities() {
         if (!isAdded()) return;
 
-        if (linka == null) {
+        if (linka == null || isFetchTaskRunning) {
             return;
         }
+        isFetchTaskRunning = true;
         if (getAppMainActivity().isNetworkAvailable()) {
             LinkaAPIServiceImpl.fetch_activities(getAppMainActivity(), linka, new Callback<LinkaAPIServiceResponse.ActivitiesResponse>() {
                 @Override
                 public void onResponse(Call<LinkaAPIServiceResponse.ActivitiesResponse> call, final Response<LinkaAPIServiceResponse.ActivitiesResponse> response) {
                     if (LinkaAPIServiceImpl.check(response, false, getAppMainActivity())) {
-                        new Handler().post(new Runnable() {
-                            @Override
-                            public void run() {
-                                shouldLoadSettings = false;
-                                LinkaAPIServiceResponse.ActivitiesResponse body = response.body();
-                                List<LinkaActivity> activities = new ArrayList<LinkaActivity>();
-
-                                if (body == null || body.data == null) {
-                                    return;
-                                }
-
-                                for (LinkaAPIServiceResponse.ActivitiesResponse.Data data : body.data) {
-                                    LinkaActivity activity = data.makeLinkaActivity(linka);
-                                    activities.add(activity);
-                                }
-
-                                LinkaActivity.saveAndOverwriteActivities(activities, linka);
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        refresh();
-                                    }
-                                });
-                            }
-                        });
+                        fetchTask = new FetchTask();
+                        fetchTask.execute(response);
                     }
                 }
 
                 @Override
                 public void onFailure(Call<LinkaAPIServiceResponse.ActivitiesResponse> call, Throwable t) {
-
+                    isFetchTaskRunning = false;
                 }
             });
         }
@@ -266,25 +273,99 @@ public class NotificationsPageFragment extends CoreFragment {
         EventBus.getDefault().register(this);
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (refreshHandler != null) {
+            refreshHandler.removeCallbacks(refreshRunnable);
+            refreshHandler = null;
+        }
+        if (fetchTask != null) {
+            fetchTask.cancel(true);
+            fetchTask = null;
+        }
+    }
 
     @Subscribe
     public void onEvent(Object object) {
         if (object != null && object instanceof String) {
-            if (object.equals(LinkaActivity.LINKA_ACTIVITY_ON_CHANGE)) {
+            if (object.equals(LinkaActivity.LINKA_ACTIVITY_ON_CHANGE) && MainTabBarPageFragment.currentPosition == MainTabBarPageFragment.NOTIFICATION_SCREEN) {
                 refresh();
             } else if (((String) object).substring(0, 8).equals("Selected")) {
                 if (object.equals("Selected-" + String.valueOf(MainTabBarPageFragment.NOTIFICATION_SCREEN))) {
                     isSaveReadState = true;
+                    shouldLoadSettings = true;
+                    refresh();
                 } else if (isSaveReadState) {
+                    if (refreshHandler != null) {
+                        refreshHandler.removeCallbacks(refreshRunnable);
+                        refreshHandler = null;
+                    }
                     adapter.updateReadState();
                     fetch_activities();
                     isSaveReadState = false;
                 }
-            }else if(object.equals(MainTabBarPageFragment.UPDATE_NOTIFICATIONS)){
-                if(MainTabBarPageFragment.currentPosition == MainTabBarPageFragment.NOTIFICATION_SCREEN){
+            } else if (object.equals(MainTabBarPageFragment.UPDATE_NOTIFICATIONS)) {
+                if (MainTabBarPageFragment.currentPosition == MainTabBarPageFragment.NOTIFICATION_SCREEN) {
                     fetch_activities();
                 }
             }
+        }
+    }
+
+    private class FetchTask extends AsyncTask<Response<LinkaAPIServiceResponse.ActivitiesResponse>, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Response<LinkaAPIServiceResponse.ActivitiesResponse>... responses) {
+            shouldLoadSettings = false;
+            LinkaAPIServiceResponse.ActivitiesResponse body = responses[0].body();
+            List<LinkaActivity> activities = new ArrayList<>();
+
+            if (body == null || body.data == null) {
+                return null;
+            }
+
+            for (LinkaAPIServiceResponse.ActivitiesResponse.Data data : body.data) {
+                LinkaActivity activity = data.makeLinkaActivity(linka);
+                activities.add(activity);
+            }
+
+            LinkaActivity.saveAndOverwriteActivities(activities, linka);
+
+            List<LinkaActivity> activities2 = LinkaActivity.getLinkaActivitiesByLinka(linka);
+            notifications = Notification.fromLinkaActivities(activities2);
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (!isAdded()) return;
+                    if (recyclerView == null) {
+                        return;
+                    }
+
+                    if (adapter == null) {
+                        return;
+                    }
+
+                    recyclerView.getSwipeToRefresh().setRefreshing(false);
+                    if(notifications.isEmpty()){
+                        threeDotsView.setVisibility(View.INVISIBLE);
+                        noRecordsText.setVisibility(View.VISIBLE);
+                    }else {
+                        threeDotsView.setVisibility(View.VISIBLE);
+                        noRecordsText.setVisibility(View.INVISIBLE);
+                    }
+                    adapter.setList(notifications);
+                    adapter.notifyDataSetChanged();
+                }
+            });
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            fetchTask = null;
+            isFetchTaskRunning = false;
         }
     }
 }
