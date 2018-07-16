@@ -12,6 +12,7 @@ import com.google.android.gms.location.GeofencingEvent;
 import com.linka.lockapp.aos.AppDelegate;
 import com.linka.lockapp.aos.AppMainActivity;
 import com.linka.lockapp.aos.R;
+import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.model.LinkaActivity;
 import com.linka.lockapp.aos.module.widget.LocksController;
 import com.pixplicity.easyprefs.library.Prefs;
@@ -74,6 +75,7 @@ public class GeofenceTransitionsIntentService extends IntentService {
                     .simple()
                     .build();
 
+            LinkaActivity.saveLinkaActivity(Linka.getLinkaByAddress(linkaAddress), LinkaActivity.LinkaActivityType.isAutoUnlockEnabled);
             SharedPreferences.Editor editor = Prefs.edit();
             editor.putString(Constants.LINKA_ADDRESS_FOR_AUTO_UNLOCK,linkaAddress);
             editor.apply();

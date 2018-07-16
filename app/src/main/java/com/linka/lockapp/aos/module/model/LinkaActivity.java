@@ -55,7 +55,9 @@ public class LinkaActivity extends Model implements Serializable {
         isSystem(9),
         isOutOfRange(10),
         isBackInRange(11),
-        isStalled(12);
+        isStalled(12),
+        isAutoUnlocked(13),
+        isAutoUnlockEnabled(14);
 
         private int _value;
 
@@ -299,6 +301,14 @@ public class LinkaActivity extends Model implements Serializable {
             activity.alarm = true;
         }
 
+        if(linkaActivityType == LinkaActivityType.isAutoUnlocked){
+            activity.timestamp_locked = linka.timestamp_locked;
+        }
+
+        if(linkaActivityType == LinkaActivityType.isAutoUnlockEnabled){
+            activity.alarm = true;
+        }
+
         activity.save();
 
         if (create_notification) {
@@ -383,7 +393,7 @@ public class LinkaActivity extends Model implements Serializable {
             }
             linka.save();
 
-        } else if (linkaActivityType == LinkaActivityType.isUnlocked) {
+        } else if (linkaActivityType == LinkaActivityType.isUnlocked || linkaActivityType == LinkaActivityType.isAutoUnlocked) {
             if (location != null) {
                 latitude = location.getLatitude();
                 longitude = location.getLongitude();

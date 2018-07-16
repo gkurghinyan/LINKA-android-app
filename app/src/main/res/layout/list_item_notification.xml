@@ -31,7 +31,7 @@
 
     <TextView
         android:id="@+id/notification"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:maxLines="3"
         android:text="Kyle Zhang now has access to your bike"
@@ -39,7 +39,8 @@
         android:textColor="@color/linka_blue"
         android:textSize="@dimen/text_size_xxm"
         app:layout_constraintTop_toTopOf="@id/notification_icon"
-        app:layout_constraintStart_toEndOf="@id/notification_icon"/>
+        app:layout_constraintStart_toEndOf="@id/notification_icon"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <TextView
         android:id="@+id/time"

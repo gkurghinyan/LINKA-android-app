@@ -79,7 +79,7 @@ public class NotificationListAdapter extends GenericLoadMoreAdapter<Notification
         if (item.type == LinkaActivityType.isLocked) {
             holder.notificationIcon.setColorFilter(context.getResources().getColor(R.color.linka_blue), android.graphics.PorterDuff.Mode.MULTIPLY);
             icon = R.drawable.close_white_linka;
-        } else if (item.type == LinkaActivityType.isUnlocked) {
+        } else if (item.type == LinkaActivityType.isUnlocked || item.type == LinkaActivityType.isAutoUnlocked) {
             holder.notificationIcon.setColorFilter(context.getResources().getColor(R.color.linka_blue), android.graphics.PorterDuff.Mode.MULTIPLY);
             icon = R.drawable.open_white_linka;
         } else if (item.type == LinkaActivityType.isTamperAlert) {
@@ -89,6 +89,8 @@ public class NotificationListAdapter extends GenericLoadMoreAdapter<Notification
             icon = R.drawable.danger_icon;
         } else if (item.type == LinkaActivityType.isBatteryCriticallyLow) {
             icon = R.drawable.danger_icon;
+        }else if(item.type == LinkaActivityType.isAutoUnlockEnabled){
+            icon = R.drawable.danger_icon;
         }
         holder.container.setTag(item);
         holder.container.setOnClickListener(mOnclickListener);
@@ -96,7 +98,7 @@ public class NotificationListAdapter extends GenericLoadMoreAdapter<Notification
         if(mItems.get(position).isRead){
             holder.container.setBackgroundColor(context.getResources().getColor(R.color.linka_white));
         }else {
-            holder.container.setBackgroundColor(context.getResources().getColor(R.color.linka_light_gray));
+            holder.container.setBackgroundColor(context.getResources().getColor(R.color.unread_notif_back_color));
         }
     }
 

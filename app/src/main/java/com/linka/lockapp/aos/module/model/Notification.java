@@ -75,9 +75,13 @@ public class Notification implements Serializable {
                     notification.longitude = activity.longitude;
                 }
 
-            } else if (type == LinkaActivityType.isUnlocked) {
+            } else if (type == LinkaActivityType.isUnlocked || type == LinkaActivityType.isAutoUnlocked) {
 
-                notification.body = _.i(R.string.act_unlocked);
+                if(type == LinkaActivityType.isAutoUnlocked) {
+                    notification.body = "Your bike is being auto-unlocked";
+                }else {
+                    notification.body = _.i(R.string.act_unlocked);
+                }
 
                 Linka linka = Linka.getLinkaById(activity.linka_id);
                 if (linka != null && linka.timestamp_locked != null && !linka.timestamp_locked.equals("")) {
@@ -120,7 +124,9 @@ public class Notification implements Serializable {
                             after = "1 " +  _.i(R.string.sec);
                         }
 
-                        notification.body = _.i(R.string.act_unlocked_after) + " " + after;
+                        if(type == LinkaActivityType.isUnlocked) {
+                            notification.body = _.i(R.string.act_unlocked_after) + " " + after;
+                        }
                     }
 
                 }
@@ -149,6 +155,8 @@ public class Notification implements Serializable {
 
                 notification.body = _.i(R.string.out_of_range_alert);
 
+            }else if(type == LinkaActivityType.isAutoUnlockEnabled){
+                notification.body = "Auto-unlocking is now enabled";
             }
 
 

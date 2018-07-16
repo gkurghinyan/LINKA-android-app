@@ -42,6 +42,7 @@
 
     <!-- Component colors -->
 
+    <color name="unread_notif_back_color">#ededed</color>
     <color name="menu_divider">@color/linka_light_gray</color>
     <color name="menu_dark_bg">#FFFFFF</color>
     <color name="menu_light_bg">@color/linka_white</color>

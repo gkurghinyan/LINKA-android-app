@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.util.Log;
 
 import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceResponse.AccessKeysResponse;
@@ -486,6 +487,7 @@ public class LinkaAPIServiceImpl {
         String longitude = activity.longitude;
         String record_date = activity.timestamp;
 
+
         if (type == LinkaActivity.LinkaActivityType.isLocked.getValue()) {
             should_update = true;
             if (latitude.equals("0") && longitude.equals("0")) {
@@ -502,18 +504,27 @@ public class LinkaAPIServiceImpl {
             should_update = true;
             body = "Unlocked";
         } else if (type == LinkaActivity.LinkaActivityType.isBatteryLow.getValue()) {
+            should_update = true;
             body = "Battery low at " + activity.batteryPercent + "%";
         } else if (type == LinkaActivity.LinkaActivityType.isBatteryCriticallyLow.getValue()) {
+            should_update = true;
             body = "Battery low at " + activity.batteryPercent + "%";
         } else if (type == LinkaActivity.LinkaActivityType.isTamperAlert.getValue()) {
             should_update = true;
             body = "Tamper Alert";
         } else if (type == LinkaActivity.LinkaActivityType.isRenamed.getValue()) {
+            should_update = true;
             body = "Lock renamed from [" + activity.old_lock_name + "] to [" + activity.new_lock_name + "]";
         } else if (type == LinkaActivity.LinkaActivityType.isBackInRange.getValue()) {
             body = "Back in Range";
         } else if (type == LinkaActivity.LinkaActivityType.isOutOfRange.getValue()) {
             body = "Out of Range";
+        }else if(type == LinkaActivity.LinkaActivityType.isAutoUnlocked.getValue()){
+            should_update = true;
+            body = "Your bike is being auto-unlocked";
+        }else if(type == LinkaActivity.LinkaActivityType.isAutoUnlockEnabled.getValue()){
+            should_update = true;
+            body = "Auto-unlocking is now enabled";
         }
 
         if (!should_update) {
@@ -547,9 +558,11 @@ public class LinkaAPIServiceImpl {
             @Override
             public void onResponse(Call<LinkaAPIServiceResponse> call, Response<LinkaAPIServiceResponse> response) {
                 if (check(response, false, context)) {
+                    Log.d("what_sate","okay");
                     callback.onResponse(call, response);
                 } else {
                     callback.onResponse(call, response);
+                    Log.d("what_sate","not_okay");
                 }
             }
 
@@ -557,6 +570,7 @@ public class LinkaAPIServiceImpl {
             public void onFailure(Call<LinkaAPIServiceResponse> call, Throwable t) {
 //                doErrors(null, context);
                 callback.onFailure(call, t);
+                Log.d("what_sate","fail");
             }
         });
         return call;

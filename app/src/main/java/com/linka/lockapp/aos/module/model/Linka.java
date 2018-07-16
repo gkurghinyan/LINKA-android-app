@@ -57,6 +57,9 @@ public class Linka extends Model implements Serializable {
     @Column(name = "lock_address", index = true)
     public String lock_address = "";
 
+    @Column(name = "is_auto_unlocked")
+    public boolean isAutoUnlocked = false;
+
     @Column(name = "lock_mac_address", index = true)
     public String lock_mac_address = "";
 
@@ -661,7 +664,11 @@ public class Linka extends Model implements Serializable {
                 if (isUnlocking) {
 
                     isChanged = true;
-                    LinkaActivity.saveLinkaActivity(this, LinkaActivity.LinkaActivityType.isUnlocked);
+                    if(!isAutoUnlocked) {
+                        LinkaActivity.saveLinkaActivity(this, LinkaActivity.LinkaActivityType.isUnlocked);
+                    }else {
+                        isAutoUnlocked = false;
+                    }
 
                     //Lock is now unlocked, so reset sleep timer
                     SleepNotificationService.getInstance().restartTimer();
@@ -999,6 +1006,7 @@ public class Linka extends Model implements Serializable {
                 LogHelper.e("AutoUnlock", "UnLock");
                 LogHelper.e("RSSI", "Started Unlocking");
 
+                isAutoUnlocked = true;
                 LocksController.getInstance().getLockController().doUnlock();
 
                 Bundle args = new Bundle();
@@ -1015,9 +1023,11 @@ public class Linka extends Model implements Serializable {
                         .click(AppMainActivity.class,args)
                         .simple()
                         .build();
+                LinkaActivity.saveLinkaActivity(this, LinkaActivity.LinkaActivityType.isAutoUnlocked);
                 awaitsForAutoUnlocking = false;
                 waitingUntilSettledtoAutoUnlock = false;
                 rssi_outOfBounds = false;
+                this.save();
             } else if (isConnected && (isUnlocking || isLocking)) {
                 LogHelper.e("AutoUnlock", "set AwaitsForAutounlocking = false");
                 awaitsForAutoUnlocking = false;
