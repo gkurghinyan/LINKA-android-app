@@ -63,8 +63,13 @@ public class WebPageFragment extends CoreFragment {
             Bundle bundle = getArguments();
             title = bundle.getString("title");
             url = bundle.getString("url");
-            init(savedInstanceState);
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        init();
     }
 
     @Override
@@ -74,7 +79,7 @@ public class WebPageFragment extends CoreFragment {
     }
 
 
-    void init(Bundle savedInstanceState) {
+    void init() {
 
         getAppMainActivity().setTitle(title);
 
@@ -84,12 +89,14 @@ public class WebPageFragment extends CoreFragment {
                 public void onPageStarted(WebView view, String url, Bitmap favicon) {
                     super.onPageStarted(view, url, favicon);
                     Utils.showLoading(WebPageFragment.this.getContext(),webView);
+                    getAppMainActivity().setBackAviable(false);
                 }
 
                 @Override
                 public void onPageFinished(WebView view, String url) {
                     super.onPageFinished(view, url);
                     Utils.cancelLoading();
+                    getAppMainActivity().setBackAviable(true);
                 }
 
 

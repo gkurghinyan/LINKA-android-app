@@ -114,6 +114,14 @@ public class CoreActivity extends AppCompatActivity implements FragmentManager.O
                 .replace(R.id.fragment_container, instance).addToBackStack(null).commit();
     }
 
+    public void pushFragmentWithoutAnimation(Fragment instance) {
+        if (instance == null) { Log.e("warning", "fragment instance is null!"); return; }
+        curFragmentCount += 1;
+        onChangeFragment(instance);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, instance).addToBackStack(null).commit();
+    }
+
     public void pushFragmentShowHide(Fragment instance)
     {
         if (instance == null) { Log.e("warning", "fragment instance is null!"); return; }

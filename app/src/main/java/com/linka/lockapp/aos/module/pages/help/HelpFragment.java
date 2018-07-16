@@ -60,7 +60,7 @@ public class HelpFragment extends CoreFragment {
 
     @OnClick(R.id.faqs)
     void onFaqsClicked() {
-        getAppMainActivity().pushFragment(WebPageFragment.newInstance(_.i(R.string.faqs), _.i(R.string.faq_url)));
+        getAppMainActivity().pushFragmentWithoutAnimation(WebPageFragment.newInstance("", _.i(R.string.faq_url)));
     }
 
     @OnClick(R.id.email_us)

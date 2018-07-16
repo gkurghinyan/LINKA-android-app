@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
@@ -194,7 +195,8 @@ public class MainTabBarPageFragment extends CoreFragment {
 
 
     void init(Bundle savedInstanceState) {
-        checkNewNotifications();
+        checkNotificationsHandler = new Handler();
+        checkNotificationsHandler.post(checkNotificationsRunnable);
 
         if (savedInstanceState != null) {
             if (viewPager != null) {
@@ -299,6 +301,14 @@ public class MainTabBarPageFragment extends CoreFragment {
         }
     }
 
+    private Handler checkNotificationsHandler = null;
+    private Runnable checkNotificationsRunnable = new Runnable() {
+        @Override
+        public void run() {
+            checkNewNotifications();
+        }
+    };
+
     private void checkNewNotifications() {
         if (!isAdded()) return;
 
@@ -331,18 +341,24 @@ public class MainTabBarPageFragment extends CoreFragment {
                                 newNotificationsCount ++;
                             }
                         }
-                        if(newNotificationsCount != 0){
-                            notificationsUpdate.setVisibility(View.VISIBLE);
-                            notificationsUpdate.setText(String.valueOf(newNotificationsCount));
-                        }else {
-                            notificationsUpdate.setVisibility(View.GONE);
-                        }
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(newNotificationsCount != 0){
+                                    notificationsUpdate.setVisibility(View.VISIBLE);
+                                    notificationsUpdate.setText(String.valueOf(newNotificationsCount));
+                                }else {
+                                    notificationsUpdate.setVisibility(View.GONE);
+                                }
+                                checkNotificationsHandler = null;
+                            }
+                        });
                     }
                 }
 
                 @Override
                 public void onFailure(Call<LinkaAPIServiceResponse.ActivitiesResponse> call, Throwable t) {
-
+                    checkNotificationsHandler = null;
                 }
             });
         }
@@ -468,6 +484,11 @@ public class MainTabBarPageFragment extends CoreFragment {
     @Override
     public void onResume() {
         super.onResume();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
         EventBus.getDefault().register(this);
 
         if (linka != null) {
@@ -536,6 +557,16 @@ public class MainTabBarPageFragment extends CoreFragment {
     public void onPause() {
         super.onPause();
         EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+        if(checkNotificationsHandler != null){
+            checkNotificationsHandler.removeCallbacks(checkNotificationsRunnable);
+            checkNotificationsHandler = null;
+        }
     }
 
     @Subscribe
