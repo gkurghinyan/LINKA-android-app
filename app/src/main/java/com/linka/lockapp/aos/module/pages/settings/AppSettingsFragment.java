@@ -6,15 +6,18 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceImpl;
 import com.linka.lockapp.aos.module.core.CoreFragment;
+import com.linka.lockapp.aos.module.pages.prelogin.ForgotPasswordPage1;
 import com.pixplicity.easyprefs.library.Prefs;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 
@@ -25,6 +28,9 @@ public class AppSettingsFragment extends CoreFragment {
 
     @BindView(R.id.user_last_name)
     TextView lastName;
+
+    @BindView(R.id.reset_password)
+    LinearLayout resetPassword;
 
     private Unbinder unbinder;
 
@@ -62,4 +68,10 @@ public class AppSettingsFragment extends CoreFragment {
             lastName.setText(Prefs.getString("user-last-name",""));
         }
     }
+
+    @OnClick(R.id.reset_password)
+    void onResetPasswordClicked(){
+        getAppMainActivity().pushFragment(ForgotPasswordPage1.newInstance());
+    }
+
 }

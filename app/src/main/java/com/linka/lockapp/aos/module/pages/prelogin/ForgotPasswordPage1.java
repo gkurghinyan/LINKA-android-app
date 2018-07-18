@@ -1,6 +1,5 @@
 package com.linka.lockapp.aos.module.pages.prelogin;
 
-import android.app.AlertDialog;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
@@ -15,7 +14,6 @@ import com.linka.lockapp.aos.module.api.LinkaAPIServiceImpl;
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceResponse;
 import com.linka.lockapp.aos.module.core.CoreFragment;
 import com.linka.lockapp.aos.module.helpers.FontHelpers;
-import com.linka.lockapp.aos.module.i18n._;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -107,11 +105,7 @@ public class ForgotPasswordPage1 extends CoreFragment {
                     public void onResponse(Call<LinkaAPIServiceResponse> call, Response<LinkaAPIServiceResponse> response) {
                         cancelLoading();
                         if (LinkaAPIServiceImpl.check(response, false, getAppMainActivity())) {
-                            new AlertDialog.Builder(getAppMainActivity())
-                                    .setTitle(_.i(R.string.almost_done))
-                                    .setMessage(_.i(R.string.reset_password_an_email_sent) + " " + _email)
-                                    .setNegativeButton(_.i(R.string.ok), null)
-                                    .show();
+                            getAppMainActivity().pushFragment(ForgotPasswordPage2.newInstance());
                         }
                     }
 

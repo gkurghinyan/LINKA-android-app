@@ -751,8 +751,6 @@ public class AppMainActivity extends CoreActivity {
             disableDrawer();
         } else if (fragment instanceof SignUpPage
                 || fragment instanceof SignInPage
-                || fragment instanceof ForgotPasswordPage1
-                || fragment instanceof ForgotPasswordPage2
                 || fragment instanceof SetupLinka3
                 || fragment instanceof AutoUpdateFragment
                 || fragment instanceof SetupLinka2
@@ -761,6 +759,20 @@ public class AppMainActivity extends CoreActivity {
             toolbarSpace.setVisibility(View.GONE);
             title.setTextColor(getResources().getColor(R.color.linka_white));
             disableDrawer();
+        }else if(fragment instanceof ForgotPasswordPage1
+                || fragment instanceof ForgotPasswordPage2){
+            if(!LinkaAPIServiceImpl.isLoggedIn()){
+                toolbar.setVisibility(View.GONE);
+                toolbarSpace.setVisibility(View.GONE);
+                title.setTextColor(getResources().getColor(R.color.linka_white));
+                disableDrawer();
+            }else {
+                toolbar.setVisibility(View.VISIBLE);
+                toolbarSpace.setVisibility(View.VISIBLE);
+                toolbar.setBackgroundColor(getResources().getColor(R.color.linka_blue_tabbar));
+                title.setTextColor(getResources().getColor(R.color.linka_white));
+                enableDrawer();
+            }
         } else if (fragment instanceof SettingsPageFragment
                 || fragment instanceof SettingsEditNamePageFragment
                 || fragment instanceof NotificationsPageFragment
@@ -798,10 +810,6 @@ public class AppMainActivity extends CoreActivity {
             setTitle(_.i( R.string.sign_in));
         } else if (fragment instanceof SignUpPage) {
             setTitle(_.i(R.string.sign_up));
-        } else if (fragment instanceof ForgotPasswordPage1) {
-            setTitle(_.i(R.string.is_forgot));
-        } else if (fragment instanceof ForgotPasswordPage2) {
-            setTitle(_.i(R.string.reset_password));
         } else if (fragment instanceof SetupLinka1) {
             setTitle(_.i(R.string.setup_linka));
         } else if (fragment instanceof SetupLinka2) {
