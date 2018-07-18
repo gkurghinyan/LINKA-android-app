@@ -5,10 +5,11 @@
     android:background="@color/linka_white"
     android:id="@+id/root">
 
-    <WebView
-        android:id="@+id/webView"
+    <ViewStub
+        android:id="@+id/webview_stub"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout="@layout/webview_layout"/>
 
     <com.linka.lockapp.aos.module.widget.ThreeDotsView
         android:id="@+id/three_dots"

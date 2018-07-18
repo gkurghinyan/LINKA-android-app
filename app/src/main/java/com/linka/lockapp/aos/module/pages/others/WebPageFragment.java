@@ -2,9 +2,11 @@ package com.linka.lockapp.aos.module.pages.others;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
@@ -22,8 +24,10 @@ import butterknife.Unbinder;
  */
 public class WebPageFragment extends CoreFragment {
 
-    @BindView(R.id.webView)
-    WebView webView;
+    private final int WEB_VIEW_INFLATE_DELAY = 50;
+
+    @BindView(R.id.webview_stub)
+    ViewStub webViewStub;
 
     @BindView(R.id.root)
     FrameLayout root;
@@ -32,6 +36,7 @@ public class WebPageFragment extends CoreFragment {
     ThreeDotsView threeDotsView;
 
     Unbinder unbinder;
+    WebView webView;
 
     public static WebPageFragment newInstance(String title, String url) {
         Bundle bundle = new Bundle();
@@ -49,12 +54,24 @@ public class WebPageFragment extends CoreFragment {
     String title;
     String url;
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_web_page, container, false);
         getAppMainActivity().setBackIconVisible(true);
         unbinder = ButterKnife.bind(this, rootView);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (webViewStub != null) {
+                    webView = (WebView) webViewStub.inflate();
+                    init();
+                }
+            }
+        }, WEB_VIEW_INFLATE_DELAY);
 
         return rootView;
     }
@@ -68,12 +85,6 @@ public class WebPageFragment extends CoreFragment {
             title = bundle.getString("title");
             url = bundle.getString("url");
         }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        init();
     }
 
     @Override
