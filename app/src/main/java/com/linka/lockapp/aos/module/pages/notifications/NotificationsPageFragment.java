@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Parcelable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -63,9 +62,7 @@ public class NotificationsPageFragment extends CoreFragment {
 
     Unbinder unbinder;
 
-    public static boolean isSaveReadState = false;
-
-    boolean shouldLoadSettings = true;
+    boolean shouldLoadSettings = false;
     View.OnClickListener mOnClickListener;
 
     public static NotificationsPageFragment newInstance(Linka linka) {
@@ -106,7 +103,7 @@ public class NotificationsPageFragment extends CoreFragment {
     public void onDestroyView() {
         super.onDestroyView();
         if (adapter != null) {
-            if (isSaveReadState) {
+            if (adapter.isUnreadItemExist()) {
                 adapter.updateReadState();
             }
             adapter.context = null;
@@ -166,7 +163,7 @@ public class NotificationsPageFragment extends CoreFragment {
 
         adapter.setLoadMore(false);
 
-        fetch_activities();
+//        fetch_activities();
     }
 
     private void onItemClick(Notification notification) {
@@ -184,52 +181,44 @@ public class NotificationsPageFragment extends CoreFragment {
         }
     }
 
-    private Handler refreshHandler = null;
-    private Runnable refreshRunnable = new Runnable() {
-        @Override
-        public void run() {
-            List<LinkaActivity> activities = LinkaActivity.getLinkaActivitiesByLinka(linka);
-            notifications = Notification.fromLinkaActivities(activities);
+    private void refresh(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                List<LinkaActivity> activities = LinkaActivity.getLinkaActivitiesByLinka(linka);
+                notifications = Notification.fromLinkaActivities(activities);
 
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (!isAdded()) return;
-                    if (recyclerView == null) {
-                        return;
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!isAdded()) return;
+                        if (recyclerView == null) {
+                            return;
+                        }
+
+                        if (adapter == null) {
+                            return;
+                        }
+
+                        recyclerView.getSwipeToRefresh().setRefreshing(false);
+                        
+                        adapter.setList(notifications);
+                        adapter.notifyDataSetChanged();
+                        if(notifications.isEmpty()){
+                            threeDotsView.setVisibility(View.INVISIBLE);
+                            noRecordsText.setVisibility(View.VISIBLE);
+                        }else {
+                            threeDotsView.setVisibility(View.VISIBLE);
+                            noRecordsText.setVisibility(View.INVISIBLE);
+                        }
+
+                        if (shouldLoadSettings) {
+                            fetch_activities();
+                        }
                     }
-
-                    if (adapter == null) {
-                        return;
-                    }
-
-                    recyclerView.getSwipeToRefresh().setRefreshing(false);
-
-                    if(notifications.isEmpty()){
-                        threeDotsView.setVisibility(View.INVISIBLE);
-                        noRecordsText.setVisibility(View.VISIBLE);
-                    }else {
-                        threeDotsView.setVisibility(View.VISIBLE);
-                        noRecordsText.setVisibility(View.INVISIBLE);
-                    }
-                    adapter.setList(notifications);
-                    adapter.notifyDataSetChanged();
-
-                    if (shouldLoadSettings) {
-                        fetch_activities();
-                    }
-                }
-            });
-            refreshHandler = null;
-        }
-    };
-
-    void refresh() {
-        if (!isAdded()) return;
-        if (refreshHandler == null) {
-            refreshHandler = new Handler();
-            refreshHandler.post(refreshRunnable);
-        }
+                });
+            }
+        }).start();
     }
 
     private FetchTask fetchTask = null;
@@ -276,13 +265,8 @@ public class NotificationsPageFragment extends CoreFragment {
     @Override
     public void onStop() {
         super.onStop();
-        if (refreshHandler != null) {
-            refreshHandler.removeCallbacks(refreshRunnable);
-            refreshHandler = null;
-        }
-        if (fetchTask != null) {
+        if (isFetchTaskRunning && fetchTask != null) {
             fetchTask.cancel(true);
-            fetchTask = null;
         }
     }
 
@@ -293,17 +277,10 @@ public class NotificationsPageFragment extends CoreFragment {
                 refresh();
             } else if (((String) object).substring(0, 8).equals("Selected")) {
                 if (object.equals("Selected-" + String.valueOf(MainTabBarPageFragment.NOTIFICATION_SCREEN))) {
-                    isSaveReadState = true;
-                    shouldLoadSettings = true;
                     refresh();
-                } else if (isSaveReadState) {
-                    if (refreshHandler != null) {
-                        refreshHandler.removeCallbacks(refreshRunnable);
-                        refreshHandler = null;
-                    }
+                } else if (adapter.isUnreadItemExist()) {
                     adapter.updateReadState();
-                    fetch_activities();
-                    isSaveReadState = false;
+                    refresh();
                 }
             } else if (object.equals(MainTabBarPageFragment.UPDATE_NOTIFICATIONS)) {
                 if (MainTabBarPageFragment.currentPosition == MainTabBarPageFragment.NOTIFICATION_SCREEN) {
@@ -364,6 +341,13 @@ public class NotificationsPageFragment extends CoreFragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            fetchTask = null;
+            isFetchTaskRunning = false;
+        }
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
             fetchTask = null;
             isFetchTaskRunning = false;
         }

@@ -2,7 +2,6 @@ package com.linka.lockapp.aos.module.model;
 
 import android.location.Location;
 import android.os.Build;
-import android.os.Handler;
 import android.provider.BaseColumns;
 import android.provider.Settings;
 
@@ -71,12 +70,13 @@ public class LinkaActivity extends Model implements Serializable {
 
         public static LinkaActivityType fromInt(int i) {
             for (LinkaActivityType type : LinkaActivityType.values()) {
-                if (type.getValue() == i) { return type; }
+                if (type.getValue() == i) {
+                    return type;
+                }
             }
             return null;
         }
     }
-
 
 
     @Column(name = "linka_id")
@@ -183,50 +183,45 @@ public class LinkaActivity extends Model implements Serializable {
     }
 
 
-
-    public static void saveAndOverwriteActivities(List<LinkaActivity> activities, Linka linka)
-    {
+    public static void saveAndOverwriteActivities(List<LinkaActivity> activities, Linka linka) {
         List<LinkaActivity> activities_reverse = new ArrayList<>();
-        for (int i = 0; i < activities.size(); i++)
-        {
+        for (int i = 0; i < activities.size(); i++) {
             activities_reverse.add(0, activities.get(i));
         }
 
         List<LinkaActivity> old_activities = getLinkaActivitiesByLinka(linka);
-        for (int i = old_activities.size() - 1; i >= 0; i--)
-        {
+        for (int i = old_activities.size() - 1; i >= 0; i--) {
             old_activities.get(i).delete();
         }
 
-        for (int i = 0; i < activities_reverse.size(); i++)
-        {
+        for (int i = 0; i < activities_reverse.size(); i++) {
             activities_reverse.get(i).save();
         }
     }
 
-    public static void updateReadState(final List<Long> ids){
-        new Handler().post(new Runnable() {
+    public static void updateReadState(final List<Long> ids) {
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 LinkaActivity activity;
-                for(Long id:ids){
+                for (Long id : ids) {
                     activity = getActivityById(id);
-                    activity.isRead = true;
-                    activity.save();
+                    if (activity != null) {
+                        activity.isRead = true;
+                        activity.save();
+                    }
                 }
             }
-        });
+        }).start();
     }
 
-    public static LinkaActivity getActivityById(Long id){
+    public static LinkaActivity getActivityById(Long id) {
         return new Select().from(LinkaActivity.class).where("_id = ?", id).executeSingle();
     }
 
-    public static LinkaActivity getActivityByTimestamp(Long time){
+    public static LinkaActivity getActivityByTimestamp(Long time) {
         return new Select().from(LinkaActivity.class).where("timestamp = ?", time).executeSingle();
     }
-
-
 
 
     public static List<LinkaActivity> getLinkaActivitiesByLinka(Linka linka) {
@@ -258,13 +253,10 @@ public class LinkaActivity extends Model implements Serializable {
         activity.actuations = linka.actuations;
         activity.temperature = linka.temperature;
 
-        if (latitude == 0 && longitude == 0)
-        {
+        if (latitude == 0 && longitude == 0) {
             activity.latitude = "";
             activity.longitude = "";
-        }
-        else
-        {
+        } else {
             activity.latitude = latitude + "";
             activity.longitude = longitude + "";
         }
@@ -301,11 +293,11 @@ public class LinkaActivity extends Model implements Serializable {
             activity.alarm = true;
         }
 
-        if(linkaActivityType == LinkaActivityType.isAutoUnlocked){
+        if (linkaActivityType == LinkaActivityType.isAutoUnlocked) {
             activity.timestamp_locked = linka.timestamp_locked;
         }
 
-        if(linkaActivityType == LinkaActivityType.isAutoUnlockEnabled){
+        if (linkaActivityType == LinkaActivityType.isAutoUnlockEnabled) {
             activity.alarm = true;
         }
 
@@ -314,15 +306,12 @@ public class LinkaActivity extends Model implements Serializable {
         if (create_notification) {
             // if linka is not the active one, don't show notification!
             Linka _linka = LinkaNotificationSettings.get_latest_linka();
-            if (_linka != null && _linka.getUUIDAddress().equals(linka.getUUIDAddress()))
-            {
+            if (_linka != null && _linka.getUUIDAddress().equals(linka.getUUIDAddress())) {
                 NotificationsHelper.getInstance().CreateLinkaNotificationMessage(activity);
             }
         }
 
         EventBus.getDefault().post(LINKA_ACTIVITY_ON_CHANGE);
-
-
 
 
         // sync to network
@@ -353,7 +342,6 @@ public class LinkaActivity extends Model implements Serializable {
         }
 
 
-
         LinkaAPIServiceImpl.add_activity(AppDelegate.getInstance(), linka, activity, new Callback<LinkaAPIServiceResponse>() {
             @Override
             public void onResponse(Call<LinkaAPIServiceResponse> call, Response<LinkaAPIServiceResponse> response) {
@@ -365,7 +353,6 @@ public class LinkaActivity extends Model implements Serializable {
 
             }
         });
-
 
 
         return true;
@@ -429,7 +416,6 @@ public class LinkaActivity extends Model implements Serializable {
 //        double longitude = 0.0;
 //        return saveLinkaActivity(linka, LinkaActivityType.isRenamed, old_lock_name, new_lock_name, latitude, longitude, true);
 //    }
-
 
 
     public static boolean removeAllActivitiesForLinka(Linka linka) {

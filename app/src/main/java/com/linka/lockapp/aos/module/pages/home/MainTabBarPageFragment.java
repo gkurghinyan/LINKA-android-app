@@ -204,6 +204,7 @@ public class MainTabBarPageFragment extends CoreFragment {
             }
         }
 
+
         if(savedInstanceState != null && savedInstanceState.getInt("current_position") != 0){
             currentPosition = savedInstanceState.getInt("current_position") - 1;
         }
@@ -232,19 +233,19 @@ public class MainTabBarPageFragment extends CoreFragment {
             switch (currentPosition){
                 case 0:
                     t1.setSelected(true);
-                    changeButtonsState(true,false,false,false);
+                    changeButtonsState(currentPosition);
                     break;
                 case 1:
                     t2.setSelected(true);
-                    changeButtonsState(false,true,false,false);
+                    changeButtonsState(currentPosition);
                     break;
                 case 2:
                     t3.setSelected(true);
-                    changeButtonsState(false,false,true,false);
+                    changeButtonsState(currentPosition);
                     break;
                 case 3:
                     t4.setSelected(true);
-                    changeButtonsState(false,false,false,true);
+                    changeButtonsState(currentPosition);
                     break;
             }
 
@@ -276,10 +277,6 @@ public class MainTabBarPageFragment extends CoreFragment {
                     }
                     if (position == 2) {
                         t3.setSelected(true);
-                    }else if(NotificationsPageFragment.isSaveReadState){
-                        newNotificationsCount = 0;
-                        notificationsUpdate.setText("");
-                        notificationsUpdate.setVisibility(View.GONE);
                     }
                     if (position == 3) {
                         t4.setSelected(true);
@@ -374,30 +371,28 @@ public class MainTabBarPageFragment extends CoreFragment {
         return fragment;
     }
 
-    private void changeButtonsState(boolean first, boolean second, boolean third, boolean fourth) {
-        if (first) {
-            t1Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_linka_select));
-            getAppMainActivity().setTitleNoUpperCase(linka.getName());
-        } else {
-            t1Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_linka));
-        }
-        if (second) {
-            t2Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_user_select));
-            getAppMainActivity().setTitle("USERS");
-        } else {
-            t2Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_user));
-        }
-        if (third) {
-            t3Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_notif_select));
-            getAppMainActivity().setTitle("NOTIFICATIONS");
-        } else {
-            t3Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_notif));
-        }
-        if (fourth) {
-            t4Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_setting_select));
-            getAppMainActivity().setTitle(getString(R.string.big_settings));
-        } else {
-            t4Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_setting));
+    private void changeButtonsState(int position){
+        t1Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_linka));
+        t2Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_user));
+        t3Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_notif));
+        t4Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_setting));
+        switch (position){
+            case LOCK_SCREEN:
+                t1Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_linka_select));
+                getAppMainActivity().setTitleNoUpperCase(linka.getName());
+                break;
+            case USER_SCREEN:
+                t2Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_user_select));
+                getAppMainActivity().setTitle("USERS");
+                break;
+            case NOTIFICATION_SCREEN:
+                t3Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_notif_select));
+                getAppMainActivity().setTitle("NOTIFICATIONS");
+                break;
+            case SETTING_SCREEN:
+                t4Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_setting_select));
+                getAppMainActivity().setTitle(getString(R.string.big_settings));
+                break;
         }
     }
 
@@ -406,31 +401,30 @@ public class MainTabBarPageFragment extends CoreFragment {
     void on_t1() {
         currentPosition = 0;
         viewPager.setCurrentItem(0, true);
-        changeButtonsState(true, false, false, false);
+        changeButtonsState(currentPosition);
     }
 
     @OnClick(R.id.t2)
     void on_t2() {
         currentPosition = 1;
         viewPager.setCurrentItem(1, true);
-        changeButtonsState(false, true, false, false);
+        changeButtonsState(currentPosition);
     }
 
     @OnClick(R.id.t3)
     void on_t3() {
         currentPosition = 2;
         viewPager.setCurrentItem(2, true);
-        changeButtonsState(false, false, true, false);
+        changeButtonsState(currentPosition);
     }
 
     @OnClick(R.id.t4)
     void on_t4() {
         //Refresh the settings page
         currentPosition = 3;
-        EventBus.getDefault().post(LinkaActivity.LINKA_ACTIVITY_ON_CHANGE);
-
         viewPager.setCurrentItem(3, true);
-        changeButtonsState(false, false, false, true);
+        EventBus.getDefault().post(LinkaActivity.LINKA_ACTIVITY_ON_CHANGE);
+        changeButtonsState(currentPosition);
     }
 
 
@@ -558,7 +552,6 @@ public class MainTabBarPageFragment extends CoreFragment {
     @Override
     public void onPause() {
         super.onPause();
-        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -580,6 +573,11 @@ public class MainTabBarPageFragment extends CoreFragment {
                     notificationsUpdate.setVisibility(View.VISIBLE);
                     notificationsUpdate.setText(String.valueOf(newNotificationsCount));
                 }
+            }
+            if(object.equals("UpdateNotifCount")){
+                newNotificationsCount = 0;
+                notificationsUpdate.setText("");
+                notificationsUpdate.setVisibility(View.GONE);
             }
         }
         if (object != null && object instanceof String && object.equals(LocksController.LOCKSCONTROLLER_NOTIFY_REFRESHED)) {

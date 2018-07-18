@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="@dimen/margin"
     android:layout_marginBottom="@dimen/margin"
-    android:background="@color/linka_light_bg">
+    android:background="@color/linka_white">
 
     <ImageView
         android:layout_width="@dimen/margin_dx"

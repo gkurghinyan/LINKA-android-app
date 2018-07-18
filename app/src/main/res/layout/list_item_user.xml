@@ -4,7 +4,7 @@
     android:id="@+id/layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/linka_light_bg"
+    android:background="@color/linka_white"
     android:layout_marginTop="@dimen/margin"
     android:layout_marginBottom="@dimen/margin">
 
@@ -12,7 +12,7 @@
         android:id="@+id/foreground_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/linka_light_bg">
+        android:background="@color/linka_white">
 
         <android.support.constraint.Guideline
             android:id="@+id/guideline"

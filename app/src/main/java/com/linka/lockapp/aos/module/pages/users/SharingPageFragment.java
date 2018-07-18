@@ -1,7 +1,6 @@
 package com.linka.lockapp.aos.module.pages.users;
 
 import android.graphics.PorterDuff;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -21,7 +20,6 @@ import com.linka.lockapp.aos.module.core.CoreFragment;
 import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.model.User;
 import com.linka.lockapp.aos.module.pages.home.MainTabBarPageFragment;
-import com.linka.lockapp.aos.module.widget.LockController;
 import com.linka.lockapp.aos.module.widget.ThreeDotsView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -91,9 +89,7 @@ public class SharingPageFragment extends CoreFragment {
     }
 
 
-    boolean isInitBLE = false;
     Linka linka;
-    LockController lockController;
 
     public SharingPageFragment() {
     }
@@ -138,7 +134,6 @@ public class SharingPageFragment extends CoreFragment {
 
 
     void init() {
-        getLockPermissions();
 
         adapter = new SharingAdapter(getContext());
         adapter.setOnClickDeviceItemListener(new SharingAdapter.OnClickDeviceItemListener() {
@@ -186,7 +181,6 @@ public class SharingPageFragment extends CoreFragment {
         recyclerView.setAdapter(adapter);
     }
 
-    private LockTask lockTask = null;
     private boolean isLockTaskRunning = false;
 
     void getLockPermissions() {
@@ -207,8 +201,7 @@ public class SharingPageFragment extends CoreFragment {
             public void onResponse(Call<LinkaAPIServiceResponse.LockPermissionsResponse> call, Response<LinkaAPIServiceResponse.LockPermissionsResponse> response) {
 
                 if (LinkaAPIServiceImpl.check(response, false, null)) {
-                    lockTask = new LockTask();
-                    lockTask.execute(response);
+                    refresh(response);
 
                 }
             }
@@ -237,11 +230,9 @@ public class SharingPageFragment extends CoreFragment {
     @Override
     public void onStop() {
         super.onStop();
-        if(isLockTaskRunning){
-            lockTask.cancel(true);
-            lockTask = null;
-            isLockTaskRunning = false;
-        }
+//        if(isLockTaskRunning && lockTask != null){
+//            lockTask.cancel(true);
+//        }
     }
 
     @Subscribe
@@ -262,83 +253,81 @@ public class SharingPageFragment extends CoreFragment {
         if (object instanceof String && object.equals(REFRESH_LIST_OF_USERS)) {
             getLockPermissions();
         }
+        if (object instanceof String && ((String) object).substring(0,8).equals("Selected")) {
+            if (object.equals("Selected-" + String.valueOf(MainTabBarPageFragment.USER_SCREEN))) {
+                getLockPermissions();
+            }
+        }
     }
 
-    private class LockTask extends AsyncTask<Response<LinkaAPIServiceResponse.LockPermissionsResponse>, Void, Void> {
+    private void refresh(Response<LinkaAPIServiceResponse.LockPermissionsResponse> response){
+        for (final LinkaAPIServiceResponse.LockPermissionsResponse.Data userData : response.body().data) {
+            User newUser = User.saveUserForEmail(userData.email,
+                    userData.first_name,
+                    userData.last_name,
+                    userData.name,
+                    userData.userId,
+                    userData.owner,
+                    userData.isPendingApproval,
+                    userData.lastUsed);
 
-        @Override
-        protected Void doInBackground(Response<LinkaAPIServiceResponse.LockPermissionsResponse>... responses) {
-            for (final LinkaAPIServiceResponse.LockPermissionsResponse.Data userData : responses[0].body().data) {
-                User newUser = User.saveUserForEmail(userData.email,
-                        userData.first_name,
-                        userData.last_name,
-                        userData.name,
-                        userData.userId,
-                        userData.owner,
-                        userData.isPendingApproval,
-                        userData.lastUsed);
+            if (ownerName == null) {
+                unbinder = ButterKnife.bind(SharingPageFragment.this, rootView);
+            }
 
-                if (ownerName == null) {
-                    unbinder = ButterKnife.bind(SharingPageFragment.this, rootView);
-                }
-
-                if (userData.owner) {
-                    if (getActivity() != null) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                ownerAvatar.setVisibility(View.VISIBLE);
-                                ownerAvatar.setColorFilter(getResources().getColor(R.color.linka_black_transparent), PorterDuff.Mode.MULTIPLY);
-                                ownerName.setVisibility(View.VISIBLE);
-                                ownerName.setText(userData.name);
-                                ownerLastUsed.setVisibility(View.VISIBLE);
-                                if (userData.lastUsed != null) {
-                                    Date date = null;
-                                    try {
-                                        date = allDateFormat.parse(userData.lastUsed);
-                                    } catch (ParseException e) {
-                                        e.printStackTrace();
-                                    }
-                                    if (date != null) {
-                                        ownerLastUsed.setText("Last used: " + dateFormat.format(date));
-                                    }
+            if (userData.owner) {
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ownerAvatar.setVisibility(View.VISIBLE);
+                            ownerAvatar.setColorFilter(getResources().getColor(R.color.linka_black_transparent), PorterDuff.Mode.MULTIPLY);
+                            ownerName.setVisibility(View.VISIBLE);
+                            ownerName.setText(userData.name);
+                            ownerLastUsed.setVisibility(View.VISIBLE);
+                            if (userData.lastUsed != null) {
+                                Date date = null;
+                                try {
+                                    date = allDateFormat.parse(userData.lastUsed);
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
                                 }
-
-                                //If we are the owner, then add the add user button
-                                if (userData.email.equals(LinkaAPIServiceImpl.getUserEmail())) {
-                                    adapter.setAddButtonVisibility(SharingAdapter.VISIBLE);
-
-                                    selfIsOwner = true;
+                                if (date != null) {
+                                    ownerLastUsed.setText("Last used: " + dateFormat.format(date));
                                 }
                             }
-                        });
-                    }
 
-                } else {
-                    userList.add(newUser);
+                            //If we are the owner, then add the add user button
+                            if (userData.email.equals(LinkaAPIServiceImpl.getUserEmail())) {
+                                adapter.setAddButtonVisibility(SharingAdapter.VISIBLE);
+
+                                selfIsOwner = true;
+                            }
+                        }
+                    });
                 }
 
+            } else {
+                userList.add(newUser);
             }
 
-            if (adapter == null) return null;
-            adapter.setList(userList);
-            if (getActivity() != null) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+        }
+
+        if (adapter == null) return;
+        adapter.setList(userList);
+        if (getActivity() != null) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if(adapter != null) {
                         adapter.notifyDataSetChanged();
+                    }
+                    if(threeDotsView != null) {
                         threeDotsView.setVisibility(View.GONE);
                     }
-                });
-            }
-            return null;
+                }
+            });
         }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            lockTask = null;
-            isLockTaskRunning = false;
-        }
+        isLockTaskRunning = false;
     }
 }

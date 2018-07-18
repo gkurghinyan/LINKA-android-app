@@ -79,11 +79,18 @@ public class InviteUserDialogFragment extends Fragment {
 
     @OnClick(R.id.cancel_button)
     void onCancelClicked(){
+        View view = getActivity().getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
         getFragmentManager().popBackStack();
     }
 
     @OnClick(R.id.invite_button)
     void onInviteClicked(){
+        invite.setClickable(false);
+        cancel.setClickable(false);
         if(!emailEdit.getText().toString().equals("") && emailEdit.getText().toString().matches(emailPattern)) {
             if(!isUserExisting(Objects.requireNonNull(getArguments().getStringArrayList(EMAIL_ADDRESSES)))) {
                 View view = getActivity().getCurrentFocus();
@@ -94,9 +101,13 @@ public class InviteUserDialogFragment extends Fragment {
                 Utils.showLoading(getContext(),root);
                 inviteUser(emailEdit.getText().toString());
             }else {
+                invite.setClickable(true);
+                cancel.setClickable(true);
                 Toast.makeText(getActivity(), getString(R.string.user_exist), Toast.LENGTH_SHORT).show();
             }
         }else {
+            invite.setClickable(true);
+            cancel.setClickable(true);
             Toast.makeText(getActivity(), "Not valid email", Toast.LENGTH_SHORT).show();
         }
     }
@@ -133,6 +144,8 @@ public class InviteUserDialogFragment extends Fragment {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
+                                    invite.setClickable(true);
+                                    cancel.setClickable(true);
                                     emailEdit.setText("");
                                 }
                             });
@@ -143,6 +156,8 @@ public class InviteUserDialogFragment extends Fragment {
 
             @Override
             public void onFailure(Call<LinkaAPIServiceResponse> call, Throwable t) {
+                invite.setClickable(true);
+                cancel.setClickable(true);
                 Utils.cancelLoading();
             }
         });

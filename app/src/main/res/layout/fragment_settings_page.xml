@@ -514,7 +514,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_marginEnd="@dimen/margin_x"
                         android:scaleType="fitEnd"
-                        android:src="@drawable/remove_info_icon" />
+                        android:src="@drawable/danger_icon" />
                 </RelativeLayout>
 
                 <View
@@ -536,6 +536,6 @@
         android:id="@+id/settings_page_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/linka_white"/>
+       />
 
 </FrameLayout>

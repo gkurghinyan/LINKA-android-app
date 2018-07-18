@@ -668,6 +668,7 @@ public class Linka extends Model implements Serializable {
                         LinkaActivity.saveLinkaActivity(this, LinkaActivity.LinkaActivityType.isUnlocked);
                     }else {
                         isAutoUnlocked = false;
+                        this.save();
                     }
 
                     //Lock is now unlocked, so reset sleep timer

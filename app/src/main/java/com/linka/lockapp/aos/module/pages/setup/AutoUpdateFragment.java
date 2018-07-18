@@ -408,7 +408,7 @@ public class AutoUpdateFragment extends CoreFragment {
 
         //Don't disable back button
         //tryDisableAbortAlertButton();
-        getAppMainActivity().setBackAviable(false);
+        getAppMainActivity().setBackAvailable(false);
         dfuManager.startDfu(getActivity(), dfuProgressListener);
     }
 
@@ -466,7 +466,7 @@ public class AutoUpdateFragment extends CoreFragment {
 
         @Override
         public void onDfuAborted(final String deviceAddress) {
-            getAppMainActivity().setBackAviable(true);
+            getAppMainActivity().setBackAvailable(true);
 
             if (isAdded()
                     && getActivity() != null) {
@@ -504,7 +504,7 @@ public class AutoUpdateFragment extends CoreFragment {
     };
 
     private void onCompleteDfu(boolean isCancelled, boolean isError, String errorMessage) {
-        getAppMainActivity().setBackAviable(true);
+        getAppMainActivity().setBackAvailable(true);
         if (isCancelled) {
             state = 33;
             return;

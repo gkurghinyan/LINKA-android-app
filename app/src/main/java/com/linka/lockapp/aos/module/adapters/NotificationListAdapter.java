@@ -15,6 +15,8 @@ import com.linka.lockapp.aos.module.model.LinkaActivity.LinkaActivityType;
 import com.linka.lockapp.aos.module.model.Notification;
 import com.linka.lockapp.aos.module.widget.GenericLoadMoreAdapter;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -108,6 +110,7 @@ public class NotificationListAdapter extends GenericLoadMoreAdapter<Notification
     }
 
     public void updateReadState(){
+        EventBus.getDefault().post("UpdateNotifCount");
        List<Long> list = new ArrayList<>();
         for(Notification notification:mItems){
             if(!notification.isRead) {
@@ -115,6 +118,15 @@ public class NotificationListAdapter extends GenericLoadMoreAdapter<Notification
             }
         }
         LinkaActivity.updateReadState(list);
+    }
+
+    public boolean isUnreadItemExist(){
+        for (Notification notification:mItems){
+            if(!notification.isRead){
+                return true;
+            }
+        }
+        return false;
     }
 
 

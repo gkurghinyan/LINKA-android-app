@@ -198,37 +198,33 @@ public class SettingsPageFragment extends CoreFragment {
                 LockController lockController = LocksController.getInstance().getLockController();
                 revocationController.implement(getAppMainActivity(), linka, lockController);
             }
-            getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            switch(currentFragment){
-                case TAMPER_SENSITIVITY_FRAGMENT:
-                    getFragmentManager().beginTransaction()
-                            .addToBackStack(null)
-                            .replace(R.id.settings_page_root, SettingsTamperSensitivityFragment.newInstance(linka))
-                            .commit();
-                    break;
-                case REMOVE_INFO_FRAGMENT:
-                    getFragmentManager().beginTransaction()
-                            .addToBackStack(null)
-                            .replace(R.id.settings_page_root, RemovingInfoFragment.newInstance())
-                            .commit();
-                    break;
-                case NO_FRAGMENT:
-                    rootFrame.setBackgroundColor(getResources().getColor(R.color.linka_transparent));
-                    break;
-
-            }
             if (savedInstanceState != null && savedInstanceState.getIntArray("position") != null) {
-                final int[] array = savedInstanceState.getIntArray("position");
-                scrollView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        scrollView.scrollTo(array[0], array[1]);
-                    }
-                });
+                array = savedInstanceState.getIntArray("position");
             }
-            init();
         }
+        getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        switch(currentFragment){
+            case TAMPER_SENSITIVITY_FRAGMENT:
+                getFragmentManager().beginTransaction()
+                        .addToBackStack(null)
+                        .replace(R.id.settings_page_root, SettingsTamperSensitivityFragment.newInstance(linka))
+                        .commit();
+                break;
+            case REMOVE_INFO_FRAGMENT:
+                getFragmentManager().beginTransaction()
+                        .addToBackStack(null)
+                        .replace(R.id.settings_page_root, RemovingInfoFragment.newInstance())
+                        .commit();
+                break;
+            case NO_FRAGMENT:
+                rootFrame.setBackgroundColor(getResources().getColor(R.color.linka_transparent));
+                break;
+
+        }
+        init();
     }
+
+    int[] array = null;
 
     @Override
     public void onStop() {
@@ -238,6 +234,7 @@ public class SettingsPageFragment extends CoreFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        rootFrame.setBackgroundColor(getResources().getColor(R.color.linka_transparent));
         unbinder.unbind();
         revocationController.onPause();
     }
@@ -252,6 +249,15 @@ public class SettingsPageFragment extends CoreFragment {
 
 
     void init() {
+        if(array != null) {
+            scrollView.post(new Runnable() {
+                @Override
+                public void run() {
+                    scrollView.scrollTo(array[0], array[1]);
+                }
+            });
+        }
+
         switchAudibleLockingUnlocking.setOnCheckedChangeListener(settings_audible_locking_unlocking);
 
         switchTamperSiren.setOnCheckedChangeListener(settings_tamper_siren);
@@ -702,6 +708,11 @@ public class SettingsPageFragment extends CoreFragment {
         }else if(object != null && object instanceof String && object.equals(FRAGMENT_ADDED)){
             rootFrame.setBackgroundColor(getResources().getColor(R.color.linka_transparent));
         }
+//        else if (object instanceof String && ((String) object).substring(0,8).equals("Selected")) {
+//            if (object.equals("Selected-" + String.valueOf(MainTabBarPageFragment.USER_SCREEN))) {
+//                init();
+//            }
+//        }
     }
 
     private void setRadiusLinearVisibility(boolean visibility) {

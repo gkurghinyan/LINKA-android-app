@@ -17,7 +17,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -239,7 +238,7 @@ public class AppMainActivity extends CoreActivity {
     @BindView(R.id.main_root)
     RelativeLayout root;
 
-    private boolean isBackAviable = true;
+    private boolean isBackAvailable = true;
 
     public enum WalkthroughOrder {
         SETUP,
@@ -668,6 +667,7 @@ public class AppMainActivity extends CoreActivity {
 
     /* ON CHANGE FRAGMENT */
 
+
     @Override
     public void onBackPressed() {
         if(isOtherBackListener){
@@ -678,7 +678,7 @@ public class AppMainActivity extends CoreActivity {
             drawerLayout.closeDrawer(drawer);
             return;
         }
-        if (isBackAviable) {
+        if (isBackAvailable) {
             Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
             if (fragment instanceof DfuManagerPageFragment) {
                 final DfuManagerPageFragment f = (DfuManagerPageFragment) fragment;
@@ -715,12 +715,12 @@ public class AppMainActivity extends CoreActivity {
         }
     }
 
-    public boolean isBackAviable() {
-        return isBackAviable;
+    public boolean isBackAvailable() {
+        return isBackAvailable;
     }
 
-    public void setBackAviable(boolean backAviable) {
-        isBackAviable = backAviable;
+    public void setBackAvailable(boolean backAvailable) {
+        isBackAvailable = backAvailable;
     }
 
     @Override

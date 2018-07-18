@@ -54,7 +54,7 @@ public class SetupLinka3 extends CoreFragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_setup_name_linka, container, false);
         if(getArguments().getInt(CURRENT_FRAGMENT) == WALKTHROUGH) {
-            getAppMainActivity().setBackAviable(false);
+            getAppMainActivity().setBackAvailable(false);
             SharedPreferences.Editor editor = Prefs.edit();
             editor.putInt(Constants.SHOWING_FRAGMENT, Constants.SET_NAME_FRAGMENT);
             editor.apply();
@@ -73,7 +73,7 @@ public class SetupLinka3 extends CoreFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        getAppMainActivity().setBackAviable(true);
+        getAppMainActivity().setBackAvailable(true);
         unbinder.unbind();
     }
 

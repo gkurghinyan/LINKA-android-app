@@ -49,8 +49,6 @@
         android:visibility="visible"
         app:button_background="@color/linka_transparent"
         app:button_bottom_padding="15dp"
-        app:button_image_disabled="@drawable/linka_logo"
-        app:button_image_enabled="@drawable/linka_logo"
         app:button_image_height="200dp"
         app:button_image_width="200dp"
         app:button_top_padding="15dp"

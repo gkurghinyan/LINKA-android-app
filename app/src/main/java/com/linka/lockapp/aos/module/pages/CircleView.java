@@ -164,8 +164,6 @@ public class CircleView extends CoreFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.layout_circle_view, container, false);
-        internetPage = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_no_internet_connectivity, null);
-        ((TextView) internetPage.findViewById(R.id.title)).setText(R.string.network_required_to_connect);
         unbinder = ButterKnife.bind(this, rootView);
 
         return rootView;
@@ -181,7 +179,6 @@ public class CircleView extends CoreFragment {
                 linka = (Linka) bundle.getSerializable("linka");
             }
 
-            init();
         }
     }
 
@@ -210,6 +207,8 @@ public class CircleView extends CoreFragment {
 
 
     void init() {
+        internetPage = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_no_internet_connectivity, null);
+        ((TextView) internetPage.findViewById(R.id.title)).setText(R.string.network_required_to_connect);
 
         lockController = LocksController.getInstance().getLockController();
 
@@ -311,15 +310,15 @@ public class CircleView extends CoreFragment {
             warningText.setVisibility(View.GONE);
             refreshDisplay();
         }
-        if(turningOnLinkaHandler != null){
+        if (turningOnLinkaHandler != null) {
             turningOnLinkaHandler.removeCallbacks(turningOnLinkaRunnable);
             turningOnLinkaHandler = null;
             isTurningOnShow = false;
         }
-        if(bluetoothAdapter != null){
+        if (bluetoothAdapter != null) {
             bluetoothAdapter.stopLeScan(scanCallback);
         }
-        if(turningLinkaDialog != null && turningLinkaDialog.isShowing()){
+        if (turningLinkaDialog != null && turningLinkaDialog.isShowing()) {
             turningLinkaDialog.dismiss();
         }
     }
@@ -339,52 +338,31 @@ public class CircleView extends CoreFragment {
                         root.setBackground(getResources().getDrawable(R.drawable.blue_gradient));
                         batteryPercent.setText("");
                     } else if (!getBluetoothConnectivity()) {
-                        batteryPercent.setText("");
-                        gifImageView.setVisibility(View.VISIBLE);
-                        gifImageView.setImageResource(R.drawable.close_white_linka);
-                        swipeButton.setCircleClickable(false);
-                        panicButton.setBackground(getResources().getDrawable(R.drawable.panic_button));
+                        setLockNotConnectedState();
                         turnOnBluetooth();
                     } else {
                         root.setBackgroundColor(getResources().getColor(R.color.linka_transparent));
                         if (!isWarningShow) {
                             if (!linka.isConnected) {
-                                if(!isTurningOnShow) {
-                                    batteryPercent.setText("");
+                                if (!isTurningOnShow) {
                                     root.removeView(internetPage);
-                                    gifImageView.setVisibility(View.VISIBLE);
-                                    gifImageView.setImageResource(R.drawable.close_white_linka);
-                                    swipeButton.setCircleClickable(false);
-                                    panicButton.setBackground(getResources().getDrawable(R.drawable.panic_button));
+                                    setLockNotConnectedState();
                                     showTurningOnLinkaDialog();
                                 }
                             } else {
                                 isTurningOnShow = false;
-                                if(turningOnLinkaHandler != null){
+                                if (turningOnLinkaHandler != null) {
                                     turningOnLinkaHandler.removeCallbacks(turningOnLinkaRunnable);
                                 }
-                                if(turningLinkaDialog != null && turningLinkaDialog.isShowing()){
+                                if (turningLinkaDialog != null && turningLinkaDialog.isShowing()) {
                                     turningLinkaDialog.dismiss();
                                 }
                                 if (linka.isLockSettled) {
-                                    batteryPercent.setText(linka.batteryPercent + "%");
-                                    root.removeView(internetPage);
-                                    gifImageView.setVisibility(View.GONE);
-                                    panicButton.setBackground(getResources().getDrawable(R.drawable.panic_red_button));
-                                    if (linka.isLocked) {
-                                        swipeButton.setCurrentState(Circle.LOCKED_STATE);
-                                        swipeButton.setCircleClickable(true);
-                                    } else if (linka.isUnlocked) {
-                                        swipeButton.setCurrentState(Circle.UNLOCKED_STATE);
-                                        swipeButton.setCircleClickable(true);
-                                    } else if (linka.isLocking) {
-                                        swipeButton.setCircleClickable(false);
-                                    } else if (linka.isUnlocking) {
-                                        swipeButton.setCircleClickable(false);
-                                    }
+                                    setLockSettledState();
                                 } else {
                                     root.removeView(internetPage);
-                                    if(gifImageView.getVisibility() != View.VISIBLE || gifImageView.getDrawable().equals(getResources().getDrawable(R.drawable.wi_fi_connection))) {
+                                    if (gifImageView.getVisibility() != View.VISIBLE ||
+                                            gifImageView.getDrawable().equals(getResources().getDrawable(R.drawable.wi_fi_connection))) {
                                         gifImageView.setVisibility(View.VISIBLE);
                                         gifImageView.setImageResource(R.drawable.wi_fi_connection);
                                     }
@@ -394,8 +372,35 @@ public class CircleView extends CoreFragment {
                             }
                         }
                     }
+                    LocksController.getInstance().refresh();
                 }
             });
+        }
+    }
+
+    private void setLockNotConnectedState() {
+        batteryPercent.setText("");
+        gifImageView.setVisibility(View.VISIBLE);
+        gifImageView.setImageResource(R.drawable.close_white_linka);
+        swipeButton.setCircleClickable(false);
+        panicButton.setBackground(getResources().getDrawable(R.drawable.panic_button));
+    }
+
+    private void setLockSettledState() {
+        batteryPercent.setText(linka.batteryPercent + "%");
+        root.removeView(internetPage);
+        gifImageView.setVisibility(View.GONE);
+        panicButton.setBackground(getResources().getDrawable(R.drawable.panic_red_button));
+        if (linka.isLocked) {
+            swipeButton.setCurrentState(Circle.LOCKED_STATE);
+            swipeButton.setCircleClickable(true);
+        } else if (linka.isUnlocked) {
+            swipeButton.setCurrentState(Circle.UNLOCKED_STATE);
+            swipeButton.setCircleClickable(true);
+        } else if (linka.isLocking) {
+            swipeButton.setCircleClickable(false);
+        } else if (linka.isUnlocking) {
+            swipeButton.setCircleClickable(false);
         }
     }
 
@@ -406,7 +411,7 @@ public class CircleView extends CoreFragment {
 
             linka = Linka.getLinkaFromLockController(linka);
 
-            if(MainTabBarPageFragment.currentPosition == MainTabBarPageFragment.LOCK_SCREEN) {
+            if (MainTabBarPageFragment.currentPosition == MainTabBarPageFragment.LOCK_SCREEN) {
                 refreshDisplay();
             }
 
@@ -414,21 +419,26 @@ public class CircleView extends CoreFragment {
 
             linka = Linka.getLinkaFromLockController(linka);
 
-            if(MainTabBarPageFragment.currentPosition == MainTabBarPageFragment.LOCK_SCREEN) {
+            if (MainTabBarPageFragment.currentPosition == MainTabBarPageFragment.LOCK_SCREEN) {
+                refreshDisplay();
+            }
+        } else if (object instanceof String && ((String) object).substring(0, 8).equals("Selected")) {
+            if (object.equals("Selected-" + String.valueOf(MainTabBarPageFragment.LOCK_SCREEN))) {
+                init();
                 refreshDisplay();
             }
         } else if (object != null && object.equals(LockGattUpdateReceiver.GATT_UPDATE_RECEIVER_NOTIFY_DISCONNECTED)) {
             LogHelper.e("MyLinkasPageFrag", "[EVENTBUS] GATT DISCONNECT Notified");
 
             linka = Linka.getLinkaFromLockController(linka);
-            if(MainTabBarPageFragment.currentPosition == MainTabBarPageFragment.LOCK_SCREEN) {
+            if (MainTabBarPageFragment.currentPosition == MainTabBarPageFragment.LOCK_SCREEN) {
                 refreshDisplay();
             }
-        }else if (object instanceof String && ((String) object).substring(0, 8).equals("Selected")) {
+        } else if (object instanceof String && ((String) object).substring(0, 8).equals("Selected")) {
             if (object.equals("Selected-" + String.valueOf(MainTabBarPageFragment.LOCK_SCREEN))) {
                 refreshDisplay();
             }
-        }else if (object != null && object.equals(NotificationsHelper.LINKA_NOT_LOCKED)) {
+        } else if (object != null && object.equals(NotificationsHelper.LINKA_NOT_LOCKED)) {
             isWarningShow = true;
             swipeButton.setCircleClickable(false);
             panicButton.setVisibility(View.GONE);
@@ -442,8 +452,8 @@ public class CircleView extends CoreFragment {
         }
     }
 
-    private void showTurningOnLinkaDialog(){
-        if(MainTabBarPageFragment.currentPosition == thisPage) {
+    private void showTurningOnLinkaDialog() {
+        if (MainTabBarPageFragment.currentPosition == thisPage) {
             scanCallback = null;
             devices.clear();
             linkaList.clear();
@@ -492,7 +502,7 @@ public class CircleView extends CoreFragment {
                 int result = BLEHelpers.upsertBluetoothLEDeviceList(devices, linkaList, device, rssi, scanRecord);
                 if (result == 0) {
                     if (!linkaList.isEmpty()) {
-                        if(bluetoothAdapter == null){
+                        if (bluetoothAdapter == null) {
                             BluetoothManager bluetoothManager = (BluetoothManager) getContext().getSystemService(Context.BLUETOOTH_SERVICE);
                             bluetoothAdapter = bluetoothManager.getAdapter();
                         }
@@ -502,7 +512,7 @@ public class CircleView extends CoreFragment {
                     }
                 } else if (result == 1) {
                     if (!linkaList.isEmpty()) {
-                        if(bluetoothAdapter == null){
+                        if (bluetoothAdapter == null) {
                             BluetoothManager bluetoothManager = (BluetoothManager) getContext().getSystemService(Context.BLUETOOTH_SERVICE);
                             bluetoothAdapter = bluetoothManager.getAdapter();
                         }
@@ -519,7 +529,7 @@ public class CircleView extends CoreFragment {
         if (bluetoothAdapter == null) return;
 
         initializeScanCallback();
-        if(bluetoothAdapter == null){
+        if (bluetoothAdapter == null) {
             BluetoothManager bluetoothManager = (BluetoothManager) getContext().getSystemService(Context.BLUETOOTH_SERVICE);
             bluetoothAdapter = bluetoothManager.getAdapter();
         }
