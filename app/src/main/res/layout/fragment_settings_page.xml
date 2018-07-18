@@ -514,7 +514,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_marginEnd="@dimen/margin_x"
                         android:scaleType="fitEnd"
-                        android:src="@drawable/danger_icon" />
+                        android:src="@drawable/remove_info_icon" />
                 </RelativeLayout>
 
                 <View

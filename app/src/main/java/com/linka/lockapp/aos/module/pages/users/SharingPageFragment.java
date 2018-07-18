@@ -134,6 +134,7 @@ public class SharingPageFragment extends CoreFragment {
 
 
     void init() {
+        getLockPermissions();
 
         adapter = new SharingAdapter(getContext());
         adapter.setOnClickDeviceItemListener(new SharingAdapter.OnClickDeviceItemListener() {
@@ -255,7 +256,7 @@ public class SharingPageFragment extends CoreFragment {
         }
         if (object instanceof String && ((String) object).substring(0,8).equals("Selected")) {
             if (object.equals("Selected-" + String.valueOf(MainTabBarPageFragment.USER_SCREEN))) {
-                getLockPermissions();
+//                getLockPermissions();
             }
         }
     }

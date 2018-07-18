@@ -189,7 +189,6 @@ public class MainTabBarPageFragment extends CoreFragment {
         outState.putInt("current_position", currentPosition + 1);
     }
 
-    List<Notification> notifications = new ArrayList<>();
     MainTabBarPageFragmentAdapter adapter;
 
 
@@ -210,6 +209,7 @@ public class MainTabBarPageFragment extends CoreFragment {
         }
 
         viewPager.isSwipable = false;
+        viewPager.setOffscreenPageLimit(3);
 
         // INIT VIEWPAGER
         if (linka != null) {
@@ -284,7 +284,6 @@ public class MainTabBarPageFragment extends CoreFragment {
                             getAppMainActivity().setBackIconVisible(true);
                         }
                     }else {
-                        Log.d("lok_j","remove from activity");
                         getAppMainActivity().setBackIconVisible(false);
                     }
                 }
@@ -292,7 +291,6 @@ public class MainTabBarPageFragment extends CoreFragment {
                 @Override
                 public void onPageScrollStateChanged(int state) {
                     if(state == ViewPager.SCROLL_STATE_IDLE){
-                        Log.d("scrol_state","IDLE");
                         EventBus.getDefault().post("Selected-" + String.valueOf(currentPosition));
                     }
                 }

@@ -61,9 +61,6 @@ public class CircleView extends CoreFragment {
     //This fragment position in viewpager of MainTabBarPageFragment
     private final int thisPage = 0;
 
-    @BindView(R.id.circle)
-    Circle circleView;
-
     @BindView(R.id.slide_to_lock)
     SwipeButton swipeButton;
 
@@ -404,6 +401,19 @@ public class CircleView extends CoreFragment {
         }
     }
 
+    private void setDeviceNotLockedSuccessState() {
+        isWarningShow = true;
+        swipeButton.setCircleClickable(false);
+        panicButton.setVisibility(View.GONE);
+        gifImageView.setVisibility(View.VISIBLE);
+        gifImageView.setBackgroundResource(R.drawable.danger_red_back);
+        gifImageView.setImageResource(R.drawable.close_white_linka);
+        warningTitle.setVisibility(View.VISIBLE);
+        warningText.setVisibility(View.VISIBLE);
+        notSuccessLockHandler = new Handler();
+        notSuccessLockHandler.postDelayed(notSuccessLockRunnable, 5000);
+    }
+
     @Subscribe
     public void onEvent(Object object) {
         if (!isAdded()) return;
@@ -434,21 +444,8 @@ public class CircleView extends CoreFragment {
             if (MainTabBarPageFragment.currentPosition == MainTabBarPageFragment.LOCK_SCREEN) {
                 refreshDisplay();
             }
-        } else if (object instanceof String && ((String) object).substring(0, 8).equals("Selected")) {
-            if (object.equals("Selected-" + String.valueOf(MainTabBarPageFragment.LOCK_SCREEN))) {
-                refreshDisplay();
-            }
         } else if (object != null && object.equals(NotificationsHelper.LINKA_NOT_LOCKED)) {
-            isWarningShow = true;
-            swipeButton.setCircleClickable(false);
-            panicButton.setVisibility(View.GONE);
-            gifImageView.setVisibility(View.VISIBLE);
-            gifImageView.setBackgroundResource(R.drawable.danger_red_back);
-            gifImageView.setImageResource(R.drawable.close_white_linka);
-            warningTitle.setVisibility(View.VISIBLE);
-            warningText.setVisibility(View.VISIBLE);
-            notSuccessLockHandler = new Handler();
-            notSuccessLockHandler.postDelayed(notSuccessLockRunnable, 5000);
+            setDeviceNotLockedSuccessState();
         }
     }
 

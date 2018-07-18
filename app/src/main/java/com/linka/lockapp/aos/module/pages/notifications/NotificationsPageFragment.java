@@ -201,7 +201,7 @@ public class NotificationsPageFragment extends CoreFragment {
                         }
 
                         recyclerView.getSwipeToRefresh().setRefreshing(false);
-                        
+
                         adapter.setList(notifications);
                         adapter.notifyDataSetChanged();
                         if(notifications.isEmpty()){
