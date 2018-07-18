@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.PorterDuff;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -66,6 +67,9 @@ public class CircleView extends CoreFragment {
 
     @BindView(R.id.battery_percent)
     TextView batteryPercent;
+
+    @BindView(R.id.battery_image)
+    ImageView batteryImage;
 
     @BindView(R.id.panic_button)
     ImageView panicButton;
@@ -204,6 +208,7 @@ public class CircleView extends CoreFragment {
 
 
     void init() {
+        batteryImage.setColorFilter(getActivity().getResources().getColor(R.color.linka_gray), PorterDuff.Mode.SRC_IN);
         internetPage = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_no_internet_connectivity, null);
         ((TextView) internetPage.findViewById(R.id.title)).setText(R.string.network_required_to_connect);
 
@@ -376,6 +381,7 @@ public class CircleView extends CoreFragment {
     }
 
     private void setLockNotConnectedState() {
+        batteryImage.setColorFilter(getActivity().getResources().getColor(R.color.linka_gray), PorterDuff.Mode.SRC_IN);
         batteryPercent.setText("");
         gifImageView.setVisibility(View.VISIBLE);
         gifImageView.setImageResource(R.drawable.close_white_linka);
@@ -384,6 +390,7 @@ public class CircleView extends CoreFragment {
     }
 
     private void setLockSettledState() {
+        batteryImage.setColorFilter(null);
         batteryPercent.setText(linka.batteryPercent + "%");
         root.removeView(internetPage);
         gifImageView.setVisibility(View.GONE);
