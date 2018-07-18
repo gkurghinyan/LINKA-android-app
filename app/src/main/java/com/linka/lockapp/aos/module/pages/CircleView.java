@@ -175,7 +175,7 @@ public class CircleView extends CoreFragment {
             if (bundle.get("linka") != null) {
                 linka = (Linka) bundle.getSerializable("linka");
             }
-
+            init();
         }
     }
 
@@ -434,7 +434,6 @@ public class CircleView extends CoreFragment {
             }
         } else if (object instanceof String && ((String) object).substring(0, 8).equals("Selected")) {
             if (object.equals("Selected-" + String.valueOf(MainTabBarPageFragment.LOCK_SCREEN))) {
-                init();
                 refreshDisplay();
             }
         } else if (object != null && object.equals(LockGattUpdateReceiver.GATT_UPDATE_RECEIVER_NOTIFY_DISCONNECTED)) {

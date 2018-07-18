@@ -731,14 +731,14 @@ public class AppMainActivity extends CoreActivity {
             fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         }
 
-//        if (curFragmentCount <= 0) {
-//            menu.setVisibility(View.VISIBLE);
-//
-//            back.setVisibility(View.GONE);
-//        } else {
-////            menu.setVisibility(View.GONE);
-////            back.setVisibility(View.VISIBLE);
-//        }
+        if (curFragmentCount <= 0) {
+            menu.setVisibility(View.VISIBLE);
+
+            back.setVisibility(View.GONE);
+        } else {
+            menu.setVisibility(View.GONE);
+            back.setVisibility(View.VISIBLE);
+        }
 
         refreshDevices();
 
@@ -760,8 +760,6 @@ public class AppMainActivity extends CoreActivity {
             toolbar.setVisibility(View.GONE);
             toolbarSpace.setVisibility(View.GONE);
             title.setTextColor(getResources().getColor(R.color.linka_white));
-            back.icon.setImageResource(R.drawable.icon_back_arrow);
-            menu.setVisibility(View.GONE);
             disableDrawer();
         } else if (fragment instanceof SettingsPageFragment
                 || fragment instanceof SettingsEditNamePageFragment
@@ -773,26 +771,23 @@ public class AppMainActivity extends CoreActivity {
                 || fragment instanceof TestingFragment
                 || fragment instanceof AvailableDevicesFragment
                 || fragment instanceof PacTutorialFragment
-                || fragment instanceof SetPac3) {
+                || fragment instanceof SetPac3
+                || fragment instanceof HelpFragment) {
             toolbar.setVisibility(View.VISIBLE);
             toolbarSpace.setVisibility(View.VISIBLE);
             toolbar.setBackgroundColor(getResources().getColor(R.color.linka_blue_tabbar));
             title.setTextColor(getResources().getColor(R.color.linka_white));
-//            back.icon.setImageResource(R.drawable.icon_back_arrow);
             enableDrawer();
         } else if (fragment instanceof DfuManagerPageFragment) {
             toolbar.setVisibility(View.VISIBLE);
             toolbarSpace.setVisibility(View.GONE);
             toolbar.setBackgroundColor(getResources().getColor(R.color.linka_blue_tabbar_transparent));
             title.setTextColor(getResources().getColor(R.color.linka_white));
-            back.icon.setImageResource(R.drawable.icon_back_arrow);
             disableDrawer();
         } else if (fragment instanceof SetupLinka1) {
             toolbar.setVisibility(View.GONE);
             toolbarSpace.setVisibility(View.GONE);
             title.setTextColor(getResources().getColor(R.color.linka_white));
-            back.icon.setImageResource(R.drawable.icon_back_arrow);
-            menu.setVisibility(View.GONE);
             enableDrawer();
         }
 

@@ -284,7 +284,7 @@ public class NotificationsPageFragment extends CoreFragment {
                 }
             } else if (object.equals(MainTabBarPageFragment.UPDATE_NOTIFICATIONS)) {
                 if (MainTabBarPageFragment.currentPosition == MainTabBarPageFragment.NOTIFICATION_SCREEN) {
-                    fetch_activities();
+                    refresh();
                 }
             }
         }
