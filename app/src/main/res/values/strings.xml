@@ -89,7 +89,8 @@
     <string name="my_linkas">My LINKA</string>
     <string name="my_bikes">PROFILE</string>
     <string name="notifications">Notifications</string>
-    <string name="activities">Activity</string>
+    <string name="activity">Activity</string>
+    <string name="activities">"ACTIVITIES"</string>
     <string name="settings">Settings</string>
     <string name="big_settings">SETTINGS</string>
     <string name="faqs">F.A.Q.s</string>

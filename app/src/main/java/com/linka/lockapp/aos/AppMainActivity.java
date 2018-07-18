@@ -825,9 +825,9 @@ public class AppMainActivity extends CoreActivity {
         } else if (fragment instanceof SettingsSleepSettingsFragment) {
             setTitle(_.i(R.string.sleep_settings));
         } else if (fragment instanceof NotificationsPageFragment) {
-            setTitle(_.i(R.string.activities));
+            setTitle(_.i(R.string.activity));
         } else if (fragment instanceof NotificationSettingsPageFragment) {
-            setTitle(_.i(R.string.notifications));
+            setTitle(R.string.activities);
         } else if (fragment instanceof LocationPageFragment) {
             setTitle(_.i(R.string.location));
         } else if (fragment instanceof WebPageFragment) {

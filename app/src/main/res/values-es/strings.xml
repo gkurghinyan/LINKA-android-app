@@ -39,7 +39,7 @@
     <!-- Menu -->
     <string name="my_linkas">Mi LINKA</string>
     <string name="my_bikes">PROFILE</string>
-    <string name="activities">Actividades</string>
+    <string name="activity">Actividades</string>
     <string name="settings">Ajustes</string>
     <string name="faqs">Preguntas frecuentes</string>
     <string name="chat_support">Chat Support</string>

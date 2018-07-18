@@ -13,7 +13,7 @@
     <string name="act_tamper_alert">Alerte manipulation</string>
     <string name="act_unlocked">Déverrouillé</string>
     <string name="act_unlocked_after">Déverrouiller après</string>
-    <string name="activities">Activité</string>
+    <string name="activity">Activité</string>
     <string name="add_photo">Ajouter photo</string>
     <string name="almost_done">Vous y êtes presque !</string>
     <string name="app_new_version">Nouvelle version de l\'appli détectée Souhaitez vous mettre à jour l\'appli maintenant ?</string>

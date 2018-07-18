@@ -387,7 +387,7 @@ public class MainTabBarPageFragment extends CoreFragment {
                 break;
             case NOTIFICATION_SCREEN:
                 t3Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_notif_select));
-                getAppMainActivity().setTitle("NOTIFICATIONS");
+                getAppMainActivity().setTitle("ACTIVITIES");
                 break;
             case SETTING_SCREEN:
                 t4Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_setting_select));
