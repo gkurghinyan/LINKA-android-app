@@ -6,12 +6,27 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.linka.lockapp.aos.R;
+import com.linka.lockapp.aos.module.api.LinkaAPIServiceImpl;
 import com.linka.lockapp.aos.module.core.CoreFragment;
+import com.pixplicity.easyprefs.library.Prefs;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 
 public class AppSettingsFragment extends CoreFragment {
+
+    @BindView(R.id.user_first_name)
+    TextView firstName;
+
+    @BindView(R.id.user_last_name)
+    TextView lastName;
+
+    private Unbinder unbinder;
 
     public static AppSettingsFragment newInstance() {
         Bundle args = new Bundle();
@@ -23,19 +38,28 @@ public class AppSettingsFragment extends CoreFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_app_settings, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        unbinder = ButterKnife.bind(this,view);
         getAppMainActivity().setTitle(getString(R.string.account_settings));
+        init();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         getAppMainActivity().setTitle("");
+        unbinder.unbind();
+    }
+
+    private void init(){
+        if (LinkaAPIServiceImpl.isLoggedIn()) {
+            firstName.setText(Prefs.getString("user-first-name",""));
+            lastName.setText(Prefs.getString("user-last-name",""));
+        }
     }
 }

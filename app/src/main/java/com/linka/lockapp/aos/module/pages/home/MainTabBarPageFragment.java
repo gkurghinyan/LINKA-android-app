@@ -334,22 +334,24 @@ public class MainTabBarPageFragment extends CoreFragment {
                         List<Notification> notifications = Notification.fromLinkaActivities(activities2);
 
                         for (Notification notification : notifications) {
-                            if(!notification.isRead){
-                                newNotificationsCount ++;
+                            if (!notification.isRead) {
+                                newNotificationsCount++;
                             }
                         }
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if(newNotificationsCount != 0){
-                                    notificationsUpdate.setVisibility(View.VISIBLE);
-                                    notificationsUpdate.setText(String.valueOf(newNotificationsCount));
-                                }else {
-                                    notificationsUpdate.setVisibility(View.GONE);
+                        if (getActivity() != null) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (newNotificationsCount != 0) {
+                                        notificationsUpdate.setVisibility(View.VISIBLE);
+                                        notificationsUpdate.setText(String.valueOf(newNotificationsCount));
+                                    } else {
+                                        notificationsUpdate.setVisibility(View.GONE);
+                                    }
+                                    checkNotificationsHandler = null;
                                 }
-                                checkNotificationsHandler = null;
-                            }
-                        });
+                            });
+                        }
                     }
                 }
 

@@ -87,6 +87,7 @@ public class SetupLinka1 extends CoreFragment implements GoogleApiClient.Connect
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_setup_linka_intro_page, container, false);
+        getAppMainActivity().setTitle(R.string.setup_linka);
         unbinder = ButterKnife.bind(this, rootView);
         return rootView;
     }

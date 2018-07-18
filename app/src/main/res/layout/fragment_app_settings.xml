@@ -40,10 +40,10 @@
                 android:textSize="@dimen/text_size_xm"
                 android:background="@color/linka_white"/>
 
-            <EditText
+            <TextView
+                android:id="@+id/user_first_name"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/margin_px"
-                android:hint="First Name"
                 android:paddingStart="@dimen/margin_x"
                 android:layout_marginTop="@dimen/margin_mm"
                 android:textColor="@color/search_text"
@@ -65,10 +65,10 @@
                 android:textColor="@color/search_text"
                 android:textSize="@dimen/text_size_xm"/>
 
-            <EditText
+            <TextView
+                android:id="@+id/user_last_name"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/margin_px"
-                android:hint="Last Name"
                 android:paddingStart="@dimen/margin_x"
                 android:textColorHint="@color/bottom_image_color"
                 android:layout_marginTop="@dimen/margin_mm"

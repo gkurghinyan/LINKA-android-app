@@ -772,7 +772,8 @@ public class AppMainActivity extends CoreActivity {
                 || fragment instanceof AvailableDevicesFragment
                 || fragment instanceof PacTutorialFragment
                 || fragment instanceof SetPac3
-                || fragment instanceof HelpFragment) {
+                || fragment instanceof HelpFragment
+                || fragment instanceof SetupLinka1) {
             toolbar.setVisibility(View.VISIBLE);
             toolbarSpace.setVisibility(View.VISIBLE);
             toolbar.setBackgroundColor(getResources().getColor(R.color.linka_blue_tabbar));
@@ -784,12 +785,13 @@ public class AppMainActivity extends CoreActivity {
             toolbar.setBackgroundColor(getResources().getColor(R.color.linka_blue_tabbar_transparent));
             title.setTextColor(getResources().getColor(R.color.linka_white));
             disableDrawer();
-        } else if (fragment instanceof SetupLinka1) {
-            toolbar.setVisibility(View.GONE);
-            toolbarSpace.setVisibility(View.GONE);
-            title.setTextColor(getResources().getColor(R.color.linka_white));
-            enableDrawer();
         }
+//        else if (fragment instanceof SetupLinka1) {
+//            toolbar.setVisibility(View.GONE);
+//            toolbarSpace.setVisibility(View.GONE);
+//            title.setTextColor(getResources().getColor(R.color.linka_white));
+//            enableDrawer();
+//        }
 
 
         if (fragment instanceof WelcomePage) {
