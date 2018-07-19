@@ -456,7 +456,7 @@ public class CircleView extends CoreFragment {
     }
 
     private void showTurningOnLinkaDialog() {
-        if (MainTabBarPageFragment.currentPosition == thisPage) {
+        if (MainTabBarPageFragment.currentPosition == thisPage && gifImageView != null) {
             scanCallback = null;
             devices.clear();
             linkaList.clear();
