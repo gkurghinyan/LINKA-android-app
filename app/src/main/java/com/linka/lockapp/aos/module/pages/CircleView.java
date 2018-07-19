@@ -71,8 +71,14 @@ public class CircleView extends CoreFragment {
     @BindView(R.id.battery_image)
     ImageView batteryImage;
 
+    @BindView(R.id.swipe_text)
+    TextView swipeText;
+
     @BindView(R.id.panic_button)
     ImageView panicButton;
+
+    @BindView(R.id.sleep_button)
+    ImageView sleepButton;
 
     @BindView(R.id.root)
     FrameLayout root;
@@ -108,9 +114,9 @@ public class CircleView extends CoreFragment {
         public void run() {
             notSuccessLockHandler = null;
             isWarningShow = false;
-            gifImageView.setBackgroundResource(R.drawable.panic_button);
             gifImageView.setVisibility(View.GONE);
-            panicButton.setVisibility(View.VISIBLE);
+            gifImageView.setBackgroundResource(R.drawable.wi_fi_connection);
+            setPanicAndSleepButtonsVisibility(View.VISIBLE);
             warningTitle.setVisibility(View.GONE);
             warningText.setVisibility(View.GONE);
             refreshDisplay();
@@ -137,10 +143,9 @@ public class CircleView extends CoreFragment {
                 final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
                 switch (state) {
                     case BluetoothAdapter.STATE_OFF:
-                        gifImageView.setVisibility(View.VISIBLE);
-                        gifImageView.setImageResource(R.drawable.close_white_linka);
+                        swipeButton.setCurrentState(Circle.NO_CONNECTION_STATE);
                         swipeButton.setCircleClickable(false);
-                        panicButton.setBackground(getResources().getDrawable(R.drawable.panic_button));
+                        setPanicAndSleepButtonsState(false);
                         turnOnBluetooth();
                         break;
                     case BluetoothAdapter.STATE_ON:
@@ -209,6 +214,8 @@ public class CircleView extends CoreFragment {
 
     void init() {
         batteryImage.setColorFilter(getActivity().getResources().getColor(R.color.linka_gray), PorterDuff.Mode.SRC_IN);
+        panicButton.setColorFilter(getActivity().getResources().getColor(R.color.panic_gray_color), PorterDuff.Mode.SRC_IN);
+        sleepButton.setColorFilter(getActivity().getResources().getColor(R.color.panic_gray_color), PorterDuff.Mode.SRC_IN);
         internetPage = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_no_internet_connectivity, null);
         ((TextView) internetPage.findViewById(R.id.title)).setText(R.string.network_required_to_connect);
 
@@ -219,13 +226,12 @@ public class CircleView extends CoreFragment {
         swipeButton.setSwipeCompleteListener(new SwipeButton.OnSwipeCompleteListener() {
             @Override
             public void clickStarted() {
-                panicButton.setVisibility(View.GONE);
 
             }
 
             @Override
             public void clickCancelled() {
-                panicButton.setVisibility(View.VISIBLE);
+                setPanicAndSleepButtonsVisibility(View.VISIBLE);
             }
 
             @Override
@@ -233,6 +239,7 @@ public class CircleView extends CoreFragment {
                 if (tabBarPageFragment != null) {
 
                     tabBarPageFragment.hideTabBar();
+                    setPanicAndSleepButtonsVisibility(View.GONE);
                 }
             }
 
@@ -241,6 +248,7 @@ public class CircleView extends CoreFragment {
                 if (tabBarPageFragment != null) {
 
                     tabBarPageFragment.hideTabBar();
+                    setPanicAndSleepButtonsVisibility(View.GONE);
                 }
             }
 
@@ -263,7 +271,7 @@ public class CircleView extends CoreFragment {
                 } else {
                     lockController.doUnlock();
                 }
-                panicButton.setVisibility(View.VISIBLE);
+                setPanicAndSleepButtonsVisibility(View.VISIBLE);
             }
         });
 
@@ -305,9 +313,8 @@ public class CircleView extends CoreFragment {
             isWarningShow = false;
             notSuccessLockHandler.removeCallbacks(notSuccessLockRunnable);
             notSuccessLockHandler = null;
-            gifImageView.setBackgroundResource(R.drawable.panic_button);
             gifImageView.setVisibility(View.GONE);
-            panicButton.setVisibility(View.VISIBLE);
+            setPanicAndSleepButtonsVisibility(View.VISIBLE);
             warningTitle.setVisibility(View.GONE);
             warningText.setVisibility(View.GONE);
             refreshDisplay();
@@ -366,10 +373,9 @@ public class CircleView extends CoreFragment {
                                     if (gifImageView.getVisibility() != View.VISIBLE ||
                                             gifImageView.getDrawable().equals(getResources().getDrawable(R.drawable.wi_fi_connection))) {
                                         gifImageView.setVisibility(View.VISIBLE);
-                                        gifImageView.setImageResource(R.drawable.wi_fi_connection);
                                     }
                                     swipeButton.setCircleClickable(false);
-                                    panicButton.setBackground(getResources().getDrawable(R.drawable.panic_button));
+                                    setPanicAndSleepButtonsState(false);
                                 }
                             }
                         }
@@ -380,13 +386,33 @@ public class CircleView extends CoreFragment {
         }
     }
 
+    private void setPanicAndSleepButtonsVisibility(int visibility){
+        swipeText.setVisibility(visibility);
+        panicButton.setVisibility(visibility);
+        sleepButton.setVisibility(visibility);
+    }
+
+    private void setPanicAndSleepButtonsState(boolean enable){
+        if(enable) {
+            panicButton.setBackground(getResources().getDrawable(R.drawable.panic_blue_button));
+            sleepButton.setBackground(getResources().getDrawable(R.drawable.panic_blue_button));
+            panicButton.setColorFilter(getActivity().getResources().getColor(R.color.linka_white), PorterDuff.Mode.SRC_IN);
+            sleepButton.setColorFilter(getActivity().getResources().getColor(R.color.linka_white), PorterDuff.Mode.SRC_IN);
+        }else {
+            panicButton.setBackground(getResources().getDrawable(R.drawable.panic_button));
+            sleepButton.setBackground(getResources().getDrawable(R.drawable.panic_button));
+            panicButton.setColorFilter(getActivity().getResources().getColor(R.color.panic_gray_color), PorterDuff.Mode.SRC_IN);
+            sleepButton.setColorFilter(getActivity().getResources().getColor(R.color.panic_gray_color), PorterDuff.Mode.SRC_IN);
+        }
+    }
+
     private void setLockNotConnectedState() {
         batteryImage.setColorFilter(getActivity().getResources().getColor(R.color.linka_gray), PorterDuff.Mode.SRC_IN);
         batteryPercent.setText("");
-        gifImageView.setVisibility(View.VISIBLE);
-        gifImageView.setImageResource(R.drawable.close_white_linka);
+        gifImageView.setVisibility(View.GONE);
+        swipeButton.setCurrentState(Circle.NO_CONNECTION_STATE);
         swipeButton.setCircleClickable(false);
-        panicButton.setBackground(getResources().getDrawable(R.drawable.panic_button));
+        setPanicAndSleepButtonsState(false);
     }
 
     private void setLockSettledState() {
@@ -394,7 +420,7 @@ public class CircleView extends CoreFragment {
         batteryPercent.setText(linka.batteryPercent + "%");
         root.removeView(internetPage);
         gifImageView.setVisibility(View.GONE);
-        panicButton.setBackground(getResources().getDrawable(R.drawable.panic_red_button));
+        setPanicAndSleepButtonsState(true);
         if (linka.isLocked) {
             swipeButton.setCurrentState(Circle.LOCKED_STATE);
             swipeButton.setCircleClickable(true);
@@ -411,7 +437,7 @@ public class CircleView extends CoreFragment {
     private void setDeviceNotLockedSuccessState() {
         isWarningShow = true;
         swipeButton.setCircleClickable(false);
-        panicButton.setVisibility(View.GONE);
+        setPanicAndSleepButtonsVisibility(View.GONE);
         gifImageView.setVisibility(View.VISIBLE);
         gifImageView.setBackgroundResource(R.drawable.danger_red_back);
         gifImageView.setImageResource(R.drawable.close_white_linka);

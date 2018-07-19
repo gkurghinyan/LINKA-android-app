@@ -18,12 +18,13 @@ import com.linka.lockapp.aos.module.widget.DimensionUtils;
  */
 
 public class Circle extends View {
+    public static final int NO_CONNECTION_STATE = 0;
     public static final int UNLOCKED_STATE = 1;
     public static final int LOCKED_STATE = 2;
     public static final int UNLOCKING_STATE = 3;
     public static final int LOCKING_STATE = 4;
 
-    private int currentState = UNLOCKED_STATE;
+    private int currentState = NO_CONNECTION_STATE;
 
     private static final int START_ANGLE_POINT = 270;
 
@@ -67,18 +68,25 @@ public class Circle extends View {
         int width = canvas.getWidth() / 2;
 
         switch (currentState) {
+            case NO_CONNECTION_STATE:
+                paint.setColor(getResources().getColor(R.color.panic_color));
+                rect.set(width - circleSize / 2, 0, width + circleSize / 2, circleSize);
+                canvas.drawOval(rect, paint);
+                rect.set(width - (circleSize - 120)/(2*bitmapProp),60,width + (circleSize - 120)/(2*bitmapProp),circleSize - 60);
+                canvas.drawBitmap(lockedLinka,null,rect,null);
+                break;
             case UNLOCKED_STATE:
                 paint.setColor(getResources().getColor(R.color.unlocked_green));
                 rect.set(width - circleSize / 2, 0, width + circleSize / 2, circleSize);
                 canvas.drawOval(rect, paint);
-                rect.set(width - (circleSize - 60)/(2*bitmapProp),30,width + (circleSize - 60)/(2*bitmapProp),circleSize - 30);
+                rect.set(width - (circleSize - 120)/(2*bitmapProp),60,width + (circleSize - 120)/(2*bitmapProp),circleSize - 60);
                 canvas.drawBitmap(unlockedLinka,null,rect,null);
                 break;
             case LOCKED_STATE:
                 paint.setColor(getResources().getColor(R.color.locked_red));
                 rect.set(width - circleSize / 2, 0, width + circleSize / 2, circleSize);
                 canvas.drawOval(rect, paint);
-                rect.set(width - (circleSize - 60)/(2*bitmapProp),30,width + (circleSize - 60)/(2*bitmapProp),circleSize - 30);
+                rect.set(width - (circleSize - 120)/(2*bitmapProp),60,width + (circleSize - 120)/(2*bitmapProp),circleSize - 60);
                 canvas.drawBitmap(lockedLinka,null,rect,null);
                 break;
             case LOCKING_STATE:

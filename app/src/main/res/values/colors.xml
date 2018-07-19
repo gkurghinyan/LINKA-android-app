@@ -74,7 +74,7 @@
     <color name="keyboard_color">#B7D4E5</color>
     <color name="dark_white">#FAFAFA</color>
     <color name="gray_text_color">#a1a0a0</color>
-    <color name="panic_color">#D9D9D9</color>
+    <color name="panic_color">#9e9d9d</color>
     <color name="unlocked_green">#6AA84F</color>
     <color name="locked_red">#FF0000</color>
     <color name="switch_back_start_color">#FEFEFE</color>
@@ -85,6 +85,7 @@
     <color name="gray_text">#666666</color>
     <color name="gif_blue">#2EB7F1</color>
     <color name="title_back_color">#f5f5f5</color>
+    <color name="panic_gray_color">#aac6c5c5</color>
 
     //RadarView
     <color name="gray">#dadada</color>
