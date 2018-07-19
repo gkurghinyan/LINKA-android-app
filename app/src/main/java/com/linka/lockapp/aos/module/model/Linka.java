@@ -211,7 +211,7 @@ public class Linka extends Model implements Serializable {
     private boolean rssi_outOfBounds = false; // Prevents auto unlocking unless user has walked out of bounds
 
     @Column(name = "auto_unlock_radius")
-    private int auto_unlock_radius = 50;
+    private int auto_unlock_radius = 200;
 
     public int getAuto_unlock_radius() {
         return auto_unlock_radius;

@@ -3,83 +3,85 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".module.pages.settings.AppSettingsFragment"
+    android:background="@color/linka_white"
     android:orientation="vertical"
-    android:background="@color/linka_white">
+    tools:context=".module.pages.settings.AppSettingsFragment">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/margin_ml"
+                android:background="@color/title_back_color"
+                android:gravity="bottom"
+                android:paddingBottom="@dimen/margin"
+                android:paddingStart="@dimen/margin_x"
                 android:text="@string/account"
                 android:textAllCaps="true"
                 android:textColor="@color/search_text"
-                android:gravity="bottom"
-                android:paddingStart="@dimen/margin_x"
-                android:paddingBottom="@dimen/margin"
-                android:textSize="@dimen/text_size_xm"
-                android:background="@color/title_back_color"/>
+                android:textSize="@dimen/text_size_xm" />
 
             <View style="@style/menu_divider" />
-            
+
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/margin_px"
-                android:text="FIRST NAME"
-                android:paddingStart="@dimen/margin_x"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_mm"
+                android:background="@color/linka_white"
+                android:paddingStart="@dimen/margin_x"
+                android:text="FIRST NAME"
                 android:textColor="@color/search_text"
-                android:textSize="@dimen/text_size_xm"
-                android:background="@color/linka_white"/>
+                android:textSize="@dimen/text_size_xm" />
 
             <TextView
                 android:id="@+id/user_first_name"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/margin_px"
-                android:paddingStart="@dimen/margin_x"
+                android:layout_height="wrap_content"
+                android:background="@color/linka_white"
                 android:layout_marginTop="@dimen/margin_mm"
+                android:paddingStart="@dimen/margin_x"
+                android:singleLine="true"
                 android:textColor="@color/search_text"
                 android:textColorHint="@color/bottom_image_color"
-                android:textSize="@dimen/text_size_normal"
-                android:singleLine="true"
-                android:background="@color/linka_white"/>
+                android:textSize="@dimen/text_size_normal" />
 
-            <View style="@style/menu_divider"
-                android:layout_marginTop="@dimen/margin_xm"
-                android:layout_marginStart="@dimen/margin_x"/>
+            <View
+                style="@style/menu_divider"
+                android:layout_marginStart="@dimen/margin_x"
+                android:layout_marginTop="@dimen/margin_xm" />
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/margin_px"
-                android:text="LAST NAME"
-                android:paddingStart="@dimen/margin_x"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_mm"
+                android:paddingStart="@dimen/margin_x"
+                android:text="LAST NAME"
                 android:textColor="@color/search_text"
-                android:textSize="@dimen/text_size_xm"/>
+                android:textSize="@dimen/text_size_xm" />
 
             <TextView
                 android:id="@+id/user_last_name"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/margin_px"
-                android:paddingStart="@dimen/margin_x"
-                android:textColorHint="@color/bottom_image_color"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_mm"
-                android:textColor="@color/search_text"
-                android:textSize="@dimen/text_size_normal"
+                android:background="@color/linka_white"
+                android:paddingStart="@dimen/margin_x"
                 android:singleLine="true"
-                android:background="@color/linka_white"/>
+                android:textColor="@color/search_text"
+                android:textColorHint="@color/bottom_image_color"
+                android:textSize="@dimen/text_size_normal" />
 
-            <View style="@style/menu_divider"
-                android:layout_marginTop="@dimen/margin_xm"
-                android:layout_marginStart="@dimen/margin_x"/>
+            <View
+                style="@style/menu_divider"
+                android:layout_marginStart="@dimen/margin_x"
+                android:layout_marginTop="@dimen/margin_xm" />
 
             <LinearLayout
                 android:id="@+id/reset_password"
@@ -114,14 +116,14 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/margin_ml"
+                android:background="@color/title_back_color"
+                android:gravity="bottom"
+                android:paddingBottom="@dimen/margin"
+                android:paddingStart="@dimen/margin_x"
                 android:text="@string/notifications"
                 android:textAllCaps="true"
                 android:textColor="@color/search_text"
-                android:gravity="bottom"
-                android:paddingStart="@dimen/margin_x"
-                android:paddingBottom="@dimen/margin"
-                android:textSize="@dimen/text_size_xm"
-                android:background="@color/title_back_color"/>
+                android:textSize="@dimen/text_size_xm" />
 
             <View style="@style/menu_divider" />
 
@@ -153,8 +155,9 @@
                     custom:sw_trackSize="33dp" />
             </RelativeLayout>
 
-            <View style="@style/menu_divider"
-                android:layout_marginStart="@dimen/margin_x"/>
+            <View
+                style="@style/menu_divider"
+                android:layout_marginStart="@dimen/margin_x" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -184,8 +187,9 @@
                     custom:sw_trackSize="33dp" />
             </RelativeLayout>
 
-            <View style="@style/menu_divider"
-                android:layout_marginStart="@dimen/margin_x"/>
+            <View
+                style="@style/menu_divider"
+                android:layout_marginStart="@dimen/margin_x" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -215,8 +219,9 @@
                     custom:sw_trackSize="33dp" />
             </RelativeLayout>
 
-            <View style="@style/menu_divider"
-                android:layout_marginStart="@dimen/margin_x"/>
+            <View
+                style="@style/menu_divider"
+                android:layout_marginStart="@dimen/margin_x" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -246,8 +251,9 @@
                     custom:sw_trackSize="33dp" />
             </RelativeLayout>
 
-            <View style="@style/menu_divider"
-                android:layout_marginStart="@dimen/margin_x"/>
+            <View
+                style="@style/menu_divider"
+                android:layout_marginStart="@dimen/margin_x" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -277,16 +283,17 @@
                     custom:sw_trackSize="33dp" />
             </RelativeLayout>
 
-            <View style="@style/menu_divider"
-                android:layout_marginStart="@dimen/margin_x"/>
+            <View
+                style="@style/menu_divider"
+                android:layout_marginStart="@dimen/margin_x" />
 
             <android.support.v4.widget.Space
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/margin_dx"
-                android:background="@color/title_back_color"/>
-            
+                android:background="@color/title_back_color" />
+
         </LinearLayout>
-        
+
     </ScrollView>
 
 

@@ -88,10 +88,10 @@ public class SettingsPageFragment extends CoreFragment {
     @BindView(R.id.auto_switch_view)
     View autoSwitchView;
 
-    @BindView(R.id.row_radius_settings)
-    LinearLayout rowRadiusSettings;
-    @BindView(R.id.text_radius_settings)
-    TextView textRadiusSettings;
+//    @BindView(R.id.row_radius_settings)
+//    LinearLayout rowRadiusSettings;
+//    @BindView(R.id.text_radius_settings)
+//    TextView textRadiusSettings;
 
     @BindView(R.id.row_tamper_siren)
     RelativeLayout rowTamperSiren;
@@ -265,9 +265,10 @@ public class SettingsPageFragment extends CoreFragment {
         switchAutoUnlocking.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(Switch view, boolean checked) {
-                setRadiusLinearVisibility(checked);
+//                setRadiusLinearVisibility(checked);
                 linka.settings_auto_unlocking = checked;
-                linka.saveSettings();
+//                linka.setAuto_unlock_radius(200);
+                linka.save();
             }
         });
         refreshDisplay();
@@ -315,7 +316,7 @@ public class SettingsPageFragment extends CoreFragment {
         switchAudibleLockingUnlocking.setChecked(linka.settings_audible_locking_unlocking);
         switchTamperSiren.setChecked(linka.settings_tamper_siren);
         switchAutoUnlocking.setChecked(linka.settings_auto_unlocking);
-        setRadiusLinearVisibility(linka.settings_auto_unlocking);
+//        setRadiusLinearVisibility(linka.settings_auto_unlocking);
         setTamperSensitivityVisibility(linka.settings_tamper_siren);
         doNotSendWrite = false;
 
@@ -532,17 +533,16 @@ public class SettingsPageFragment extends CoreFragment {
                             firmwareText.setTextColor(getResources().getColor(R.color.red));
                             firmwareVersion.setTextColor(getResources().getColor(R.color.red));
                             rowFirmwareVersion.setClickable(true);
-
+                            return;
                         }
                     }
                 }
             }
-        }else {
-            firmwareText.setText(getString(R.string.firmware_version));
-            firmwareText.setTextColor(getResources().getColor(R.color.search_text));
-            firmwareVersion.setTextColor(getResources().getColor(R.color.search_text));
-            rowFirmwareVersion.setEnabled(false);
         }
+        firmwareText.setText(getString(R.string.firmware_version));
+        firmwareText.setTextColor(getResources().getColor(R.color.search_text));
+        firmwareVersion.setTextColor(getResources().getColor(R.color.search_text));
+        rowFirmwareVersion.setEnabled(false);
     }
 
 
@@ -602,14 +602,14 @@ public class SettingsPageFragment extends CoreFragment {
 
     }
 
-    @OnClick(R.id.row_radius_settings)
-    void onClick_row_radius_settings() {
-        getAppMainActivity().curFragmentCount++;
-        getActivity().getSupportFragmentManager().beginTransaction()
-                .addToBackStack(null)
-                .replace(R.id.settings_page_root, CheckRadiusFragment.newInstance(linka))
-                .commit();
-    }
+//    @OnClick(R.id.row_radius_settings)
+//    void onClick_row_radius_settings() {
+//        getAppMainActivity().curFragmentCount++;
+//        getActivity().getSupportFragmentManager().beginTransaction()
+//                .addToBackStack(null)
+//                .replace(R.id.settings_page_root, CheckRadiusFragment.newInstance(linka))
+//                .commit();
+//    }
 
     @OnClick(R.id.row_firmware_version)
     void onClick_fw_update_button() {
@@ -715,15 +715,15 @@ public class SettingsPageFragment extends CoreFragment {
 //        }
     }
 
-    private void setRadiusLinearVisibility(boolean visibility) {
-        if (visibility) {
-            textRadiusSettings.setTextColor(getResources().getColor(R.color.linka_blue));
-            rowRadiusSettings.setClickable(true);
-        } else {
-            textRadiusSettings.setTextColor(getResources().getColor(R.color.search_text));
-            rowRadiusSettings.setClickable(false);
-        }
-    }
+//    private void setRadiusLinearVisibility(boolean visibility) {
+//        if (visibility) {
+//            textRadiusSettings.setTextColor(getResources().getColor(R.color.linka_blue));
+//            rowRadiusSettings.setClickable(true);
+//        } else {
+//            textRadiusSettings.setTextColor(getResources().getColor(R.color.search_text));
+//            rowRadiusSettings.setClickable(false);
+//        }
+//    }
 
     private void setTamperSensitivityVisibility(boolean visibility) {
         if (visibility) {
