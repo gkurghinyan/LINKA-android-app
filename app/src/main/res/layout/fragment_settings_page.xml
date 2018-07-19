@@ -55,7 +55,7 @@
                         android:textColorHint="@color/bottom_image_color"
                         android:background="@color/linka_white"
                         android:textSize="@dimen/text_size_normal" />
-                    
+
                 </LinearLayout>
 
                 <View style="@style/menu_divider" />

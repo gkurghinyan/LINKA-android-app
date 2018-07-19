@@ -2,12 +2,10 @@ package com.linka.lockapp.aos.module.pages.users;
 
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -129,27 +127,11 @@ public class InviteUserDialogFragment extends Fragment {
             @Override
             public void onResponse(Call<LinkaAPIServiceResponse> call, Response<LinkaAPIServiceResponse> response) {
                 if (LinkaAPIServiceImpl.check(response, false, null)) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setTitle("Invite Sent").
-                            setMessage("This user will appear in your Guest Users list once they create a LINKA account.").
-                            setNegativeButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                    getFragmentManager().popBackStack();
-                                    EventBus.getDefault().post(SharingPageFragment.REFRESH_LIST_OF_USERS);
-                                }
-                            })
-                            .setPositiveButton("Invite another", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                    invite.setClickable(true);
-                                    cancel.setClickable(true);
-                                    emailEdit.setText("");
-                                }
-                            });
-                    builder.create().show();
+                    getFragmentManager().popBackStack();
+                    EventBus.getDefault().post(SharingPageFragment.REFRESH_LIST_OF_USERS);
+                }else {
+                    invite.setClickable(true);
+                    cancel.setClickable(true);
                 }
                 Utils.cancelLoading();
             }
