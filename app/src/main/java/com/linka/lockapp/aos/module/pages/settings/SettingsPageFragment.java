@@ -203,7 +203,7 @@ public class SettingsPageFragment extends CoreFragment {
             }
         }
         getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        switch(currentFragment){
+        switch (currentFragment) {
             case TAMPER_SENSITIVITY_FRAGMENT:
                 getFragmentManager().beginTransaction()
                         .addToBackStack(null)
@@ -249,7 +249,7 @@ public class SettingsPageFragment extends CoreFragment {
 
 
     void init() {
-        if(array != null) {
+        if (array != null) {
             scrollView.post(new Runnable() {
                 @Override
                 public void run() {
@@ -269,6 +269,17 @@ public class SettingsPageFragment extends CoreFragment {
                 linka.settings_auto_unlocking = checked;
 //                linka.setAuto_unlock_radius(200);
                 linka.save();
+            }
+        });
+        editName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    if (editName != null) {
+                        linka.saveName(editName.getText().toString());
+                        linka.save();
+                    }
+                }
             }
         });
         refreshDisplay();
@@ -397,9 +408,9 @@ public class SettingsPageFragment extends CoreFragment {
         }
 
 //        macId.setText(linka.lock_mac_address);
-        if(linka.pacIsSet){
+        if (linka.pacIsSet) {
             passcode.setText(String.valueOf(linka.pac));
-        }else {
+        } else {
             passcode.setText("");
         }
 
@@ -443,11 +454,9 @@ public class SettingsPageFragment extends CoreFragment {
             textResetToFactorySettings.setTextColor(color);
             rowResetToFactorySettings.setClickable(true);
 
-            if (!isAdmin) {
-                removeLock.setTextColor(getResources().getColor(R.color.red));
-                removeLock.setClickable(true);
-                removeInfo.setClickable(false);
-            }
+            removeLock.setTextColor(getResources().getColor(R.color.red));
+            rowRemoveLock.setClickable(true);
+            removeInfo.setClickable(true);
 
             firmwareText.setText(getString(R.string.firmware_version));
             firmwareText.setTextColor(getResources().getColor(R.color.search_text));
@@ -492,11 +501,9 @@ public class SettingsPageFragment extends CoreFragment {
             textResetToFactorySettings.setTextColor(color);
             rowResetToFactorySettings.setClickable(false);
 
-            if (!isAdmin) {
-                removeLock.setTextColor(color);
-                removeLock.setClickable(false);
-                removeInfo.setClickable(false);
-            }
+            removeLock.setTextColor(color);
+            rowRemoveLock.setClickable(false);
+            removeInfo.setClickable(false);
 
             firmwareText.setText(getString(R.string.firmware_version));
             firmwareText.setTextColor(getResources().getColor(R.color.search_text));
@@ -525,7 +532,8 @@ public class SettingsPageFragment extends CoreFragment {
                 String ver = lockController.lockControllerBundle.getFwVersionNumber();
                 if (!ver.equals("")) {
                     linka.canAlertCriticalFirmwareUpdate = false;
-                    if (!ver.equals(AppDelegate.linkaMinRequiredFirmwareVersion) && !ver.equals("1.5.9") && AppDelegate.linkaMinRequiredFirmwareVersionIsCriticalUpdate) {
+//                    if (!ver.equals(AppDelegate.linkaMinRequiredFirmwareVersion) && !ver.equals("1.5.9") && AppDelegate.linkaMinRequiredFirmwareVersionIsCriticalUpdate) {
+                    if(!ver.equals("2.0.0")){
                         LogHelper.e("MainTabBarPageFrag", "FW version of " + ver + " does not equal " + AppDelegate.linkaMinRequiredFirmwareVersion);
                         LinkaAccessKey accessKey = LinkaAccessKey.getKeyFromLinka(linka);
                         if (accessKey != null && accessKey.isAdmin()) {
@@ -589,8 +597,8 @@ public class SettingsPageFragment extends CoreFragment {
     @OnClick(R.id.row_reset_to_factory_settings)
     void onClick_row_reset_to_factory_settings() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle("Are you sure you want to reset?")
-                        .setMessage("This will delete all data and revoke all access to this lock")
+        builder.setTitle("Are you sure you want to reset?")
+                .setMessage("This will delete all data and revoke all access to this lock")
                 .setPositiveButton("Reset", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -644,7 +652,7 @@ public class SettingsPageFragment extends CoreFragment {
     }
 
     @OnClick(R.id.remove_info)
-    void onRemoveInfoClicked(){
+    void onRemoveInfoClicked() {
         currentFragment = REMOVE_INFO_FRAGMENT;
         getFragmentManager().beginTransaction()
                 .addToBackStack(null)
@@ -688,6 +696,10 @@ public class SettingsPageFragment extends CoreFragment {
     @Override
     public void onPause() {
         super.onPause();
+        if (editName != null) {
+            linka.saveName(editName.getText().toString());
+            linka.save();
+        }
         EventBus.getDefault().unregister(this);
     }
 
@@ -705,7 +717,7 @@ public class SettingsPageFragment extends CoreFragment {
             linka = Linka.getLinkaFromLockController(linka);
 
             refreshDisplay();
-        }else if(object != null && object instanceof String && object.equals(FRAGMENT_ADDED)){
+        } else if (object != null && object instanceof String && object.equals(FRAGMENT_ADDED)) {
             rootFrame.setBackgroundColor(getResources().getColor(R.color.linka_transparent));
         }
 //        else if (object instanceof String && ((String) object).substring(0,8).equals("Selected")) {

@@ -139,6 +139,8 @@
                     android:background="@color/linka_white"
                     android:hint="Linka's name"
                     android:paddingStart="@dimen/margin_x"
+                    android:paddingEnd="@dimen/margin_x"
+                    android:singleLine="true"
                     android:textColor="@color/search_text"
                     android:textColorHint="@color/bottom_image_color"
                     android:textSize="@dimen/text_size_normal" />
@@ -310,7 +312,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="@dimen/margin_x"
-                        android:text="Tamper Settings"
+                        android:text="Tamper Sensitivity"
                         android:textColor="@color/search_text"
                         android:textSize="@dimen/text_size_normal" />
 
