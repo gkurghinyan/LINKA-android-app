@@ -21,6 +21,7 @@
     <dimen name="margin_l">67dp</dimen>
     <dimen name="margin_ml">77dp</dimen>
     <dimen name="margin_xl">87dp</dimen>
+    <dimen name="margin_xxl">97dp</dimen>
     <dimen name="margin_ultra">180dp</dimen>
     <dimen name="margin_xu">240dp</dimen>
 

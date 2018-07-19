@@ -379,17 +379,17 @@ public class SettingsPageFragment extends CoreFragment {
             isAdmin = false;
         }
 
-        if (!isAdmin) {
-            rowRemoveLock.setVisibility(View.GONE);
-            removeTopDivider.setVisibility(View.GONE);
-            removeBottomDivider.setVisibility(View.GONE);
-            removeSpace.setVisibility(View.GONE);
-        } else {
-            rowRemoveLock.setVisibility(View.VISIBLE);
-            removeTopDivider.setVisibility(View.VISIBLE);
-            removeBottomDivider.setVisibility(View.VISIBLE);
-            removeSpace.setVisibility(View.VISIBLE);
-        }
+//        if (!isAdmin) {
+//            rowRemoveLock.setVisibility(View.GONE);
+//            removeTopDivider.setVisibility(View.GONE);
+//            removeBottomDivider.setVisibility(View.GONE);
+//            removeSpace.setVisibility(View.GONE);
+//        } else {
+//            rowRemoveLock.setVisibility(View.VISIBLE);
+//            removeTopDivider.setVisibility(View.VISIBLE);
+//            removeBottomDivider.setVisibility(View.VISIBLE);
+//            removeSpace.setVisibility(View.VISIBLE);
+//        }
 
         LockController lockController = LocksController.getInstance().getLockController();
         String ver = lockController.lockControllerBundle.getFwVersionNumber();

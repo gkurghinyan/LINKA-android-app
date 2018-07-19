@@ -22,7 +22,47 @@
 
                 <android.support.v4.widget.Space
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/margin_px"
+                    android:layout_height="@dimen/margin_dx"
+                    android:background="@color/title_back_color" />
+
+                <View style="@style/menu_divider" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/margin_l"
+                    android:orientation="horizontal"
+                    android:background="@color/linka_white">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="Lock Name"
+                        android:gravity="center"
+                        android:layout_marginStart="@dimen/margin_x"
+                        android:textSize="@dimen/text_size_normal"
+                        android:textColor="@color/linka_blue"/>
+
+                    <EditText
+                        android:id="@+id/row_edit_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="Linka's name"
+                        android:paddingStart="@dimen/margin_x"
+                        android:paddingEnd="@dimen/margin_x"
+                        android:singleLine="true"
+                        android:gravity="end|center_vertical"
+                        android:textColor="@color/search_text"
+                        android:textColorHint="@color/bottom_image_color"
+                        android:background="@color/linka_white"
+                        android:textSize="@dimen/text_size_normal" />
+                    
+                </LinearLayout>
+
+                <View style="@style/menu_divider" />
+
+                <android.support.v4.widget.Space
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/margin_dx"
                     android:background="@color/title_back_color" />
 
                 <View style="@style/menu_divider" />
@@ -69,9 +109,84 @@
                         android:src="@drawable/right_gray_arrow" />
                 </RelativeLayout>
 
-                <View
-                    style="@style/menu_divider"
-                    android:layout_marginStart="@dimen/margin_x" />
+                <View style="@style/menu_divider" />
+
+                <TextView
+                    android:id="@+id/access_code_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/margin_xxl"
+                    android:background="@color/title_back_color"
+                    android:maxLines="3"
+                    android:paddingTop="@dimen/margin_mm"
+                    android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce orci quam, viverra sit amet sagittis eu, scelerisque non eros. Curabitur a pretium purus. Praesent congue id dolor ut pretium. Sed sit amet dolor nec quam euismod fringilla. Pellentesque laoreet aliquam arcu ac molestie. In facilisis eget lorem sed auctor. Ut ac sagittis tellus."
+                    android:paddingStart="@dimen/margin_x"
+                    android:paddingEnd="@dimen/margin_x"
+                    android:textColor="@color/search_text"
+                    android:textSize="@dimen/text_size_xm" />
+
+                <View style="@style/menu_divider" />
+
+
+                <RelativeLayout
+                    android:id="@+id/row_auto_unlocking"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/margin_l"
+                    android:background="@color/linka_white">
+
+                    <TextView
+                        android:id="@+id/text_auto_unlock"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="@dimen/margin_x"
+                        android:text="Auto-unlock"
+                        android:textColor="@color/search_text"
+                        android:textSize="@dimen/text_size_normal" />
+
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/margin_x">
+
+                        <com.rey.material.widget.Switch xmlns:custom="http://schemas.android.com/apk/res-auto"
+                            android:id="@+id/settings_auto_unlocking"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:checked="false"
+                            custom:sw_thumbColor="@color/linka_white"
+                            custom:sw_thumbElevation="2dp"
+                            custom:sw_thumbRadius="17dp"
+                            custom:sw_trackColor="@color/colorstate_switch"
+                            custom:sw_trackSize="33dp" />
+
+                        <View
+                            android:id="@+id/auto_switch_view"
+                            android:layout_width="@dimen/margin_xl"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/transparent"
+                            android:clickable="true" />
+                    </FrameLayout>
+                </RelativeLayout>
+
+                <View style="@style/menu_divider" />
+
+                <TextView
+                    android:id="@+id/auto_unlock_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/margin_xxl"
+                    android:background="@color/title_back_color"
+                    android:maxLines="3"
+                    android:paddingTop="@dimen/margin_mm"
+                    android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce orci quam, viverra sit amet sagittis eu, scelerisque non eros. Curabitur a pretium purus. Praesent congue id dolor ut pretium. Sed sit amet dolor nec quam euismod fringilla. Pellentesque laoreet aliquam arcu ac molestie. In facilisis eget lorem sed auctor. Ut ac sagittis tellus."
+                    android:paddingStart="@dimen/margin_x"
+                    android:paddingEnd="@dimen/margin_x"
+                    android:textColor="@color/search_text"
+                    android:textSize="@dimen/text_size_xm" />
+
+                <View style="@style/menu_divider" />
 
                 <RelativeLayout
                     android:id="@+id/row_quick_lock"
@@ -120,134 +235,54 @@
                 <View style="@style/menu_divider" />
 
                 <TextView
+                    android:id="@+id/quick_lock_desc"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/margin_ml"
-                    android:layout_marginBottom="@dimen/margin_mm"
+                    android:layout_height="@dimen/margin_xxl"
                     android:background="@color/title_back_color"
-                    android:gravity="bottom"
+                    android:maxLines="3"
+                    android:paddingTop="@dimen/margin_mm"
+                    android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce orci quam, viverra sit amet sagittis eu, scelerisque non eros. Curabitur a pretium purus. Praesent congue id dolor ut pretium. Sed sit amet dolor nec quam euismod fringilla. Pellentesque laoreet aliquam arcu ac molestie. In facilisis eget lorem sed auctor. Ut ac sagittis tellus."
                     android:paddingStart="@dimen/margin_x"
-                    android:text="lock name"
-                    android:textAllCaps="true"
-                    android:textColor="@color/search_text" />
+                    android:paddingEnd="@dimen/margin_x"
+                    android:textColor="@color/search_text"
+                    android:textSize="@dimen/text_size_xm" />
 
                 <View style="@style/menu_divider" />
 
-                <EditText
-                    android:id="@+id/row_edit_name"
+                <LinearLayout
+                    android:id="@+id/row_sleep_settings"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/margin_l"
                     android:background="@color/linka_white"
-                    android:hint="Linka's name"
-                    android:paddingStart="@dimen/margin_x"
-                    android:paddingEnd="@dimen/margin_x"
-                    android:singleLine="true"
-                    android:textColor="@color/search_text"
-                    android:textColorHint="@color/bottom_image_color"
-                    android:textSize="@dimen/text_size_normal" />
-
-                <View style="@style/menu_divider" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/margin_ml"
-                    android:layout_marginBottom="@dimen/margin_mm"
-                    android:background="@color/title_back_color"
-                    android:gravity="bottom"
-                    android:paddingStart="@dimen/margin_x"
-                    android:text="@string/auto_unlocking"
-                    android:textAllCaps="true"
-                    android:textColor="@color/search_text" />
-
-                <View style="@style/menu_divider" />
-
-                <RelativeLayout
-                    android:id="@+id/row_auto_unlocking"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/margin_l"
-                    android:background="@color/linka_white">
+                    android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/text_auto_unlock"
+                        android:id="@+id/text_sleep_settings"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginStart="@dimen/margin_x"
-                        android:text="Enable"
+                        android:text="Battery Preferences"
                         android:textColor="@color/search_text"
                         android:textSize="@dimen/text_size_normal" />
 
-                    <FrameLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="@dimen/margin_x">
-
-                        <com.rey.material.widget.Switch xmlns:custom="http://schemas.android.com/apk/res-auto"
-                            android:id="@+id/settings_auto_unlocking"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:checked="false"
-                            custom:sw_thumbColor="@color/linka_white"
-                            custom:sw_thumbElevation="2dp"
-                            custom:sw_thumbRadius="17dp"
-                            custom:sw_trackColor="@color/colorstate_switch"
-                            custom:sw_trackSize="33dp" />
-
-                        <View
-                            android:id="@+id/auto_switch_view"
-                            android:layout_width="@dimen/margin_xl"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/transparent"
-                            android:clickable="true" />
-                    </FrameLayout>
-                </RelativeLayout>
-
-                <!--<View-->
-                    <!--style="@style/menu_divider"-->
-                    <!--android:layout_marginStart="@dimen/margin_x" />-->
-
-                <!--<LinearLayout-->
-                    <!--android:id="@+id/row_radius_settings"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="@dimen/margin_l"-->
-                    <!--android:background="@color/linka_white"-->
-                    <!--android:orientation="horizontal">-->
-
-                    <!--<TextView-->
-                        <!--android:id="@+id/text_radius_settings"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_gravity="center_vertical"-->
-                        <!--android:layout_marginStart="@dimen/margin_x"-->
-                        <!--android:text="Set Safe Zone"-->
-                        <!--android:textColor="@color/search_text"-->
-                        <!--android:textSize="@dimen/text_size_normal" />-->
-
-                    <!--<ImageView-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="@dimen/margin_x"-->
-                        <!--android:layout_gravity="center_vertical"-->
-                        <!--android:layout_marginEnd="@dimen/margin_x"-->
-                        <!--android:paddingLeft="@dimen/activity_horizontal_margin_xsm"-->
-                        <!--android:paddingRight="@dimen/activity_horizontal_margin_xsm"-->
-                        <!--android:scaleType="fitEnd"-->
-                        <!--android:src="@drawable/right_gray_arrow" />-->
-                <!--</LinearLayout>-->
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/margin_x"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginEnd="@dimen/margin_x"
+                        android:paddingLeft="@dimen/activity_horizontal_margin_xsm"
+                        android:paddingRight="@dimen/activity_horizontal_margin_xsm"
+                        android:scaleType="fitEnd"
+                        android:src="@drawable/right_gray_arrow" />
+                </LinearLayout>
 
                 <View style="@style/menu_divider" />
 
-                <TextView
+                <android.support.v4.widget.Space
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/margin_ml"
-                    android:layout_marginBottom="@dimen/margin_mm"
-                    android:background="@color/title_back_color"
-                    android:gravity="bottom"
-                    android:paddingStart="@dimen/margin_x"
-                    android:text="@string/lock_tones_alarms"
-                    android:textAllCaps="true"
-                    android:textColor="@color/search_text" />
+                    android:layout_height="@dimen/margin_dx"
+                    android:background="@color/title_back_color" />
 
                 <View style="@style/menu_divider" />
 
@@ -376,43 +411,6 @@
                     </FrameLayout>
 
                 </RelativeLayout>
-
-                <View style="@style/menu_divider" />
-
-                <android.support.v4.widget.Space
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/margin_dx"
-                    android:background="@color/title_back_color" />
-
-                <View style="@style/menu_divider" />
-
-                <LinearLayout
-                    android:id="@+id/row_sleep_settings"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/margin_l"
-                    android:background="@color/linka_white"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/text_sleep_settings"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="@dimen/margin_x"
-                        android:text="Battery Preferences"
-                        android:textColor="@color/search_text"
-                        android:textSize="@dimen/text_size_normal" />
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/margin_x"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginEnd="@dimen/margin_x"
-                        android:paddingLeft="@dimen/activity_horizontal_margin_xsm"
-                        android:paddingRight="@dimen/activity_horizontal_margin_xsm"
-                        android:scaleType="fitEnd"
-                        android:src="@drawable/right_gray_arrow" />
-                </LinearLayout>
 
                 <View style="@style/menu_divider" />
 

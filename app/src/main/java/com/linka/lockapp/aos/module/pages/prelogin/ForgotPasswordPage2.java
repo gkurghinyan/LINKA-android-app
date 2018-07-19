@@ -17,6 +17,8 @@ import com.linka.lockapp.aos.module.api.LinkaAPIServiceResponse;
 import com.linka.lockapp.aos.module.core.CoreFragment;
 import com.linka.lockapp.aos.module.helpers.FontHelpers;
 import com.linka.lockapp.aos.module.i18n._;
+import com.linka.lockapp.aos.module.model.LinkaNotificationSettings;
+import com.linka.lockapp.aos.module.other.Utils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -125,7 +127,25 @@ public class ForgotPasswordPage2 extends CoreFragment {
                                     .setNegativeButton(_.i(R.string.ok), new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            getAppMainActivity().resetActivity();
+                                            if(LinkaAPIServiceImpl.isLoggedIn()){
+                                                Utils.showLoading(getActivity(),root);
+                                                LinkaNotificationSettings.disconnect_all_linka();
+                                                LinkaAPIServiceImpl.logout(getActivity(), new Callback<LinkaAPIServiceResponse>() {
+                                                    @Override
+                                                    public void onResponse(Call<LinkaAPIServiceResponse> call, Response<LinkaAPIServiceResponse> response) {
+                                                        Utils.cancelLoading();
+                                                        LinkaNotificationSettings.disconnect_all_linka();
+                                                        getAppMainActivity().resetActivity();
+                                                    }
+
+                                                    @Override
+                                                    public void onFailure(Call<LinkaAPIServiceResponse> call, Throwable t) {
+                                                        Utils.cancelLoading();
+                                                    }
+                                                });
+                                            }else {
+                                                getAppMainActivity().resetActivity();
+                                            }
                                         }
                                     })
                                     .show();
