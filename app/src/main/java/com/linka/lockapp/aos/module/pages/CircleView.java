@@ -17,8 +17,11 @@ import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -47,7 +50,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
+import butterknife.OnTouch;
 import butterknife.Unbinder;
 import pl.droidsonroids.gif.GifImageView;
 
@@ -108,6 +111,8 @@ public class CircleView extends CoreFragment {
 
     private AlertDialog turningLinkaDialog = null;
 
+    private boolean isPanicEnabled = false;
+
     private Handler notSuccessLockHandler;
     private Runnable notSuccessLockRunnable = new Runnable() {
         @Override
@@ -145,7 +150,9 @@ public class CircleView extends CoreFragment {
                     case BluetoothAdapter.STATE_OFF:
                         swipeButton.setCurrentState(Circle.NO_CONNECTION_STATE);
                         swipeButton.setCircleClickable(false);
-                        setPanicAndSleepButtonsState(false);
+                        if (isPanicAndSleepEnabled) {
+                            setPanicAndSleepButtonsState(false);
+                        }
                         turnOnBluetooth();
                         break;
                     case BluetoothAdapter.STATE_ON:
@@ -214,9 +221,8 @@ public class CircleView extends CoreFragment {
 
     void init() {
         batteryImage.setColorFilter(getActivity().getResources().getColor(R.color.linka_gray), PorterDuff.Mode.SRC_IN);
-        panicButton.setColorFilter(getActivity().getResources().getColor(R.color.panic_gray_color), PorterDuff.Mode.SRC_IN);
-        sleepButton.setColorFilter(getActivity().getResources().getColor(R.color.panic_gray_color), PorterDuff.Mode.SRC_IN);
         internetPage = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_no_internet_connectivity, null);
+        setPanicAndSleepButtonsState(false);
         ((TextView) internetPage.findViewById(R.id.title)).setText(R.string.network_required_to_connect);
 
         lockController = LocksController.getInstance().getLockController();
@@ -284,10 +290,61 @@ public class CircleView extends CoreFragment {
         }
     }
 
+    private boolean isPanicAndSleepEnabled = false;
+    private AlphaAnimation animation = new AlphaAnimation(1.0f, 0.2f);
 
-    @OnClick(R.id.panic_button)
-    void onPanic() {
-        lockController.doActionSiren();
+    @OnTouch(R.id.panic_button)
+    boolean onPanicTouch(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            if (!isPanicEnabled) {
+                panicButton.setColorFilter(getActivity().getResources().getColor(R.color.panic_gray_color), PorterDuff.Mode.SRC_IN);
+            }
+        }
+        if (ev.getAction() == MotionEvent.ACTION_UP) {
+            if (!isPanicEnabled) {
+                lockController.doActionSiren();
+                isPanicEnabled = true;
+                panicButton.setBackground(getResources().getDrawable(R.drawable.panic_red_button));
+                panicButton.setColorFilter(getActivity().getResources().getColor(R.color.linka_white), PorterDuff.Mode.SRC_IN);
+                animation.setDuration(700);
+                animation.setRepeatCount(Animation.INFINITE);
+                animation.setRepeatMode(Animation.REVERSE);
+                panicButton.startAnimation(animation);
+            } else {
+                isPanicEnabled = false;
+                panicButton.clearAnimation();
+                panicButton.setBackground(getResources().getDrawable(R.drawable.panic_blue_button));
+            }
+        }
+        return false;
+    }
+
+    @OnTouch(R.id.sleep_button)
+    boolean onSleepTouch(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            sleepButton.setColorFilter(getActivity().getResources().getColor(R.color.panic_gray_color), PorterDuff.Mode.SRC_IN);
+        }
+        if (ev.getAction() == MotionEvent.ACTION_UP) {
+            sleepButton.setColorFilter(getActivity().getResources().getColor(R.color.linka_white), PorterDuff.Mode.SRC_IN);
+            new AlertDialog.Builder(getActivity()).
+                    setTitle("Put your lock to sleep?").
+                    setMessage("Push the power button on your lock to turn it back on.").
+                    setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .setPositiveButton("Sleep", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            lockController.doSleep();
+                            setDeviceNotLockedSuccessState();
+                        }
+                    })
+                    .create().show();
+        }
+        return false;
     }
 
     @Override
@@ -375,7 +432,9 @@ public class CircleView extends CoreFragment {
                                         gifImageView.setVisibility(View.VISIBLE);
                                     }
                                     swipeButton.setCircleClickable(false);
-                                    setPanicAndSleepButtonsState(false);
+                                    if (isPanicAndSleepEnabled) {
+                                        setPanicAndSleepButtonsState(false);
+                                    }
                                 }
                             }
                         }
@@ -386,19 +445,30 @@ public class CircleView extends CoreFragment {
         }
     }
 
-    private void setPanicAndSleepButtonsVisibility(int visibility){
+    private void setPanicAndSleepButtonsVisibility(int visibility) {
+        if (panicButton.getAnimation() != null) {
+            panicButton.clearAnimation();
+            panicButton.setBackground(getResources().getDrawable(R.drawable.panic_blue_button));
+        }
         swipeText.setVisibility(visibility);
         panicButton.setVisibility(visibility);
         sleepButton.setVisibility(visibility);
     }
 
-    private void setPanicAndSleepButtonsState(boolean enable){
-        if(enable) {
+    private void setPanicAndSleepButtonsState(boolean enable) {
+        if (panicButton.getAnimation() != null) {
+            panicButton.clearAnimation();
+            panicButton.setBackground(getResources().getDrawable(R.drawable.panic_blue_button));
+        }
+        panicButton.setClickable(enable);
+        sleepButton.setClickable(enable);
+        isPanicAndSleepEnabled = enable;
+        if (enable) {
             panicButton.setBackground(getResources().getDrawable(R.drawable.panic_blue_button));
             sleepButton.setBackground(getResources().getDrawable(R.drawable.panic_blue_button));
             panicButton.setColorFilter(getActivity().getResources().getColor(R.color.linka_white), PorterDuff.Mode.SRC_IN);
             sleepButton.setColorFilter(getActivity().getResources().getColor(R.color.linka_white), PorterDuff.Mode.SRC_IN);
-        }else {
+        } else {
             panicButton.setBackground(getResources().getDrawable(R.drawable.panic_button));
             sleepButton.setBackground(getResources().getDrawable(R.drawable.panic_button));
             panicButton.setColorFilter(getActivity().getResources().getColor(R.color.panic_gray_color), PorterDuff.Mode.SRC_IN);
@@ -412,7 +482,9 @@ public class CircleView extends CoreFragment {
         gifImageView.setVisibility(View.GONE);
         swipeButton.setCurrentState(Circle.NO_CONNECTION_STATE);
         swipeButton.setCircleClickable(false);
-        setPanicAndSleepButtonsState(false);
+        if (isPanicAndSleepEnabled) {
+            setPanicAndSleepButtonsState(false);
+        }
     }
 
     private void setLockSettledState() {
@@ -420,7 +492,9 @@ public class CircleView extends CoreFragment {
         batteryPercent.setText(linka.batteryPercent + "%");
         root.removeView(internetPage);
         gifImageView.setVisibility(View.GONE);
-        setPanicAndSleepButtonsState(true);
+        if (!isPanicAndSleepEnabled) {
+            setPanicAndSleepButtonsState(true);
+        }
         if (linka.isLocked) {
             swipeButton.setCurrentState(Circle.LOCKED_STATE);
             swipeButton.setCircleClickable(true);
