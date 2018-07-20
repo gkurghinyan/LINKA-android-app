@@ -316,7 +316,7 @@ public class MainTabBarPageFragment extends CoreFragment {
             LinkaAPIServiceImpl.fetch_activities(getAppMainActivity(), linka, new Callback<LinkaAPIServiceResponse.ActivitiesResponse>() {
                 @Override
                 public void onResponse(Call<LinkaAPIServiceResponse.ActivitiesResponse> call, Response<LinkaAPIServiceResponse.ActivitiesResponse> response) {
-                    if (LinkaAPIServiceImpl.check(response, false, getAppMainActivity())) {
+                    if (LinkaAPIServiceImpl.check(response, false, getAppMainActivity()) && notificationsUpdate != null) {
                         LinkaAPIServiceResponse.ActivitiesResponse body = response.body();
                         List<LinkaActivity> activities = new ArrayList<LinkaActivity>();
 

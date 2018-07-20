@@ -6,9 +6,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.Space;
 import android.support.v7.app.AlertDialog;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -280,6 +282,15 @@ public class SettingsPageFragment extends CoreFragment {
                         linka.save();
                     }
                 }
+            }
+        });
+        editName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                    linka.saveName(editName.getText().toString());
+                    linka.save();
+                }
+                return false;
             }
         });
         refreshDisplay();
@@ -689,7 +700,7 @@ public class SettingsPageFragment extends CoreFragment {
     @Override
     public void onResume() {
         super.onResume();
-        getAppMainActivity().setTitle(getString(R.string.big_settings));
+//        getAppMainActivity().setTitle(getString(R.string.big_settings));
         EventBus.getDefault().register(this);
     }
 
@@ -721,7 +732,7 @@ public class SettingsPageFragment extends CoreFragment {
             rootFrame.setBackgroundColor(getResources().getColor(R.color.linka_transparent));
         }
 //        else if (object instanceof String && ((String) object).substring(0,8).equals("Selected")) {
-//            if (object.equals("Selected-" + String.valueOf(MainTabBarPageFragment.USER_SCREEN))) {
+//            if (object.equals("Selected-" + String.valueOf(MainTabBarPageFragment.SETTING_SCREEN))) {
 //                init();
 //            }
 //        }

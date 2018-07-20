@@ -51,6 +51,7 @@ import com.linka.lockapp.aos.module.model.LinkaActivity;
 import com.linka.lockapp.aos.module.model.LinkaNotificationSettings;
 import com.linka.lockapp.aos.module.other.Utils;
 import com.linka.lockapp.aos.module.pages.AvailableDevicesFragment;
+import com.linka.lockapp.aos.module.pages.CircleView;
 import com.linka.lockapp.aos.module.pages.TestingFragment;
 import com.linka.lockapp.aos.module.pages.dfu.DfuManagerPageFragment;
 import com.linka.lockapp.aos.module.pages.help.HelpFragment;
@@ -819,6 +820,8 @@ public class AppMainActivity extends CoreActivity {
             setTitle(_.i(R.string.setup_linka));
         } else if (fragment instanceof SetupLinka2) {
             setTitle(_.i(R.string.setup_linka));
+        } else if(fragment instanceof CircleView){
+            setTitle(LinkaNotificationSettings.get_latest_linka().getName());
         } else if (fragment instanceof SettingsPageFragment) {
             setTitle(_.i(R.string.settings));
         } else if (fragment instanceof SetPac3) {
