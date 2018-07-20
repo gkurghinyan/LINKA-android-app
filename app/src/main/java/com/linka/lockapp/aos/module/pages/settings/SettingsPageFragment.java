@@ -469,10 +469,6 @@ public class SettingsPageFragment extends CoreFragment {
             rowRemoveLock.setClickable(true);
             removeInfo.setClickable(true);
 
-            firmwareText.setText(getString(R.string.firmware_version));
-            firmwareText.setTextColor(getResources().getColor(R.color.search_text));
-            rowFirmwareVersion.setClickable(false);
-
             checkUpdates();
 
 //            if (AppDelegate.shouldAlwaysEnableFwUpgradeButton) {
@@ -519,7 +515,7 @@ public class SettingsPageFragment extends CoreFragment {
             firmwareText.setText(getString(R.string.firmware_version));
             firmwareText.setTextColor(getResources().getColor(R.color.search_text));
             firmwareVersion.setTextColor(getResources().getColor(R.color.search_text));
-            rowFirmwareVersion.setEnabled(false);
+            rowFirmwareVersion.setClickable(false);
         }
 
 //        switchAudibleLockingUnlocking.setChecked(linka.settings_audible_locking_unlocking);
@@ -544,7 +540,7 @@ public class SettingsPageFragment extends CoreFragment {
                 if (!ver.equals("")) {
                     linka.canAlertCriticalFirmwareUpdate = false;
 //                    if (!ver.equals(AppDelegate.linkaMinRequiredFirmwareVersion) && !ver.equals("1.5.9") && AppDelegate.linkaMinRequiredFirmwareVersionIsCriticalUpdate) {
-                    if(!ver.equals("2.0.0")){
+                    if (!ver.equals("2.0.0")) {
                         LogHelper.e("MainTabBarPageFrag", "FW version of " + ver + " does not equal " + AppDelegate.linkaMinRequiredFirmwareVersion);
                         LinkaAccessKey accessKey = LinkaAccessKey.getKeyFromLinka(linka);
                         if (accessKey != null && accessKey.isAdmin()) {
@@ -561,7 +557,7 @@ public class SettingsPageFragment extends CoreFragment {
         firmwareText.setText(getString(R.string.firmware_version));
         firmwareText.setTextColor(getResources().getColor(R.color.search_text));
         firmwareVersion.setTextColor(getResources().getColor(R.color.search_text));
-        rowFirmwareVersion.setEnabled(false);
+        rowFirmwareVersion.setClickable(false);
     }
 
 
