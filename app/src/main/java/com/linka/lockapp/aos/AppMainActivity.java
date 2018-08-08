@@ -71,7 +71,6 @@ import com.linka.lockapp.aos.module.pages.prelogin.WelcomePage;
 import com.linka.lockapp.aos.module.pages.settings.AppSettingsFragment;
 import com.linka.lockapp.aos.module.pages.settings.SettingsEditNamePageFragment;
 import com.linka.lockapp.aos.module.pages.settings.SettingsPageFragment;
-import com.linka.lockapp.aos.module.pages.settings.SettingsSleepSettingsFragment;
 import com.linka.lockapp.aos.module.pages.settings.SettingsTamperSensitivityFragment;
 import com.linka.lockapp.aos.module.pages.setup.AutoUpdateFragment;
 import com.linka.lockapp.aos.module.pages.setup.SetupLinka1;
@@ -830,8 +829,6 @@ public class AppMainActivity extends CoreActivity {
             setTitle(_.i(R.string.edit_name));
         } else if (fragment instanceof SettingsTamperSensitivityFragment) {
             setTitle(_.i(R.string.tamper_sensitivity));
-        } else if (fragment instanceof SettingsSleepSettingsFragment) {
-            setTitle(_.i(R.string.sleep_settings));
         } else if (fragment instanceof NotificationsPageFragment) {
             setTitle(_.i(R.string.activity));
         } else if (fragment instanceof NotificationSettingsPageFragment) {

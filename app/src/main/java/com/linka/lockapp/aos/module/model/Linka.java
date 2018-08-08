@@ -179,15 +179,18 @@ public class Linka extends Model implements Serializable {
     public int settings_stall_delay = 30;
 
     //locked sleep sec
-    @Column(name = "settings_unlocked_sleep")
-    public int settings_unlocked_sleep = AppDelegate.default_unlock_sleep_time;
+//    @Column(name = "settings_unlocked_sleep")
+//    public int settings_unlocked_sleep = AppDelegate.default_unlock_sleep_time;
+//
+//    //unlocked sleep sec
+//    @Column(name = "settings_locked_sleep")
+//    public int settings_locked_sleep = AppDelegate.default_lock_sleep_time;
+    public static final int LOW_PERFORMANCE = 300;
+    public static final int NORMAL_PERFORMANCE = 7200;
+    public static final int HIGH_PERFORMANCE = 36000;
 
-    //unlocked sleep sec
-    @Column(name = "settings_locked_sleep")
-    public int settings_locked_sleep = AppDelegate.default_lock_sleep_time;
-
-    @Column(name = "is_auto_sleep_enabled")
-    public boolean isAutoSleepEnabled = false;
+    @Column(name = "settings_sleep_performance")
+    public int settingsSleepPerformance = NORMAL_PERFORMANCE;
 
     @Column(name = "api_user_id")
     public String api_user_id = "";

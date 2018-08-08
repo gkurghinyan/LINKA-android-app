@@ -118,10 +118,12 @@ public class SettingsPageFragment extends CoreFragment {
     @BindView(R.id.tone_switch_view)
     View toneSwitchView;
 
-    @BindView(R.id.row_sleep_settings)
-    LinearLayout rowSleepSettings;
-    @BindView(R.id.text_sleep_settings)
-    TextView textSleepSettings;
+    @BindView(R.id.row_battery_settings)
+    RelativeLayout rowBatterySettings;
+    @BindView(R.id.text_battery_settings)
+    TextView textBatterySettings;
+    @BindView(R.id.battery_performance)
+    TextView batteryPerformance;
 
     @BindView(R.id.row_firmware_version)
     LinearLayout rowFirmwareVersion;
@@ -434,6 +436,8 @@ public class SettingsPageFragment extends CoreFragment {
             }
         }
 
+        setBatteryPerformance();
+
         if (linka != null && linka.isConnected && linka.isLockSettled) {
             int color = getResources().getColor(R.color.linka_blue);
 
@@ -459,8 +463,8 @@ public class SettingsPageFragment extends CoreFragment {
             toneSwitchView.setVisibility(View.GONE);
             switchAudibleLockingUnlocking.setAlpha(1.0f);
 
-            textSleepSettings.setTextColor(color);
-            rowSleepSettings.setClickable(true);
+            textBatterySettings.setTextColor(color);
+            rowBatterySettings.setClickable(true);
 
             textResetToFactorySettings.setTextColor(color);
             rowResetToFactorySettings.setClickable(true);
@@ -502,8 +506,8 @@ public class SettingsPageFragment extends CoreFragment {
             toneSwitchView.setVisibility(View.VISIBLE);
             switchAudibleLockingUnlocking.setAlpha(0.4f);
 
-            textSleepSettings.setTextColor(color);
-            rowSleepSettings.setClickable(false);
+            textBatterySettings.setTextColor(color);
+            rowBatterySettings.setClickable(false);
 
             textResetToFactorySettings.setTextColor(color);
             rowResetToFactorySettings.setClickable(false);
@@ -560,6 +564,25 @@ public class SettingsPageFragment extends CoreFragment {
         rowFirmwareVersion.setClickable(false);
     }
 
+    private void setBatteryPerformance(){
+        if(linka.settingsSleepPerformance == 1800){
+            linka.settingsSleepPerformance = Linka.NORMAL_PERFORMANCE;
+            linka.save();
+        }
+
+        switch (linka.settingsSleepPerformance) {
+            case Linka.LOW_PERFORMANCE:
+                batteryPerformance.setText("Low");
+                break;
+            case Linka.NORMAL_PERFORMANCE:
+                batteryPerformance.setText("Normal");
+                break;
+            case Linka.HIGH_PERFORMANCE:
+                batteryPerformance.setText("High");
+                break;
+        }
+    }
+
 
     @OnClick(R.id.row_audible_locking_unlocking)
     void onClick_row_audible_locking_unlocking() {
@@ -573,7 +596,7 @@ public class SettingsPageFragment extends CoreFragment {
 
     @OnClick(R.id.row_phoneless_passcode)
     void onClick_row_phoneless_passcode() {
-        getAppMainActivity().pushFragment(SetPac3.newInstance(LinkaNotificationSettings.get_latest_linka(), SetPac3.SETTINGS));
+        getAppMainActivity().pushFragmentWithoutAnimation(SetPac3.newInstance(LinkaNotificationSettings.get_latest_linka(), SetPac3.SETTINGS));
     }
 
 //    @OnClick(R.id.row_edit_name)
@@ -591,9 +614,9 @@ public class SettingsPageFragment extends CoreFragment {
                 .commit();
     }
 
-    @OnClick(R.id.row_sleep_settings)
-    void OnClick_row_sleep_settings() {
-        getAppMainActivity().pushFragment(SettingsBatteryFragment.newInstance(linka));
+    @OnClick(R.id.row_battery_settings)
+    void OnClick_row_battery_settings() {
+        getAppMainActivity().pushFragmentWithoutAnimation(SettingsBatteryFragment.newInstance(linka));
     }
 
     @OnClick(R.id.row_tamper_siren)

@@ -6,15 +6,13 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 
-import com.linka.lockapp.aos.AppDelegate;
 import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.core.CoreFragment;
 import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.widget.LockController;
 import com.linka.lockapp.aos.module.widget.LocksController;
-import com.rey.material.widget.Switch;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,11 +23,14 @@ import butterknife.Unbinder;
 public class SettingsBatteryFragment extends CoreFragment {
     private static final String LINKA_ARGUMENT = "LinkaArgument";
 
-    @BindView(R.id.enable_switch)
-    Switch enableAutoSleep;
+    @BindView(R.id.high_performance_image)
+    ImageView highImage;
 
-    @BindView(R.id.set_sleep_in_linear)
-    LinearLayout setSleepIn;
+    @BindView(R.id.normal_performance_image)
+    ImageView normalImage;
+
+    @BindView(R.id.low_performance_image)
+    ImageView lowImage;
 
     private Unbinder unbinder;
     private Linka linka;
@@ -55,7 +56,7 @@ public class SettingsBatteryFragment extends CoreFragment {
         unbinder = ButterKnife.bind(this, view);
         linka = ((Linka) getArguments().getSerializable(LINKA_ARGUMENT));
         getAppMainActivity().setBackIconVisible(true);
-        init();
+        setPerformanceImage();
     }
 
     @Override
@@ -65,43 +66,56 @@ public class SettingsBatteryFragment extends CoreFragment {
         unbinder.unbind();
     }
 
-    private void init() {
-        if (linka.isAutoSleepEnabled) {
-            enableAutoSleep.setChecked(true);
-            setSleepIn.setVisibility(View.VISIBLE);
-        }else {
-            enableAutoSleep.setChecked(false);
-            setSleepIn.setVisibility(View.GONE);
-        }
-        enableAutoSleep.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(Switch view, boolean checked) {
-                LockController lockController = LocksController.getInstance().getLockController();
-                if (checked) {
-                    setSleepIn.setVisibility(View.VISIBLE);
-                    linka.isAutoSleepEnabled = true;
-                    linka.saveSettings();
-
-                    lockController.doAction_SetLockSleep(linka.settings_locked_sleep);
-                    if(linka.settings_unlocked_sleep == 960){
-                        linka.settings_unlocked_sleep = 1800;
-                        linka.save();
-                    }
-                    lockController.doAction_SetUnlockSleep(linka.settings_unlocked_sleep);
-                } else {
-                    setSleepIn.setVisibility(View.GONE);
-                    linka.isAutoSleepEnabled = false;
-                    linka.saveSettings();
-
-                    lockController.doAction_SetLockSleep(AppDelegate.default_lock_sleep_time);
-                    lockController.doAction_SetUnlockSleep(AppDelegate.default_unlock_sleep_time);
-                }
-            }
-        });
+    @OnClick(R.id.low_performance)
+    void onClickLowPerformance(){
+        linka.settingsSleepPerformance = Linka.LOW_PERFORMANCE;
+        linka.save();
+        LockController lockController = LocksController.getInstance().getLockController();
+        lockController.doAction_SetLockSleep(Linka.LOW_PERFORMANCE);
+        lockController.doAction_SetUnlockSleep(Linka.LOW_PERFORMANCE);
+        setPerformanceImage();
     }
 
-    @OnClick(R.id.set_sleep_in_linear)
-    void onSetSleepInLinearClicked() {
-        getAppMainActivity().pushFragment(SettingsSleepSettingsFragment.newInstance((linka)));
+    @OnClick(R.id.normal_performance)
+    void onClickNormalPerformance(){
+        linka.settingsSleepPerformance = Linka.NORMAL_PERFORMANCE;
+        linka.save();
+        LockController lockController = LocksController.getInstance().getLockController();
+        lockController.doAction_SetLockSleep(Linka.NORMAL_PERFORMANCE);
+        lockController.doAction_SetUnlockSleep(Linka.NORMAL_PERFORMANCE);
+        setPerformanceImage();
+    }
+
+    @OnClick(R.id.high_performance)
+    void onClickHighPerformance(){
+        linka.settingsSleepPerformance = Linka.HIGH_PERFORMANCE;
+        linka.save();
+        LockController lockController = LocksController.getInstance().getLockController();
+        lockController.doAction_SetLockSleep(Linka.HIGH_PERFORMANCE);
+        lockController.doAction_SetUnlockSleep(Linka.HIGH_PERFORMANCE);
+        setPerformanceImage();
+    }
+
+    private void setPerformanceImage(){
+        if(linka.settingsSleepPerformance == 1800){
+            linka.settingsSleepPerformance = Linka.NORMAL_PERFORMANCE;
+            linka.save();
+        }
+
+        lowImage.setVisibility(View.GONE);
+        normalImage.setVisibility(View.GONE);
+        highImage.setVisibility(View.GONE);
+
+        switch (linka.settingsSleepPerformance) {
+            case Linka.LOW_PERFORMANCE:
+                lowImage.setVisibility(View.VISIBLE);
+                break;
+            case Linka.NORMAL_PERFORMANCE:
+                normalImage.setVisibility(View.VISIBLE);
+                break;
+            case Linka.HIGH_PERFORMANCE:
+                highImage.setVisibility(View.VISIBLE);
+                break;
+        }
     }
 }

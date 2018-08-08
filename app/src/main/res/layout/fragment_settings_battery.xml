@@ -9,18 +9,19 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/margin_l"
+        android:layout_height="wrap_content"
         android:gravity="bottom"
-        android:paddingBottom="@dimen/margin_mm"
+        android:paddingBottom="@dimen/margin_15"
         android:paddingStart="@dimen/margin_x"
-        android:text="AUTO_SLEEP"
-        android:textColor="@color/linka_blue"
+        android:paddingTop="@dimen/margin_15"
+        android:text="@string/battery_settings_description"
+        android:textColor="@color/dark_gray_text"
         android:textSize="@dimen/text_size_xm" />
 
     <View style="@style/menu_divider" />
 
-    <RelativeLayout
-        android:id="@+id/enable_linear"
+    <LinearLayout
+        android:id="@+id/high_performance"
         android:layout_width="match_parent"
         android:layout_height="@dimen/margin_l"
         android:background="@color/linka_white">
@@ -28,75 +29,118 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
             android:layout_marginStart="@dimen/margin_x"
-            android:text="Enable"
-            android:textColor="@color/linka_blue"
+            android:layout_weight="8"
+            android:text="High Performance"
+            android:textColor="@color/linka_black_transparent"
             android:textSize="@dimen/text_size_normal" />
 
-        <com.rey.material.widget.Switch xmlns:custom="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/enable_switch"
+        <ImageView
+            android:id="@+id/high_performance_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="@dimen/margin_x"
-            android:checked="false"
-            custom:sw_thumbColor="@color/linka_white"
-            custom:sw_thumbElevation="2dp"
-            custom:sw_thumbRadius="17dp"
-            custom:sw_trackColor="@color/colorstate_switch"
-            custom:sw_trackSize="33dp" />
-    </RelativeLayout>
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="@dimen/margin"
+            android:layout_weight="1"
+            android:src="@drawable/check_icon"
+            android:visibility="gone" />
+    </LinearLayout>
 
     <View style="@style/menu_divider" />
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/logo_height"
+        android:layout_height="@dimen/margin_l"
         android:paddingEnd="@dimen/margin_x"
         android:paddingStart="@dimen/margin_x"
         android:paddingTop="@dimen/margin_mm"
-        android:text="@string/save_battery_by_enabling_linka"
+        android:text="Your lock will sleep after 10 hours."
         android:textColor="@color/search_text"
         android:textSize="@dimen/text_size_xm" />
 
+    <View style="@style/menu_divider" />
+
     <LinearLayout
-        android:id="@+id/set_sleep_in_linear"
+        android:id="@+id/normal_performance"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone">
+        android:layout_height="@dimen/margin_l"
+        android:background="@color/linka_white">
 
-        <View style="@style/menu_divider" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/margin_x"
+            android:layout_weight="8"
+            android:text="Normal"
+            android:textColor="@color/linka_black_transparent"
+            android:textSize="@dimen/text_size_normal" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/margin_l"
-            android:background="@color/linka_white"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="@dimen/margin_x"
-                android:text="Set to sleep in"
-                android:textColor="@color/linka_blue"
-                android:textSize="@dimen/text_size_normal" />
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/margin_x"
-                android:layout_gravity="center_vertical"
-                android:layout_marginEnd="@dimen/margin_x"
-                android:paddingLeft="@dimen/activity_horizontal_margin_xsm"
-                android:paddingRight="@dimen/activity_horizontal_margin_xsm"
-                android:scaleType="fitEnd"
-                android:src="@drawable/right_gray_arrow" />
-        </LinearLayout>
-
-        <View style="@style/menu_divider" />
+        <ImageView
+            android:id="@+id/normal_performance_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="@dimen/margin"
+            android:layout_weight="1"
+            android:src="@drawable/check_icon"
+            android:visibility="gone" />
     </LinearLayout>
+
+    <View style="@style/menu_divider" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/margin_l"
+        android:paddingEnd="@dimen/margin_x"
+        android:paddingStart="@dimen/margin_x"
+        android:paddingTop="@dimen/margin_mm"
+        android:text="Your lock will sleep after 2 hours."
+        android:textColor="@color/search_text"
+        android:textSize="@dimen/text_size_xm" />
+
+    <View style="@style/menu_divider" />
+
+    <LinearLayout
+        android:id="@+id/low_performance"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/margin_l"
+        android:background="@color/linka_white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/margin_x"
+            android:layout_weight="8"
+            android:text="Low"
+            android:textColor="@color/linka_black_transparent"
+            android:textSize="@dimen/text_size_normal" />
+
+        <ImageView
+            android:id="@+id/low_performance_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="@dimen/margin"
+            android:layout_weight="1"
+            android:src="@drawable/check_icon"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <View style="@style/menu_divider" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/margin_l"
+        android:paddingEnd="@dimen/margin_x"
+        android:paddingStart="@dimen/margin_x"
+        android:paddingTop="@dimen/margin_mm"
+        android:text="Your lock will sleep after 5 minutes."
+        android:textColor="@color/search_text"
+        android:textSize="@dimen/text_size_xm" />
+
+    <View style="@style/menu_divider" />
 
 </LinearLayout>

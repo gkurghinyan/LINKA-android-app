@@ -472,6 +472,7 @@ public class CircleView extends CoreFragment {
             if (isPanicAndSleepEnabled) {
                 setPanicAndSleepButtonsState(false);
             }
+            scanLeDevice();
         }
     }
 

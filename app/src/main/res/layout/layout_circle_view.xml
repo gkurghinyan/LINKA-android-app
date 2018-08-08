@@ -113,7 +113,7 @@
         android:id="@+id/swipe_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/swipe_to_confirm_lock"
+        android:text="@string/asleep_or_out"
         android:textAllCaps="true"
         android:textColor="@color/linka_blue"
         android:textSize="@dimen/text_size_normal"

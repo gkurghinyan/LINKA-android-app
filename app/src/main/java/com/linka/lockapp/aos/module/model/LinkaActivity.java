@@ -233,8 +233,8 @@ public class LinkaActivity extends Model implements Serializable {
         activity.lockState = linka.lockState;
         activity.old_lock_name = old_lock_name;
         activity.new_lock_name = new_lock_name;
-        activity.sleep_lock_sec = linka.settings_locked_sleep;
-        activity.sleep_unlock_sec = linka.settings_unlocked_sleep;
+        activity.sleep_lock_sec = linka.settingsSleepPerformance;
+        activity.sleep_unlock_sec = linka.settingsSleepPerformance;
         activity.isRead = false;
 
         // Handle Android Specific Telemetry

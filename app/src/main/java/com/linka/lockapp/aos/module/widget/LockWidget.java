@@ -135,7 +135,7 @@ public class LockWidget extends RelativeLayout {
             arcProgress.setVisibility(INVISIBLE);
 
             setBatteryPercent(linka.batteryPercent);
-            setBatteryDaysRemaining(linka.getBatteryRemainingRepresentation(linka.settings_unlocked_sleep, linka.settings_locked_sleep), linka.isCharging, linka.batteryPercent);
+            setBatteryDaysRemaining(linka.getBatteryRemainingRepresentation(linka.settingsSleepPerformance, linka.settingsSleepPerformance), linka.isCharging, linka.batteryPercent);
             setIsLocked(linka.isLocked);
             setLockingStatus(linka.isLocking, linka.isUnlocking);
         }

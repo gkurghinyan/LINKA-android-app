@@ -1058,14 +1058,14 @@ public class LockController implements Serializable {
                     //unlock sleeping
                     if(index == LockSettingPacket.VLSO_SETTING_UNLOCKED_SLEEP_S){
 
-                        linka.settings_unlocked_sleep = value;
+                        linka.settingsSleepPerformance = value;
 
                         linka.saveSettings();
                     }
 
                     //lock sleeping
                     if(index == LockSettingPacket.VLSO_SETTING_LOCKED_SLEEP_S){
-                        linka.settings_locked_sleep = value;
+                        linka.settingsSleepPerformance = value;
 
                         //Start sleep timer locked sleep is read
                         SleepNotificationService.getInstance().restartTimer();

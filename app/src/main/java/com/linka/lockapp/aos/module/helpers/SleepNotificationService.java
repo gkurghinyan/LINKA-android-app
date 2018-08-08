@@ -1,6 +1,5 @@
 package com.linka.lockapp.aos.module.helpers;
 
-import android.app.NotificationManager;
 import android.app.Service;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
@@ -8,10 +7,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.IBinder;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.linka.lockapp.aos.AppDelegate;
 import com.linka.lockapp.aos.AppMainActivity;
 import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.model.Linka;
@@ -119,11 +116,11 @@ public class SleepNotificationService extends Service {
             if (isTargetLinkaConnected() || lastSleepTime != 0) {
 
                 //Get the sleep time
-                lastSleepTime = targetLinka.isLocked ? targetLinka.settings_locked_sleep : targetLinka.settings_unlocked_sleep;
+                lastSleepTime = targetLinka.settingsSleepPerformance;
 
                 // Final check to make sure the values have been set
                 if (lastSleepTime == 0){
-                    lastSleepTime = targetLinka.isLocked ? AppDelegate.default_lock_sleep_time : AppDelegate.default_unlock_sleep_time;
+                    lastSleepTime = Linka.NORMAL_PERFORMANCE;
                 }
 
                 //subtract 3 seconds from sleep time so that it runs before out of range alert runs

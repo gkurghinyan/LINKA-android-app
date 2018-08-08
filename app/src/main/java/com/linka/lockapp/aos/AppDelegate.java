@@ -78,7 +78,7 @@ public class AppDelegate extends MultiDexApplication {
     public static int battery_low_below = 30;
     public static int battery_critically_low_below = 10;
     public static int default_lock_sleep_time = 10800; // 3 hours
-    public static int default_unlock_sleep_time = 1800; //30 mins
+    public static int default_unlock_sleep_time = 7200; //30 mins
     //public static int battery_full_life_by_days = 270;
     public static boolean shouldEnableLocationScanning = true;
     public static int locationScanningInterval = 10000;
