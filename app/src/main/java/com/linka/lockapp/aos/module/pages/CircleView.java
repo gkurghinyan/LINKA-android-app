@@ -118,7 +118,8 @@ public class CircleView extends CoreFragment {
             notSuccessLockHandler = null;
             isWarningShow = false;
             gifImageView.setVisibility(View.GONE);
-            gifImageView.setBackgroundResource(R.drawable.wi_fi_connection);
+            gifImageView.setImageResource(R.drawable.wi_fi_connection);
+            gifImageView.setBackgroundResource(R.drawable.panic_button);
             setPanicAndSleepButtonsVisibility(View.VISIBLE);
             warningTitle.setVisibility(View.GONE);
             warningText.setVisibility(View.GONE);
@@ -571,9 +572,11 @@ public class CircleView extends CoreFragment {
                     }
                 } else if (result == 1) {
                     if (!linkaList.isEmpty()) {
-                        if (bluetoothAdapter == null) {
-                            BluetoothManager bluetoothManager = (BluetoothManager) getContext().getSystemService(Context.BLUETOOTH_SERVICE);
-                            bluetoothAdapter = bluetoothManager.getAdapter();
+                        if (bluetoothAdapter == null && getActivity() != null) {
+                            BluetoothManager bluetoothManager = (BluetoothManager) getActivity().getSystemService(Context.BLUETOOTH_SERVICE);
+                            if(bluetoothManager != null) {
+                                bluetoothAdapter = bluetoothManager.getAdapter();
+                            }
                         }
                         bluetoothAdapter.stopLeScan(scanCallback);
                         scanCallback = null;
