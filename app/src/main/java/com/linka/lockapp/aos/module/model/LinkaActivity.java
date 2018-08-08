@@ -200,19 +200,14 @@ public class LinkaActivity extends Model implements Serializable {
     }
 
     public static void updateReadState(final List<Long> ids) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                LinkaActivity activity;
-                for (Long id : ids) {
-                    activity = getActivityById(id);
-                    if (activity != null) {
-                        activity.isRead = true;
-                        activity.save();
-                    }
-                }
+        LinkaActivity activity;
+        for (Long id : ids) {
+            activity = getActivityById(id);
+            if (activity != null) {
+                activity.isRead = true;
+                activity.save();
             }
-        }).start();
+        }
     }
 
     public static LinkaActivity getActivityById(Long id) {

@@ -129,6 +129,9 @@ public class Circle extends View {
             } else if ((state == LOCKING_STATE || state == UNLOCKING_STATE) && !animator.isStarted()){
                 currentState = state;
                 animator.start();
+            }else {
+                currentState = state;
+                invalidate();
             }
         }
     }
