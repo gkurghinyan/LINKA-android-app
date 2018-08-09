@@ -578,7 +578,9 @@ public class CircleView extends CoreFragment {
                                 bluetoothAdapter = bluetoothManager.getAdapter();
                             }
                         }
-                        bluetoothAdapter.stopLeScan(scanCallback);
+                        if(bluetoothAdapter != null) {
+                            bluetoothAdapter.stopLeScan(scanCallback);
+                        }
                         scanCallback = null;
                         bluetoothAdapter = null;
                     }

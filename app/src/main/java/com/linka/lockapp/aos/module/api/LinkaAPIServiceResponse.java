@@ -289,6 +289,7 @@ public class LinkaAPIServiceResponse {
                 if (timestamp != null) { activity.timestamp = timestamp; };
                 if (timestamp_locked != null) { activity.timestamp_locked = timestamp_locked; };
                 activity.batteryPercent = batteryPercent;
+                activity.owner = owner;
                 return activity;
             }
         }

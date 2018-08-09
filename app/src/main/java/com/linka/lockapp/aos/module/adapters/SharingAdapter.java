@@ -38,7 +38,7 @@ public class SharingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public static final int VISIBLE = 1;
     public static final int INVISIBLE = 0;
     private static int addButtonVisibility = INVISIBLE;
-    private SimpleDateFormat allDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss", Locale.UK);
+    private SimpleDateFormat allDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.UK);
     private SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd', 'h:mma", Locale.UK);
 
 
@@ -102,13 +102,13 @@ public class SharingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    if(date != null) {
+                    if (date != null) {
                         ((ViewHolder) holder).lastUsed.setText("Last used: " + dateFormat.format(date));
                     }
                 }
             }
 
-            ((ViewHolder) holder).avatar.setColorFilter( context.getResources().getColor(R.color.linka_black_transparent), PorterDuff.Mode.MULTIPLY );
+            ((ViewHolder) holder).avatar.setColorFilter(context.getResources().getColor(R.color.linka_black_transparent), PorterDuff.Mode.MULTIPLY);
             ((ViewHolder) holder).item = user;
             ((ViewHolder) holder).position = position;
             ((ViewHolder) holder).onClickDeviceItemListener = onClickDeviceItemListener;

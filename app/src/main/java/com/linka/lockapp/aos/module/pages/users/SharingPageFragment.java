@@ -18,6 +18,7 @@ import com.linka.lockapp.aos.module.api.LinkaAPIServiceImpl;
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceResponse;
 import com.linka.lockapp.aos.module.core.CoreFragment;
 import com.linka.lockapp.aos.module.model.Linka;
+import com.linka.lockapp.aos.module.model.LinkaActivity;
 import com.linka.lockapp.aos.module.model.User;
 import com.linka.lockapp.aos.module.pages.home.MainTabBarPageFragment;
 import com.linka.lockapp.aos.module.widget.ThreeDotsView;
@@ -25,7 +26,6 @@ import com.linka.lockapp.aos.module.widget.ThreeDotsView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -47,7 +47,7 @@ import static com.linka.lockapp.aos.module.widget.LocksController.LOCKSCONTROLLE
 
 public class SharingPageFragment extends CoreFragment {
     public static final String REFRESH_LIST_OF_USERS = "RefreshListOfUsers";
-    private SimpleDateFormat allDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss", Locale.UK);
+    private SimpleDateFormat allDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.UK);
     private SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd', 'h:mma", Locale.UK);
 
     public static int active_page = 0;
@@ -254,14 +254,14 @@ public class SharingPageFragment extends CoreFragment {
         if (object instanceof String && object.equals(REFRESH_LIST_OF_USERS)) {
             getLockPermissions();
         }
-        if (object instanceof String && ((String) object).substring(0,8).equals("Selected")) {
+        if (object instanceof String && ((String) object).substring(0, 8).equals("Selected")) {
             if (object.equals("Selected-" + String.valueOf(MainTabBarPageFragment.USER_SCREEN))) {
 //                getLockPermissions();
             }
         }
     }
 
-    private void refresh(Response<LinkaAPIServiceResponse.LockPermissionsResponse> response){
+    private void refresh(Response<LinkaAPIServiceResponse.LockPermissionsResponse> response) {
         for (final LinkaAPIServiceResponse.LockPermissionsResponse.Data userData : response.body().data) {
             User newUser = User.saveUserForEmail(userData.email,
                     userData.first_name,
@@ -286,14 +286,11 @@ public class SharingPageFragment extends CoreFragment {
                             ownerName.setVisibility(View.VISIBLE);
                             ownerName.setText(userData.name);
                             ownerLastUsed.setVisibility(View.VISIBLE);
-                            if (userData.lastUsed != null) {
-                                Date date = null;
-                                try {
-                                    date = allDateFormat.parse(userData.lastUsed);
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
-                                }
-                                if (date != null) {
+                            if (LinkaAPIServiceImpl.getUserEmail().equals(userData.email)) {
+                                LinkaActivity activity = getLastActivityForUser();
+                                if (activity != null) {
+                                    String ownerLastUsedTime = getLastActivityForUser().timestamp;
+                                    Date date = new Date(Long.parseLong(ownerLastUsedTime));
                                     ownerLastUsed.setText("Last used: " + dateFormat.format(date));
                                 }
                             }
@@ -309,6 +306,14 @@ public class SharingPageFragment extends CoreFragment {
                 }
 
             } else {
+                if (userData.email.equals(LinkaAPIServiceImpl.getUserEmail())) {
+                    LinkaActivity activity = getLastActivityForUser();
+                    if (activity != null) {
+                        String lastUsedTime = activity.timestamp;
+                        Date date = new Date(Long.parseLong(lastUsedTime));
+                        newUser.lastUsed = allDateFormat.format(date);
+                    }
+                }
                 userList.add(newUser);
             }
 
@@ -320,15 +325,30 @@ public class SharingPageFragment extends CoreFragment {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if(adapter != null) {
+                    if (adapter != null) {
                         adapter.notifyDataSetChanged();
                     }
-                    if(threeDotsView != null) {
+                    if (threeDotsView != null) {
                         threeDotsView.setVisibility(View.GONE);
                     }
                 }
             });
         }
         isLockTaskRunning = false;
+    }
+
+    private LinkaActivity getLastActivityForUser() {
+        List<LinkaActivity> activities = LinkaActivity.getLinkaActivitiesByLinka(linka);
+        if (activities != null) {
+            for (LinkaActivity activity : activities) {
+                if (activity.owner.equals(LinkaAPIServiceImpl.getUserID())) {
+                    if (activity.linka_activity_status == LinkaActivity.LinkaActivityType.isLocked.getValue() ||
+                            activity.linka_activity_status == LinkaActivity.LinkaActivityType.isUnlocked.getValue()) {
+                        return activity;
+                    }
+                }
+            }
+        }
+        return null;
     }
 }

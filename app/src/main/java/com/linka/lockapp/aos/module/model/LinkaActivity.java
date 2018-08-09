@@ -116,6 +116,9 @@ public class LinkaActivity extends Model implements Serializable {
     @Column(name = "isRead")
     public boolean isRead = false;
 
+    @Column(name = "owner")
+    public String owner = "";
+
     // Telemetry
     public String linka_uuid = "";
     public String platform = "Android " + Build.MANUFACTURER + " " + Build.MODEL;
