@@ -519,10 +519,10 @@ public class LinkaAPIServiceImpl {
             body = "Back in Range";
         } else if (type == LinkaActivity.LinkaActivityType.isOutOfRange.getValue()) {
             body = "Out of Range";
-        }else if(type == LinkaActivity.LinkaActivityType.isAutoUnlocked.getValue()){
+        } else if (type == LinkaActivity.LinkaActivityType.isAutoUnlocked.getValue()) {
             should_update = true;
             body = "Your bike is being auto-unlocked";
-        }else if(type == LinkaActivity.LinkaActivityType.isAutoUnlockEnabled.getValue()){
+        } else if (type == LinkaActivity.LinkaActivityType.isAutoUnlockEnabled.getValue()) {
             should_update = true;
             body = "Auto-unlocking is now enabled";
         }
@@ -558,11 +558,11 @@ public class LinkaAPIServiceImpl {
             @Override
             public void onResponse(Call<LinkaAPIServiceResponse> call, Response<LinkaAPIServiceResponse> response) {
                 if (check(response, false, context)) {
-                    Log.d("what_sate","okay");
+                    Log.d("what_sate", "okay");
                     callback.onResponse(call, response);
                 } else {
                     callback.onResponse(call, response);
-                    Log.d("what_sate","not_okay");
+                    Log.d("what_sate", "not_okay");
                 }
             }
 
@@ -570,7 +570,7 @@ public class LinkaAPIServiceImpl {
             public void onFailure(Call<LinkaAPIServiceResponse> call, Throwable t) {
 //                doErrors(null, context);
                 callback.onFailure(call, t);
-                Log.d("what_sate","fail");
+                Log.d("what_sate", "fail");
             }
         });
         return call;
@@ -1233,6 +1233,30 @@ public class LinkaAPIServiceImpl {
             @Override
             public void onResponse(Call<LinkaAPIServiceResponse> call, Response<LinkaAPIServiceResponse> response) {
                 if (check(response, true, context)) {
+                    callback.onResponse(call, response);
+                } else {
+                    callback.onResponse(call, response);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LinkaAPIServiceResponse> call, Throwable t) {
+                doErrors(null, context);
+                callback.onFailure(call, t);
+            }
+        });
+        return call;
+    }
+
+    public static Call<LinkaAPIServiceResponse> hide_lock(
+            final Context context,
+            String lock_serial_no,
+            final Callback<LinkaAPIServiceResponse> callback) {
+        Call<LinkaAPIServiceResponse> call = LinkaAPIServiceManager.getInstance().hide_lock(lock_serial_no);
+        call.enqueue(new Callback<LinkaAPIServiceResponse>() {
+            @Override
+            public void onResponse(Call<LinkaAPIServiceResponse> call, Response<LinkaAPIServiceResponse> response) {
+                if(check(response,true,context)){
                     callback.onResponse(call, response);
                 } else {
                     callback.onResponse(call, response);

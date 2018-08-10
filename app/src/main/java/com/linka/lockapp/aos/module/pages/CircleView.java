@@ -110,6 +110,7 @@ public class CircleView extends CoreFragment {
 
     private boolean isPanicEnabled = false;
     private boolean isRefreshAvailable = true;
+    private boolean isLockConnected = false;
 
     private Handler notSuccessLockHandler;
     private Runnable notSuccessLockRunnable = new Runnable() {
@@ -349,6 +350,7 @@ public class CircleView extends CoreFragment {
         IntentFilter filter1 = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         getActivity().registerReceiver(blueToothReceiver, filter1);
         EventBus.getDefault().register(this);
+        isRefreshAvailable = true;
     }
 
     @Override
@@ -378,6 +380,10 @@ public class CircleView extends CoreFragment {
         if (turningLinkaDialog != null && turningLinkaDialog.isShowing()) {
             turningLinkaDialog.dismiss();
         }
+        if(refreshHandler != null){
+            refreshHandler = null;
+            isRefreshAvailable = true;
+        }
     }
 
     public void refreshDisplay() {
@@ -403,7 +409,9 @@ public class CircleView extends CoreFragment {
                             if (!isWarningShow) {
                                 if (!linka.isConnected) {
                                     root.removeView(internetPage);
-                                    setLockNotConnectedState();
+                                    if (isLockConnected) {
+                                        setLockNotConnectedState();
+                                    }
                                 } else {
                                     if (turningLinkaDialog != null && turningLinkaDialog.isShowing()) {
                                         turningLinkaDialog.dismiss();
@@ -424,12 +432,25 @@ public class CircleView extends CoreFragment {
                                 }
                             }
                         }
+                        LocksController.getInstance().refresh();
                     }
                 });
             }
+            isRefreshAvailable = false;
+            if (refreshHandler == null) {
+                refreshHandler = new Handler();
+            }
+            refreshHandler.postDelayed(refreshRunnable, 700);
         }
-        LocksController.getInstance().refresh();
     }
+
+    private Handler refreshHandler;
+    private Runnable refreshRunnable = new Runnable() {
+        @Override
+        public void run() {
+            isRefreshAvailable = true;
+        }
+    };
 
     private void setPanicAndSleepButtonsVisibility(int visibility) {
         if (panicButton.getAnimation() != null) {
@@ -474,17 +495,21 @@ public class CircleView extends CoreFragment {
                 setPanicAndSleepButtonsState(false);
             }
             scanLeDevice();
+            isLockConnected = false;
         }
     }
 
     private void setLockSettledState() {
-        batteryImage.setColorFilter(null);
-        batteryPercent.setText(linka.batteryPercent + "%");
-        swipeText.setText(getString(R.string.swipe_to_confirm_lock));
-        root.removeView(internetPage);
-        gifImageView.setVisibility(View.GONE);
-        if (!isPanicAndSleepEnabled) {
-            setPanicAndSleepButtonsState(true);
+        if (!isLockConnected) {
+            batteryImage.setColorFilter(null);
+            batteryPercent.setText(linka.batteryPercent + "%");
+            swipeText.setText(getString(R.string.swipe_to_confirm_lock));
+            root.removeView(internetPage);
+            gifImageView.setVisibility(View.GONE);
+            if (!isPanicAndSleepEnabled) {
+                setPanicAndSleepButtonsState(true);
+            }
+            isLockConnected = true;
         }
         if (linka.isLocked) {
             swipeButton.setCurrentState(Circle.LOCKED_STATE);
@@ -574,11 +599,11 @@ public class CircleView extends CoreFragment {
                     if (!linkaList.isEmpty()) {
                         if (bluetoothAdapter == null && getActivity() != null) {
                             BluetoothManager bluetoothManager = (BluetoothManager) getActivity().getSystemService(Context.BLUETOOTH_SERVICE);
-                            if(bluetoothManager != null) {
+                            if (bluetoothManager != null) {
                                 bluetoothAdapter = bluetoothManager.getAdapter();
                             }
                         }
-                        if(bluetoothAdapter != null) {
+                        if (bluetoothAdapter != null) {
                             bluetoothAdapter.stopLeScan(scanCallback);
                         }
                         scanCallback = null;
@@ -599,5 +624,4 @@ public class CircleView extends CoreFragment {
         }
         bluetoothAdapter.startLeScan(scanCallback);
     }
-
 }

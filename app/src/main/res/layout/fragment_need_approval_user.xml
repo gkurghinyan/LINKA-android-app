@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/linka_white"
-    tools:context=".module.pages.users.GuestUserFragment">
+    tools:context=".module.pages.users.GuestUserFragment"
+    android:id="@+id/root">
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline"

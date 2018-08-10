@@ -308,4 +308,8 @@ public interface LinkaAPIService {
             @Field("new_confirm_password") String new_confirm_password
     );
 
+    @FormUrlEncoded
+    @PUT("/api/keys/hide_lock")
+    Call<LinkaAPIServiceResponse> hide_lock(@Field("lock_serial_no") String lock_serial_no);
+
 }

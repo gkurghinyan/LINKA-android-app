@@ -4,6 +4,7 @@ package com.linka.lockapp.aos.module.pages.users;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import com.linka.lockapp.aos.module.api.LinkaAPIServiceImpl;
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceResponse;
 import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.model.User;
+import com.linka.lockapp.aos.module.other.Utils;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -31,11 +33,17 @@ public class NeedApprovalUserFragment extends Fragment {
     private static final String USER_ARGUMENT = "UserArgument";
     private static final String LINKA_ARGUMENT = "LinkaArgument";
 
+    @BindView(R.id.root)
+    ConstraintLayout root;
+
     @BindView(R.id.user_name)
     TextView userName;
 
     @BindView(R.id.used_date)
     TextView usedDate;
+
+    @BindView(R.id.grant_button)
+    TextView grantButton;
 
     private Unbinder unbinder;
     private User user;
@@ -77,6 +85,7 @@ public class NeedApprovalUserFragment extends Fragment {
 
     @OnClick(R.id.grant_button)
     void onClickGrantButton() {
+        grantButton.setClickable(false);
         inviteUser();
     }
 
@@ -86,10 +95,12 @@ public class NeedApprovalUserFragment extends Fragment {
     }
 
     private void inviteUser() {
+        Utils.showLoading(getActivity(),root);
         LinkaAPIServiceImpl.send_invite(getActivity(), ((Linka) getArguments().getSerializable(LINKA_ARGUMENT)), user.userId, new Callback<LinkaAPIServiceResponse>() {
             @Override
             public void onResponse(Call<LinkaAPIServiceResponse> call, Response<LinkaAPIServiceResponse> response) {
                 if (LinkaAPIServiceImpl.check(response, false, null)) {
+                    Utils.cancelLoading();
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setTitle("Access Granted").
                             setMessage("This user can now lock and unlock your bike.")
@@ -101,12 +112,16 @@ public class NeedApprovalUserFragment extends Fragment {
                                 }
                             });
                     builder.create().show();
+                }else {
+                    Utils.cancelLoading();
                 }
+                grantButton.setClickable(true);
             }
 
             @Override
             public void onFailure(Call<LinkaAPIServiceResponse> call, Throwable t) {
-
+                Utils.cancelLoading();
+                grantButton.setClickable(true);
             }
         });
     }

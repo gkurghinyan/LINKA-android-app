@@ -134,8 +134,7 @@ public class ForgotPasswordPage2 extends CoreFragment {
                                                     @Override
                                                     public void onResponse(Call<LinkaAPIServiceResponse> call, Response<LinkaAPIServiceResponse> response) {
                                                         Utils.cancelLoading();
-                                                        LinkaNotificationSettings.disconnect_all_linka();
-                                                        getAppMainActivity().resetActivity();
+                                                        getAppMainActivity().logout();
                                                     }
 
                                                     @Override

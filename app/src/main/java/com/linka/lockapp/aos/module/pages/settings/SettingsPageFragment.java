@@ -2,7 +2,6 @@ package com.linka.lockapp.aos.module.pages.settings;
 
 import android.app.FragmentManager;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.Space;
 import android.support.v7.app.AlertDialog;
@@ -20,7 +19,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.linka.lockapp.aos.AppDelegate;
-import com.linka.lockapp.aos.AppMainActivity;
 import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceImpl;
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceResponse;
@@ -584,10 +582,10 @@ public class SettingsPageFragment extends CoreFragment {
     }
 
 
-    @OnClick(R.id.row_audible_locking_unlocking)
-    void onClick_row_audible_locking_unlocking() {
-        switchAudibleLockingUnlocking.toggle();
-    }
+//    @OnClick(R.id.row_audible_locking_unlocking)
+//    void onClick_row_audible_locking_unlocking() {
+//        switchAudibleLockingUnlocking.toggle();
+//    }
 
     @OnClick(R.id.row_auto_unlocking)
     void onClick_row_auto_unlocking() {
@@ -619,10 +617,10 @@ public class SettingsPageFragment extends CoreFragment {
         getAppMainActivity().pushFragmentWithoutAnimation(SettingsBatteryFragment.newInstance(linka));
     }
 
-    @OnClick(R.id.row_tamper_siren)
-    void onClick_row_tamper_siren() {
-        switchTamperSiren.toggle();
-    }
+//    @OnClick(R.id.row_tamper_siren)
+//    void onClick_row_tamper_siren() {
+//        switchTamperSiren.toggle();
+//    }
 
     @OnClick(R.id.row_reset_to_factory_settings)
     void onClick_row_reset_to_factory_settings() {
@@ -691,28 +689,57 @@ public class SettingsPageFragment extends CoreFragment {
     }
 
     private void removeLock() {
-        LinkaAPIServiceImpl.revoke_access(getActivity(), linka, LinkaAPIServiceImpl.getUserID(), new Callback<LinkaAPIServiceResponse>() {
-            @Override
-            public void onResponse(Call<LinkaAPIServiceResponse> call, Response<LinkaAPIServiceResponse> response) {
-                if (threeDotsDialogFragment != null) {
-                    threeDotsDialogFragment.dismiss();
-                    threeDotsDialogFragment = null;
+        if(!isAdmin) {
+            LinkaAPIServiceImpl.revoke_access(getActivity(), linka, LinkaAPIServiceImpl.getUserID(), new Callback<LinkaAPIServiceResponse>() {
+                @Override
+                public void onResponse(Call<LinkaAPIServiceResponse> call, Response<LinkaAPIServiceResponse> response) {
+                    if (LinkaAPIServiceImpl.check(response, false, null)) {
+                        getAppMainActivity().logout();
+//                        Linka.removeLinka(linka);
+                        if (threeDotsDialogFragment != null) {
+                            threeDotsDialogFragment.dismiss();
+                            threeDotsDialogFragment = null;
+                        }
+                        getAppMainActivity().resetActivity();
+                    }else {
+                        if (threeDotsDialogFragment != null) {
+                            threeDotsDialogFragment.dismiss();
+                            threeDotsDialogFragment = null;
+                        }
+                    }
                 }
-                if (LinkaAPIServiceImpl.check(response, false, null)) {
-                    Linka.removeLinka(linka);
-                    getActivity().finish();
-                    startActivity(new Intent(getActivity(), AppMainActivity.class));
-                }
-            }
 
-            @Override
-            public void onFailure(Call<LinkaAPIServiceResponse> call, Throwable t) {
-                if (threeDotsDialogFragment != null) {
-                    threeDotsDialogFragment.dismiss();
-                    threeDotsDialogFragment = null;
+                @Override
+                public void onFailure(Call<LinkaAPIServiceResponse> call, Throwable t) {
+                    if (threeDotsDialogFragment != null) {
+                        threeDotsDialogFragment.dismiss();
+                        threeDotsDialogFragment = null;
+                    }
                 }
-            }
-        });
+            });
+        }
+        else {
+            LinkaAPIServiceImpl.hide_lock(getActivity(), linka.lock_mac_address, new Callback<LinkaAPIServiceResponse>() {
+                @Override
+                public void onResponse(Call<LinkaAPIServiceResponse> call, Response<LinkaAPIServiceResponse> response) {
+                    if (threeDotsDialogFragment != null) {
+                        threeDotsDialogFragment.dismiss();
+                        threeDotsDialogFragment = null;
+                    }
+                    if (LinkaAPIServiceImpl.check(response, false, null)) {
+                        getAppMainActivity().logout();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<LinkaAPIServiceResponse> call, Throwable t) {
+                    if (threeDotsDialogFragment != null) {
+                        threeDotsDialogFragment.dismiss();
+                        threeDotsDialogFragment = null;
+                    }
+                }
+            });
+        }
     }
 
 

@@ -1026,23 +1026,27 @@ public class AppMainActivity extends CoreActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Utils.showLoading(AppMainActivity.this,root);
-                        LinkaNotificationSettings.disconnect_all_linka();
-                        LinkaAPIServiceImpl.logout(AppMainActivity.this, new Callback<LinkaAPIServiceResponse>() {
-                            @Override
-                            public void onResponse(Call<LinkaAPIServiceResponse> call, Response<LinkaAPIServiceResponse> response) {
-                                Utils.cancelLoading();
-                                onLogout();
-                            }
-
-                            @Override
-                            public void onFailure(Call<LinkaAPIServiceResponse> call, Throwable t) {
-                                Utils.cancelLoading();
-                                onLogout();
-                            }
-                        });
+                        logout();
                     }
                 })
                 .show();
+    }
+
+    public void logout(){
+        LinkaNotificationSettings.disconnect_all_linka();
+        LinkaAPIServiceImpl.logout(AppMainActivity.this, new Callback<LinkaAPIServiceResponse>() {
+            @Override
+            public void onResponse(Call<LinkaAPIServiceResponse> call, Response<LinkaAPIServiceResponse> response) {
+                Utils.cancelLoading();
+                onLogout();
+            }
+
+            @Override
+            public void onFailure(Call<LinkaAPIServiceResponse> call, Throwable t) {
+                Utils.cancelLoading();
+                onLogout();
+            }
+        });
     }
 
 

@@ -15,8 +15,8 @@ import com.linka.lockapp.aos.module.api.LinkaAPIServiceResponse;
 import com.linka.lockapp.aos.module.core.CoreFragment;
 import com.linka.lockapp.aos.module.eventbus.SuccessConnectBusEventMessage;
 import com.linka.lockapp.aos.module.model.Linka;
-import com.linka.lockapp.aos.module.other.Utils;
 import com.linka.lockapp.aos.module.pages.dialogs.SuccessConnectionDialogFragment;
+import com.linka.lockapp.aos.module.pages.dialogs.ThreeDotsDialogFragment;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -25,6 +25,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import jp.wasabeef.blurry.Blurry;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -42,6 +43,8 @@ public class AccessLockFragment extends CoreFragment {
 
 
     private Unbinder unbinder;
+
+    private ThreeDotsDialogFragment threeDotsDialogFragment;
 
     public static AccessLockFragment newInstance(Linka linka) {
 
@@ -95,35 +98,42 @@ public class AccessLockFragment extends CoreFragment {
     }
 
     void trySendUserPermissionRequest(Linka linka) {
-        setBlur(true);
+        Blurry.with(getActivity()).radius(25).sampling(2).onto(root);
+        threeDotsDialogFragment = ThreeDotsDialogFragment.newInstance().setConnectingText(false, null);
+        threeDotsDialogFragment.show(getFragmentManager(), null);
         LinkaAPIServiceImpl.send_request_for_user_permission(getActivity(), linka, new Callback<LinkaAPIServiceResponse>() {
             @Override
             public void onResponse(Call<LinkaAPIServiceResponse> call, Response<LinkaAPIServiceResponse> response) {
-                setBlur(false);
                 if (!isAdded()) return;
                 if (LinkaAPIServiceImpl.check(response, false, getActivity())) {
+                    if(threeDotsDialogFragment != null){
+                        threeDotsDialogFragment.dismiss();
+                        threeDotsDialogFragment = null;
+                    }
                     SuccessConnectionDialogFragment.newInstance(getString(R.string.request_sent)).show(getFragmentManager(),null);
+                }else {
+                    Blurry.delete(root);
+                    if(threeDotsDialogFragment != null){
+                        threeDotsDialogFragment.dismiss();
+                        threeDotsDialogFragment = null;
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<LinkaAPIServiceResponse> call, Throwable t) {
-                setBlur(false);
+                Blurry.delete(root);
+                if(threeDotsDialogFragment != null){
+                    threeDotsDialogFragment.dismiss();
+                    threeDotsDialogFragment = null;
+                }
             }
         });
     }
 
-    public void setBlur(boolean isBlur){
-        if(isBlur){
-            Utils.showLoading(getContext(),root);
-        }else {
-            Utils.cancelLoading();
-        }
-    }
-
     @Subscribe
     public void dialogClosed(SuccessConnectBusEventMessage connectBusEventMessage) {
-        setBlur(false);
+        Blurry.delete(root);
         getAppMainActivity().popFragment();
     }
 

@@ -591,6 +591,10 @@ public class SwipeButton extends RelativeLayout {
         }
     }
 
+    public int getCurrentState(){
+        return circleView.getCurrentState();
+    }
+
     public void setCircleClickable(boolean clickable){
         isCircleClickable = clickable;
     }
