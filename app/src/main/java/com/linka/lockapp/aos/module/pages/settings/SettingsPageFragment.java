@@ -541,7 +541,6 @@ public class SettingsPageFragment extends CoreFragment {
             if (lockController.lockControllerBundle != null) {
                 String ver = lockController.lockControllerBundle.getFwVersionNumber();
                 if (!ver.equals("")) {
-                    linka.canAlertCriticalFirmwareUpdate = false;
 //                    if (!ver.equals(AppDelegate.linkaMinRequiredFirmwareVersion) && !ver.equals("1.5.9") && AppDelegate.linkaMinRequiredFirmwareVersionIsCriticalUpdate) {
                     if (!ver.equals("2.0.0")) {
                         LogHelper.e("MainTabBarPageFrag", "FW version of " + ver + " does not equal " + AppDelegate.linkaMinRequiredFirmwareVersion);

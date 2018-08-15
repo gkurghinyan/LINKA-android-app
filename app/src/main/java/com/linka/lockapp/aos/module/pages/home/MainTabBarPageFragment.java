@@ -749,8 +749,4 @@ public class MainTabBarPageFragment extends CoreFragment {
 
         }
     }
-
-    public void getCurrentFragment() {
-
-    }
 }

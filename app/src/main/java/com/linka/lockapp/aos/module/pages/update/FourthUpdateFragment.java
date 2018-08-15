@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.helpers.AppBluetoothService;
 import com.linka.lockapp.aos.module.model.Linka;
+import com.linka.lockapp.aos.module.model.LinkaNotificationSettings;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,7 +32,7 @@ public class FourthUpdateFragment extends Fragment {
     public static FourthUpdateFragment newInstance(Linka linka) {
 
         Bundle args = new Bundle();
-        args.putSerializable(LINKA_ARGUMENT,linka);
+        args.putSerializable(LINKA_ARGUMENT, linka);
         FourthUpdateFragment fragment = new FourthUpdateFragment();
         fragment.setArguments(args);
         return fragment;
@@ -82,25 +83,14 @@ public class FourthUpdateFragment extends Fragment {
         // to update the Lock Settings Profile next Context Packet received
         if (((FirmwareUpdateActivity) getActivity()).wasDFUSuccessful) {
 
+            Linka targetLinka = LinkaNotificationSettings.get_latest_linka();
             Linka linka = ((Linka) getArguments().getSerializable(LINKA_ARGUMENT));
-            if(linka != null) {
+            if (linka != null && targetLinka != null && linka.getMACAddress().equals(targetLinka.getMACAddress())) {
                 linka.updateLockSettingsProfile = true;
                 linka.saveSettings();
             }
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-//                    AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
-//                            .setTitle(R.string.fw_1_4_3_post_update_title)
-//                            .setMessage(R.string.fw_1_4_3_post_update_desc)
-//                            .setNegativeButton(R.string.ok, null)
-//                            .create();
-//                    alertDialog.show();
-                    updateText.setText(getString(R.string.update_is_done_successfully));
-
-                }
-            });
-        }else {
+            updateText.setText(getString(R.string.update_is_done_successfully));
+        } else {
             updateText.setText(getString(R.string.update_is_not_done));
         }
     }
