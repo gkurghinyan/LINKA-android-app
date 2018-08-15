@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".module.pages.update.SecondUpdateFragment"
+    android:background="@drawable/blue_gradient"
+    android:id="@+id/root">
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_xl"
+        android:layout_marginEnd="@dimen/margin_x"
+        android:layout_marginStart="@dimen/margin_x"
+        android:gravity="center"
+        android:text="@string/confirm_led_is_purple"
+        android:textColor="@color/linka_white"
+        android:textSize="@dimen/text_size_xm"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/not_see_purple_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_x"
+        android:gravity="center"
+        android:text="@string/not_see_it"
+        android:textColor="@color/linka_white"
+        android:textSize="@dimen/text_size_xm"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/lets_go_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_px"
+        android:layout_marginEnd="@dimen/margin_px"
+        android:layout_marginBottom="@dimen/margin_x"
+        style="@style/linka_button_nomargin"
+        android:gravity="center"
+        android:paddingBottom="@dimen/margin_15"
+        android:paddingTop="@dimen/margin_15"
+        android:text="@string/i_see_purple"
+        android:textColor="@color/linka_blue"
+        android:textSize="@dimen/text_size_normal"
+        app:layout_constraintBottom_toTopOf="@id/not_see_purple_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

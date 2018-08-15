@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".module.pages.update.FirstUpdateFragment">
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_xl"
+        android:layout_marginEnd="@dimen/margin_dx"
+        android:layout_marginStart="@dimen/margin_dx"
+        android:gravity="center"
+        android:text="@string/make_sure_device_unlocked"
+        android:textColor="@color/linka_white"
+        android:textSize="@dimen/text_size_xm"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/not_see_device_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_x"
+        android:gravity="center"
+        android:text="@string/i_don_t_see_my_device_connected"
+        android:textColor="@color/linka_white"
+        android:textSize="@dimen/text_size_xm"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/lets_go_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_px"
+        android:layout_marginEnd="@dimen/margin_px"
+        android:layout_marginBottom="@dimen/margin_x"
+        style="@style/linka_button_nomargin"
+        android:gravity="center"
+        android:paddingBottom="@dimen/margin_15"
+        android:paddingTop="@dimen/margin_15"
+        android:text="@string/unlocked_connected_lets_go"
+        android:textColor="@color/linka_blue"
+        android:textSize="@dimen/text_size_normal"
+        app:layout_constraintBottom_toTopOf="@id/not_see_device_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

@@ -2,6 +2,7 @@ package com.linka.lockapp.aos.module.pages.settings;
 
 import android.app.FragmentManager;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.Space;
 import android.support.v7.app.AlertDialog;
@@ -30,7 +31,7 @@ import com.linka.lockapp.aos.module.model.LinkaActivity;
 import com.linka.lockapp.aos.module.model.LinkaNotificationSettings;
 import com.linka.lockapp.aos.module.pages.dialogs.ThreeDotsDialogFragment;
 import com.linka.lockapp.aos.module.pages.pac.SetPac3;
-import com.linka.lockapp.aos.module.pages.setup.AutoUpdateFragment;
+import com.linka.lockapp.aos.module.pages.update.FirmwareUpdateActivity;
 import com.linka.lockapp.aos.module.widget.LockController;
 import com.linka.lockapp.aos.module.widget.LocksController;
 import com.rey.material.widget.Switch;
@@ -562,8 +563,8 @@ public class SettingsPageFragment extends CoreFragment {
         rowFirmwareVersion.setClickable(false);
     }
 
-    private void setBatteryPerformance(){
-        if(linka.settingsSleepPerformance == 1800){
+    private void setBatteryPerformance() {
+        if (linka.settingsSleepPerformance == 1800) {
             linka.settingsSleepPerformance = Linka.NORMAL_PERFORMANCE;
             linka.save();
         }
@@ -635,7 +636,6 @@ public class SettingsPageFragment extends CoreFragment {
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
-
     }
 
 //    @OnClick(R.id.row_radius_settings)
@@ -650,10 +650,12 @@ public class SettingsPageFragment extends CoreFragment {
     @OnClick(R.id.row_firmware_version)
     void onClick_fw_update_button() {
 
-
+        Intent intent = new Intent(getActivity(), FirmwareUpdateActivity.class);
+        intent.putExtra(FirmwareUpdateActivity.LINKA_EXTRA, linka);
+        startActivity(intent);
 //            DfuManagerPageFragment fragment = DfuManagerPageFragment.newInstance(linka);
-        AutoUpdateFragment fragment = AutoUpdateFragment.newInstance(linka, AutoUpdateFragment.SETTINGS);
-        getAppMainActivity().pushFragment(fragment);
+//        AutoUpdateFragment fragment = AutoUpdateFragment.newInstance(linka, AutoUpdateFragment.SETTINGS);
+//        getAppMainActivity().pushFragment(fragment);
 
     }
 
@@ -689,7 +691,7 @@ public class SettingsPageFragment extends CoreFragment {
     }
 
     private void removeLock() {
-        if(!isAdmin) {
+        if (!isAdmin) {
             LinkaAPIServiceImpl.revoke_access(getActivity(), linka, LinkaAPIServiceImpl.getUserID(), new Callback<LinkaAPIServiceResponse>() {
                 @Override
                 public void onResponse(Call<LinkaAPIServiceResponse> call, Response<LinkaAPIServiceResponse> response) {
@@ -701,7 +703,7 @@ public class SettingsPageFragment extends CoreFragment {
                             threeDotsDialogFragment = null;
                         }
                         getAppMainActivity().resetActivity();
-                    }else {
+                    } else {
                         if (threeDotsDialogFragment != null) {
                             threeDotsDialogFragment.dismiss();
                             threeDotsDialogFragment = null;
@@ -717,8 +719,7 @@ public class SettingsPageFragment extends CoreFragment {
                     }
                 }
             });
-        }
-        else {
+        } else {
             LinkaAPIServiceImpl.hide_lock(getActivity(), linka.lock_mac_address, new Callback<LinkaAPIServiceResponse>() {
                 @Override
                 public void onResponse(Call<LinkaAPIServiceResponse> call, Response<LinkaAPIServiceResponse> response) {

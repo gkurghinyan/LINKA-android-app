@@ -539,4 +539,14 @@
     <string name="asleep_or_out">Lock is asleep or out of range</string>
     <string name="battery">Battery</string>
     <string name="battery_settings_description">Your battery settings controls how long your lock stays awake. Keeping your lock awake longer will improve feature performance but require more frequent recharging. Auto-unlock will only work while the lock is awake.</string>
+    <string name="make_sure_device_unlocked">Please make sure your LINKA is unlocked and connected. Your LINKA device LED indicator should be blinking green.</string>
+    <string name="i_don_t_see_my_device_connected"><u>I don\'t see my device connected</u></string>
+    <string name="unlocked_connected_lets_go">Unlocked &amp; Connected, let\'s go!</string>
+    <string name="confirm_led_is_purple">Your LINKA device is now reading for updating.\nConfirm LED indicator is purple.</string>
+    <string name="not_see_it"><u>I don\'t see it, let\'s try again</u></string>
+    <string name="firmware_update_in_progress">Firmware update in progress. Please do not turn off your mobile device until complete.</string>
+    <string name="finish">Finish</string>
+    <string name="i_see_purple">I see purple, let\'s go</string>
+    <string name="update_is_done_successfully">Update is done successfully</string>
+    <string name="update_is_not_done">Update is not done</string>
 </resources>

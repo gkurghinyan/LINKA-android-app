@@ -173,7 +173,9 @@
             android:exported="false" />
         <service
             android:name=".module.helpers.GeofenceTransitionsIntentService"
-            android:exported="false"/>
+            android:exported="false" />
+
+        <activity android:name=".module.pages.update.FirmwareUpdateActivity"></activity>
     </application>
 
 </manifest>

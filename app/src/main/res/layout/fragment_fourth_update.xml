@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".module.pages.update.FourthUpdateFragment"
+    android:background="@drawable/blue_gradient">
+
+    <TextView
+        android:id="@+id/update_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/update_is_done_successfully"
+        android:textSize="@dimen/text_size_normal"
+        android:textColor="@color/linka_white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="@dimen/margin_px"/>
+
+    <TextView
+        android:id="@+id/finish_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_px"
+        android:layout_marginEnd="@dimen/margin_px"
+        android:layout_marginBottom="@dimen/margin_dx"
+        style="@style/linka_button_nomargin"
+        android:gravity="center"
+        android:paddingBottom="@dimen/margin_15"
+        android:paddingTop="@dimen/margin_15"
+        android:text="@string/finish"
+        android:textColor="@color/linka_blue"
+        android:textSize="@dimen/text_size_normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</android.support.constraint.ConstraintLayout>
