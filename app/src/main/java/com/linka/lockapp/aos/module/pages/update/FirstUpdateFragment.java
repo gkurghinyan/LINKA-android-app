@@ -128,7 +128,16 @@ public class FirstUpdateFragment extends Fragment {
 
     @OnClick(R.id.not_see_device_button)
     void onClickNotSeeDevice() {
-
+        new AlertDialog.Builder(getActivity())
+                .setCancelable(false)
+                .setMessage("Please go back to the LINKA home page and press the power button on LINKA to reconnect.")
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        getActivity().finish();
+                    }
+                }).create().show();
     }
 
     // In Nougat 7.0 there is a problem during firmware update
