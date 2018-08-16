@@ -432,7 +432,7 @@ public class CircleView extends CoreFragment {
                                 }
                             }
                         }
-                        LocksController.getInstance().refresh();
+//                        LocksController.getInstance().refresh();
                     }
                 });
             }
@@ -500,15 +500,15 @@ public class CircleView extends CoreFragment {
     }
 
     private void setLockSettledState() {
-        if (!isLockConnected) {
-            batteryImage.setColorFilter(null);
+        if (!isPanicAndSleepEnabled) {
+            setPanicAndSleepButtonsState(true);
             batteryPercent.setText(linka.batteryPercent + "%");
             swipeText.setText(getString(R.string.swipe_to_confirm_lock));
+        }
+        if (!isLockConnected) {
+            batteryImage.setColorFilter(null);
             root.removeView(internetPage);
             gifImageView.setVisibility(View.GONE);
-            if (!isPanicAndSleepEnabled) {
-                setPanicAndSleepButtonsState(true);
-            }
             isLockConnected = true;
         }
         if (linka.isLocked) {
@@ -518,8 +518,10 @@ public class CircleView extends CoreFragment {
             swipeButton.setCurrentState(Circle.UNLOCKED_STATE);
             swipeButton.setCircleClickable(true);
         } else if (linka.isLocking) {
+            swipeButton.setCurrentState(Circle.LOCKING_STATE);
             swipeButton.setCircleClickable(false);
         } else if (linka.isUnlocking) {
+            swipeButton.setCurrentState(Circle.UNLOCKING_STATE);
             swipeButton.setCircleClickable(false);
         }
     }

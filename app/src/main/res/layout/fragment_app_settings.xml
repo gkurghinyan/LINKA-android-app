@@ -152,7 +152,8 @@
                     custom:sw_thumbElevation="2dp"
                     custom:sw_thumbRadius="17dp"
                     custom:sw_trackColor="@color/colorstate_switch"
-                    custom:sw_trackSize="33dp" />
+                    custom:sw_trackSize="33dp"
+                    android:id="@+id/switch_out_of_range"/>
             </RelativeLayout>
 
             <View
@@ -184,7 +185,8 @@
                     custom:sw_thumbElevation="2dp"
                     custom:sw_thumbRadius="17dp"
                     custom:sw_trackColor="@color/colorstate_switch"
-                    custom:sw_trackSize="33dp" />
+                    custom:sw_trackSize="33dp"
+                    android:id="@+id/switch_back_in_range"/>
             </RelativeLayout>
 
             <View
@@ -216,7 +218,8 @@
                     custom:sw_thumbElevation="2dp"
                     custom:sw_thumbRadius="17dp"
                     custom:sw_trackColor="@color/colorstate_switch"
-                    custom:sw_trackSize="33dp" />
+                    custom:sw_trackSize="33dp"
+                    android:id="@+id/switch_battery_low"/>
             </RelativeLayout>
 
             <View
@@ -248,7 +251,8 @@
                     custom:sw_thumbElevation="2dp"
                     custom:sw_thumbRadius="17dp"
                     custom:sw_trackColor="@color/colorstate_switch"
-                    custom:sw_trackSize="33dp" />
+                    custom:sw_trackSize="33dp"
+                    android:id="@+id/switch_battery_critically_low"/>
             </RelativeLayout>
 
             <View
@@ -280,7 +284,8 @@
                     custom:sw_thumbElevation="2dp"
                     custom:sw_thumbRadius="17dp"
                     custom:sw_trackColor="@color/colorstate_switch"
-                    custom:sw_trackSize="33dp" />
+                    custom:sw_trackSize="33dp"
+                    android:id="@+id/switch_sleep_notification"/>
             </RelativeLayout>
 
             <View

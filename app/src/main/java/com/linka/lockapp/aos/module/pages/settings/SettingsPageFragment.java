@@ -340,7 +340,6 @@ public class SettingsPageFragment extends CoreFragment {
         switchTamperSiren.setChecked(linka.settings_tamper_siren);
         switchAutoUnlocking.setChecked(linka.settings_auto_unlocking);
 //        setRadiusLinearVisibility(linka.settings_auto_unlocking);
-        setTamperSensitivityVisibility(linka.settings_tamper_siren);
         doNotSendWrite = false;
 
 //        switchStallOverride.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener() {
@@ -440,6 +439,8 @@ public class SettingsPageFragment extends CoreFragment {
         if (linka != null && linka.isConnected && linka.isLockSettled) {
             int color = getResources().getColor(R.color.linka_blue);
 
+            setTamperSensitivityVisibility(linka.settings_tamper_siren);
+
             rowPhonelessPasscode.setClickable(true);
             textPhonelessPasscode.setTextColor(color);
 
@@ -482,6 +483,8 @@ public class SettingsPageFragment extends CoreFragment {
 
         } else {
             int color = getResources().getColor(R.color.search_text);
+
+            setTamperSensitivityVisibility(false);
 
             rowPhonelessPasscode.setClickable(false);
             textPhonelessPasscode.setTextColor(color);

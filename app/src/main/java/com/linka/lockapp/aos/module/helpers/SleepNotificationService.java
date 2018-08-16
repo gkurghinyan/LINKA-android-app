@@ -17,6 +17,7 @@ import com.linka.lockapp.aos.module.model.LinkaActivity;
 import com.linka.lockapp.aos.module.model.LinkaNotificationSettings;
 import com.linka.lockapp.aos.module.widget.LockController;
 import com.linka.lockapp.aos.module.widget.LocksController;
+import com.pixplicity.easyprefs.library.Prefs;
 
 /**
  * Created by Vanson on 8/4/16.
@@ -192,22 +193,37 @@ public void stopTimer(){
         if (targetLinka == null) {
             return;
         }
-        isShowNotifiaction = LinkaNotificationSettings.getSettings().settings_sleep_notification;
+//        isShowNotifiaction = LinkaNotificationSettings.getSettings().settings_sleep_notification;
+        isShowNotifiaction = Prefs.getBoolean(Constants.SHOW_SLEEP_NOTIFICATION,false);
         if(!isShowNotifiaction) return;
 
         //Wait until disconnected if locked and ready to sleep
-        if(targetLinka.isConnected && targetLinka.isLocked){
-            overdueSleep = true;
-            return;
-        }
-
-        //If unlocked, only send sleep notificaiton if connected
-        if(!targetLinka.isConnected && !targetLinka.isLocked){
-            return;
-        }
-
+//        if(targetLinka.isConnected && targetLinka.isLocked){
+//            overdueSleep = true;
+//            return;
+//        }
+//
+//        //If unlocked, only send sleep notificaiton if connected
+//        if(!targetLinka.isConnected && !targetLinka.isLocked){
+//            PugNotification.with(AppDelegate.getInstance())
+//            return;
+//        }
+//
         NotificationsHelper.getInstance().CreateLinkaNotificationMessage(getContext().getString(R.string.tabbar_icon_text_home),
                 getContext().getString(R.string.sleep_notification_desc), R.raw.audio_out_of_range, false, LinkaActivity.getLinkaActivitiesByLinka(targetLinka).get(0), AppMainActivity.getInstance());
+
+//        PugNotification.with(AppDelegate.getInstance())
+//                .load()
+//                .autoCancel(true)
+//                .identifier(LinkaActivity.LinkaActivityType.isSleep.getValue())
+//                .title("Linka")
+//                .message(getContext().getString(R.string.sleep_notification_desc))
+//                .smallIcon(R.drawable.ic_action_name)
+//                .largeIcon(R.mipmap.ic_launcher)
+//                .flags(Notification.DEFAULT_ALL)
+//                .click(AppMainActivity.class)
+//                .simple()
+//                .build();
         /*
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(getContext())

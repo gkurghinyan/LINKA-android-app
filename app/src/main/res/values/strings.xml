@@ -491,6 +491,8 @@
     <string name="enabling_bluetooth">Enabling bluetooth</string>
     <string name="out_of_range_notif_title">Auto-unlocking is now enabled</string>
     <string name="out_of_range_notif_message">When you return to your bike it will automatically unlock.</string>
+    <string name="back_in_range_notif_title">Back in range</string>
+    <string name="back_in_range_notif_message">You back in range and Linka will be automatically unlocked when you come up to your bike.</string>
     <string name="auto_unlock_notif_title">Auto-unlocking started</string>
     <string name="auto_unlock_notif_message">Your bike is being unlocked</string>
     <string name="set_radius_screen_title">SET THE PARAMETERS OF YOUR LINKA UNLOCK ZONE BY PULLING THE DIAMETER RING</string>

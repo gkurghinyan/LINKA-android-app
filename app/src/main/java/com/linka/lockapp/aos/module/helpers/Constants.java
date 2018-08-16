@@ -35,6 +35,11 @@ public class Constants {
 
     //Constants for shared preferences
     public static final String LINKA_ADDRESS_FOR_AUTO_UNLOCK = "linka_address_for_auto_unlock";
+    public static final String SHOW_OUT_OF_RANGE_NOTIFICATION = "ShowOutOfRangeNotification";
+    public static final String SHOW_BACK_IN_RANGE_NOTIFICATION = "ShowBackInRangeNotification";
+    public static final String SHOW_BATTERY_LOW_NOTIFICATION = "ShowBatteryLowNotification";
+    public static final String SHOW_BATTERY_CRITICALLY_LOW_NOTIFICATION = "ShowBatteryCriticallyLowNotification";
+    public static final String SHOW_SLEEP_NOTIFICATION = "ShowSleepNotification";
 
     //Constants for extras name
     public static final String IS_IT_OPEN_FROM_NOTIFICATION = "IsItOpenFromNotification";

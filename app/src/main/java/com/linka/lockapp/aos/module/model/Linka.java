@@ -529,7 +529,7 @@ public class Linka extends Model implements Serializable {
 
     void tryRecordBatteryLow(LockStatusPacket lockStatusData) {
         if (canRecordStall) {
-            LinkaActivity.saveLinkaActivity(this, LinkaActivity.LinkaActivityType.isBatteryLow, lockStatusData.GetBatteryPercent());
+            LinkaActivity.saveLinkaActivity(this, LinkaActivity.LinkaActivityType.isBatteryLow, lockStatusData.GetBatteryPercent(),Prefs.getBoolean(Constants.SHOW_BATTERY_LOW_NOTIFICATION,false));
             canRecordBatteryLow = false;
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
@@ -543,7 +543,7 @@ public class Linka extends Model implements Serializable {
 
     void tryRecordBatteryCriticallyLow(LockStatusPacket lockStatusData) {
         if (canRecordStall) {
-            LinkaActivity.saveLinkaActivity(this, LinkaActivity.LinkaActivityType.isBatteryCriticallyLow, lockStatusData.GetBatteryPercent());
+            LinkaActivity.saveLinkaActivity(this, LinkaActivity.LinkaActivityType.isBatteryCriticallyLow, lockStatusData.GetBatteryPercent(),Prefs.getBoolean(Constants.SHOW_BATTERY_CRITICALLY_LOW_NOTIFICATION,false));
             canRecordBatteryCriticallyLow = false;
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {

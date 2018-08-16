@@ -441,11 +441,11 @@ public class SwipeButton extends RelativeLayout {
                             if (hasActivationState) {
                                 //expandButton();
                                 if (swipeListener != null) {
-                                    if(circleView.getCurrentState() == Circle.LOCKING_STATE){
-                                        circleView.drawState(Circle.LOCKED_STATE);
-                                    }else if(circleView.getCurrentState() == Circle.UNLOCKING_STATE){
-                                        circleView.drawState(Circle.UNLOCKED_STATE);
-                                    }
+//                                    if(circleView.getCurrentState() == Circle.LOCKING_STATE){
+//                                        circleView.drawState(Circle.LOCKED_STATE);
+//                                    }else if(circleView.getCurrentState() == Circle.UNLOCKING_STATE){
+//                                        circleView.drawState(Circle.UNLOCKED_STATE);
+//                                    }
                                     swipeListener.onSwipeComplete(true);
                                 }
 
@@ -586,6 +586,16 @@ public class SwipeButton extends RelativeLayout {
     }
 
     public void setCurrentState(int state){
+        if(state == Circle.LOCKING_STATE || state == Circle.UNLOCKING_STATE){
+            if(state == Circle.LOCKING_STATE){
+                if(circleView.getCurrentState() == Circle.UNLOCKED_STATE) {
+                    circleView.drawState(Circle.LOCKED_STATE);
+                }
+            }else if(circleView.getCurrentState() == Circle.LOCKED_STATE) {
+                circleView.drawState(Circle.UNLOCKED_STATE);
+            }
+            return;
+        }
         if(isCircleEnable) {
             circleView.drawState(state);
         }
@@ -598,4 +608,5 @@ public class SwipeButton extends RelativeLayout {
     public void setCircleClickable(boolean clickable){
         isCircleClickable = clickable;
     }
+
 }

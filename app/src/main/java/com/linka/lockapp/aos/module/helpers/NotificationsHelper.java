@@ -1,9 +1,7 @@
 package com.linka.lockapp.aos.module.helpers;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Notification;
-import android.content.DialogInterface;
 import android.media.MediaPlayer;
 import android.net.Uri;
 
@@ -99,42 +97,42 @@ public class NotificationsHelper {
     }
 
     public boolean CreateLinkaNotificationMessage(final String title, final String message, final int audio, final boolean loop, LinkaActivity linkaActivity, final Activity context) {
-        if (AppDelegate.isActivityVisible()) {
-            // show alert
-            if (linkaActivity.alarm) {
-
-                if (mediaPlayer == null && audio != 0) {
-                    mediaPlayer = MediaPlayer.create(AppDelegate.getInstance(), audio);
-                    mediaPlayer.setLooping(loop);
-                    mediaPlayer.start();
-                }
-            }
-
-            if (context != null) {
-                context.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        new AlertDialog.Builder(context)
-                                .setTitle(title)
-                                .setMessage(message)
-                                .setNegativeButton(R.string.dismiss, null)
-                                .setOnDismissListener(new DialogInterface.OnDismissListener() {
-                                    @Override
-                                    public void onDismiss(DialogInterface dialog) {
-                                        if (mediaPlayer != null) {
-                                            mediaPlayer.stop();
-                                            mediaPlayer.release();
-                                            mediaPlayer = null;
-                                        }
-                                    }
-                                })
-                                .show();
-                    }
-                });
-            }
-
-
-        } else {
+//        if (AppDelegate.isActivityVisible()) {
+//            // show alert
+//            if (linkaActivity.alarm) {
+//
+//                if (mediaPlayer == null && audio != 0) {
+//                    mediaPlayer = MediaPlayer.create(AppDelegate.getInstance(), audio);
+//                    mediaPlayer.setLooping(loop);
+//                    mediaPlayer.start();
+//                }
+//            }
+//
+//            if (context != null) {
+//                context.runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        new AlertDialog.Builder(context)
+//                                .setTitle(title)
+//                                .setMessage(message)
+//                                .setNegativeButton(R.string.dismiss, null)
+//                                .setOnDismissListener(new DialogInterface.OnDismissListener() {
+//                                    @Override
+//                                    public void onDismiss(DialogInterface dialog) {
+//                                        if (mediaPlayer != null) {
+//                                            mediaPlayer.stop();
+//                                            mediaPlayer.release();
+//                                            mediaPlayer = null;
+//                                        }
+//                                    }
+//                                })
+//                                .show();
+//                    }
+//                });
+//            }
+//
+//
+//        } else {
             // create notification
 
             Load load = PugNotification.with(AppDelegate.getInstance())
@@ -155,7 +153,7 @@ public class NotificationsHelper {
             }
 
             load.simple().build();
-        }
+
 
         return true;
     }

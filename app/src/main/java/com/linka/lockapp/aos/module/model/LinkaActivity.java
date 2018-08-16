@@ -56,7 +56,8 @@ public class LinkaActivity extends Model implements Serializable {
         isBackInRange(11),
         isStalled(12),
         isAutoUnlocked(13),
-        isAutoUnlockEnabled(14);
+        isAutoUnlockEnabled(14),
+        isSleep(15);
 
         private int _value;
 
@@ -401,11 +402,11 @@ public class LinkaActivity extends Model implements Serializable {
         return saveLinkaActivity(linka, linkaActivityType, "", "", latitude, longitude, true);
     }
 
-    public static boolean saveLinkaActivity(Linka linka, LinkaActivityType linkaActivityType, int batteryPercent) {
+    public static boolean saveLinkaActivity(Linka linka, LinkaActivityType linkaActivityType, int batteryPercent,boolean showNotification) {
         double latitude = 0.0;
         double longitude = 0.0;
         linka.batteryPercent = batteryPercent;
-        return saveLinkaActivity(linka, linkaActivityType, "", "", latitude, longitude, true);
+        return saveLinkaActivity(linka, linkaActivityType, "", "", latitude, longitude, showNotification);
     }
 
 
