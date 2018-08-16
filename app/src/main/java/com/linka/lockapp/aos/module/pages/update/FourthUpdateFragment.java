@@ -86,8 +86,8 @@ public class FourthUpdateFragment extends Fragment {
             Linka targetLinka = LinkaNotificationSettings.get_latest_linka();
             Linka linka = ((Linka) getArguments().getSerializable(LINKA_ARGUMENT));
             if (linka != null && targetLinka != null && linka.getMACAddress().equals(targetLinka.getMACAddress())) {
-                linka.updateLockSettingsProfile = true;
-                linka.saveSettings();
+                targetLinka.updateLockSettingsProfile = true;
+                targetLinka.saveSettings();
             }
             updateText.setText(getString(R.string.update_is_done_successfully));
         } else {

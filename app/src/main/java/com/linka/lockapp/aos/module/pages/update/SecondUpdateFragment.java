@@ -87,7 +87,7 @@ public class SecondUpdateFragment extends Fragment {
 
     @OnClick(R.id.not_see_purple_button)
     void onClickNotSeeDevice() {
-        getFragmentManager().popBackStack();
+        getActivity().finish();
     }
 
     private void refreshBluetooth(){

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/blue_gradient"
     tools:context=".module.pages.update.FirmwareUpdateActivity">
 
     <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
@@ -20,14 +21,66 @@
             layout="@layout/firmware_update_bar_layout" />
     </android.support.v7.widget.Toolbar>
 
+    <LinearLayout
+        android:id="@+id/tabs_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_mm"
+        android:layout_marginStart="@dimen/margin_mm"
+        android:layout_marginTop="@dimen/margin_xm"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+        <View
+            android:id="@+id/first_tab"
+            android:layout_width="0dp"
+            android:layout_height="4dp"
+            android:layout_marginEnd="@dimen/margin_mm"
+            android:layout_marginStart="@dimen/margin_mm"
+            android:layout_weight="1"
+            android:alpha="1.0"
+            android:background="@drawable/white_rounded_back" />
+
+        <View
+            android:id="@+id/second_tab"
+            android:layout_width="0dp"
+            android:layout_height="4dp"
+            android:layout_marginEnd="@dimen/margin_mm"
+            android:layout_marginStart="@dimen/margin_mm"
+            android:layout_weight="1"
+            android:alpha="0.3"
+            android:background="@drawable/white_rounded_back" />
+
+        <View
+            android:id="@+id/third_tab"
+            android:layout_width="0dp"
+            android:layout_height="4dp"
+            android:layout_marginEnd="@dimen/margin_mm"
+            android:layout_marginStart="@dimen/margin_mm"
+            android:layout_weight="1"
+            android:alpha="0.3"
+            android:background="@drawable/white_rounded_back" />
+
+        <View
+            android:id="@+id/fourth_tab"
+            android:layout_width="0dp"
+            android:layout_height="4dp"
+            android:layout_marginEnd="@dimen/margin_mm"
+            android:layout_marginStart="@dimen/margin_mm"
+            android:layout_weight="1"
+            android:alpha="0.3"
+            android:background="@drawable/white_rounded_back" />
+    </LinearLayout>
+
     <FrameLayout
         android:id="@+id/firmware_update_container"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:background="@drawable/blue_gradient"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tabs_layout" />
 
 </android.support.constraint.ConstraintLayout>

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.TextView;
 
 import com.linka.lockapp.aos.R;
@@ -28,6 +29,18 @@ public class FirmwareUpdateActivity extends AppCompatActivity implements Firmwar
 
     @BindView(R.id.title)
     TextView title;
+
+    @BindView(R.id.first_tab)
+    View firstTab;
+
+    @BindView(R.id.second_tab)
+    View secondTab;
+
+    @BindView(R.id.third_tab)
+    View thirdTab;
+
+    @BindView(R.id.fourth_tab)
+    View fourthTab;
 
     private Unbinder unbinder;
 
@@ -85,6 +98,7 @@ public class FirmwareUpdateActivity extends AppCompatActivity implements Firmwar
 
     private void updateCurrentPage(int page) {
         currentPage = page;
+        changeTabsAlpha();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.addToBackStack(null);
         switch (page) {
@@ -109,6 +123,31 @@ public class FirmwareUpdateActivity extends AppCompatActivity implements Firmwar
         }
         if (fragmentTransaction != null) {
             fragmentTransaction.commit();
+        }
+    }
+
+    private void changeTabsAlpha(){
+        switch (currentPage){
+            case 1:
+                secondTab.setAlpha(0.3f);
+                thirdTab.setAlpha(0.3f);
+                fourthTab.setAlpha(0.3f);
+                break;
+            case 2:
+                secondTab.setAlpha(1.0f);
+                thirdTab.setAlpha(0.3f);
+                fourthTab.setAlpha(0.3f);
+                break;
+            case 3:
+                secondTab.setAlpha(1.0f);
+                thirdTab.setAlpha(1.0f);
+                fourthTab.setAlpha(0.3f);
+                break;
+            case 4:
+                secondTab.setAlpha(1.0f);
+                thirdTab.setAlpha(1.0f);
+                fourthTab.setAlpha(1.0f);
+                break;
         }
     }
 
@@ -151,6 +190,7 @@ public class FirmwareUpdateActivity extends AppCompatActivity implements Firmwar
             currentPage --;
             super.onBackPressed();
         }
+        changeTabsAlpha();
     }
 
     @OnClick(R.id.back)

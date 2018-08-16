@@ -331,12 +331,8 @@ public class CircleView extends CoreFragment {
                             lockController.doSleep();
                             isRefreshAvailable = false;
                             setLockNotConnectedState();
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    isRefreshAvailable = true;
-                                }
-                            }, 1000);
+                            refreshHandler.removeCallbacks(refreshRunnable);
+                            refreshHandler.postDelayed(refreshRunnable,5000);
                         }
                     })
                     .create().show();
@@ -502,11 +498,11 @@ public class CircleView extends CoreFragment {
     private void setLockSettledState() {
         if (!isPanicAndSleepEnabled) {
             setPanicAndSleepButtonsState(true);
+            batteryImage.setColorFilter(null);
             batteryPercent.setText(linka.batteryPercent + "%");
             swipeText.setText(getString(R.string.swipe_to_confirm_lock));
         }
         if (!isLockConnected) {
-            batteryImage.setColorFilter(null);
             root.removeView(internetPage);
             gifImageView.setVisibility(View.GONE);
             isLockConnected = true;
