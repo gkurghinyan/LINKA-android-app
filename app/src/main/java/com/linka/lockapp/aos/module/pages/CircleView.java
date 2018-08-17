@@ -333,7 +333,7 @@ public class CircleView extends CoreFragment {
                             isRefreshAvailable = false;
                             setLockNotConnectedState();
                             refreshHandler.removeCallbacks(refreshRunnable);
-                            refreshHandler.postDelayed(refreshRunnable,5000);
+                            refreshHandler.postDelayed(refreshRunnable, 5000);
                         }
                     })
                     .create().show();
@@ -377,22 +377,22 @@ public class CircleView extends CoreFragment {
         if (turningLinkaDialog != null && turningLinkaDialog.isShowing()) {
             turningLinkaDialog.dismiss();
         }
-        if(refreshHandler != null){
+        if (refreshHandler != null) {
             refreshHandler = null;
             isRefreshAvailable = true;
         }
     }
 
-    Handler scanHandler = null;
-    Runnable scanRunnable = new Runnable() {
+    private Handler scanHandler = null;
+    private Runnable scanRunnable = new Runnable() {
         @Override
         public void run() {
-            if(scanCallback != null){
+            if (scanCallback != null) {
                 bluetoothAdapter.stopLeScan(scanCallback);
                 scanCallback = null;
             }
             scanLeDevice();
-            scanHandler.postDelayed(scanRunnable,10000);
+            scanHandler.postDelayed(scanRunnable, 10000);
         }
     };
 
@@ -418,32 +418,9 @@ public class CircleView extends CoreFragment {
                             root.setBackgroundColor(getResources().getColor(R.color.linka_transparent));
                             if (!isWarningShow) {
                                 if (!linka.isConnected) {
-                                    root.removeView(internetPage);
-                                    if(scanHandler == null){
-                                        scanHandler = new Handler();
-                                        scanHandler.postDelayed(scanRunnable,3000);
-                                    }
-                                    if (isLockConnected) {
-                                        setLockNotConnectedState();
-                                    }
+                                    setLockNotConnect();
                                 } else {
-                                    if (turningLinkaDialog != null && turningLinkaDialog.isShowing()) {
-                                        turningLinkaDialog.dismiss();
-                                    }
-                                    if (linka.isLockSettled) {
-                                        setLockSettledState();
-                                    } else {
-                                        isLockConnected = false;
-                                        root.removeView(internetPage);
-                                        if (gifImageView.getVisibility() != View.VISIBLE ||
-                                                gifImageView.getDrawable().equals(getResources().getDrawable(R.drawable.wi_fi_connection))) {
-                                            gifImageView.setVisibility(View.VISIBLE);
-                                        }
-                                        swipeButton.setCircleClickable(false);
-                                        if (isPanicAndSleepEnabled) {
-                                            setPanicAndSleepButtonsState(false);
-                                        }
-                                    }
+                                    setLockConnect();
                                 }
                             }
                         }
@@ -456,6 +433,45 @@ public class CircleView extends CoreFragment {
                 refreshHandler = new Handler();
             }
             refreshHandler.postDelayed(refreshRunnable, 700);
+        }
+    }
+
+    private void setLockNotConnect(){
+        root.removeView(internetPage);
+        if (scanHandler == null) {
+            scanHandler = new Handler();
+            scanHandler.postDelayed(scanRunnable, 3000);
+        }
+        if (isLockConnected) {
+            setLockNotConnectedState();
+        }
+    }
+
+    private void setLockConnect(){
+        if (turningLinkaDialog != null && turningLinkaDialog.isShowing()) {
+            turningLinkaDialog.dismiss();
+        }
+        if (scanCallback != null) {
+            bluetoothAdapter.stopLeScan(scanCallback);
+            scanCallback = null;
+        }
+        if (scanHandler != null) {
+            scanHandler.removeCallbacks(scanRunnable);
+            scanHandler = null;
+        }
+        if (linka.isLockSettled) {
+            setLockSettledState();
+        } else {
+            isLockConnected = false;
+            root.removeView(internetPage);
+            if (gifImageView.getVisibility() != View.VISIBLE ||
+                    gifImageView.getDrawable().equals(getResources().getDrawable(R.drawable.wi_fi_connection))) {
+                gifImageView.setVisibility(View.VISIBLE);
+            }
+            swipeButton.setCircleClickable(false);
+            if (isPanicAndSleepEnabled) {
+                setPanicAndSleepButtonsState(false);
+            }
         }
     }
 
