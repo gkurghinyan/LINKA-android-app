@@ -388,6 +388,7 @@ public class CircleView extends CoreFragment {
         @Override
         public void run() {
             scanLeDevice();
+            scanHandler.postDelayed(scanRunnable, 30 * 1000);
         }
     };
 
@@ -431,18 +432,18 @@ public class CircleView extends CoreFragment {
         }
     }
 
-    private void setLockNotConnect(){
+    private void setLockNotConnect() {
         root.removeView(internetPage);
         if (scanHandler == null) {
             scanHandler = new Handler();
             scanHandler.postDelayed(scanRunnable, 3000);
         }
-        if (isLockConnected) {
+        if (isLockConnected || swipeButton.getCurrentState() != Circle.NO_CONNECTION_STATE) {
             setLockNotConnectedState();
         }
     }
 
-    private void setLockConnect(){
+    private void setLockConnect() {
         if (turningLinkaDialog != null && turningLinkaDialog.isShowing()) {
             turningLinkaDialog.dismiss();
         }
@@ -622,7 +623,7 @@ public class CircleView extends CoreFragment {
                         bluetoothAdapter.stopLeScan(this);
                         scanCallback = null;
                         bluetoothAdapter = null;
-                        if(scanHandler != null){
+                        if (scanHandler != null) {
                             scanHandler.removeCallbacks(scanRunnable);
                             scanHandler = null;
                         }
@@ -640,7 +641,7 @@ public class CircleView extends CoreFragment {
                         }
                         scanCallback = null;
                         bluetoothAdapter = null;
-                        if(scanHandler != null){
+                        if (scanHandler != null) {
                             scanHandler.removeCallbacks(scanRunnable);
                             scanHandler = null;
                         }
@@ -653,6 +654,10 @@ public class CircleView extends CoreFragment {
     void scanLeDevice() {
         if (bluetoothAdapter == null) return;
 
+        if (scanCallback != null) {
+            bluetoothAdapter.stopLeScan(scanCallback);
+            scanCallback = null;
+        }
         initializeScanCallback();
         if (bluetoothAdapter == null) {
             BluetoothManager bluetoothManager = (BluetoothManager) getContext().getSystemService(Context.BLUETOOTH_SERVICE);
