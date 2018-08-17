@@ -95,6 +95,9 @@ public class Linka extends Model implements Serializable {
     @Column(name = "batteryPercent")
     public int batteryPercent;
 
+    @Column(name = "settings_quick_lock")
+    public int settings_quick_lock = 0;
+
     //Battery percent displayed will be different from the % received from firmware
     //because when charging, battery % jumps. Therefore, must take this into account.
     //Also need to take into account LED shows green at 98%

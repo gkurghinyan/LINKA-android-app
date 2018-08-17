@@ -656,7 +656,7 @@ public class MainTabBarPageFragment extends CoreFragment {
                         if (!ver.equals("")) {
                             linka.canAlertCriticalFirmwareUpdate = false;
 //                            if (!ver.equals(AppDelegate.linkaMinRequiredFirmwareVersion) && !ver.equals("1.5.9") && AppDelegate.linkaMinRequiredFirmwareVersionIsCriticalUpdate) {
-                            if(!ver.equals("2.0.0")){
+                            if(!ver.equals("2.0")){
                                 LogHelper.e("MainTabBarPageFrag", "FW version of " + ver + " does not equal " + AppDelegate.linkaMinRequiredFirmwareVersion);
                                 LinkaAccessKey accessKey = LinkaAccessKey.getKeyFromLinka(linka);
                                 if (accessKey != null && accessKey.isAdmin()) {

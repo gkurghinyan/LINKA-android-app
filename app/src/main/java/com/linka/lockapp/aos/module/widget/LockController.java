@@ -14,6 +14,7 @@ import android.util.Log;
 import com.linka.Lock.BLE.BluetoothLeQueuedService;
 import com.linka.Lock.FirmwareAPI.Comms.LINKAGattAttributes;
 import com.linka.Lock.FirmwareAPI.Comms.LockAckNakPacket;
+import com.linka.Lock.FirmwareAPI.Comms.LockCommand;
 import com.linka.Lock.FirmwareAPI.Comms.LockContextPacket;
 import com.linka.Lock.FirmwareAPI.Comms.LockEncV1;
 import com.linka.Lock.FirmwareAPI.Comms.LockInfoPacket;
@@ -116,7 +117,7 @@ public class LockController implements Serializable {
     void stopUpdateRSSIRunnable() {
         updateRSSIHandler.removeCallbacks(updateRSSIRunnable);
     }
-        /* UPDATE RSSI END */
+    /* UPDATE RSSI END */
 
     Context context;
     Linka linka;
@@ -346,6 +347,10 @@ public class LockController implements Serializable {
         return lockBLEServiceProxy.doAction_siren(lockControllerBundle);
     }
 
+    public boolean doStopActionSiren(){
+        return lockBLEServiceProxy.doAction_stop_siren(lockControllerBundle);
+    }
+
     public boolean doSetAudibility(boolean enabled) {
 
         boolean audible = enabled;
@@ -456,6 +461,13 @@ public class LockController implements Serializable {
         return isOK;
     }
 
+    //set quick locking
+    public boolean doAction_SetQuickLock(int enable){
+        boolean isOK = lockBLEServiceProxy.doAction_SetQuickLock(enable, lockControllerBundle);
+        LogHelper.e("QUICK LOCK: ","Quick Lock Enabled = " + Integer.toString(enable));
+        return isOK;
+    }
+
     public boolean doFwUpg() {
         return lockBLEServiceProxy.doAction_FwUpg(lockControllerBundle);
     }
@@ -494,7 +506,7 @@ public class LockController implements Serializable {
         return false;
     }
 
-//Do activate is called after connection to read 
+    //Do activate is called after connection to read
     public void doActivate(){
         LogHelper.e("doAction", "READING SETTING" + hashCode);
         // Keep it simple, send a read command to the queue
@@ -516,6 +528,7 @@ public class LockController implements Serializable {
 
         //Read audio to set into settings page
         lockBLEServiceProxy.doAction_ReadSetting("LockController->doActivate", LockSettingPacket.VLSO_SETTING_AUDIO, lockControllerBundle);
+        lockBLEServiceProxy.doAction_ReadSetting("LockController->doActivate",LockCommand.VLSO_SETTING_ALLOW_UNCONN_LOCK,lockControllerBundle);
 
         // Useful for testing the queue by initiating multiple sequential reads
 /*
@@ -1006,6 +1019,11 @@ public class LockController implements Serializable {
                         EventBus.getDefault().post(LinkaActivity.LINKA_ACTIVITY_ON_CHANGE);
                     }
 
+                    if(index == LockCommand.VLSO_SETTING_ALLOW_UNCONN_LOCK){
+                        linka.settings_quick_lock = value;
+                        linka.saveSettings();
+                    }
+
                     //alarm delay
                     if(index == LockSettingPacket.VLSO_SETTING_ALARM_DELAY_S){
                         linka.settings_alarm_delay = value;
@@ -1461,5 +1479,3 @@ public class LockController implements Serializable {
         isDeinitialized = true;
     }
 }
-
-

@@ -267,6 +267,7 @@ public class ThirdUpdateFragment extends Fragment {
         @Override
         public void onError(final String deviceAddress, final int error, final int errorType, final String message) {
             onCompleteDfu(false, true, message);
+            activityCallback.changeCurrentPage(4);
         }
     };
 

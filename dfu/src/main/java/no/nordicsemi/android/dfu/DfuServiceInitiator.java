@@ -362,7 +362,7 @@ public class DfuServiceInitiator {
 	}
 
 	public DfuServiceInitiator setBinOrHex() {
-		return init(null, null, R.raw.ble_vlso_lock_s110_xxac_v1_5_9, DfuBaseService.TYPE_APPLICATION, DfuBaseService.MIME_TYPE_OCTET_STREAM);
+		return init(null, null, R.raw.ble_vlso_lock_s110_xxac_v2_0, DfuBaseService.TYPE_APPLICATION, DfuBaseService.MIME_TYPE_OCTET_STREAM);
 	}
 
 	/**

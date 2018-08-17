@@ -362,6 +362,13 @@ public class LockBLEServiceProxy {
         return doAction_WriteCommandPacket("LockBLEServiceProxy->doAction_siren", LockCommand.VCMD_ACTIVATE_SIREN, 0, bundle);
     }
 
+    public boolean doAction_stop_siren(LockControllerBundle bundle){
+        LogHelper.i("LockBLEServiceProxy", "doAction_stop_siren... ");
+        LogHelper.i("With mLINKA_BLE_Service", mLINKA_BLE_Service.toString() + " ");
+        return doAction_WriteCommandPacket("LockBLEServiceProxy->doAction_stop_siren", LockCommand.VCMD_STOP_ALARM, 0, bundle);
+    }
+
+
     public boolean doAction_activate(LockControllerBundle bundle) {
         LogHelper.i("LockBLEServiceProxy", "doAction_activate... ");
         LogHelper.i("With mLINKA_BLE_Service", mLINKA_BLE_Service.toString() + " ");
@@ -464,7 +471,11 @@ public class LockBLEServiceProxy {
         return doAction_WriteSetting("doAction_SetLockSleep", LockSettingPacket.VLSO_SETTING_LOCKED_SLEEP_S, sec, bundle);
     }
 
-
+    public boolean doAction_SetQuickLock(int enable,LockControllerBundle bundle){
+        LogHelper.i("LockBLEServiceProxy", "doAction_SetQuickLock... ");
+        LogHelper.i("With mLINKA_BLE_Service", mLINKA_BLE_Service.toString() + " ");
+        return doAction_WriteSetting("doAction_SetLockSleep", LockSettingPacket.VLSO_SETTING_LOCKED_SLEEP_S, enable, bundle);
+    }
 
 
     public boolean tryToSetEncryptionKey(byte[] keyToSet, LockEncV1.KEY_SLOT slotToSet, LockEncV1.KEY_PART part, LockControllerBundle bundle)

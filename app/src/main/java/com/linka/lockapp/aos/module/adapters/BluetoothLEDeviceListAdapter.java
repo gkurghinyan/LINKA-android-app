@@ -33,8 +33,7 @@ public class BluetoothLEDeviceListAdapter extends RecyclerView.Adapter<Bluetooth
         mItems = new ArrayList<>();
     }
 
-    public void setList(List<Linka> models)
-    {
+    public void setList(List<Linka> models) {
         // SET REFERENCE
         this.mItems.clear();
         for (Linka item : models) {
@@ -64,13 +63,11 @@ public class BluetoothLEDeviceListAdapter extends RecyclerView.Adapter<Bluetooth
         holder.isClickDisabled = false;
 
         final String deviceName = device.getName();
-        final String deviceMAC  = device.getMACAddress();
+        final String deviceMAC = device.getMACAddress();
         if (deviceName != null && deviceName.length() > 0) {
             holder.deviceName.setText(deviceName);
             holder.deviceAddress.setText(deviceMAC);
-        }
-        else
-        {
+        } else {
             holder.deviceName.setText(R.string.unknown_device);
 //            holder.isClickDisabled = true;
         }
@@ -101,7 +98,6 @@ public class BluetoothLEDeviceListAdapter extends RecyclerView.Adapter<Bluetooth
     }
 
 
-
     class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.linka_name)
@@ -117,8 +113,7 @@ public class BluetoothLEDeviceListAdapter extends RecyclerView.Adapter<Bluetooth
         OnClickDeviceItemListener onClickDeviceItemListener;
         boolean isClickDisabled = false;
 
-        public ViewHolder(View itemView)
-        {
+        public ViewHolder(View itemView) {
             super(itemView);
             this.itemView = itemView;
             ButterKnife.bind(this, itemView);
@@ -133,11 +128,12 @@ public class BluetoothLEDeviceListAdapter extends RecyclerView.Adapter<Bluetooth
     }
 
 
-
     public interface OnClickDeviceItemListener {
-        public void onClickDeviceItem(Linka item, int position);
+        void onClickDeviceItem(Linka item, int position);
     }
+
     public OnClickDeviceItemListener onClickDeviceItemListener;
+
     public void setOnClickDeviceItemListener(OnClickDeviceItemListener onClickDeviceItemListener) {
         this.onClickDeviceItemListener = onClickDeviceItemListener;
     }

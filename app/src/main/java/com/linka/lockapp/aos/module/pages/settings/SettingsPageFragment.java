@@ -265,15 +265,10 @@ public class SettingsPageFragment extends CoreFragment {
 
         switchTamperSiren.setOnCheckedChangeListener(settings_tamper_siren);
 
-        switchAutoUnlocking.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(Switch view, boolean checked) {
-//                setRadiusLinearVisibility(checked);
-                linka.settings_auto_unlocking = checked;
-//                linka.setAuto_unlock_radius(200);
-                linka.save();
-            }
-        });
+        switchAutoUnlocking.setOnCheckedChangeListener(settings_auto_unlock);
+
+        switchQuickLock.setOnCheckedChangeListener(settings_quick_lock);
+
         editName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -330,6 +325,49 @@ public class SettingsPageFragment extends CoreFragment {
             setTamperSensitivityVisibility(checked);
         }
     };
+
+    Switch.OnCheckedChangeListener settings_auto_unlock = new Switch.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(Switch view, boolean checked) {
+            linka.settings_auto_unlocking = checked;
+            linka.save();
+            if(checked && switchQuickLock.isChecked()){
+                switchQuickLock.setChecked(false);
+                setQuickLockChecked(0);
+            }
+        }
+    };
+
+    Switch.OnCheckedChangeListener settings_quick_lock = new Switch.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(Switch view, boolean checked) {
+            int value;
+            if (checked) {
+                value = 1;
+            } else {
+                value = 0;
+            }
+            setQuickLockChecked(value);
+            if(checked && switchAutoUnlocking.isChecked()){
+                switchAutoUnlocking.setChecked(false);
+                linka.settings_auto_unlocking = false;
+                linka.save();
+            }
+        }
+    };
+
+    private void setQuickLockChecked(int isChecked){
+        if (!doNotSendWrite) {
+            linka.settings_quick_lock = isChecked;
+            LockController lockController = LocksController.getInstance().getLockController();
+            if (lockController.doAction_SetQuickLock(isChecked)) {
+                linka.saveSettings();
+            }
+        } else {
+            linka.settings_quick_lock = isChecked;
+            linka.saveSettings();
+        }
+    }
 
 
     boolean doNotSendWrite = false;
@@ -444,8 +482,9 @@ public class SettingsPageFragment extends CoreFragment {
             rowPhonelessPasscode.setClickable(true);
             textPhonelessPasscode.setTextColor(color);
 
-            quickSwitchView.setVisibility(View.VISIBLE);
-            switchQuickLock.setAlpha(0.4f);
+            textQuickLock.setTextColor(color);
+            quickSwitchView.setVisibility(View.GONE);
+            switchQuickLock.setAlpha(1.0f);
 
             editName.setAlpha(1.0f);
             editName.setEnabled(true);
@@ -489,6 +528,7 @@ public class SettingsPageFragment extends CoreFragment {
             rowPhonelessPasscode.setClickable(false);
             textPhonelessPasscode.setTextColor(color);
 
+            textQuickLock.setTextColor(color);
             switchQuickLock.setVisibility(View.VISIBLE);
             switchQuickLock.setAlpha(0.4f);
 
@@ -545,7 +585,7 @@ public class SettingsPageFragment extends CoreFragment {
                 String ver = lockController.lockControllerBundle.getFwVersionNumber();
                 if (!ver.equals("")) {
 //                    if (!ver.equals(AppDelegate.linkaMinRequiredFirmwareVersion) && !ver.equals("1.5.9") && AppDelegate.linkaMinRequiredFirmwareVersionIsCriticalUpdate) {
-                    if (!ver.equals("2.0.0")) {
+                    if (!ver.equals("2.0")) {
                         LogHelper.e("MainTabBarPageFrag", "FW version of " + ver + " does not equal " + AppDelegate.linkaMinRequiredFirmwareVersion);
                         LinkaAccessKey accessKey = LinkaAccessKey.getKeyFromLinka(linka);
                         if (accessKey != null && accessKey.isAdmin()) {

@@ -304,6 +304,7 @@ public class CircleView extends CoreFragment {
                 isPanicEnabled = false;
                 panicButton.clearAnimation();
                 panicButton.setBackground(getResources().getDrawable(R.drawable.panic_blue_button));
+                lockController.doStopActionSiren();
             }
         }
         return false;
@@ -382,6 +383,19 @@ public class CircleView extends CoreFragment {
         }
     }
 
+    Handler scanHandler = null;
+    Runnable scanRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if(scanCallback != null){
+                bluetoothAdapter.stopLeScan(scanCallback);
+                scanCallback = null;
+            }
+            scanLeDevice();
+            scanHandler.postDelayed(scanRunnable,10000);
+        }
+    };
+
     public void refreshDisplay() {
         if (!isAdded()) return;
 
@@ -405,6 +419,10 @@ public class CircleView extends CoreFragment {
                             if (!isWarningShow) {
                                 if (!linka.isConnected) {
                                     root.removeView(internetPage);
+                                    if(scanHandler == null){
+                                        scanHandler = new Handler();
+                                        scanHandler.postDelayed(scanRunnable,3000);
+                                    }
                                     if (isLockConnected) {
                                         setLockNotConnectedState();
                                     }
@@ -415,6 +433,7 @@ public class CircleView extends CoreFragment {
                                     if (linka.isLockSettled) {
                                         setLockSettledState();
                                     } else {
+                                        isLockConnected = false;
                                         root.removeView(internetPage);
                                         if (gifImageView.getVisibility() != View.VISIBLE ||
                                                 gifImageView.getDrawable().equals(getResources().getDrawable(R.drawable.wi_fi_connection))) {
@@ -490,7 +509,7 @@ public class CircleView extends CoreFragment {
             if (isPanicAndSleepEnabled) {
                 setPanicAndSleepButtonsState(false);
             }
-            scanLeDevice();
+//            scanLeDevice();
             isLockConnected = false;
         }
     }

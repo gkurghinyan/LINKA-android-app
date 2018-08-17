@@ -23,6 +23,8 @@ public class LockCommand  {
     public static final byte VCMD_FORGET_CURRENT_BOND = 16;	//!< Forget the current device's bonding
     public static final byte VCMD_FORGET_BOND_X = 17;		//!< Forget specified bond
     public static final byte VCMD_PLAY_TUNE = 18;			//!< Play specified tune (subcommand is tune index)
+    public static final byte VCMD_STOP_ALARM = 20;          //!< Stop siren
+    public static final byte VLSO_SETTING_ALLOW_UNCONN_LOCK = 55;
 
 
         /*
