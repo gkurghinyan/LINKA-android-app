@@ -387,12 +387,7 @@ public class CircleView extends CoreFragment {
     private Runnable scanRunnable = new Runnable() {
         @Override
         public void run() {
-            if (scanCallback != null) {
-                bluetoothAdapter.stopLeScan(scanCallback);
-                scanCallback = null;
-            }
             scanLeDevice();
-            scanHandler.postDelayed(scanRunnable, 10000);
         }
     };
 
@@ -627,6 +622,10 @@ public class CircleView extends CoreFragment {
                         bluetoothAdapter.stopLeScan(this);
                         scanCallback = null;
                         bluetoothAdapter = null;
+                        if(scanHandler != null){
+                            scanHandler.removeCallbacks(scanRunnable);
+                            scanHandler = null;
+                        }
                     }
                 } else if (result == 1) {
                     if (!linkaList.isEmpty()) {
@@ -641,6 +640,10 @@ public class CircleView extends CoreFragment {
                         }
                         scanCallback = null;
                         bluetoothAdapter = null;
+                        if(scanHandler != null){
+                            scanHandler.removeCallbacks(scanRunnable);
+                            scanHandler = null;
+                        }
                     }
                 }
             }
