@@ -242,6 +242,14 @@ public class AppDelegate extends MultiDexApplication {
         createIfNeedColumn(LinkaAccessKey.class, "key_id");
         createIfNeedColumn(Linka.class, "isUnlocked");
 
+        //Updating to 2.1
+        createIfNeedColumn(Linka.class, "is_auto_unlocked");
+        createIfNeedColumn(Linka.class, "settings_quick_lock");
+        createIfNeedColumn(Linka.class, "settings_sleep_performance");
+        createIfNeedColumn(Linka.class, "awaits_for_auto_unlock");
+        createIfNeedColumn(Linka.class, "waiting_until_settled_to_auto_lock");
+        createIfNeedColumn(Linka.class, "auto_unlock_radius");
+
         createTable(User.class);
 
         BLEHelpers.initialize(this);
