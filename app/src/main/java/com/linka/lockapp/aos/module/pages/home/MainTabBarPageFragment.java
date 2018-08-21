@@ -136,9 +136,9 @@ public class MainTabBarPageFragment extends CoreFragment {
             Bundle bundle = getArguments();
             if (bundle.get("linka") != null) {
                 linka = (Linka) bundle.getSerializable("linka");
-                if(getArguments().getInt(SCREEN_ARGUMENT) != -1) {
+                if (getArguments().getInt(SCREEN_ARGUMENT) != -1) {
                     currentPosition = getArguments().getInt(SCREEN_ARGUMENT);
-                    getArguments().putInt(SCREEN_ARGUMENT,-1);
+                    getArguments().putInt(SCREEN_ARGUMENT, -1);
                 }
                 if (linka != null && linka.getId() != null) {
                     linka = Linka.getLinkaById(linka.getId());
@@ -202,7 +202,7 @@ public class MainTabBarPageFragment extends CoreFragment {
         }
 
 
-        if(savedInstanceState != null && savedInstanceState.getInt("current_position") != 0){
+        if (savedInstanceState != null && savedInstanceState.getInt("current_position") != 0) {
             currentPosition = savedInstanceState.getInt("current_position") - 1;
         }
 
@@ -228,7 +228,7 @@ public class MainTabBarPageFragment extends CoreFragment {
         if (adapter != null) {
             viewPager.setAdapter(adapter);
             viewPager.setCurrentItem(currentPosition, false); //Circle view is default
-            switch (currentPosition){
+            switch (currentPosition) {
                 case 0:
                     t1.setSelected(true);
                     changeButtonsState(currentPosition);
@@ -278,17 +278,17 @@ public class MainTabBarPageFragment extends CoreFragment {
                     }
                     if (position == 3) {
                         t4.setSelected(true);
-                        if(SettingsPageFragment.currentFragment != SettingsPageFragment.NO_FRAGMENT){
+                        if (SettingsPageFragment.currentFragment != SettingsPageFragment.NO_FRAGMENT) {
                             getAppMainActivity().setBackIconVisible(true);
                         }
-                    }else {
+                    } else {
                         getAppMainActivity().setBackIconVisible(false);
                     }
                 }
 
                 @Override
                 public void onPageScrollStateChanged(int state) {
-                    if(state == ViewPager.SCROLL_STATE_IDLE){
+                    if (state == ViewPager.SCROLL_STATE_IDLE) {
                         EventBus.getDefault().post("Selected-" + String.valueOf(currentPosition));
                     }
                 }
@@ -360,12 +360,12 @@ public class MainTabBarPageFragment extends CoreFragment {
         return fragment;
     }
 
-    private void changeButtonsState(int position){
+    private void changeButtonsState(int position) {
         t1Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_linka));
         t2Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_user));
         t3Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_notif));
         t4Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_setting));
-        switch (position){
+        switch (position) {
             case LOCK_SCREEN:
                 t1Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_linka_select));
                 getAppMainActivity().setTitleNoUpperCase(linka.getName());
@@ -552,15 +552,15 @@ public class MainTabBarPageFragment extends CoreFragment {
 
     @Subscribe
     public void onEvent(Object object) {
-        if(object != null && object instanceof String){
-            if(object.equals(UPDATE_NOTIFICATIONS)){
-                if(currentPosition != NOTIFICATION_SCREEN) {
+        if (object != null && object instanceof String) {
+            if (object.equals(UPDATE_NOTIFICATIONS)) {
+                if (currentPosition != NOTIFICATION_SCREEN) {
                     newNotificationsCount++;
                     notificationsUpdate.setVisibility(View.VISIBLE);
                     notificationsUpdate.setText(String.valueOf(newNotificationsCount));
                 }
             }
-            if(object.equals("UpdateNotifCount")){
+            if (object.equals("UpdateNotifCount")) {
                 newNotificationsCount = 0;
                 notificationsUpdate.setText("");
                 notificationsUpdate.setVisibility(View.GONE);
@@ -649,17 +649,17 @@ public class MainTabBarPageFragment extends CoreFragment {
             // TODO: This is becoming spaghetti, need to be completely reworked in the future
             if (linka != null && lockController != null &&
                     linka.isLockSettled && linka.pacIsSet) {
-                settingsUpdate.setVisibility(View.VISIBLE);
-                if (linka.canAlertCriticalFirmwareUpdate) {
-                    if (lockController.lockControllerBundle != null) {
-                        String ver = lockController.lockControllerBundle.getFwVersionNumber();
-                        if (!ver.equals("")) {
-                            linka.canAlertCriticalFirmwareUpdate = false;
+                if (lockController.lockControllerBundle != null) {
+                    String ver = lockController.lockControllerBundle.getFwVersionNumber();
+                    if (!ver.equals("")) {
 //                            if (!ver.equals(AppDelegate.linkaMinRequiredFirmwareVersion) && !ver.equals("1.5.9") && AppDelegate.linkaMinRequiredFirmwareVersionIsCriticalUpdate) {
-                            if(!ver.equals("2.0")){
-                                LogHelper.e("MainTabBarPageFrag", "FW version of " + ver + " does not equal " + AppDelegate.linkaMinRequiredFirmwareVersion);
-                                LinkaAccessKey accessKey = LinkaAccessKey.getKeyFromLinka(linka);
-                                if (accessKey != null && accessKey.isAdmin()) {
+                        if (!ver.equals("2.0")) {
+                            LogHelper.e("MainTabBarPageFrag", "FW version of " + ver + " does not equal " + AppDelegate.linkaMinRequiredFirmwareVersion);
+                            LinkaAccessKey accessKey = LinkaAccessKey.getKeyFromLinka(linka);
+                            if (accessKey != null && accessKey.isAdmin()) {
+                                settingsUpdate.setVisibility(View.VISIBLE);
+                                if (linka.canAlertCriticalFirmwareUpdate) {
+                                    linka.canAlertCriticalFirmwareUpdate = false;
                                     Bundle args = new Bundle();
                                     args.putBoolean(Constants.OPEN_SETTINGS, true);
                                     PugNotification.with(AppDelegate.getInstance())
@@ -675,12 +675,14 @@ public class MainTabBarPageFragment extends CoreFragment {
                                             .simple()
                                             .build();
                                 }
+                            } else {
+                                settingsUpdate.setVisibility(View.GONE);
                             }
+                        } else {
+                            settingsUpdate.setVisibility(View.GONE);
                         }
                     }
                 }
-            }else {
-                settingsUpdate.setVisibility(View.GONE);
             }
 
 
