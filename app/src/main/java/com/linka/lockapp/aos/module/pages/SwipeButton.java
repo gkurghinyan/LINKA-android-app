@@ -337,7 +337,11 @@ public class SwipeButton extends RelativeLayout {
 
                                 if (!longClickActive) {
                                     longClickActive = true;
-                                    handler.postDelayed(setColor, MIN_CLICK_DURATION);
+                                    if(circleView.getCurrentState() == Circle.LOCKED_STATE){
+                                        setLockingUnlockingStates();
+                                    }else {
+                                        handler.postDelayed(setColor, MIN_CLICK_DURATION);
+                                    }
                                     startClickTime = Calendar.getInstance().getTimeInMillis();
                                 }
 
@@ -363,7 +367,7 @@ public class SwipeButton extends RelativeLayout {
                             long clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
 
 
-                            if (clickDuration >= MIN_CLICK_DURATION) {
+                            if (clickDuration >= MIN_CLICK_DURATION || circleView.getCurrentState() == Circle.UNLOCKING_STATE) {
 
                                 clickPositionChanged = event.getY() - clickPosition;
 
@@ -481,20 +485,24 @@ public class SwipeButton extends RelativeLayout {
     Runnable setColor = new Runnable() {
         @Override
         public void run() {
-            background.setBackground(ContextCompat.getDrawable(context, R.drawable.lock_shape_button));
-            bottomImageView.setVisibility(VISIBLE);
-            if(circleView.getCurrentState() == Circle.LOCKING_STATE){
-                bottomImageView.setImageDrawable(getResources().getDrawable(R.drawable.close_white_linka));
-            }else if(circleView.getCurrentState() == Circle.UNLOCKING_STATE){
-                bottomImageView.setImageDrawable(getResources().getDrawable(R.drawable.open_white_linka));
-            }
-
-            if (swipeListener != null) {
-                swipeListener.clickComplete();
-            }
+            setLockingUnlockingStates();
 
         }
     };
+
+    private void setLockingUnlockingStates(){
+        background.setBackground(ContextCompat.getDrawable(context, R.drawable.lock_shape_button));
+        bottomImageView.setVisibility(VISIBLE);
+        if(circleView.getCurrentState() == Circle.LOCKING_STATE){
+            bottomImageView.setImageDrawable(getResources().getDrawable(R.drawable.close_white_linka));
+        }else if(circleView.getCurrentState() == Circle.UNLOCKING_STATE){
+            bottomImageView.setImageDrawable(getResources().getDrawable(R.drawable.open_white_linka));
+        }
+
+        if (swipeListener != null) {
+            swipeListener.clickComplete();
+        }
+    }
 
 
     @NonNull

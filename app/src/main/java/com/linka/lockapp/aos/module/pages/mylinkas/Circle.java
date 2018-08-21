@@ -98,12 +98,12 @@ public class Circle extends View {
                 canvas.drawArc(rect, START_ANGLE_POINT, angle, true, paint);
                 break;
             case UNLOCKING_STATE:
-                paint.setColor(getResources().getColor(R.color.locked_red));
-                rect.set(width - circleSize / 2, 0, width + circleSize / 2, circleSize);
-                canvas.drawOval(rect, paint);
                 paint.setColor(getResources().getColor(R.color.unlocked_green));
                 rect.set(width - circleSize / 2, 0, width + circleSize / 2, circleSize);
-                canvas.drawArc(rect, START_ANGLE_POINT, angle, true, paint);
+                canvas.drawOval(rect, paint);
+//                paint.setColor(getResources().getColor(R.color.unlocked_green));
+//                rect.set(width - circleSize / 2, 0, width + circleSize / 2, circleSize);
+//                canvas.drawArc(rect, START_ANGLE_POINT, angle, true, paint);
                 break;
         }
     }
@@ -126,7 +126,7 @@ public class Circle extends View {
             if ((state == UNLOCKED_STATE || state == LOCKED_STATE) && !animator.isRunning()) {
                 currentState = state;
                 invalidate();
-            } else if ((state == LOCKING_STATE || state == UNLOCKING_STATE) && !animator.isStarted()){
+            } else if (state == LOCKING_STATE && !animator.isStarted()){
                 currentState = state;
                 animator.start();
             }else {

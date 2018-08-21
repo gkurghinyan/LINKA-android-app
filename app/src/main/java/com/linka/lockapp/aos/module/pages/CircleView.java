@@ -253,6 +253,10 @@ public class CircleView extends CoreFragment {
                 if (tabBarPageFragment != null) {
                     tabBarPageFragment.showTabBar();
                 }
+                if(!linka.isConnected){
+                    setLockNotConnect();
+                    setLockNotConnectedState();
+                }
 
             }
 
@@ -348,6 +352,8 @@ public class CircleView extends CoreFragment {
         getActivity().registerReceiver(blueToothReceiver, filter1);
         EventBus.getDefault().register(this);
         isRefreshAvailable = true;
+        scanHandler = new Handler();
+        scanHandler.postDelayed(scanRunnable,3000);
     }
 
     @Override
@@ -381,6 +387,10 @@ public class CircleView extends CoreFragment {
             refreshHandler = null;
             isRefreshAvailable = true;
         }
+        if(scanHandler != null){
+            scanHandler.removeCallbacks(scanRunnable);
+            scanHandler = null;
+        }
     }
 
     private Handler scanHandler = null;
@@ -388,7 +398,7 @@ public class CircleView extends CoreFragment {
         @Override
         public void run() {
             scanLeDevice();
-            scanHandler.postDelayed(scanRunnable, 30 * 1000);
+            scanHandler.postDelayed(scanRunnable, 15 * 1000);
         }
     };
 
