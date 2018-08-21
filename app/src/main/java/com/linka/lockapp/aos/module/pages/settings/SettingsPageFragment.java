@@ -334,6 +334,11 @@ public class SettingsPageFragment extends CoreFragment {
             if(checked && switchQuickLock.isChecked()){
                 switchQuickLock.setChecked(false);
                 setQuickLockChecked(0);
+                new AlertDialog.Builder(getActivity())
+                        .setTitle("Quick Lock has been disabled")
+                        .setMessage("Auto-unlock requires Quick Lock to be off.")
+                        .setPositiveButton(R.string.ok,null)
+                        .create().show();
             }
         }
     };
@@ -352,6 +357,11 @@ public class SettingsPageFragment extends CoreFragment {
                 switchAutoUnlocking.setChecked(false);
                 linka.settings_auto_unlocking = false;
                 linka.save();
+                new AlertDialog.Builder(getActivity())
+                        .setTitle("Auto-unlock has been disabled")
+                        .setMessage("Quick Lock requires auto-unlock to be off.")
+                        .setPositiveButton(R.string.ok,null)
+                        .create().show();
             }
         }
     };
