@@ -87,6 +87,10 @@ public class AppSettingsFragment extends CoreFragment {
         }
 
         outOfRangeSwitch.setChecked(Prefs.getBoolean(Constants.SHOW_OUT_OF_RANGE_NOTIFICATION, false));
+        backInRangeSwitch.setChecked(Prefs.getBoolean(Constants.SHOW_BACK_IN_RANGE_NOTIFICATION,false));
+        batteryLowSwitch.setChecked(Prefs.getBoolean(Constants.SHOW_BATTERY_LOW_NOTIFICATION,false));
+        batteryCriticLowSwitch.setChecked(Prefs.getBoolean(Constants.SHOW_BATTERY_CRITICALLY_LOW_NOTIFICATION,false));
+        sleepSwitch.setChecked(Prefs.getBoolean(Constants.SHOW_SLEEP_NOTIFICATION,false));
     }
 
     private void setListeners(){
