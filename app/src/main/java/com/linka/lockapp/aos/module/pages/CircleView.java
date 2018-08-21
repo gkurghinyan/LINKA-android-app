@@ -253,7 +253,7 @@ public class CircleView extends CoreFragment {
                 if (tabBarPageFragment != null) {
                     tabBarPageFragment.showTabBar();
                 }
-                if(!linka.isConnected){
+                if (!linka.isConnected) {
                     setLockNotConnect();
                     setLockNotConnectedState();
                 }
@@ -352,8 +352,10 @@ public class CircleView extends CoreFragment {
         getActivity().registerReceiver(blueToothReceiver, filter1);
         EventBus.getDefault().register(this);
         isRefreshAvailable = true;
-        scanHandler = new Handler();
-        scanHandler.postDelayed(scanRunnable,3000);
+        if (!linka.isConnected) {
+            scanHandler = new Handler();
+            scanHandler.postDelayed(scanRunnable, 3000);
+        }
     }
 
     @Override
@@ -387,7 +389,7 @@ public class CircleView extends CoreFragment {
             refreshHandler = null;
             isRefreshAvailable = true;
         }
-        if(scanHandler != null){
+        if (scanHandler != null) {
             scanHandler.removeCallbacks(scanRunnable);
             scanHandler = null;
         }
@@ -601,6 +603,15 @@ public class CircleView extends CoreFragment {
         } else if (object instanceof String && ((String) object).substring(0, 8).equals("Selected")) {
             if (object.equals("Selected-" + String.valueOf(MainTabBarPageFragment.LOCK_SCREEN))) {
                 refreshDisplay();
+                if (!linka.isConnected) {
+                    if (scanHandler != null) {
+                        scanHandler.removeCallbacks(scanRunnable);
+                        scanHandler = null;
+                    }
+                    scanHandler = new Handler();
+                    scanHandler.postDelayed(scanRunnable, 1500);
+                }
+
             }
         } else if (object != null && object.equals(LockGattUpdateReceiver.GATT_UPDATE_RECEIVER_NOTIFY_DISCONNECTED)) {
             LogHelper.e("MyLinkasPageFrag", "[EVENTBUS] GATT DISCONNECT Notified");
