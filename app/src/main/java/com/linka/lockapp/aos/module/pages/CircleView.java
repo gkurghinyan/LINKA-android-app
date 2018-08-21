@@ -531,7 +531,6 @@ public class CircleView extends CoreFragment {
             setPanicAndSleepButtonsState(true);
             batteryImage.setColorFilter(null);
             batteryPercent.setText(linka.batteryPercent + "%");
-            swipeText.setText(getString(R.string.swipe_to_confirm_lock));
         }
         if (!isLockConnected) {
             root.removeView(internetPage);
@@ -539,21 +538,26 @@ public class CircleView extends CoreFragment {
             isLockConnected = true;
         }
         if (linka.isLocked) {
+            swipeText.setText(getString(R.string.press_to_unlock));
             swipeButton.setCurrentState(Circle.LOCKED_STATE);
             swipeButton.setCircleClickable(true);
         } else if (linka.isUnlocked) {
+            swipeText.setText(getString(R.string.press_to_lock));
             swipeButton.setCurrentState(Circle.UNLOCKED_STATE);
             swipeButton.setCircleClickable(true);
         } else if (linka.isLocking) {
+            swipeText.setText(getString(R.string.locking));
             swipeButton.setCurrentState(Circle.LOCKING_STATE);
             swipeButton.setCircleClickable(false);
         } else if (linka.isUnlocking) {
+            swipeText.setText(getString(R.string.unlocking));
             swipeButton.setCurrentState(Circle.UNLOCKING_STATE);
             swipeButton.setCircleClickable(false);
         }
     }
 
     private void setDeviceNotLockedSuccessState() {
+        swipeText.setText(getString(R.string.press_to_lock));
         isWarningShow = true;
         swipeButton.setCircleClickable(false);
         setPanicAndSleepButtonsVisibility(View.GONE);
