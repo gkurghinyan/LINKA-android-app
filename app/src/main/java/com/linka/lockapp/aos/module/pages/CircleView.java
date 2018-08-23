@@ -128,6 +128,16 @@ public class CircleView extends CoreFragment {
         }
     };
 
+    private Handler bluetoothHandler = null;
+    private Runnable bluetoothRunnable = new Runnable() {
+        @Override
+        public void run() {
+            turnOnBluetooth();
+            setLockNotConnect();
+            bluetoothHandler = null;
+        }
+    };
+
     private final BroadcastReceiver blueToothReceiver = new BroadcastReceiver() {
 
         @Override
@@ -138,12 +148,11 @@ public class CircleView extends CoreFragment {
                 final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
                 switch (state) {
                     case BluetoothAdapter.STATE_OFF:
-                        swipeButton.setCurrentState(Circle.NO_CONNECTION_STATE);
-                        swipeButton.setCircleClickable(false);
-                        if (isPanicAndSleepEnabled) {
-                            setPanicAndSleepButtonsState(false);
+                        if(bluetoothHandler == null) {
+                            setLockNotConnectedState();
+                            bluetoothHandler = new Handler();
+                            bluetoothHandler.postDelayed(bluetoothRunnable, 1000);
                         }
-                        turnOnBluetooth();
                         break;
                     case BluetoothAdapter.STATE_ON:
                         refreshDisplay();
@@ -385,6 +394,10 @@ public class CircleView extends CoreFragment {
         if (turningLinkaDialog != null && turningLinkaDialog.isShowing()) {
             turningLinkaDialog.dismiss();
         }
+        removeCallbacks();
+    }
+
+    private void removeCallbacks(){
         if (refreshHandler != null) {
             refreshHandler = null;
             isRefreshAvailable = true;
@@ -392,6 +405,10 @@ public class CircleView extends CoreFragment {
         if (scanHandler != null) {
             scanHandler.removeCallbacks(scanRunnable);
             scanHandler = null;
+        }
+        if(bluetoothHandler != null){
+            bluetoothHandler.removeCallbacks(bluetoothRunnable);
+            bluetoothHandler = null;
         }
     }
 
@@ -420,8 +437,11 @@ public class CircleView extends CoreFragment {
                             root.setBackground(getResources().getDrawable(R.drawable.blue_gradient));
                             batteryPercent.setText("");
                         } else if (!getBluetoothConnectivity()) {
-                            setLockNotConnectedState();
-                            turnOnBluetooth();
+                            if(bluetoothHandler == null) {
+                                setLockNotConnectedState();
+                                bluetoothHandler = new Handler();
+                                bluetoothHandler.postDelayed(bluetoothRunnable,1000);
+                            }
                         } else {
                             root.setBackgroundColor(getResources().getColor(R.color.linka_transparent));
                             if (!isWarningShow) {

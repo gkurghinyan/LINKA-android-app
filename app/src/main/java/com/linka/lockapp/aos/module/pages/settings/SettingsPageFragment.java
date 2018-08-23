@@ -280,6 +280,9 @@ public class SettingsPageFragment extends CoreFragment {
                 }
             }
         });
+
+        editName.setText(linka.getName());
+
         editName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
@@ -498,7 +501,6 @@ public class SettingsPageFragment extends CoreFragment {
 
             editName.setAlpha(1.0f);
             editName.setEnabled(true);
-            editName.setText(linka.getName());
 
             textAutoUnlock.setTextColor(color);
             autoSwitchView.setVisibility(View.GONE);
@@ -544,7 +546,6 @@ public class SettingsPageFragment extends CoreFragment {
 
             editName.setAlpha(1.0f);
             editName.setEnabled(false);
-            editName.setText(linka.getName());
 
             textAutoUnlock.setTextColor(color);
             autoSwitchView.setVisibility(View.VISIBLE);

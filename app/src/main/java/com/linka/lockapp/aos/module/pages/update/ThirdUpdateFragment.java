@@ -143,8 +143,10 @@ public class ThirdUpdateFragment extends Fragment {
             return;
         }
         if (isError) {
-            textUploading.setText(_.i(R.string.dfu_status_error));
-            progressPercent.setText(errorMessage);
+            if(textUploading != null) {
+                textUploading.setText(_.i(R.string.dfu_status_error));
+                progressPercent.setText(errorMessage);
+            }
             startDfu();
             return;
         }

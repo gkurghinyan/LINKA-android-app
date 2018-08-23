@@ -17,6 +17,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
@@ -300,6 +301,15 @@ public class AppMainActivity extends CoreActivity {
 
         initDrawer();
         initNavBar();
+
+        Linka linka = new Linka();
+        Linka linka1 = new Linka();
+        Linka linka2 = linka;
+        Log.d("linka_code",String.valueOf(linka.hashCode()));
+        Log.d("linka_code",String.valueOf(linka1.hashCode()));
+        Log.d("linka_code",String.valueOf(linka2.hashCode()));
+        linka2 = linka1;
+        Log.d("linka_code",String.valueOf(linka2.hashCode()));
 
         setFragment(decide(getIntent()));
 
