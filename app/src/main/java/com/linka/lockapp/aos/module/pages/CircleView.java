@@ -132,6 +132,7 @@ public class CircleView extends CoreFragment {
     private Runnable bluetoothRunnable = new Runnable() {
         @Override
         public void run() {
+            isRefreshAvailable = true;
             turnOnBluetooth();
             setLockNotConnect();
             bluetoothHandler = null;
@@ -149,9 +150,11 @@ public class CircleView extends CoreFragment {
                 switch (state) {
                     case BluetoothAdapter.STATE_OFF:
                         if(bluetoothHandler == null) {
+                            isRefreshAvailable = false;
                             setLockNotConnectedState();
                             bluetoothHandler = new Handler();
                             bluetoothHandler.postDelayed(bluetoothRunnable, 1000);
+                            lockController.doDisconnectDevice();
                         }
                         break;
                     case BluetoothAdapter.STATE_ON:
@@ -438,9 +441,11 @@ public class CircleView extends CoreFragment {
                             batteryPercent.setText("");
                         } else if (!getBluetoothConnectivity()) {
                             if(bluetoothHandler == null) {
+                                isRefreshAvailable = false;
                                 setLockNotConnectedState();
                                 bluetoothHandler = new Handler();
                                 bluetoothHandler.postDelayed(bluetoothRunnable,1000);
+                                lockController.doDisconnectDevice();
                             }
                         } else {
                             root.setBackgroundColor(getResources().getColor(R.color.linka_transparent));
