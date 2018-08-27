@@ -351,13 +351,13 @@ public class MyLinkasPageFragmentPage extends CoreFragment {
         if (!isAdded()) return;
         if (object instanceof String && ((String) object).equals(LOCKSCONTROLLER_NOTIFY_REFRESHED)) {
 
-            linka = Linka.getLinkaFromLockController(linka);
+            linka = Linka.getLinkaFromLockController();
 
             refreshDisplay();
 
         } else if (object != null && object.equals(LinkaActivity.LINKA_ACTIVITY_ON_CHANGE)) {
 
-            linka = Linka.getLinkaFromLockController(linka);
+            linka = Linka.getLinkaFromLockController();
 
             refreshDisplay();
         } else if (object != null && object.equals(LockGattUpdateReceiver.GATT_UPDATE_RECEIVER_NOTIFY_DISCONNECTED)) {

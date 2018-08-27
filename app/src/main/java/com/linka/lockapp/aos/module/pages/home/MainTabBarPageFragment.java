@@ -5,7 +5,6 @@ import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -24,6 +23,7 @@ import android.widget.TextView;
 import com.linka.lockapp.aos.AppDelegate;
 import com.linka.lockapp.aos.AppMainActivity;
 import com.linka.lockapp.aos.R;
+import com.linka.lockapp.aos.module.adapters.NotificationListAdapter;
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceImpl;
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceResponse;
 import com.linka.lockapp.aos.module.core.CoreFragment;
@@ -65,9 +65,16 @@ import retrofit2.Response;
  * Created by Vanson on 30/3/16.
  */
 public class MainTabBarPageFragment extends CoreFragment {
+    private static final String SCREEN_ARGUMENT = "ScreenArgument";
+    private static final String LINKA_ARGUMENT = "LinkaArgument";
+    private static final String VIEW_PAGER_STATE = "ViewPagerState";
+    private static final String CURRENT_POSITION = "CurrentPosition";
+    private static final String LINKA_ID = "LinkaId";
     public static final String CLOSE_PAGES_IN_USERS_SCREEN = "ClosePagesInUsersScreen";
     public static final String UPDATE_NOTIFICATIONS = "UpdateNotifications";
-    private static final String SCREEN_ARGUMENT = "ScreenArgument";
+    public static final String SELECTED_SCREEN = "Selected-";
+
+    //Numbers of ViewPager screens
     public static final int LOCK_SCREEN = 0;
     public static final int USER_SCREEN = 1;
     public static final int NOTIFICATION_SCREEN = 2;
@@ -75,47 +82,56 @@ public class MainTabBarPageFragment extends CoreFragment {
 
     @BindView(R.id.viewPager)
     ToggleSwipeableViewPager viewPager;
+
     @BindView(R.id.t1)
     LinearLayout t1;
+
     @BindView(R.id.t2)
     LinearLayout t2;
+
     @BindView(R.id.t3)
     ConstraintLayout t3;
+
     @BindView(R.id.t4)
     ConstraintLayout t4;
+
     @BindView(R.id.tab_bar)
     LinearLayout tabBar;
+
     @BindView(R.id.t1_img)
     ImageView t1Img;
+
     @BindView(R.id.t2_img)
     ImageView t2Img;
+
     @BindView(R.id.t3_img)
     ImageView t3Img;
+
     @BindView(R.id.t4_img)
     ImageView t4Img;
+
     @BindView(R.id.settings_update)
     TextView settingsUpdate;
+
     @BindView(R.id.notifications_update)
     TextView notificationsUpdate;
 
     public static int currentPosition = 0;
     private int newNotificationsCount = 0;
-    Linka linka;
-    Unbinder unbinder;
+    private Linka linka;
+    private Unbinder unbinder;
+    private MainTabBarPageFragmentAdapter adapter;
+    private LockController lockController;
 
     public boolean awaitsForLinkaSetPasscode = true;
 
     public static MainTabBarPageFragment newInstance(Linka linka, int screen) {
         Bundle bundle = new Bundle();
         MainTabBarPageFragment fragment = new MainTabBarPageFragment();
-        bundle.putSerializable("linka", linka);
+        bundle.putSerializable(LINKA_ARGUMENT, linka);
         bundle.putInt(SCREEN_ARGUMENT, screen);
         fragment.setArguments(bundle);
         return fragment;
-    }
-
-
-    public MainTabBarPageFragment() {
     }
 
     @Override
@@ -123,7 +139,6 @@ public class MainTabBarPageFragment extends CoreFragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main_tabbar_page, container, false);
         unbinder = ButterKnife.bind(this, rootView);
-
         return rootView;
     }
 
@@ -133,25 +148,66 @@ public class MainTabBarPageFragment extends CoreFragment {
 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         if (getArguments() != null) {
-            Bundle bundle = getArguments();
-            if (bundle.get("linka") != null) {
-                linka = (Linka) bundle.getSerializable("linka");
+            if (getArguments().get(LINKA_ARGUMENT) != null) {
+                linka = (Linka) getArguments().getSerializable(LINKA_ARGUMENT);
                 if (getArguments().getInt(SCREEN_ARGUMENT) != -1) {
                     currentPosition = getArguments().getInt(SCREEN_ARGUMENT);
                     getArguments().putInt(SCREEN_ARGUMENT, -1);
                 }
-                if (linka != null && linka.getId() != null) {
+                if (linka.getId() != null) {
                     linka = Linka.getLinkaById(linka.getId());
-                    init(savedInstanceState);
-                } else {
-                    init(savedInstanceState);
                 }
-            } else if (savedInstanceState != null && savedInstanceState.getLong("linka_id", 0) != 0) {
-                linka = Linka.getLinkaById(savedInstanceState.getLong("linka_id", 0));
+                init(savedInstanceState);
+            } else if (savedInstanceState != null && savedInstanceState.getLong(LINKA_ID, 0) != 0) {
+                linka = Linka.getLinkaById(savedInstanceState.getLong(LINKA_ID, 0));
                 init(savedInstanceState);
             }
         }
-//        viewPager.setCurrentItem(currentPosition);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+
+        if (linka != null) {
+            LinkaAPIServiceImpl.get_lock_single(
+                    getAppMainActivity(),
+                    linka,
+                    new Callback<LinkaAPIServiceResponse.LocksResponse>() {
+                        @Override
+                        public void onResponse(Call<LinkaAPIServiceResponse.LocksResponse> call, Response<LinkaAPIServiceResponse.LocksResponse> response) {
+                            if (linka == null || !isAdded()) {
+                                return;
+                            }
+                            EventBus.getDefault().post(LocksController.LOCKSCONTROLLER_NOTIFY_REFRESHED);
+                        }
+
+                        @Override
+                        public void onFailure(Call<LinkaAPIServiceResponse.LocksResponse> call, Throwable t) {
+
+                        }
+                    });
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+        newNotificationsCount = 0;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (viewPager != null) {
+            outState.putParcelable(VIEW_PAGER_STATE, viewPager.onSaveInstanceState());
+        }
+        if (linka != null) {
+            outState.putLong(LINKA_ID, linka.getId());
+        }
+        outState.putInt(CURRENT_POSITION, currentPosition + 1);
     }
 
     @Override
@@ -167,43 +223,19 @@ public class MainTabBarPageFragment extends CoreFragment {
         }
         adapter = null;
         unbinder.unbind();
-//        currentPosition = 0;
     }
 
-//    @Override
-//    public void onDestroy() {
-//        super.onDestroy();
-//        currentPosition = 0;
-//    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if (viewPager != null) {
-            outState.putParcelable("ss", viewPager.onSaveInstanceState());
-        }
-        if (linka != null) {
-            outState.putLong("linka_id", linka.getId());
-        }
-        outState.putInt("current_position", currentPosition + 1);
-    }
-
-    MainTabBarPageFragmentAdapter adapter;
-
-
-    void init(Bundle savedInstanceState) {
+    private void init(Bundle savedInstanceState) {
         checkNewNotifications();
+        lockController = LocksController.getInstance().getLockController();
 
         if (savedInstanceState != null) {
-            if (viewPager != null) {
-                Parcelable ss = savedInstanceState.getParcelable("ss");
-                viewPager.onRestoreInstanceState(ss);
+            if (viewPager != null && savedInstanceState.getParcelable(VIEW_PAGER_STATE) != null) {
+                viewPager.onRestoreInstanceState(savedInstanceState.getParcelable(VIEW_PAGER_STATE));
             }
-        }
-
-
-        if (savedInstanceState != null && savedInstanceState.getInt("current_position") != 0) {
-            currentPosition = savedInstanceState.getInt("current_position") - 1;
+            if (savedInstanceState.getInt(CURRENT_POSITION) != 0) {
+                currentPosition = savedInstanceState.getInt(CURRENT_POSITION) - 1;
+            }
         }
 
         viewPager.isSwipable = false;
@@ -218,7 +250,6 @@ public class MainTabBarPageFragment extends CoreFragment {
 
         // INIT LINKA CONNECTION
         if (linka != null) {
-            LockController lockController = LocksController.getInstance().getLockController();
             if (!lockController.getIsDeviceConnecting() && lockController.getIsDeviceDisconnected()) {
                 Log.e("MainTabBarPage", "DoConnectDevice");
                 lockController.doConnectDevice();
@@ -228,24 +259,7 @@ public class MainTabBarPageFragment extends CoreFragment {
         if (adapter != null) {
             viewPager.setAdapter(adapter);
             viewPager.setCurrentItem(currentPosition, false); //Circle view is default
-            switch (currentPosition) {
-                case 0:
-                    t1.setSelected(true);
-                    changeButtonsState(currentPosition);
-                    break;
-                case 1:
-                    t2.setSelected(true);
-                    changeButtonsState(currentPosition);
-                    break;
-                case 2:
-                    t3.setSelected(true);
-                    changeButtonsState(currentPosition);
-                    break;
-                case 3:
-                    t4.setSelected(true);
-                    changeButtonsState(currentPosition);
-                    break;
-            }
+            changeButtonsState(currentPosition);
 
             getAppMainActivity().onChangeFragment(getSelectedPageFragment(viewPager, adapter));
 
@@ -258,26 +272,12 @@ public class MainTabBarPageFragment extends CoreFragment {
                 @Override
                 public void onPageSelected(int position) {
                     getAppMainActivity().onChangeFragment(getSelectedPageFragment(viewPager, adapter));
-                    t1.setSelected(false);
-                    t2.setSelected(false);
-                    t3.setSelected(false);
-                    t4.setSelected(false);
 
-                    if (position == 0) {
-                        t1.setSelected(true);
+                    if (position != 1 && getActivity().getSupportFragmentManager().findFragmentById(R.id.users_page_root) != null) {
+                        getAppMainActivity().popFragment();
                     }
-                    if (position == 1) {
-                        t2.setSelected(true);
-                    } else {
-                        if (getActivity().getSupportFragmentManager().findFragmentById(R.id.users_page_root) != null) {
-                            getAppMainActivity().popFragment();
-                        }
-                    }
-                    if (position == 2) {
-                        t3.setSelected(true);
-                    }
+
                     if (position == 3) {
-                        t4.setSelected(true);
                         if (SettingsPageFragment.currentFragment != SettingsPageFragment.NO_FRAGMENT) {
                             getAppMainActivity().setBackIconVisible(true);
                         }
@@ -289,7 +289,7 @@ public class MainTabBarPageFragment extends CoreFragment {
                 @Override
                 public void onPageScrollStateChanged(int state) {
                     if (state == ViewPager.SCROLL_STATE_IDLE) {
-                        EventBus.getDefault().post("Selected-" + String.valueOf(currentPosition));
+                        EventBus.getDefault().post(SELECTED_SCREEN + String.valueOf(currentPosition));
                     }
                 }
             });
@@ -308,7 +308,7 @@ public class MainTabBarPageFragment extends CoreFragment {
                 public void onResponse(Call<LinkaAPIServiceResponse.ActivitiesResponse> call, Response<LinkaAPIServiceResponse.ActivitiesResponse> response) {
                     if (LinkaAPIServiceImpl.check(response, false, getAppMainActivity()) && notificationsUpdate != null) {
                         LinkaAPIServiceResponse.ActivitiesResponse body = response.body();
-                        List<LinkaActivity> activities = new ArrayList<LinkaActivity>();
+                        List<LinkaActivity> activities = new ArrayList<>();
 
                         if (body == null || body.data == null) {
                             return;
@@ -320,8 +320,8 @@ public class MainTabBarPageFragment extends CoreFragment {
                         }
                         LinkaActivity.saveAndOverwriteActivities(activities, linka);
 
-                        List<LinkaActivity> activities2 = LinkaActivity.getLinkaActivitiesByLinka(linka);
-                        List<Notification> notifications = Notification.fromLinkaActivities(activities2);
+                        List<LinkaActivity> act = LinkaActivity.getLinkaActivitiesByLinka(linka);
+                        List<Notification> notifications = Notification.fromLinkaActivities(act);
 
                         for (Notification notification : notifications) {
                             if (!notification.isRead) {
@@ -352,12 +352,10 @@ public class MainTabBarPageFragment extends CoreFragment {
         }
     }
 
-
-    Fragment getSelectedPageFragment(ViewPager viewPager, MainTabBarPageFragmentAdapter adapter) {
+    private Fragment getSelectedPageFragment(ViewPager viewPager, MainTabBarPageFragmentAdapter adapter) {
         if (viewPager == null || adapter == null) return null;
         int page = viewPager.getCurrentItem();
-        Fragment fragment = adapter.getItem(page);
-        return fragment;
+        return adapter.getItem(page);
     }
 
     private void changeButtonsState(int position) {
@@ -372,11 +370,11 @@ public class MainTabBarPageFragment extends CoreFragment {
                 break;
             case USER_SCREEN:
                 t2Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_user_select));
-                getAppMainActivity().setTitle("USERS");
+                getAppMainActivity().setTitle(getString(R.string.users));
                 break;
             case NOTIFICATION_SCREEN:
                 t3Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_notif_select));
-                getAppMainActivity().setTitle("ACTIVITIES");
+                getAppMainActivity().setTitle(getString(R.string.activities));
                 break;
             case SETTING_SCREEN:
                 t4Img.setImageDrawable(getResources().getDrawable(R.drawable.tab_setting_select));
@@ -384,7 +382,6 @@ public class MainTabBarPageFragment extends CoreFragment {
                 break;
         }
     }
-
 
     @OnClick(R.id.t1)
     void on_t1() {
@@ -416,14 +413,238 @@ public class MainTabBarPageFragment extends CoreFragment {
         changeButtonsState(currentPosition);
     }
 
+    public void hideTabBar() {
+        tabBar.setVisibility(View.INVISIBLE);
+    }
 
-    class MainTabBarPageFragmentAdapter extends FragmentPagerAdapter {
-        public CircleView f1;
-        public SharingPageFragment f2;
-        public NotificationsPageFragment f3;
-        public SettingsPageFragment f4;
+    public void showTabBar() {
+        tabBar.setVisibility(View.VISIBLE);
+    }
 
-        public MainTabBarPageFragmentAdapter(FragmentManager fragmentManager, Linka linka) {
+    private void checkPacIsExisting() {
+        final Linka _linka = Linka.getLinkaFromLockController();
+        if (_linka == null) return;
+        linka = _linka;
+
+        if (_linka.isConnected && !linka.pacIsSet && lockController.hasReadPac) {
+            if (awaitsForLinkaSetPasscode) {
+                awaitsForLinkaSetPasscode = false;
+                LinkaAccessKey accessKey = LinkaAccessKey.getKeyFromLinka(linka);
+                if (accessKey != null && accessKey.isAdmin()) {
+                    new AlertDialog.Builder(getAppMainActivity())
+                            .setMessage(R.string.setup_your_passcode_recommended)
+                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    getAppMainActivity().pushFragment(SetPac3.newInstance(_linka, SetPac3.SETTINGS));
+                                }
+                            })
+                            .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    String pin_value;
+                                    int digit_value;
+                                    Random rand = new Random();
+
+                                    //Find 4 digit PAC values that are valid
+                                    do {
+                                        pin_value = "";
+
+                                        for (int i = 0; i < 4; i++) {
+                                            digit_value = rand.nextInt(9) + 1;
+                                            pin_value = pin_value + Integer.toString(digit_value);
+                                        }
+
+                                    } while (pin_value.equals("1234")
+                                            || pin_value.equals("1111")
+                                            || pin_value.equals("2222")
+                                            || pin_value.equals("3333")
+                                            || pin_value.equals("4444")
+                                            || pin_value.equals("5555")
+                                            || pin_value.equals("6666")
+                                            || pin_value.equals("7777")
+                                            || pin_value.equals("8888")
+                                            || pin_value.equals("9999"));
+
+                                    //Now set as the PAC in the Lock
+
+                                    // set PAC in lock settings
+                                    if (lockController.doSetPasscode(pin_value)) {
+
+                                        linka.pac = Integer.parseInt(pin_value);
+                                        LogHelper.e("Random Generated PAC", pin_value);
+                                        linka.saveSettings();
+
+                                        //Notify user of their new PAC
+                                        new AlertDialog.Builder(getAppMainActivity())
+                                                .setTitle(pin_value)
+                                                .setMessage(_.i(R.string.random_code_set))
+                                                .setNegativeButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        linka.pacIsSet = true;
+                                                        linka.saveSettings();
+                                                    }
+                                                }).show();
+                                    }
+
+                                }
+                            }).show();
+                }
+            }
+        }
+    }
+
+    private void checkFirmwareUpdates() {
+        // Make sure PAC is set before any attempts to update firmware
+        // TODO: This is becoming spaghetti, need to be completely reworked in the future
+        if (linka != null && lockController != null &&
+                linka.isLockSettled && linka.pacIsSet) {
+            if (lockController.lockControllerBundle != null) {
+                String ver = lockController.lockControllerBundle.getFwVersionNumber();
+                if (!ver.equals("")) {
+//                            if (!ver.equals(AppDelegate.linkaMinRequiredFirmwareVersion) && !ver.equals("1.5.9") && AppDelegate.linkaMinRequiredFirmwareVersionIsCriticalUpdate) {
+                    if (!ver.equals("2.0")) {
+                        LogHelper.e("MainTabBarPageFrag", "FW version of " + ver + " does not equal " + AppDelegate.linkaMinRequiredFirmwareVersion);
+                        LinkaAccessKey accessKey = LinkaAccessKey.getKeyFromLinka(linka);
+                        if (accessKey != null && accessKey.isAdmin()) {
+                            settingsUpdate.setVisibility(View.VISIBLE);
+                            if (linka.canAlertCriticalFirmwareUpdate) {
+                                linka.canAlertCriticalFirmwareUpdate = false;
+                                Bundle args = new Bundle();
+                                args.putBoolean(Constants.OPEN_SETTINGS, true);
+                                PugNotification.with(AppDelegate.getInstance())
+                                        .load()
+                                        .autoCancel(true)
+                                        .identifier(Constants.UPDATE_AVAILABLE_NOTIFICATION)
+                                        .title("Update Available")
+                                        .message(R.string.critical_firmware_update)
+                                        .smallIcon(R.drawable.ic_action_name)
+                                        .largeIcon(R.mipmap.ic_launcher)
+                                        .flags(PendingIntent.FLAG_UPDATE_CURRENT)
+                                        .click(AppMainActivity.class, args)
+                                        .simple()
+                                        .build();
+                            }
+                        } else {
+                            settingsUpdate.setVisibility(View.GONE);
+                        }
+                    } else {
+                        settingsUpdate.setVisibility(View.GONE);
+                    }
+                }
+            }
+        }
+    }
+
+    private void displayBlodPopup() {
+        //To determine the number of times we can show the BLOD popup, we need a counter in prefs
+        SharedPreferences.Editor edit = Prefs.edit();
+        switch (Prefs.getInt("numberTimesDetectLinkaFuBlod", 0)) {
+            case 0:
+
+                new AlertDialog.Builder(getAppMainActivity())
+                        .setTitle(R.string.oops)
+                        .setMessage(R.string.blod_popup)
+                        .setNegativeButton(R.string.blod_popup_no, null)
+                        .setPositiveButton(R.string.blod_popup_yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                //Start DFU fragment, make LINKA parameter null because we don't initialize it
+//                                        DfuManagerPageFragment fragment = DfuManagerPageFragment.newInstance(null);
+                                AutoUpdateFragment fragment = AutoUpdateFragment.newInstance(null, AutoUpdateFragment.SETTINGS);
+                                fragment.blod_firmware_mode = true;
+                                fragment.blod_firmware_try_again = true;
+                                AppMainActivity.getInstance().pushFragment(fragment);
+                            }
+                        })
+                        .show();
+
+                edit.putInt("numberTimesDetectLinkaFuBlod", 1).commit();
+
+
+                break;
+
+            //The second time we have the popup, we tell them to contact LINKA Support
+            case 1:
+                new AlertDialog.Builder(getAppMainActivity())
+                        .setTitle(R.string.oops)
+                        .setMessage(R.string.blod_popup_contact_linka)
+                        .setPositiveButton(R.string.ok, null)
+                        .show();
+
+                //We only show the contact linka support popup once. Subsequent times we don't show anything, so that it doesn't get annoying it they don't have a BLOD
+                edit.putInt("numberTimesDetectLinkaFuBlod", 2).commit();
+                break;
+        }
+
+        lockController.shouldDisplayBLODPopup = false;
+    }
+
+    @Subscribe
+    public void onEvent(Object object) {
+        if (object != null && object instanceof String) {
+            if (object.equals(UPDATE_NOTIFICATIONS)) {
+                if (currentPosition != NOTIFICATION_SCREEN) {
+                    newNotificationsCount++;
+                    notificationsUpdate.setVisibility(View.VISIBLE);
+                    notificationsUpdate.setText(String.valueOf(newNotificationsCount));
+                }
+            }
+            if (object.equals(NotificationListAdapter.UPDATE_NOTIFICATIONS_COUNT)) {
+                newNotificationsCount = 0;
+                notificationsUpdate.setText("");
+                notificationsUpdate.setVisibility(View.GONE);
+            }
+            if (object.equals(LocksController.LOCKSCONTROLLER_NOTIFY_REFRESHED)) {
+                if (linka.isLockSettled) {
+                    checkPacIsExisting();
+                    checkFirmwareUpdates();
+                }
+                //Check if there was a possible BLOD, and if so, display a popup
+                //We decided that we can only show the solid blue popup once.
+                //After it is shown once, then we show the message to contact LINKA Support
+                if (lockController.shouldDisplayBLODPopup) {
+                    displayBlodPopup();
+                }
+            }
+        }
+    }
+
+    // DELETE FUNCTION BELOW ??
+    // If the user declines to set the PAC
+    // Set it to 1212
+    private void setDefaultPasscode(final Linka linka) {
+        LockController lockController = LocksController.getInstance().getLockController();
+        if (lockController.doSetPasscode("1212")) {
+
+            getAppMainActivity().popFragment();
+            new AlertDialog.Builder(getAppMainActivity())
+                    .setTitle(R.string.default_passcode_title)
+                    .setMessage(R.string.default_passcode_desc)
+                    .setNegativeButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            linka.saveSettings();
+                        }
+                    })
+                    .show();
+        } else {
+            new AlertDialog.Builder(getAppMainActivity())
+                    .setTitle(_.i(R.string.fail_to_communicate))
+                    .setMessage(_.i(R.string.check_connection))
+                    .setNegativeButton(_.i(R.string.ok), null)
+                    .show();
+        }
+    }
+
+    private class MainTabBarPageFragmentAdapter extends FragmentPagerAdapter {
+        CircleView f1;
+        SharingPageFragment f2;
+        NotificationsPageFragment f3;
+        SettingsPageFragment f4;
+
+        MainTabBarPageFragmentAdapter(FragmentManager fragmentManager, Linka linka) {
             super(fragmentManager);
 
             f1 = CircleView.newInstance(linka);
@@ -462,279 +683,6 @@ public class MainTabBarPageFragment extends CoreFragment {
         @Override
         public int getItemPosition(Object object) {
             return PagerAdapter.POSITION_NONE;
-        }
-    }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-
-        if (linka != null) {
-            LinkaAPIServiceImpl.get_lock_single(
-                    getAppMainActivity(),
-                    linka,
-                    new Callback<LinkaAPIServiceResponse.LocksResponse>() {
-                        @Override
-                        public void onResponse(Call<LinkaAPIServiceResponse.LocksResponse> call, Response<LinkaAPIServiceResponse.LocksResponse> response) {
-                            if (linka == null) {
-                                return;
-                            }
-
-                            if (!isAdded()) {
-                                return;
-                            }
-
-                            EventBus.getDefault().post(LocksController.LOCKSCONTROLLER_NOTIFY_REFRESHED);
-                        }
-
-                        @Override
-                        public void onFailure(Call<LinkaAPIServiceResponse.LocksResponse> call, Throwable t) {
-
-                        }
-                    });
-        }
-    }
-
-    // DELETE FUNCTION BELOW ??
-    // If the user declines to set the PAC
-    // Set it to 1212
-    private void setDefaultPasscode(final Linka linka) {
-        LockController lockController = LocksController.getInstance().getLockController();
-        if (lockController.doSetPasscode("1212")) {
-
-            getAppMainActivity().popFragment();
-            new AlertDialog.Builder(getAppMainActivity())
-                    .setTitle(R.string.default_passcode_title)
-                    .setMessage(R.string.default_passcode_desc)
-                    .setNegativeButton(R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            linka.saveSettings();
-                        }
-                    })
-                    .show();
-        } else {
-            new AlertDialog.Builder(getAppMainActivity())
-                    .setTitle(_.i(R.string.fail_to_communicate))
-                    .setMessage(_.i(R.string.check_connection))
-                    .setNegativeButton(_.i(R.string.ok), null)
-                    .show();
-        }
-    }
-
-
-    public void hideTabBar() {
-        tabBar.setVisibility(View.INVISIBLE);
-    }
-
-    public void showTabBar() {
-        tabBar.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
-        newNotificationsCount = 0;
-    }
-
-    @Subscribe
-    public void onEvent(Object object) {
-        if (object != null && object instanceof String) {
-            if (object.equals(UPDATE_NOTIFICATIONS)) {
-                if (currentPosition != NOTIFICATION_SCREEN) {
-                    newNotificationsCount++;
-                    notificationsUpdate.setVisibility(View.VISIBLE);
-                    notificationsUpdate.setText(String.valueOf(newNotificationsCount));
-                }
-            }
-            if (object.equals("UpdateNotifCount")) {
-                newNotificationsCount = 0;
-                notificationsUpdate.setText("");
-                notificationsUpdate.setVisibility(View.GONE);
-            }
-        }
-        if (object != null && object instanceof String && object.equals(LocksController.LOCKSCONTROLLER_NOTIFY_REFRESHED)) {
-            LockController lockController = LocksController.getInstance().getLockController();
-            if (linka.isLockSettled) {
-                LinkaAccessKey accessKey = LinkaAccessKey.getKeyFromLinka(linka);
-
-                final Linka _linka = Linka.getLinkaFromLockController(linka);
-                if (_linka == null) return;
-                linka = _linka;
-
-                if (_linka.isConnected && !linka.pacIsSet && lockController.hasReadPac) {
-                    if (awaitsForLinkaSetPasscode) {
-                        awaitsForLinkaSetPasscode = false;
-                        if (accessKey != null && accessKey.isAdmin()) {
-                            new AlertDialog.Builder(getAppMainActivity())
-                                    .setMessage(R.string.setup_your_passcode_recommended)
-                                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            getAppMainActivity().pushFragment(SetPac3.newInstance(_linka, SetPac3.SETTINGS));
-                                        }
-                                    })
-                                    .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            String pin_value;
-                                            int digit_value;
-                                            Random rand = new Random();
-
-                                            //Find 4 digit PAC values that are valid
-                                            do {
-                                                pin_value = "";
-
-                                                for (int i = 0; i < 4; i++) {
-                                                    digit_value = rand.nextInt(9) + 1;
-                                                    pin_value = pin_value + Integer.toString(digit_value);
-                                                }
-
-                                            } while (pin_value.equals("1234")
-                                                    || pin_value.equals("1111")
-                                                    || pin_value.equals("2222")
-                                                    || pin_value.equals("3333")
-                                                    || pin_value.equals("4444")
-                                                    || pin_value.equals("5555")
-                                                    || pin_value.equals("6666")
-                                                    || pin_value.equals("7777")
-                                                    || pin_value.equals("8888")
-                                                    || pin_value.equals("9999"));
-
-                                            //Now set as the PAC in the Lock
-
-                                            // set PAC in lock settings
-                                            LockController lockController = LocksController.getInstance().getLockController();
-                                            if (lockController.doSetPasscode(pin_value)) {
-
-                                                linka.pac = Integer.parseInt(pin_value);
-                                                LogHelper.e("Random Generated PAC", pin_value);
-                                                linka.saveSettings();
-
-                                                //Notify user of their new PAC
-                                                new AlertDialog.Builder(getAppMainActivity())
-                                                        .setTitle(pin_value)
-                                                        .setMessage(_.i(R.string.random_code_set))
-                                                        .setNegativeButton(R.string.ok, new DialogInterface.OnClickListener() {
-                                                            @Override
-                                                            public void onClick(DialogInterface dialog, int which) {
-                                                                linka.pacIsSet = true;
-                                                                linka.saveSettings();
-                                                            }
-                                                        })
-                                                        .show();
-                                            }
-
-                                        }
-                                    })
-                                    .show();
-                        }
-                    }
-                }
-            }
-            // Make sure PAC is set before any attempts to update firmware
-            // TODO: This is becoming spaghetti, need to be completely reworked in the future
-            if (linka != null && lockController != null &&
-                    linka.isLockSettled && linka.pacIsSet) {
-                if (lockController.lockControllerBundle != null) {
-                    String ver = lockController.lockControllerBundle.getFwVersionNumber();
-                    if (!ver.equals("")) {
-//                            if (!ver.equals(AppDelegate.linkaMinRequiredFirmwareVersion) && !ver.equals("1.5.9") && AppDelegate.linkaMinRequiredFirmwareVersionIsCriticalUpdate) {
-                        if (!ver.equals("2.0")) {
-                            LogHelper.e("MainTabBarPageFrag", "FW version of " + ver + " does not equal " + AppDelegate.linkaMinRequiredFirmwareVersion);
-                            LinkaAccessKey accessKey = LinkaAccessKey.getKeyFromLinka(linka);
-                            if (accessKey != null && accessKey.isAdmin()) {
-                                settingsUpdate.setVisibility(View.VISIBLE);
-                                if (linka.canAlertCriticalFirmwareUpdate) {
-                                    linka.canAlertCriticalFirmwareUpdate = false;
-                                    Bundle args = new Bundle();
-                                    args.putBoolean(Constants.OPEN_SETTINGS, true);
-                                    PugNotification.with(AppDelegate.getInstance())
-                                            .load()
-                                            .autoCancel(true)
-                                            .identifier(Constants.UPDATE_AVAILABLE_NOTIFICATION)
-                                            .title("Update Available")
-                                            .message(R.string.critical_firmware_update)
-                                            .smallIcon(R.drawable.ic_action_name)
-                                            .largeIcon(R.mipmap.ic_launcher)
-                                            .flags(PendingIntent.FLAG_UPDATE_CURRENT)
-                                            .click(AppMainActivity.class, args)
-                                            .simple()
-                                            .build();
-                                }
-                            } else {
-                                settingsUpdate.setVisibility(View.GONE);
-                            }
-                        } else {
-                            settingsUpdate.setVisibility(View.GONE);
-                        }
-                    }
-                }
-            }
-
-
-            //Check if there was a possible BLOD, and if so, display a popup
-            //We decided that we can only show the solid blue popup once.
-            //After it is shown once, then we show the message to contact LINKA Support
-            if (lockController.shouldDisplayBLODPopup) {
-
-                //To determine the number of times we can show the BLOD popup, we need a counter in prefs
-                SharedPreferences.Editor edit = Prefs.edit();
-                switch (Prefs.getInt("numberTimesDetectLinkaFuBlod", 0)) {
-                    case 0:
-
-                        new AlertDialog.Builder(getAppMainActivity())
-                                .setTitle(R.string.oops)
-                                .setMessage(R.string.blod_popup)
-                                .setNegativeButton(R.string.blod_popup_no, null)
-                                .setPositiveButton(R.string.blod_popup_yes, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        //Start DFU fragment, make LINKA parameter null because we don't initialize it
-//                                        DfuManagerPageFragment fragment = DfuManagerPageFragment.newInstance(null);
-                                        AutoUpdateFragment fragment = AutoUpdateFragment.newInstance(null, AutoUpdateFragment.SETTINGS);
-                                        fragment.blod_firmware_mode = true;
-                                        fragment.blod_firmware_try_again = true;
-                                        AppMainActivity.getInstance().pushFragment(fragment);
-                                    }
-                                })
-                                .show();
-
-                        edit.putInt("numberTimesDetectLinkaFuBlod", 1).commit();
-
-
-                        break;
-
-                    //The second time we have the popup, we tell them to contact LINKA Support
-                    case 1:
-                        new AlertDialog.Builder(getAppMainActivity())
-                                .setTitle(R.string.oops)
-                                .setMessage(R.string.blod_popup_contact_linka)
-                                .setPositiveButton(R.string.ok, null)
-                                .show();
-
-                        //We only show the contact linka support popup once. Subsequent times we don't show anything, so that it doesn't get annoying it they don't have a BLOD
-                        edit.putInt("numberTimesDetectLinkaFuBlod", 2).commit();
-                        break;
-                }
-
-                lockController.shouldDisplayBLODPopup = false;
-            }
-
-
         }
     }
 }

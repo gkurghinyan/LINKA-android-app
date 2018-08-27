@@ -800,7 +800,6 @@ public class SettingsPageFragment extends CoreFragment {
     @Override
     public void onResume() {
         super.onResume();
-//        getAppMainActivity().setTitle(getString(R.string.big_settings));
         EventBus.getDefault().register(this);
     }
 
@@ -819,13 +818,13 @@ public class SettingsPageFragment extends CoreFragment {
         if (!isAdded()) return;
         if (object instanceof String && ((String) object).equals(LOCKSCONTROLLER_NOTIFY_REFRESHED_SETTINGS)) {
 
-            linka = Linka.getLinkaFromLockController(linka);
+            linka = Linka.getLinkaFromLockController();
 
             refreshDisplay();
 
         } else if (object != null && object.equals(LinkaActivity.LINKA_ACTIVITY_ON_CHANGE)) {
 
-            linka = Linka.getLinkaFromLockController(linka);
+            linka = Linka.getLinkaFromLockController();
 
             refreshDisplay();
         } else if (object != null && object instanceof String && object.equals(FRAGMENT_ADDED)) {

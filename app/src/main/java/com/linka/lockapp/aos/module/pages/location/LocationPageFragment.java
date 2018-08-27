@@ -159,7 +159,7 @@ public class LocationPageFragment extends CoreFragment implements OnMapReadyCall
 
         btnMapview.setVisibility(View.INVISIBLE);
 
-        Linka _linka = Linka.getLinkaFromLockController(linka);
+        Linka _linka = Linka.getLinkaFromLockController();
         if (_linka == null) return;
         linka = _linka;
 
@@ -273,7 +273,7 @@ public class LocationPageFragment extends CoreFragment implements OnMapReadyCall
         if (!isAdded()) return;
 
         if (object != null && object.equals(LinkaActivity.LINKA_ACTIVITY_ON_CHANGE)) {
-            linka = Linka.getLinkaFromLockController(linka);
+            linka = Linka.getLinkaFromLockController();
             address = null;
             updateLinkaLocation();
         }

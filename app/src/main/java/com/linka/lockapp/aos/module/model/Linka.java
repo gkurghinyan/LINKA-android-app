@@ -243,7 +243,7 @@ public class Linka extends Model implements Serializable {
         return lock_address;
     }
 
-    public void setLock_mac_address(String lock_mac_address){
+    public void setLock_mac_address(String lock_mac_address) {
         this.lock_mac_address = lock_mac_address;
     }
 
@@ -251,26 +251,21 @@ public class Linka extends Model implements Serializable {
     public String getName() {
         String name = lock_name;
         LinkaName linkaName = LinkaName.getLinkaNameForMACAddress(getMACAddress());
-        if (linkaName != null)
-        {
+        if (linkaName != null) {
             name = linkaName.name;
         }
         return name;
     }
 
 
-    public static String getName(String lock_mac_address, BluetoothLEDevice item)
-    {
+    public static String getName(String lock_mac_address, BluetoothLEDevice item) {
         String name = item.getName();
         LinkaName linkaName = LinkaName.getLinkaNameForMACAddress(lock_mac_address);
-        if (linkaName != null)
-        {
+        if (linkaName != null) {
             name = linkaName.name;
         }
         return name;
     }
-
-
 
 
     public boolean isBonded() {
@@ -325,11 +320,10 @@ public class Linka extends Model implements Serializable {
     }
 
 
-    public static Linka getLinkaFromLockController(Linka linka) {
+    public static Linka getLinkaFromLockController() {
         LockController lockController = LocksController.getInstance().getLockController();
         if (lockController != null) {
-            Linka _linka = lockController.getLinka();
-            return _linka;
+            return lockController.getLinka();
         }
         return null;
     }
@@ -348,27 +342,27 @@ public class Linka extends Model implements Serializable {
         //new implement
 
         //time
-        int one_day_sec = 24*60*60;
+        int one_day_sec = 24 * 60 * 60;
 //        int unlocked_connected_sec = settings_unlocked_sleep;//E7
 //        int locked_connected_sec = Math.round(settings_locked_sleep*0.5f);//E8
 //        int locked_awake_sec = Math.round(settings_locked_sleep*0.5f);//E9
 
         int unlocked_connected_sec;
         //if between 0 and 30 min:
-        if(unlock_time < 1800){
-            unlocked_connected_sec = unlock_time*2;
-        }else if(unlock_time < 3600){ //if between 30 min and 1 hr
-            unlocked_connected_sec = (int)((unlock_time-1800)*0.8) + 3600;
-        }else if (unlock_time <  18000) { // if between 1 hour and 5 hours
-            unlocked_connected_sec = (int)((unlock_time-3600)*0.25) + 5040;
-        }else { //Up to 10 hours
-            unlocked_connected_sec = (int)((unlock_time - 18000)*0.13) + 8640;
+        if (unlock_time < 1800) {
+            unlocked_connected_sec = unlock_time * 2;
+        } else if (unlock_time < 3600) { //if between 30 min and 1 hr
+            unlocked_connected_sec = (int) ((unlock_time - 1800) * 0.8) + 3600;
+        } else if (unlock_time < 18000) { // if between 1 hour and 5 hours
+            unlocked_connected_sec = (int) ((unlock_time - 3600) * 0.25) + 5040;
+        } else { //Up to 10 hours
+            unlocked_connected_sec = (int) ((unlock_time - 18000) * 0.13) + 8640;
         }
 
-        int locked_connected_sec = 10*60;//10 min
-        int locked_awake_sec = lock_time*2;//E9
-        int unlocking_motor_on = 3*4;//3sec * 4 times //E12
-        int locking_motor_on = 3*4;//3sec * 4 times //E13
+        int locked_connected_sec = 10 * 60;//10 min
+        int locked_awake_sec = lock_time * 2;//E9
+        int unlocking_motor_on = 3 * 4;//3sec * 4 times //E12
+        int locking_motor_on = 3 * 4;//3sec * 4 times //E13
         int siren_on_sec = 10;//E14
         int non_sleep_total_time = unlocked_connected_sec + locked_connected_sec + locked_awake_sec + unlocking_motor_on + locking_motor_on + siren_on_sec;
         int locked_sleep_sec = one_day_sec - non_sleep_total_time;
@@ -384,42 +378,42 @@ public class Linka extends Model implements Serializable {
         double locking_motor_on_draw_mah = 80;
         double siren_on_draw_mah = 80;
 
-        double  unlocked_connected_draw_mah_pre_day = ((unlocked_connected_draw_mah/60)/60)*unlocked_connected_sec;
-        double  locked_connected_draw_mah_pre_day = ((locked_connected_draw_mah/60)/60)*locked_connected_sec;
-        double  locked_awake_draw_mah_pre_day = ((locked_awake_draw_mah/60)/60)*locked_awake_sec;
-        double  locked_sleep_draw_mah_pre_day = ((locked_sleep_draw_mah/60)/60)*locked_sleep_sec;
-        double  unlocked_sleep_draw_mah_pre_day = ((unlocked_sleep_draw_mah/60)/60)*unlocked_sleep_sec;
-        double  unlocking_motor_draw_mah_pre_day = ((unlocking_motor_on_draw_mah/60)/60)*unlocking_motor_on;
-        double  locking_motor_draw_mah_pre_day = ((locking_motor_on_draw_mah/60)/60)*locking_motor_on;
-        double  siren_on_draw_mah_pre_day = ((siren_on_draw_mah/60)/60)*siren_on_sec;
+        double unlocked_connected_draw_mah_pre_day = ((unlocked_connected_draw_mah / 60) / 60) * unlocked_connected_sec;
+        double locked_connected_draw_mah_pre_day = ((locked_connected_draw_mah / 60) / 60) * locked_connected_sec;
+        double locked_awake_draw_mah_pre_day = ((locked_awake_draw_mah / 60) / 60) * locked_awake_sec;
+        double locked_sleep_draw_mah_pre_day = ((locked_sleep_draw_mah / 60) / 60) * locked_sleep_sec;
+        double unlocked_sleep_draw_mah_pre_day = ((unlocked_sleep_draw_mah / 60) / 60) * unlocked_sleep_sec;
+        double unlocking_motor_draw_mah_pre_day = ((unlocking_motor_on_draw_mah / 60) / 60) * unlocking_motor_on;
+        double locking_motor_draw_mah_pre_day = ((locking_motor_on_draw_mah / 60) / 60) * locking_motor_on;
+        double siren_on_draw_mah_pre_day = ((siren_on_draw_mah / 60) / 60) * siren_on_sec;
 
 
-        double total_power_consume_mah = unlocked_connected_draw_mah_pre_day+locked_connected_draw_mah_pre_day
-                +locked_awake_draw_mah_pre_day+locked_sleep_draw_mah_pre_day+unlocked_sleep_draw_mah_pre_day
-                +unlocking_motor_draw_mah_pre_day+locking_motor_draw_mah_pre_day+siren_on_draw_mah_pre_day;
+        double total_power_consume_mah = unlocked_connected_draw_mah_pre_day + locked_connected_draw_mah_pre_day
+                + locked_awake_draw_mah_pre_day + locked_sleep_draw_mah_pre_day + unlocked_sleep_draw_mah_pre_day
+                + unlocking_motor_draw_mah_pre_day + locking_motor_draw_mah_pre_day + siren_on_draw_mah_pre_day;
 
 
         //Calculate remaining battery capacity
-        double percent = (double)batteryPercent / 100;
+        double percent = (double) batteryPercent / 100;
 
         //Make it value very conservative: Display 0 days at 9%
-        if (percent <0.09){
+        if (percent < 0.09) {
             percent = 0;
-        }else{
+        } else {
             percent -= 0.09;
         }
 
         double total_full_power_link = 700;
-        double total_remain_power_link = total_full_power_link* percent;
+        double total_remain_power_link = total_full_power_link * percent;
 
 
-        double remaining_days = total_remain_power_link/total_power_consume_mah;
+        double remaining_days = total_remain_power_link / total_power_consume_mah;
         //double remaining_days = AppDelegate.battery_full_life_by_days * percent;
 
-        int days = (int)Math.floor(remaining_days);
-        int hours = (int)Math.floor((remaining_days * 24) % 24);
-        int mins = (int)Math.floor((remaining_days * 24 * 60) % 60);
-        int secs = (int)Math.floor((remaining_days * 24 * 60 * 60) % 60);
+        int days = (int) Math.floor(remaining_days);
+        int hours = (int) Math.floor((remaining_days * 24) % 24);
+        int mins = (int) Math.floor((remaining_days * 24 * 60) % 60);
+        int secs = (int) Math.floor((remaining_days * 24 * 60 * 60) % 60);
 
         String after = "";
         long after_depth = 0;
@@ -446,13 +440,10 @@ public class Linka extends Model implements Serializable {
         return after;
     }
 
-    public String getEstimatedBatteryRemaining(int unlock_time, int lock_time){
+    public String getEstimatedBatteryRemaining(int unlock_time, int lock_time) {
         String[] raw = getBatteryRemainingRepresentation(unlock_time, lock_time).split(" ");
-        return raw[0]+" "+_.i(R.string.estimated)+" "+raw[1]+" "+_.i(R.string.remaining);
+        return raw[0] + " " + _.i(R.string.estimated) + " " + raw[1] + " " + _.i(R.string.remaining);
     }
-
-
-
 
 
     public static Linka makeLinka(BluetoothLEDevice item) {
@@ -477,8 +468,6 @@ public class Linka extends Model implements Serializable {
         linka.api_user_id = LinkaAPIServiceImpl.getUserID();
         return linka;
     }
-
-
 
 
     public static Linka saveLinka(BluetoothLEDevice item, boolean allow_override) {
@@ -512,10 +501,6 @@ public class Linka extends Model implements Serializable {
     }
 
 
-
-
-
-
     void tryRecordStall() {
         if (canRecordStall) {
             LinkaActivity.saveLinkaActivity(this, LinkaActivity.LinkaActivityType.isStalled);
@@ -532,7 +517,7 @@ public class Linka extends Model implements Serializable {
 
     void tryRecordBatteryLow(LockStatusPacket lockStatusData) {
         if (canRecordStall) {
-            LinkaActivity.saveLinkaActivity(this, LinkaActivity.LinkaActivityType.isBatteryLow, lockStatusData.GetBatteryPercent(),Prefs.getBoolean(Constants.SHOW_BATTERY_LOW_NOTIFICATION,false));
+            LinkaActivity.saveLinkaActivity(this, LinkaActivity.LinkaActivityType.isBatteryLow, lockStatusData.GetBatteryPercent(), Prefs.getBoolean(Constants.SHOW_BATTERY_LOW_NOTIFICATION, false));
             canRecordBatteryLow = false;
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
@@ -546,7 +531,7 @@ public class Linka extends Model implements Serializable {
 
     void tryRecordBatteryCriticallyLow(LockStatusPacket lockStatusData) {
         if (canRecordStall) {
-            LinkaActivity.saveLinkaActivity(this, LinkaActivity.LinkaActivityType.isBatteryCriticallyLow, lockStatusData.GetBatteryPercent(),Prefs.getBoolean(Constants.SHOW_BATTERY_CRITICALLY_LOW_NOTIFICATION,false));
+            LinkaActivity.saveLinkaActivity(this, LinkaActivity.LinkaActivityType.isBatteryCriticallyLow, lockStatusData.GetBatteryPercent(), Prefs.getBoolean(Constants.SHOW_BATTERY_CRITICALLY_LOW_NOTIFICATION, false));
             canRecordBatteryCriticallyLow = false;
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
@@ -560,8 +545,7 @@ public class Linka extends Model implements Serializable {
 
     void tryRecordTamperAlert(LockStatusPacket lockStatusData) {
         if (canRecordTamperAlert) {
-            if (this.settings_tamper_siren)
-            {
+            if (this.settings_tamper_siren) {
                 LinkaActivity.saveLinkaActivity(this, LinkaActivity.LinkaActivityType.isTamperAlert);
                 canRecordTamperAlert = false;
                 Handler handler = new Handler();
@@ -576,13 +560,9 @@ public class Linka extends Model implements Serializable {
     }
 
 
-
-
-
     public boolean updateFromStatusData(boolean isConnected, LockStatusPacket lockStatusData) {
         if (lockStatusData != null) {
-            if (this.isConnected != isConnected || this.authState != lockStatusData.GetAuthState().GetValue())
-            {
+            if (this.isConnected != isConnected || this.authState != lockStatusData.GetAuthState().GetValue()) {
                 LogHelper.e("LINKA", "isConnected: " + (isConnected ? "true" : "false") + ", " + "state: " + lockStatusData.GetLockState() + "auth: " + lockStatusData.GetAuthState());
             }
         }
@@ -590,7 +570,7 @@ public class Linka extends Model implements Serializable {
         boolean isChanged = false;
 
         //Make sure it's listed as connected
-        if(isConnected == true){   //Only connected if it is not currently disconnecting.
+        if (isConnected == true) {   //Only connected if it is not currently disconnecting.
 
             //Check to make sure bluetooth is turned on
             //On some phones, it remains connected even when bluetooth is turned off.
@@ -598,16 +578,16 @@ public class Linka extends Model implements Serializable {
             BluetoothAdapter bluetoothAdapter = BLEHelpers.checkBLESupportForAdapter(AppBluetoothService.getInstance().getContext());
             if (bluetoothAdapter != null) {
                 if (bluetoothAdapter.isEnabled()) {
-                    if(this.isConnected == false) {
+                    if (this.isConnected == false) {
                         this.isConnected = true;
                         isChanged = true;
                     }
                 }
             }
 
-        }else if(isConnected == false){
+        } else if (isConnected == false) {
 
-            if(this.isConnected == true) {
+            if (this.isConnected == true) {
                 this.isConnected = false;
                 isChanged = true;
             }
@@ -626,13 +606,13 @@ public class Linka extends Model implements Serializable {
         if (lockStatusData != null) {
 
             //Check auth state
-            if(this.authState != lockStatusData.GetAuthState().GetValue()) {
+            if (this.authState != lockStatusData.GetAuthState().GetValue()) {
                 this.authState = lockStatusData.GetAuthState().GetValue();
                 isChanged = true;
             }
 
             //Check existing state
-            if(this.lockState != lockStatusData.GetLockState().GetValue()) {
+            if (this.lockState != lockStatusData.GetLockState().GetValue()) {
                 this.lockState = lockStatusData.GetLockState().GetValue();
                 isChanged = true;
             }
@@ -660,19 +640,19 @@ public class Linka extends Model implements Serializable {
                 isUnlocked = false;
                 canRecordTamperAlert = true;
                 awaitsForAutoUnlocking = false;
-            } else if (state == LockState.LOCK_UNLOCKING){
+            } else if (state == LockState.LOCK_UNLOCKING) {
                 isUnlocking = true;
                 isLocked = false;
                 isUnlocked = false;
                 isLocking = false;
                 canRecordTamperAlert = true;
-            } else if (state == LockState.LOCK_UNLOCKED){
+            } else if (state == LockState.LOCK_UNLOCKED) {
                 if (isUnlocking) {
 
                     isChanged = true;
-                    if(!isAutoUnlocked) {
+                    if (!isAutoUnlocked) {
                         LinkaActivity.saveLinkaActivity(this, LinkaActivity.LinkaActivityType.isUnlocked);
-                    }else {
+                    } else {
                         isAutoUnlocked = false;
                         this.save();
                     }
@@ -688,19 +668,19 @@ public class Linka extends Model implements Serializable {
             }
 
             int stateFlags = lockStatusData.GetStateFlags();
-            if(stateFlags != 0) {
+            if (stateFlags != 0) {
                 boolean isCurrentlyCharging = SystemFlags.flagsToString(stateFlags).contains("Charging");
 
                 //Set lastUnpluggedPercent and lastChargingPercent when charging state changes
                 //If variables are unused, set to 100 and 0.
-                if(isCurrentlyCharging) {
+                if (isCurrentlyCharging) {
                     if (!isCharging) {
                         lastUnpluggedPercent = batteryPercent;
                     }
                     isCharging = true;
                     lastChargingPercent = 100;
 
-                }else {     //If not currently charging
+                } else {     //If not currently charging
                     if (isCharging) {
                         lastChargingPercent = batteryPercent;
                     }
@@ -710,7 +690,7 @@ public class Linka extends Model implements Serializable {
                 }
             }
 
-            if(origBatteryPercent != lockStatusData.GetBatteryPercent()) {
+            if (origBatteryPercent != lockStatusData.GetBatteryPercent()) {
                 if (origBatteryPercent > 0 && lockStatusData.GetBatteryPercent() > 0) {
                     if (origBatteryPercent >= AppDelegate.battery_low_below && lockStatusData.GetBatteryPercent() < AppDelegate.battery_low_below) {
                         tryRecordBatteryLow(lockStatusData);
@@ -723,57 +703,56 @@ public class Linka extends Model implements Serializable {
 
                 //If it is charging, decrease the value by an algorithm.
                 //If it is not charging, display the actual value.
-                if(!isCharging){
+                if (!isCharging) {
                     batteryPercent = origBatteryPercent;
-                }
-                else{
+                } else {
                     //Subtract ~15-30% from the charging value
-                    double calc1 = 0.471*origBatteryPercent;
-                    double calc2 = 0.015*origBatteryPercent*origBatteryPercent;
-                    batteryPercent = (int)(0.9 - calc1 + calc2);
+                    double calc1 = 0.471 * origBatteryPercent;
+                    double calc2 = 0.015 * origBatteryPercent * origBatteryPercent;
+                    batteryPercent = (int) (0.9 - calc1 + calc2);
                 }
 
                 //Make sure it's says charged if it's charged & there's a green light
-                if(SystemFlags.flagsToString(stateFlags).contains("Charged")){
+                if (SystemFlags.flagsToString(stateFlags).contains("Charged")) {
                     batteryPercent = 100;
-                }else if (batteryPercent == 100){
+                } else if (batteryPercent == 100) {
                     batteryPercent = 99;
                 }
 
                 //Make sure that if charge reaches 100% when plugged in, if unplugging, the
                 // battery indeed stays at 100% for at least some time
-                if(!isCharging){
-                    if(batteryPercent > 80){
-                        double calc3 = (batteryPercent-80)*1.4;
-                        batteryPercent = 80 + (int)(calc3); //Anything above 95% -> 100%
+                if (!isCharging) {
+                    if (batteryPercent > 80) {
+                        double calc3 = (batteryPercent - 80) * 1.4;
+                        batteryPercent = 80 + (int) (calc3); //Anything above 95% -> 100%
                     }
                 }
-                
+
                 //Make sure lastChargingPercent never goes to 0
-                if(lastChargingPercent == 0){
+                if (lastChargingPercent == 0) {
                     lastChargingPercent = 100;
                 }
-                
+
                 //Make sure when unplugged, battery never goes above when charged
                 //Also make sure when plugging in, battery never goes below when unplugged
-                if(batteryPercent > lastChargingPercent){
+                if (batteryPercent > lastChargingPercent) {
                     batteryPercent = lastChargingPercent;
-                }else if (batteryPercent < lastUnpluggedPercent){
+                } else if (batteryPercent < lastUnpluggedPercent) {
                     batteryPercent = lastUnpluggedPercent;
                 }
 
                 //Make sure when not charging, battery % never goes up
-                if(!isCharging){
-                    if(batteryPercent < lastChargingPercent){
+                if (!isCharging) {
+                    if (batteryPercent < lastChargingPercent) {
                         lastChargingPercent = batteryPercent;
                     }
                 }
 
                 //Make sure battery percent never exceeds 100%
-                if(batteryPercent >100){
+                if (batteryPercent > 100) {
                     batteryPercent = 100;
                 }
-                LogHelper.i("BATTERY CALC" , "Original percent: " + Integer.toString(origBatteryPercent) + "New Percent:" + Integer.toString(batteryPercent));
+                LogHelper.i("BATTERY CALC", "Original percent: " + Integer.toString(origBatteryPercent) + "New Percent:" + Integer.toString(batteryPercent));
             }
 
 
@@ -807,8 +786,8 @@ public class Linka extends Model implements Serializable {
         return tamperStatus == LockAdV1.VLS_FLAG_ALARM_TIP;
     }*/
 
-    public static void removeLinka(Linka linka){
-        new Delete().from(Linka.class).where("lock_mac_address = ?",linka.getMACAddress()).execute();
+    public static void removeLinka(Linka linka) {
+        new Delete().from(Linka.class).where("lock_mac_address = ?", linka.getMACAddress()).execute();
     }
 
 
@@ -836,8 +815,7 @@ public class Linka extends Model implements Serializable {
         return true;
     }
 
-    public void saveLatLng(Double latitude, Double longitude)
-    {
+    public void saveLatLng(Double latitude, Double longitude) {
         this.latitude = latitude + "";
         this.longitude = longitude + "";
         this.save();
@@ -930,8 +908,6 @@ public class Linka extends Model implements Serializable {
     }
 
 
-
-
     //Sep 2017 - Changing autounlocking Architecture
     //Testing and statistics here: https://docs.google.com/spreadsheets/d/1PtnVTJFL3tsznObbE9rtCvSaUXV0dT0G3oXY1VJEfgE
     // Observations: We should only focus on the maximal RSSI value for a given # of seconds. All the noise is in the negative direction.
@@ -968,34 +944,34 @@ public class Linka extends Model implements Serializable {
             Integer item = RSSIs.get(i);
             int _rssi = item.intValue();
 
-            if (_rssi > -66){ //Check two that exceed -58 in the last 7 rssi values
+            if (_rssi > -66) { //Check two that exceed -58 in the last 7 rssi values
                 numHighRssiCandidates++;
             }
-            if (_rssi > -73 && i >= 2){ //Check two that exceed -63 in the last 5 rssi values
+            if (_rssi > -73 && i >= 2) { //Check two that exceed -63 in the last 5 rssi values
                 numMediumRssiCandidate++;
             }
 
-            if(numHighRssiCandidates >= 2){
+            if (numHighRssiCandidates >= 2) {
                 shouldAutounlockNow = true;
 
-            }else if (numMediumRssiCandidate >= 2){
+            } else if (numMediumRssiCandidate >= 2) {
                 shouldAutounlockAfterDelay = true;
             }
         }
 
 
-        if(!awaitsForAutoUnlocking){
+        if (!awaitsForAutoUnlocking) {
             waitingUntilSettledtoAutoUnlock = false;
         }
 
-        if(shouldAutounlockNow && awaitsForAutoUnlocking || waitingUntilSettledtoAutoUnlock){
+        if (shouldAutounlockNow && awaitsForAutoUnlocking || waitingUntilSettledtoAutoUnlock) {
             doAutounlock();
 
-        } else if (shouldAutounlockAfterDelay && awaitsForAutoUnlocking){
+        } else if (shouldAutounlockAfterDelay && awaitsForAutoUnlocking) {
             Handler handler = new Handler();
-            handler.postDelayed(new Runnable(){
+            handler.postDelayed(new Runnable() {
                 @Override
-                public void run(){
+                public void run() {
                     doAutounlock();
                 }
             }, 2000); //Wait two seconds until the user can walk closer
@@ -1005,9 +981,8 @@ public class Linka extends Model implements Serializable {
     }
 
 
-
     private void doAutounlock() {
-        if(Prefs.getString(Constants.LINKA_ADDRESS_FOR_AUTO_UNLOCK,"").equals(lock_mac_address)) {
+        if (Prefs.getString(Constants.LINKA_ADDRESS_FOR_AUTO_UNLOCK, "").equals(lock_mac_address)) {
             PugNotification.with(AppDelegate.getInstance()).cancel(LinkaActivity.LinkaActivityType.isOutOfRange.getValue());
             if (isConnected && isLockSettled && isLocked && !isLocking && !isUnlocking) {
                 LogHelper.e("AutoUnlock", "UnLock");
@@ -1017,7 +992,7 @@ public class Linka extends Model implements Serializable {
                 LocksController.getInstance().getLockController().doUnlock();
 
                 Bundle args = new Bundle();
-                args.putBoolean(Constants.LINKA_ADDRESS_FOR_AUTO_UNLOCK,true);
+                args.putBoolean(Constants.LINKA_ADDRESS_FOR_AUTO_UNLOCK, true);
                 PugNotification.with(AppDelegate.getInstance())
                         .load()
                         .autoCancel(true)
@@ -1027,7 +1002,7 @@ public class Linka extends Model implements Serializable {
                         .smallIcon(R.drawable.ic_action_name)
                         .largeIcon(R.mipmap.ic_launcher)
                         .flags(Notification.DEFAULT_ALL)
-                        .click(AppMainActivity.class,args)
+                        .click(AppMainActivity.class, args)
                         .simple()
                         .build();
                 LinkaActivity.saveLinkaActivity(this, LinkaActivity.LinkaActivityType.isAutoUnlocked);

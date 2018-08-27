@@ -27,11 +27,10 @@ import butterknife.ButterKnife;
  * Created by Vanson on 18/2/16.
  */
 public class NotificationListAdapter extends GenericLoadMoreAdapter<NotificationListAdapter.ViewHolder> {
+    public static final String UPDATE_NOTIFICATIONS_COUNT = "UpdateNotificationsCount";
 
-
-    public List<Notification> mItems = new ArrayList<>();
-    public View.OnClickListener mOnclickListener;
-
+    private List<Notification> mItems;
+    private View.OnClickListener mOnclickListener;
     public Context context;
 
 
@@ -42,8 +41,7 @@ public class NotificationListAdapter extends GenericLoadMoreAdapter<Notification
         setItemCountSource(mItems);
     }
 
-    public void setList(List<Notification> models)
-    {
+    public void setList(List<Notification> models) {
         // SET REFERENCE
         this.mItems.clear();
         for (Notification item : models) {
@@ -91,15 +89,15 @@ public class NotificationListAdapter extends GenericLoadMoreAdapter<Notification
             icon = R.drawable.danger_icon;
         } else if (item.type == LinkaActivityType.isBatteryCriticallyLow) {
             icon = R.drawable.danger_icon;
-        }else if(item.type == LinkaActivityType.isAutoUnlockEnabled){
+        } else if (item.type == LinkaActivityType.isAutoUnlockEnabled) {
             icon = R.drawable.danger_icon;
         }
         holder.container.setTag(item);
         holder.container.setOnClickListener(mOnclickListener);
         holder.notificationIcon.setImageResource(icon);
-        if(mItems.get(position).isRead){
+        if (mItems.get(position).isRead) {
             holder.container.setBackgroundColor(context.getResources().getColor(R.color.linka_white));
-        }else {
+        } else {
             holder.container.setBackgroundColor(context.getResources().getColor(R.color.unread_notif_back_color));
         }
     }
@@ -109,26 +107,25 @@ public class NotificationListAdapter extends GenericLoadMoreAdapter<Notification
         return super.getItemCount();
     }
 
-    public void updateReadState(){
-        EventBus.getDefault().post("UpdateNotifCount");
-       List<Long> list = new ArrayList<>();
-        for(Notification notification:mItems){
-            if(!notification.isRead) {
+    public void updateReadState() {
+        EventBus.getDefault().post(UPDATE_NOTIFICATIONS_COUNT);
+        List<Long> list = new ArrayList<>();
+        for (Notification notification : mItems) {
+            if (!notification.isRead) {
                 list.add(notification.id);
             }
         }
         LinkaActivity.updateReadState(list);
     }
 
-    public boolean isUnreadItemExist(){
-        for (Notification notification:mItems){
-            if(!notification.isRead){
+    public boolean isUnreadItemExist() {
+        for (Notification notification : mItems) {
+            if (!notification.isRead) {
                 return true;
             }
         }
         return false;
     }
-
 
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -146,8 +143,7 @@ public class NotificationListAdapter extends GenericLoadMoreAdapter<Notification
         int position;
         View itemView;
 
-        public ViewHolder(View itemView)
-        {
+        public ViewHolder(View itemView) {
             super(itemView);
             this.itemView = itemView;
             ButterKnife.bind(this, itemView);
