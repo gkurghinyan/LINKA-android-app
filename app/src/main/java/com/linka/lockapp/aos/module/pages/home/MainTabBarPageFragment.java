@@ -273,11 +273,11 @@ public class MainTabBarPageFragment extends CoreFragment {
                 public void onPageSelected(int position) {
                     getAppMainActivity().onChangeFragment(getSelectedPageFragment(viewPager, adapter));
 
-                    if (position != 1 && getActivity().getSupportFragmentManager().findFragmentById(R.id.users_page_root) != null) {
+                    if (position != USER_SCREEN && getActivity().getSupportFragmentManager().findFragmentById(R.id.users_page_root) != null) {
                         getAppMainActivity().popFragment();
                     }
 
-                    if (position == 3) {
+                    if (position == NOTIFICATION_SCREEN) {
                         if (SettingsPageFragment.currentFragment != SettingsPageFragment.NO_FRAGMENT) {
                             getAppMainActivity().setBackIconVisible(true);
                         }

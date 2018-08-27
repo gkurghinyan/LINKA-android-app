@@ -30,7 +30,6 @@ import com.linka.Lock.BLE.BluetoothLEDevice;
 import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.core.CoreFragment;
 import com.linka.lockapp.aos.module.helpers.BLEHelpers;
-import com.linka.lockapp.aos.module.helpers.LogHelper;
 import com.linka.lockapp.aos.module.helpers.NotificationsHelper;
 import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.model.LinkaActivity;
@@ -60,8 +59,7 @@ import static com.linka.lockapp.aos.module.widget.LocksController.LOCKSCONTROLLE
 
 
 public class CircleView extends CoreFragment {
-    //This fragment position in viewpager of MainTabBarPageFragment
-    private final int thisPage = 0;
+    private static final String LINKA_ARGUMENT = "LinkaArgument";
 
     @BindView(R.id.slide_to_lock)
     SwipeButton swipeButton;
@@ -99,18 +97,17 @@ public class CircleView extends CoreFragment {
     private BluetoothAdapter bluetoothAdapter;
     private BluetoothAdapter.LeScanCallback scanCallback;
     private Unbinder unbinder;
-
     private Linka linka;
     private LockController lockController;
     private View internetPage;
 
     private boolean isWarningShow = false;
-
-    private AlertDialog turningLinkaDialog = null;
-
     private boolean isPanicEnabled = false;
     private boolean isRefreshAvailable = true;
     private boolean isLockConnected = false;
+    private boolean isPanicAndSleepEnabled = false;
+
+    private AlphaAnimation animation = new AlphaAnimation(1.0f, 0.2f);
 
     private Handler notSuccessLockHandler;
     private Runnable notSuccessLockRunnable = new Runnable() {
@@ -139,6 +136,24 @@ public class CircleView extends CoreFragment {
         }
     };
 
+    private Handler scanHandler = null;
+    private Runnable scanRunnable = new Runnable() {
+        @Override
+        public void run() {
+            lockController.doConnectDevice();
+            scanLeDevice();
+            scanHandler.postDelayed(scanRunnable, 15 * 1000);
+        }
+    };
+
+    private Handler refreshHandler;
+    private Runnable refreshRunnable = new Runnable() {
+        @Override
+        public void run() {
+            isRefreshAvailable = true;
+        }
+    };
+
     private final BroadcastReceiver blueToothReceiver = new BroadcastReceiver() {
 
         @Override
@@ -149,7 +164,7 @@ public class CircleView extends CoreFragment {
                 final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
                 switch (state) {
                     case BluetoothAdapter.STATE_OFF:
-                        if(bluetoothHandler == null) {
+                        if (bluetoothHandler == null) {
                             isRefreshAvailable = false;
                             setLockNotConnectedState();
                             bluetoothHandler = new Handler();
@@ -158,6 +173,7 @@ public class CircleView extends CoreFragment {
                         }
                         break;
                     case BluetoothAdapter.STATE_ON:
+                        lockController.doConnectDevice();
                         refreshDisplay();
                         break;
                 }
@@ -169,7 +185,7 @@ public class CircleView extends CoreFragment {
     public static CircleView newInstance(Linka linka) {
         Bundle bundle = new Bundle();
         CircleView fragment = new CircleView();
-        bundle.putSerializable("linka", linka);
+        bundle.putSerializable(LINKA_ARGUMENT, linka);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -180,21 +196,56 @@ public class CircleView extends CoreFragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.layout_circle_view, container, false);
         unbinder = ButterKnife.bind(this, rootView);
-
         return rootView;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        if (getArguments() != null) {
-            Bundle bundle = getArguments();
-            if (bundle.get("linka") != null) {
-                linka = (Linka) bundle.getSerializable("linka");
-            }
+        if (getArguments().get(LINKA_ARGUMENT) != null) {
+            linka = (Linka) getArguments().getSerializable(LINKA_ARGUMENT);
             init();
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        IntentFilter filter1 = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+        getActivity().registerReceiver(blueToothReceiver, filter1);
+        EventBus.getDefault().register(this);
+        isRefreshAvailable = true;
+        if (!linka.isConnected) {
+            scanHandler = new Handler();
+            scanHandler.postDelayed(scanRunnable, 3000);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshDisplay();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+        getActivity().unregisterReceiver(blueToothReceiver);
+        if (notSuccessLockHandler != null) {
+            isWarningShow = false;
+            notSuccessLockHandler.removeCallbacks(notSuccessLockRunnable);
+            notSuccessLockHandler = null;
+            gifImageView.setVisibility(View.GONE);
+            setPanicAndSleepButtonsVisibility(View.VISIBLE);
+            warningTitle.setVisibility(View.GONE);
+            warningText.setVisibility(View.GONE);
+            refreshDisplay();
+        }
+        if (bluetoothAdapter != null) {
+            bluetoothAdapter.stopLeScan(scanCallback);
+        }
+        removeCallbacks();
     }
 
     @Override
@@ -203,25 +254,7 @@ public class CircleView extends CoreFragment {
         unbinder.unbind();
     }
 
-    private boolean getInternetConnectivity() {
-        boolean connected;
-        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        connected = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
-                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED;
-        return connected;
-    }
-
-    private boolean getBluetoothConnectivity() {
-        if (!getContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
-            return false;
-        }
-        BluetoothManager bluetoothManager = (BluetoothManager) getContext().getSystemService(Context.BLUETOOTH_SERVICE);
-        bluetoothAdapter = bluetoothManager.getAdapter();
-        return bluetoothAdapter.isEnabled();
-    }
-
-
-    void init() {
+    private void init() {
         batteryImage.setColorFilter(getActivity().getResources().getColor(R.color.linka_gray), PorterDuff.Mode.SRC_IN);
         internetPage = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_no_internet_connectivity, null);
         setPanicAndSleepButtonsState(false);
@@ -289,6 +322,72 @@ public class CircleView extends CoreFragment {
 
     }
 
+    public void refreshDisplay() {
+        if (!isAdded()) return;
+
+        if (isRefreshAvailable) {
+            if (getAppMainActivity() != null) {
+                getAppMainActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!getInternetConnectivity()) {
+                            root.removeView(internetPage);
+                            if (internetPage.getParent() == null) {
+                                root.addView(internetPage);
+                            }
+                            root.setBackground(getResources().getDrawable(R.drawable.blue_gradient));
+                            batteryPercent.setText("");
+                        } else if (!getBluetoothConnectivity()) {
+                            if (bluetoothHandler == null) {
+                                isRefreshAvailable = false;
+                                setLockNotConnectedState();
+                                bluetoothHandler = new Handler();
+                                bluetoothHandler.postDelayed(bluetoothRunnable, 1000);
+                                lockController.doDisconnectDevice();
+                            }
+                        } else {
+                            root.setBackgroundColor(getResources().getColor(R.color.linka_transparent));
+                            if (!isWarningShow) {
+                                if (!linka.isConnected) {
+                                    setLockNotConnect();
+                                } else {
+                                    setLockConnect();
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            isRefreshAvailable = false;
+            if (refreshHandler == null) {
+                refreshHandler = new Handler();
+            }
+            refreshHandler.postDelayed(refreshRunnable, 700);
+        }
+    }
+
+    private boolean getInternetConnectivity() {
+        boolean connected;
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        connected = connectivityManager != null &&
+                (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                        connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED);
+        return connected;
+    }
+
+    private boolean getBluetoothConnectivity() {
+        if (!getContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+            return false;
+        }
+        BluetoothManager bluetoothManager = (BluetoothManager) getContext().getSystemService(Context.BLUETOOTH_SERVICE);
+        if(bluetoothManager != null) {
+            bluetoothAdapter = bluetoothManager.getAdapter();
+            return bluetoothAdapter.isEnabled();
+        }else {
+            return false;
+        }
+    }
+
     private void turnOnBluetooth() {
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (!mBluetoothAdapter.isEnabled()) {
@@ -296,8 +395,213 @@ public class CircleView extends CoreFragment {
         }
     }
 
-    private boolean isPanicAndSleepEnabled = false;
-    private AlphaAnimation animation = new AlphaAnimation(1.0f, 0.2f);
+    private void removeCallbacks() {
+        if (refreshHandler != null) {
+            refreshHandler = null;
+            isRefreshAvailable = true;
+        }
+        if (scanHandler != null) {
+            scanHandler.removeCallbacks(scanRunnable);
+            scanHandler = null;
+        }
+        if (bluetoothHandler != null) {
+            bluetoothHandler.removeCallbacks(bluetoothRunnable);
+            bluetoothHandler = null;
+        }
+    }
+
+    private void setLockNotConnect() {
+        root.removeView(internetPage);
+        if (scanHandler == null) {
+            scanHandler = new Handler();
+            scanHandler.postDelayed(scanRunnable, 3000);
+        }
+        if (isLockConnected || swipeButton.getCurrentState() != Circle.NO_CONNECTION_STATE) {
+            setLockNotConnectedState();
+        }
+    }
+
+    private void setLockNotConnectedState() {
+        if (batteryImage != null) {
+            batteryImage.setColorFilter(getActivity().getResources().getColor(R.color.linka_gray), PorterDuff.Mode.SRC_IN);
+            batteryPercent.setText("");
+            swipeText.setText(getString(R.string.asleep_or_out));
+            gifImageView.setVisibility(View.GONE);
+            swipeButton.setCurrentState(Circle.NO_CONNECTION_STATE);
+            swipeButton.setCircleClickable(false);
+            if (isPanicAndSleepEnabled) {
+                setPanicAndSleepButtonsState(false);
+            }
+            isLockConnected = false;
+        }
+    }
+
+    private void setLockConnect() {
+        if (scanCallback != null) {
+            bluetoothAdapter.stopLeScan(scanCallback);
+            scanCallback = null;
+        }
+        if (scanHandler != null) {
+            scanHandler.removeCallbacks(scanRunnable);
+            scanHandler = null;
+        }
+        if (linka.isLockSettled) {
+            setLockSettledState();
+        } else {
+            isLockConnected = false;
+            root.removeView(internetPage);
+            if (gifImageView.getVisibility() != View.VISIBLE ||
+                    gifImageView.getDrawable().equals(getResources().getDrawable(R.drawable.wi_fi_connection))) {
+                gifImageView.setVisibility(View.VISIBLE);
+            }
+            swipeButton.setCircleClickable(false);
+            if (isPanicAndSleepEnabled) {
+                setPanicAndSleepButtonsState(false);
+            }
+        }
+    }
+
+    private void setLockSettledState() {
+        if (!isPanicAndSleepEnabled) {
+            setPanicAndSleepButtonsState(true);
+            batteryImage.setColorFilter(null);
+            batteryPercent.setText(linka.batteryPercent + "%");
+        }
+        if (!isLockConnected) {
+            root.removeView(internetPage);
+            gifImageView.setVisibility(View.GONE);
+            isLockConnected = true;
+        }
+        if (linka.isLocked) {
+            swipeText.setText(getString(R.string.press_to_unlock));
+            swipeButton.setCurrentState(Circle.LOCKED_STATE);
+            swipeButton.setCircleClickable(true);
+        } else if (linka.isUnlocked) {
+            swipeText.setText(getString(R.string.press_to_lock));
+            swipeButton.setCurrentState(Circle.UNLOCKED_STATE);
+            swipeButton.setCircleClickable(true);
+        } else if (linka.isLocking) {
+            swipeText.setText(getString(R.string.locking));
+            swipeButton.setCurrentState(Circle.LOCKING_STATE);
+            swipeButton.setCircleClickable(false);
+        } else if (linka.isUnlocking) {
+            swipeText.setText(getString(R.string.unlocking));
+            swipeButton.setCurrentState(Circle.UNLOCKING_STATE);
+            swipeButton.setCircleClickable(false);
+        }
+    }
+
+    private void setDeviceNotLockedSuccessState() {
+        swipeText.setText(getString(R.string.press_to_lock));
+        isWarningShow = true;
+        swipeButton.setCircleClickable(false);
+        setPanicAndSleepButtonsVisibility(View.GONE);
+        gifImageView.setVisibility(View.VISIBLE);
+        gifImageView.setBackgroundResource(R.drawable.danger_red_back);
+        gifImageView.setImageResource(R.drawable.close_white_linka);
+        warningTitle.setVisibility(View.VISIBLE);
+        warningText.setVisibility(View.VISIBLE);
+        notSuccessLockHandler = new Handler();
+        notSuccessLockHandler.postDelayed(notSuccessLockRunnable, 5000);
+    }
+
+    private void setPanicAndSleepButtonsVisibility(int visibility) {
+        if (panicButton.getAnimation() != null) {
+            panicButton.clearAnimation();
+            panicButton.setBackground(getResources().getDrawable(R.drawable.panic_blue_button));
+        }
+        swipeText.setVisibility(visibility);
+        panicButton.setVisibility(visibility);
+        sleepButton.setVisibility(visibility);
+    }
+
+    private void setPanicAndSleepButtonsState(boolean enable) {
+        if (panicButton.getAnimation() != null) {
+            panicButton.clearAnimation();
+            panicButton.setBackground(getResources().getDrawable(R.drawable.panic_blue_button));
+        }
+        panicButton.setClickable(enable);
+        sleepButton.setClickable(enable);
+        isPanicAndSleepEnabled = enable;
+        if (enable) {
+            panicButton.setBackground(getResources().getDrawable(R.drawable.panic_blue_button));
+            sleepButton.setBackground(getResources().getDrawable(R.drawable.panic_blue_button));
+            panicButton.setColorFilter(getActivity().getResources().getColor(R.color.linka_white), PorterDuff.Mode.SRC_IN);
+            sleepButton.setColorFilter(getActivity().getResources().getColor(R.color.linka_white), PorterDuff.Mode.SRC_IN);
+        } else {
+            panicButton.setBackground(getResources().getDrawable(R.drawable.panic_button));
+            sleepButton.setBackground(getResources().getDrawable(R.drawable.panic_button));
+            panicButton.setColorFilter(getActivity().getResources().getColor(R.color.panic_gray_color), PorterDuff.Mode.SRC_IN);
+            sleepButton.setColorFilter(getActivity().getResources().getColor(R.color.panic_gray_color), PorterDuff.Mode.SRC_IN);
+        }
+    }
+
+    private List<Linka> linkaList = new ArrayList<>();
+    private List<BluetoothLEDevice> devices = new ArrayList<>();
+
+    private void initializeScanCallback() {
+        scanCallback = new BluetoothAdapter.LeScanCallback() {
+
+            @Override
+            public void onLeScan(final BluetoothDevice device, final int rssi, final byte[] scanRecord) {
+                if (device == null) {
+                    return;
+                }
+                int result = BLEHelpers.upsertBluetoothLEDeviceList(devices, linkaList, device, rssi, scanRecord);
+                if (result == 0) {
+                    if (!linkaList.isEmpty()) {
+                        if (bluetoothAdapter == null) {
+                            BluetoothManager bluetoothManager = (BluetoothManager) getContext().getSystemService(Context.BLUETOOTH_SERVICE);
+                            if(bluetoothManager != null) {
+                                bluetoothAdapter = bluetoothManager.getAdapter();
+                            }
+                        }
+                        bluetoothAdapter.stopLeScan(this);
+                        scanCallback = null;
+                        bluetoothAdapter = null;
+                        if (scanHandler != null) {
+                            scanHandler.removeCallbacks(scanRunnable);
+                            scanHandler = null;
+                        }
+                    }
+                } else if (result == 1) {
+                    if (!linkaList.isEmpty()) {
+                        if (bluetoothAdapter == null && getActivity() != null) {
+                            BluetoothManager bluetoothManager = (BluetoothManager) getActivity().getSystemService(Context.BLUETOOTH_SERVICE);
+                            if (bluetoothManager != null) {
+                                bluetoothAdapter = bluetoothManager.getAdapter();
+                            }
+                        }
+                        if (bluetoothAdapter != null) {
+                            bluetoothAdapter.stopLeScan(scanCallback);
+                        }
+                        scanCallback = null;
+                        bluetoothAdapter = null;
+                        if (scanHandler != null) {
+                            scanHandler.removeCallbacks(scanRunnable);
+                            scanHandler = null;
+                        }
+                    }
+                }
+            }
+        };
+    }
+
+    private void scanLeDevice() {
+        if (bluetoothAdapter == null) return;
+
+        if (scanCallback != null) {
+            bluetoothAdapter.stopLeScan(scanCallback);
+            scanCallback = null;
+        }
+        initializeScanCallback();
+        if (bluetoothAdapter == null) {
+            BluetoothManager bluetoothManager = (BluetoothManager) getContext().getSystemService(Context.BLUETOOTH_SERVICE);
+            if(bluetoothManager != null) {
+                bluetoothManager.getAdapter().startLeScan(scanCallback);
+            }
+        }
+    }
 
     @OnTouch(R.id.panic_button)
     boolean onPanicTouch(MotionEvent ev) {
@@ -357,362 +661,33 @@ public class CircleView extends CoreFragment {
         return false;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        IntentFilter filter1 = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
-        getActivity().registerReceiver(blueToothReceiver, filter1);
-        EventBus.getDefault().register(this);
-        isRefreshAvailable = true;
-        if (!linka.isConnected) {
-            scanHandler = new Handler();
-            scanHandler.postDelayed(scanRunnable, 3000);
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        refreshDisplay();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
-        getActivity().unregisterReceiver(blueToothReceiver);
-        if (notSuccessLockHandler != null) {
-            isWarningShow = false;
-            notSuccessLockHandler.removeCallbacks(notSuccessLockRunnable);
-            notSuccessLockHandler = null;
-            gifImageView.setVisibility(View.GONE);
-            setPanicAndSleepButtonsVisibility(View.VISIBLE);
-            warningTitle.setVisibility(View.GONE);
-            warningText.setVisibility(View.GONE);
-            refreshDisplay();
-        }
-        if (bluetoothAdapter != null) {
-            bluetoothAdapter.stopLeScan(scanCallback);
-        }
-        if (turningLinkaDialog != null && turningLinkaDialog.isShowing()) {
-            turningLinkaDialog.dismiss();
-        }
-        removeCallbacks();
-    }
-
-    private void removeCallbacks(){
-        if (refreshHandler != null) {
-            refreshHandler = null;
-            isRefreshAvailable = true;
-        }
-        if (scanHandler != null) {
-            scanHandler.removeCallbacks(scanRunnable);
-            scanHandler = null;
-        }
-        if(bluetoothHandler != null){
-            bluetoothHandler.removeCallbacks(bluetoothRunnable);
-            bluetoothHandler = null;
-        }
-    }
-
-    private Handler scanHandler = null;
-    private Runnable scanRunnable = new Runnable() {
-        @Override
-        public void run() {
-            scanLeDevice();
-            scanHandler.postDelayed(scanRunnable, 15 * 1000);
-        }
-    };
-
-    public void refreshDisplay() {
-        if (!isAdded()) return;
-
-        if (isRefreshAvailable) {
-            if (getAppMainActivity() != null) {
-                getAppMainActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (!getInternetConnectivity()) {
-                            root.removeView(internetPage);
-                            if (internetPage.getParent() == null) {
-                                root.addView(internetPage);
-                            }
-                            root.setBackground(getResources().getDrawable(R.drawable.blue_gradient));
-                            batteryPercent.setText("");
-                        } else if (!getBluetoothConnectivity()) {
-                            if(bluetoothHandler == null) {
-                                isRefreshAvailable = false;
-                                setLockNotConnectedState();
-                                bluetoothHandler = new Handler();
-                                bluetoothHandler.postDelayed(bluetoothRunnable,1000);
-                                lockController.doDisconnectDevice();
-                            }
-                        } else {
-                            root.setBackgroundColor(getResources().getColor(R.color.linka_transparent));
-                            if (!isWarningShow) {
-                                if (!linka.isConnected) {
-                                    setLockNotConnect();
-                                } else {
-                                    setLockConnect();
-                                }
-                            }
-                        }
-//                        LocksController.getInstance().refresh();
-                    }
-                });
-            }
-            isRefreshAvailable = false;
-            if (refreshHandler == null) {
-                refreshHandler = new Handler();
-            }
-            refreshHandler.postDelayed(refreshRunnable, 700);
-        }
-    }
-
-    private void setLockNotConnect() {
-        root.removeView(internetPage);
-        if (scanHandler == null) {
-            scanHandler = new Handler();
-            scanHandler.postDelayed(scanRunnable, 3000);
-        }
-        if (isLockConnected || swipeButton.getCurrentState() != Circle.NO_CONNECTION_STATE) {
-            setLockNotConnectedState();
-        }
-    }
-
-    private void setLockConnect() {
-        if (turningLinkaDialog != null && turningLinkaDialog.isShowing()) {
-            turningLinkaDialog.dismiss();
-        }
-        if (scanCallback != null) {
-            bluetoothAdapter.stopLeScan(scanCallback);
-            scanCallback = null;
-        }
-        if (scanHandler != null) {
-            scanHandler.removeCallbacks(scanRunnable);
-            scanHandler = null;
-        }
-        if (linka.isLockSettled) {
-            setLockSettledState();
-        } else {
-            isLockConnected = false;
-            root.removeView(internetPage);
-            if (gifImageView.getVisibility() != View.VISIBLE ||
-                    gifImageView.getDrawable().equals(getResources().getDrawable(R.drawable.wi_fi_connection))) {
-                gifImageView.setVisibility(View.VISIBLE);
-            }
-            swipeButton.setCircleClickable(false);
-            if (isPanicAndSleepEnabled) {
-                setPanicAndSleepButtonsState(false);
-            }
-        }
-    }
-
-    private Handler refreshHandler;
-    private Runnable refreshRunnable = new Runnable() {
-        @Override
-        public void run() {
-            isRefreshAvailable = true;
-        }
-    };
-
-    private void setPanicAndSleepButtonsVisibility(int visibility) {
-        if (panicButton.getAnimation() != null) {
-            panicButton.clearAnimation();
-            panicButton.setBackground(getResources().getDrawable(R.drawable.panic_blue_button));
-        }
-        swipeText.setVisibility(visibility);
-        panicButton.setVisibility(visibility);
-        sleepButton.setVisibility(visibility);
-    }
-
-    private void setPanicAndSleepButtonsState(boolean enable) {
-        if (panicButton.getAnimation() != null) {
-            panicButton.clearAnimation();
-            panicButton.setBackground(getResources().getDrawable(R.drawable.panic_blue_button));
-        }
-        panicButton.setClickable(enable);
-        sleepButton.setClickable(enable);
-        isPanicAndSleepEnabled = enable;
-        if (enable) {
-            panicButton.setBackground(getResources().getDrawable(R.drawable.panic_blue_button));
-            sleepButton.setBackground(getResources().getDrawable(R.drawable.panic_blue_button));
-            panicButton.setColorFilter(getActivity().getResources().getColor(R.color.linka_white), PorterDuff.Mode.SRC_IN);
-            sleepButton.setColorFilter(getActivity().getResources().getColor(R.color.linka_white), PorterDuff.Mode.SRC_IN);
-        } else {
-            panicButton.setBackground(getResources().getDrawable(R.drawable.panic_button));
-            sleepButton.setBackground(getResources().getDrawable(R.drawable.panic_button));
-            panicButton.setColorFilter(getActivity().getResources().getColor(R.color.panic_gray_color), PorterDuff.Mode.SRC_IN);
-            sleepButton.setColorFilter(getActivity().getResources().getColor(R.color.panic_gray_color), PorterDuff.Mode.SRC_IN);
-        }
-    }
-
-    private void setLockNotConnectedState() {
-        if (batteryImage != null) {
-            batteryImage.setColorFilter(getActivity().getResources().getColor(R.color.linka_gray), PorterDuff.Mode.SRC_IN);
-            batteryPercent.setText("");
-            swipeText.setText(getString(R.string.asleep_or_out));
-            gifImageView.setVisibility(View.GONE);
-            swipeButton.setCurrentState(Circle.NO_CONNECTION_STATE);
-            swipeButton.setCircleClickable(false);
-            if (isPanicAndSleepEnabled) {
-                setPanicAndSleepButtonsState(false);
-            }
-//            scanLeDevice();
-            isLockConnected = false;
-        }
-    }
-
-    private void setLockSettledState() {
-        if (!isPanicAndSleepEnabled) {
-            setPanicAndSleepButtonsState(true);
-            batteryImage.setColorFilter(null);
-            batteryPercent.setText(linka.batteryPercent + "%");
-        }
-        if (!isLockConnected) {
-            root.removeView(internetPage);
-            gifImageView.setVisibility(View.GONE);
-            isLockConnected = true;
-        }
-        if (linka.isLocked) {
-            swipeText.setText(getString(R.string.press_to_unlock));
-            swipeButton.setCurrentState(Circle.LOCKED_STATE);
-            swipeButton.setCircleClickable(true);
-        } else if (linka.isUnlocked) {
-            swipeText.setText(getString(R.string.press_to_lock));
-            swipeButton.setCurrentState(Circle.UNLOCKED_STATE);
-            swipeButton.setCircleClickable(true);
-        } else if (linka.isLocking) {
-            swipeText.setText(getString(R.string.locking));
-            swipeButton.setCurrentState(Circle.LOCKING_STATE);
-            swipeButton.setCircleClickable(false);
-        } else if (linka.isUnlocking) {
-            swipeText.setText(getString(R.string.unlocking));
-            swipeButton.setCurrentState(Circle.UNLOCKING_STATE);
-            swipeButton.setCircleClickable(false);
-        }
-    }
-
-    private void setDeviceNotLockedSuccessState() {
-        swipeText.setText(getString(R.string.press_to_lock));
-        isWarningShow = true;
-        swipeButton.setCircleClickable(false);
-        setPanicAndSleepButtonsVisibility(View.GONE);
-        gifImageView.setVisibility(View.VISIBLE);
-        gifImageView.setBackgroundResource(R.drawable.danger_red_back);
-        gifImageView.setImageResource(R.drawable.close_white_linka);
-        warningTitle.setVisibility(View.VISIBLE);
-        warningText.setVisibility(View.VISIBLE);
-        notSuccessLockHandler = new Handler();
-        notSuccessLockHandler.postDelayed(notSuccessLockRunnable, 5000);
-    }
-
     @Subscribe
     public void onEvent(Object object) {
         if (!isAdded()) return;
-        if (object instanceof String && object.equals(LOCKSCONTROLLER_NOTIFY_REFRESHED)) {
+        if(object != null && object instanceof String){
+            if (object.equals(LOCKSCONTROLLER_NOTIFY_REFRESHED) ||
+                    object.equals(LinkaActivity.LINKA_ACTIVITY_ON_CHANGE) ||
+                    object.equals(LockGattUpdateReceiver.GATT_UPDATE_RECEIVER_NOTIFY_DISCONNECTED)) {
 
-            linka = Linka.getLinkaFromLockController();
-
-            if (MainTabBarPageFragment.currentPosition == MainTabBarPageFragment.LOCK_SCREEN) {
-                refreshDisplay();
-            }
-
-        } else if (object != null && object.equals(LinkaActivity.LINKA_ACTIVITY_ON_CHANGE)) {
-
-            linka = Linka.getLinkaFromLockController();
-
-            if (MainTabBarPageFragment.currentPosition == MainTabBarPageFragment.LOCK_SCREEN) {
-                refreshDisplay();
-            }
-        } else if (object instanceof String && ((String) object).substring(0, 8).equals("Selected")) {
-            if (object.equals("Selected-" + String.valueOf(MainTabBarPageFragment.LOCK_SCREEN))) {
-                refreshDisplay();
-                if (!linka.isConnected) {
-                    if (scanHandler != null) {
-                        scanHandler.removeCallbacks(scanRunnable);
-                        scanHandler = null;
-                    }
-                    scanHandler = new Handler();
-                    scanHandler.postDelayed(scanRunnable, 1500);
+                linka = Linka.getLinkaFromLockController();
+                if (MainTabBarPageFragment.currentPosition == MainTabBarPageFragment.LOCK_SCREEN) {
+                    refreshDisplay();
                 }
-
-            }
-        } else if (object != null && object.equals(LockGattUpdateReceiver.GATT_UPDATE_RECEIVER_NOTIFY_DISCONNECTED)) {
-            LogHelper.e("MyLinkasPageFrag", "[EVENTBUS] GATT DISCONNECT Notified");
-
-            linka = Linka.getLinkaFromLockController();
-            if (MainTabBarPageFragment.currentPosition == MainTabBarPageFragment.LOCK_SCREEN) {
-                refreshDisplay();
-            }
-        } else if (object != null && object.equals(NotificationsHelper.LINKA_NOT_LOCKED)) {
-            setDeviceNotLockedSuccessState();
-        }
-    }
-
-    List<Linka> linkaList = new ArrayList<>();
-    List<BluetoothLEDevice> devices = new ArrayList<>();
-
-    private void initializeScanCallback() {
-        scanCallback = new BluetoothAdapter.LeScanCallback() {
-
-            @Override
-            public void onLeScan(final BluetoothDevice device, final int rssi, final byte[] scanRecord) {
-                if (device != null) {
-                    LogHelper.e("SCAN", "Got Device " + device.getName() + device.getAddress());
-                } else {
-                    return;
-                }
-                int result = BLEHelpers.upsertBluetoothLEDeviceList(devices, linkaList, device, rssi, scanRecord);
-                if (result == 0) {
-                    if (!linkaList.isEmpty()) {
-                        if (bluetoothAdapter == null) {
-                            BluetoothManager bluetoothManager = (BluetoothManager) getContext().getSystemService(Context.BLUETOOTH_SERVICE);
-                            bluetoothAdapter = bluetoothManager.getAdapter();
-                        }
-                        bluetoothAdapter.stopLeScan(this);
-                        scanCallback = null;
-                        bluetoothAdapter = null;
+            } else if (((String) object).substring(0, 9).equals(MainTabBarPageFragment.SELECTED_SCREEN)) {
+                if (object.equals(MainTabBarPageFragment.SELECTED_SCREEN + String.valueOf(MainTabBarPageFragment.LOCK_SCREEN))) {
+                    refreshDisplay();
+                    if (!linka.isConnected) {
                         if (scanHandler != null) {
                             scanHandler.removeCallbacks(scanRunnable);
                             scanHandler = null;
                         }
-                    }
-                } else if (result == 1) {
-                    if (!linkaList.isEmpty()) {
-                        if (bluetoothAdapter == null && getActivity() != null) {
-                            BluetoothManager bluetoothManager = (BluetoothManager) getActivity().getSystemService(Context.BLUETOOTH_SERVICE);
-                            if (bluetoothManager != null) {
-                                bluetoothAdapter = bluetoothManager.getAdapter();
-                            }
-                        }
-                        if (bluetoothAdapter != null) {
-                            bluetoothAdapter.stopLeScan(scanCallback);
-                        }
-                        scanCallback = null;
-                        bluetoothAdapter = null;
-                        if (scanHandler != null) {
-                            scanHandler.removeCallbacks(scanRunnable);
-                            scanHandler = null;
-                        }
+                        scanHandler = new Handler();
+                        scanHandler.postDelayed(scanRunnable, 1500);
                     }
                 }
+            } else  if (object.equals(NotificationsHelper.LINKA_NOT_LOCKED)) {
+                setDeviceNotLockedSuccessState();
             }
-        };
-    }
-
-    void scanLeDevice() {
-        if (bluetoothAdapter == null) return;
-
-        if (scanCallback != null) {
-            bluetoothAdapter.stopLeScan(scanCallback);
-            scanCallback = null;
         }
-        initializeScanCallback();
-        if (bluetoothAdapter == null) {
-            BluetoothManager bluetoothManager = (BluetoothManager) getContext().getSystemService(Context.BLUETOOTH_SERVICE);
-            bluetoothAdapter = bluetoothManager.getAdapter();
-        }
-        bluetoothAdapter.startLeScan(scanCallback);
     }
 }
