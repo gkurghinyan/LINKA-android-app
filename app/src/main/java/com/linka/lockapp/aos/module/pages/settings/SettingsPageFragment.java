@@ -53,6 +53,12 @@ import static com.linka.lockapp.aos.module.widget.LocksController.LOCKSCONTROLLE
  * Created by Vanson on 17/2/16.
  */
 public class SettingsPageFragment extends CoreFragment {
+    private static final String LINKA_ARGUMENT = "LinkaArgument";
+    private static final String SCROLL_VIEW_POSITION = "ScrollViewPosition";
+    public static final String FRAGMENT_ADDED = "FragmentAdded";
+    public static final int NO_FRAGMENT = 0;
+    public static final int TAMPER_SENSITIVITY_FRAGMENT = 1;
+    public static final int REMOVE_INFO_FRAGMENT = 2;
 
     @BindView(R.id.root)
     FrameLayout root;
@@ -88,11 +94,6 @@ public class SettingsPageFragment extends CoreFragment {
     Switch switchAutoUnlocking;
     @BindView(R.id.auto_switch_view)
     View autoSwitchView;
-
-//    @BindView(R.id.row_radius_settings)
-//    LinearLayout rowRadiusSettings;
-//    @BindView(R.id.text_radius_settings)
-//    TextView textRadiusSettings;
 
     @BindView(R.id.row_tamper_siren)
     RelativeLayout rowTamperSiren;
@@ -149,34 +150,27 @@ public class SettingsPageFragment extends CoreFragment {
     @BindView(R.id.remove_bottom_divider)
     View removeBottomDivider;
 
-    Linka linka;
+//      @BindView(R.id.row_radius_settings)
+//    LinearLayout rowRadiusSettings;
+//    @BindView(R.id.text_radius_settings)
+//    TextView textRadiusSettings;
 
-    public static final String FRAGMENT_ADDED = "FragmentAdded";
-    public static final int NO_FRAGMENT = 0;
-    public static final int TAMPER_SENSITIVITY_FRAGMENT = 1;
-    public static final int REMOVE_INFO_FRAGMENT = 2;
+    private Linka linka;
     public static int currentFragment = NO_FRAGMENT;
-
     private ThreeDotsDialogFragment threeDotsDialogFragment = null;
-
-    RevocationControllerV2 revocationController = new RevocationControllerV2();
-
-    boolean isAdmin = false;
-//    @BindView(R.id.fw_update_button)
-//    LinkaButton fwUpdateButton;
-
+    private RevocationControllerV2 revocationController = new RevocationControllerV2();
+    private boolean isAdmin = false;
     private Unbinder unbinder;
+    private int[] array = null;
+    private boolean doNotSendWrite = false;
+    private LockController lockController;
 
     public static SettingsPageFragment newInstance(Linka linka) {
         Bundle bundle = new Bundle();
         SettingsPageFragment fragment = new SettingsPageFragment();
-        bundle.putSerializable("linka", linka);
+        bundle.putSerializable(LINKA_ARGUMENT, linka);
         fragment.setArguments(bundle);
         return fragment;
-    }
-
-
-    public SettingsPageFragment() {
     }
 
     @Override
@@ -184,7 +178,6 @@ public class SettingsPageFragment extends CoreFragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_settings_page, container, false);
         unbinder = ButterKnife.bind(this, rootView);
-
         revocationController.onResume();
         return rootView;
     }
@@ -193,16 +186,14 @@ public class SettingsPageFragment extends CoreFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (getArguments() != null) {
-            Bundle bundle = getArguments();
-            if (bundle.get("linka") != null) {
-                linka = (Linka) bundle.getSerializable("linka");
+        lockController = LocksController.getInstance().getLockController();
 
-                LockController lockController = LocksController.getInstance().getLockController();
-                revocationController.implement(getAppMainActivity(), linka, lockController);
-            }
-            if (savedInstanceState != null && savedInstanceState.getIntArray("position") != null) {
-                array = savedInstanceState.getIntArray("position");
+        if (getArguments().get(LINKA_ARGUMENT) != null) {
+            linka = (Linka) getArguments().getSerializable(LINKA_ARGUMENT);
+            revocationController.implement(getAppMainActivity(), linka, lockController);
+
+            if (savedInstanceState != null && savedInstanceState.getIntArray(SCROLL_VIEW_POSITION) != null) {
+                array = savedInstanceState.getIntArray(SCROLL_VIEW_POSITION);
             }
         }
         getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
@@ -227,11 +218,20 @@ public class SettingsPageFragment extends CoreFragment {
         init();
     }
 
-    int[] array = null;
+    @Override
+    public void onResume() {
+        super.onResume();
+        EventBus.getDefault().register(this);
+    }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onPause() {
+        super.onPause();
+        if (editName != null) {
+            linka.saveName(editName.getText().toString());
+            linka.save();
+        }
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -246,12 +246,11 @@ public class SettingsPageFragment extends CoreFragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         if (scrollView != null) {
-            outState.putIntArray("position", new int[]{scrollView.getScrollX(), scrollView.getScrollY()});
+            outState.putIntArray(SCROLL_VIEW_POSITION, new int[]{scrollView.getScrollX(), scrollView.getScrollY()});
         }
     }
 
-
-    void init() {
+    private void init() {
         if (array != null) {
             scrollView.post(new Runnable() {
                 @Override
@@ -261,13 +260,7 @@ public class SettingsPageFragment extends CoreFragment {
             });
         }
 
-        switchAudibleLockingUnlocking.setOnCheckedChangeListener(settings_audible_locking_unlocking);
-
-        switchTamperSiren.setOnCheckedChangeListener(settings_tamper_siren);
-
-        switchAutoUnlocking.setOnCheckedChangeListener(settings_auto_unlock);
-
-        switchQuickLock.setOnCheckedChangeListener(settings_quick_lock);
+        setSwitchesCheckedChangeListeners();
 
         editName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -295,95 +288,78 @@ public class SettingsPageFragment extends CoreFragment {
         refreshDisplay();
     }
 
+    private void setSwitchesCheckedChangeListeners() {
+        Switch.OnCheckedChangeListener onCheckedChangeListener = new Switch.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(Switch view, boolean checked) {
+                switch (view.getId()) {
+                    case R.id.settings_audible_locking_unlocking:
+                        if (!doNotSendWrite) {
+                            linka.settings_audible_locking_unlocking = checked;
+                            if (lockController.doSetAudibility(checked)) {
+                                linka.saveSettings();
+                            }
+                        } else {
+                            linka.settings_audible_locking_unlocking = checked;
+                            linka.saveSettings();
+                        }
+                        break;
 
-    Switch.OnCheckedChangeListener settings_audible_locking_unlocking = new Switch.OnCheckedChangeListener() {
-        @Override
-        public void onCheckedChanged(Switch view, boolean checked) {
-            if (!doNotSendWrite) {
-                linka.settings_audible_locking_unlocking = checked;
-                LockController lockController = LocksController.getInstance().getLockController();
-                if (lockController.doSetAudibility(checked)) {
-                    linka.saveSettings();
+                    case R.id.settings_tamper_siren:
+                        if (!doNotSendWrite) {
+                            linka.settings_tamper_siren = checked;
+                            if (lockController.doSetTamperAlert(checked)) {
+                                linka.saveSettings();
+                            }
+                        } else {
+                            linka.settings_tamper_siren = checked;
+                            linka.saveSettings();
+                        }
+                        setTamperSensitivityVisibility(checked);
+                        break;
+
+                    case R.id.settings_auto_unlocking:
+                        linka.settings_auto_unlocking = checked;
+                        linka.save();
+                        if (checked && switchQuickLock.isChecked()) {
+                            switchQuickLock.setChecked(false);
+                            setQuickLockChecked(0);
+                            new AlertDialog.Builder(getActivity())
+                                    .setTitle("Quick Lock has been disabled")
+                                    .setMessage("Auto-unlock requires Quick Lock to be off.")
+                                    .setPositiveButton(R.string.ok, null)
+                                    .create().show();
+                        }
+                        break;
+
+                    case R.id.switch_quick_lock:
+                        int value;
+                        if (checked) {
+                            value = 1;
+                        } else {
+                            value = 0;
+                        }
+                        setQuickLockChecked(value);
+                        if (checked && switchAutoUnlocking.isChecked()) {
+                            switchAutoUnlocking.setChecked(false);
+                            linka.settings_auto_unlocking = false;
+                            linka.save();
+                            new AlertDialog.Builder(getActivity())
+                                    .setTitle("Auto-unlock has been disabled")
+                                    .setMessage("Quick Lock requires auto-unlock to be off.")
+                                    .setPositiveButton(R.string.ok, null)
+                                    .create().show();
+                        }
+                        break;
                 }
-            } else {
-                linka.settings_audible_locking_unlocking = checked;
-                linka.saveSettings();
             }
-        }
-    };
+        };
 
-    Switch.OnCheckedChangeListener settings_tamper_siren = new Switch.OnCheckedChangeListener() {
-        @Override
-        public void onCheckedChanged(Switch view, boolean checked) {
-            if (!doNotSendWrite) {
-                linka.settings_tamper_siren = checked;
-                LockController lockController = LocksController.getInstance().getLockController();
-                if (lockController.doSetTamperAlert(checked)) {
-                    linka.saveSettings();
-                }
-            } else {
-                linka.settings_tamper_siren = checked;
-                linka.saveSettings();
-            }
-            setTamperSensitivityVisibility(checked);
-        }
-    };
-
-    Switch.OnCheckedChangeListener settings_auto_unlock = new Switch.OnCheckedChangeListener() {
-        @Override
-        public void onCheckedChanged(Switch view, boolean checked) {
-            linka.settings_auto_unlocking = checked;
-            linka.save();
-            if(checked && switchQuickLock.isChecked()){
-                switchQuickLock.setChecked(false);
-                setQuickLockChecked(0);
-                new AlertDialog.Builder(getActivity())
-                        .setTitle("Quick Lock has been disabled")
-                        .setMessage("Auto-unlock requires Quick Lock to be off.")
-                        .setPositiveButton(R.string.ok,null)
-                        .create().show();
-            }
-        }
-    };
-
-    Switch.OnCheckedChangeListener settings_quick_lock = new Switch.OnCheckedChangeListener() {
-        @Override
-        public void onCheckedChanged(Switch view, boolean checked) {
-            int value;
-            if (checked) {
-                value = 1;
-            } else {
-                value = 0;
-            }
-            setQuickLockChecked(value);
-            if(checked && switchAutoUnlocking.isChecked()){
-                switchAutoUnlocking.setChecked(false);
-                linka.settings_auto_unlocking = false;
-                linka.save();
-                new AlertDialog.Builder(getActivity())
-                        .setTitle("Auto-unlock has been disabled")
-                        .setMessage("Quick Lock requires auto-unlock to be off.")
-                        .setPositiveButton(R.string.ok,null)
-                        .create().show();
-            }
-        }
-    };
-
-    private void setQuickLockChecked(int isChecked){
-        if (!doNotSendWrite) {
-            linka.settings_quick_lock = isChecked;
-            LockController lockController = LocksController.getInstance().getLockController();
-            if (lockController.doAction_SetQuickLock(isChecked)) {
-                linka.saveSettings();
-            }
-        } else {
-            linka.settings_quick_lock = isChecked;
-            linka.saveSettings();
-        }
+        switchAudibleLockingUnlocking.setOnCheckedChangeListener(onCheckedChangeListener);
+        switchTamperSiren.setOnCheckedChangeListener(onCheckedChangeListener);
+        switchAutoUnlocking.setOnCheckedChangeListener(onCheckedChangeListener);
+        switchQuickLock.setOnCheckedChangeListener(onCheckedChangeListener);
     }
-
-
-    boolean doNotSendWrite = false;
 
     void refreshDisplay() {
         doNotSendWrite = true;
@@ -393,7 +369,273 @@ public class SettingsPageFragment extends CoreFragment {
 //        setRadiusLinearVisibility(linka.settings_auto_unlocking);
         doNotSendWrite = false;
 
-//        switchStallOverride.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener() {
+        LinkaAccessKey key = LinkaAccessKey.getKeyFromLinka(linka);
+        if (key != null && !key.access_key_admin.equals("")) {
+            isAdmin = true;
+        } else {
+            isAdmin = false;
+        }
+
+        setFirmwareVersion();
+        setBatteryPerformance();
+
+        if (linka.pacIsSet) {
+            passcode.setText(String.valueOf(linka.pac));
+        } else {
+            passcode.setText("");
+        }
+
+        if (linka.isLockSettled) {
+            //Set PAC values into settings page
+            if (linka.pac == 0 || linka.pac == 1234) {
+                if (!lockController.hasReadPac) {
+                    lockController.doReadPAC();
+                }
+            }
+        }
+
+        if (linka != null && linka.isConnected && linka.isLockSettled) {
+            setLockConnectedState();
+        } else {
+            setLockNotConnectedState();
+        }
+    }
+
+    private void setLockConnectedState() {
+        int color = getResources().getColor(R.color.linka_blue);
+
+        setTamperSensitivityVisibility(linka.settings_tamper_siren);
+
+        rowPhonelessPasscode.setClickable(true);
+        textPhonelessPasscode.setTextColor(color);
+
+        textQuickLock.setTextColor(color);
+        quickSwitchView.setVisibility(View.GONE);
+        switchQuickLock.setAlpha(1.0f);
+
+        editName.setAlpha(1.0f);
+        editName.setEnabled(true);
+
+        textAutoUnlock.setTextColor(color);
+        autoSwitchView.setVisibility(View.GONE);
+        switchAutoUnlocking.setAlpha(1.0f);
+
+        textTamperSiren.setTextColor(color);
+        tamperSwitchView.setVisibility(View.GONE);
+        switchTamperSiren.setAlpha(1.0f);
+
+        textAudibleLockingUnlocking.setTextColor(color);
+        toneSwitchView.setVisibility(View.GONE);
+        switchAudibleLockingUnlocking.setAlpha(1.0f);
+
+        textBatterySettings.setTextColor(color);
+        rowBatterySettings.setClickable(true);
+
+        textResetToFactorySettings.setTextColor(color);
+        rowResetToFactorySettings.setClickable(true);
+
+        removeLock.setTextColor(getResources().getColor(R.color.red));
+        rowRemoveLock.setClickable(true);
+        removeInfo.setClickable(true);
+
+        checkUpdates();
+
+//            if (AppDelegate.shouldAlwaysEnableFwUpgradeButton) {
+//                firmwareText.setText(getString(R.string.firmware_update_available));
+//                firmwareText.setTextColor(getResources().getColor(R.color.red));
+//                rowFirmwareVersion.setClickable(true);
+//            }
+
+        if (linka != null && !linka.isUnlocked()) {
+            removeLock.setClickable(false);
+            rowResetToFactorySettings.setClickable(false);
+            rowFirmwareVersion.setClickable(false);
+        }
+    }
+
+    private void setLockNotConnectedState() {
+        int color = getResources().getColor(R.color.search_text);
+
+        setTamperSensitivityVisibility(false);
+
+        rowPhonelessPasscode.setClickable(false);
+        textPhonelessPasscode.setTextColor(color);
+
+        textQuickLock.setTextColor(color);
+        switchQuickLock.setVisibility(View.VISIBLE);
+        switchQuickLock.setAlpha(0.4f);
+
+        editName.setAlpha(1.0f);
+        editName.setEnabled(false);
+
+        textAutoUnlock.setTextColor(color);
+        autoSwitchView.setVisibility(View.VISIBLE);
+        switchAutoUnlocking.setAlpha(0.4f);
+
+        textTamperSiren.setTextColor(color);
+        tamperSwitchView.setVisibility(View.VISIBLE);
+        switchTamperSiren.setAlpha(0.4f);
+
+        textAudibleLockingUnlocking.setTextColor(color);
+        toneSwitchView.setVisibility(View.VISIBLE);
+        switchAudibleLockingUnlocking.setAlpha(0.4f);
+
+        textBatterySettings.setTextColor(color);
+        rowBatterySettings.setClickable(false);
+
+        textResetToFactorySettings.setTextColor(color);
+        rowResetToFactorySettings.setClickable(false);
+
+        removeLock.setTextColor(color);
+        rowRemoveLock.setClickable(false);
+        removeInfo.setClickable(false);
+
+        firmwareText.setText(getString(R.string.firmware_version));
+        firmwareText.setTextColor(getResources().getColor(R.color.search_text));
+        firmwareVersion.setTextColor(getResources().getColor(R.color.search_text));
+        rowFirmwareVersion.setClickable(false);
+    }
+
+    private void checkUpdates() {
+        if (linka != null && lockController != null &&
+                linka.isLockSettled && linka.pacIsSet) {
+            if (lockController.lockControllerBundle != null) {
+                String ver = lockController.lockControllerBundle.getFwVersionNumber();
+                if (!ver.equals("")) {
+//                    if (!ver.equals(AppDelegate.linkaMinRequiredFirmwareVersion) && !ver.equals("1.5.9") && AppDelegate.linkaMinRequiredFirmwareVersionIsCriticalUpdate) {
+                    if (!ver.equals("2.0")) {
+                        LogHelper.e("MainTabBarPageFrag", "FW version of " + ver + " does not equal " + AppDelegate.linkaMinRequiredFirmwareVersion);
+                        LinkaAccessKey accessKey = LinkaAccessKey.getKeyFromLinka(linka);
+                        if (accessKey != null && accessKey.isAdmin()) {
+                            firmwareText.setText(getString(R.string.firmware_update_available));
+                            firmwareText.setTextColor(getResources().getColor(R.color.red));
+                            firmwareVersion.setTextColor(getResources().getColor(R.color.red));
+                            rowFirmwareVersion.setClickable(true);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        firmwareText.setText(getString(R.string.firmware_version));
+        firmwareText.setTextColor(getResources().getColor(R.color.search_text));
+        firmwareVersion.setTextColor(getResources().getColor(R.color.search_text));
+        rowFirmwareVersion.setClickable(false);
+    }
+
+    private void setFirmwareVersion() {
+        String ver = lockController.lockControllerBundle.getFwVersionNumber();
+        if (!ver.equals("")) {
+            if (ver.equals("0.76")) {
+                firmwareVersion.setText("1.0");
+            } else if (ver.equals("0.77")) {
+                firmwareVersion.setText("1.1");
+            } else if (ver.equals("0.83")) {
+                firmwareVersion.setText("1.2");
+            } else {
+                firmwareVersion.setText(ver);
+            }
+        } else {
+            firmwareVersion.setText("");
+        }
+    }
+
+    private void setBatteryPerformance() {
+        if (linka.settingsSleepPerformance == 1800) {
+            linka.settingsSleepPerformance = Linka.NORMAL_PERFORMANCE;
+            linka.save();
+        }
+
+        switch (linka.settingsSleepPerformance) {
+            case Linka.LOW_PERFORMANCE:
+                batteryPerformance.setText("Low");
+                break;
+            case Linka.NORMAL_PERFORMANCE:
+                batteryPerformance.setText("Normal");
+                break;
+            case Linka.HIGH_PERFORMANCE:
+                batteryPerformance.setText("High");
+                break;
+        }
+    }
+
+    private void setQuickLockChecked(int isChecked) {
+        if (!doNotSendWrite) {
+            linka.settings_quick_lock = isChecked;
+            if (lockController.doAction_SetQuickLock(isChecked)) {
+                linka.saveSettings();
+            }
+        } else {
+            linka.settings_quick_lock = isChecked;
+            linka.saveSettings();
+        }
+    }
+
+    private void setTamperSensitivityVisibility(boolean visibility) {
+        if (visibility) {
+            textTamperSensitivity.setTextColor(getResources().getColor(R.color.linka_blue));
+            rowTamperSensitivity.setClickable(true);
+        } else {
+            textTamperSensitivity.setTextColor(getResources().getColor(R.color.search_text));
+            rowTamperSensitivity.setClickable(false);
+        }
+    }
+
+    private void cancelThreeDotsDialog() {
+        if (threeDotsDialogFragment != null) {
+            threeDotsDialogFragment.dismiss();
+            threeDotsDialogFragment = null;
+        }
+    }
+
+    private void removeLock() {
+        if (!isAdmin) {
+            LinkaAPIServiceImpl.revoke_access(getActivity(), linka, LinkaAPIServiceImpl.getUserID(), new Callback<LinkaAPIServiceResponse>() {
+                @Override
+                public void onResponse(Call<LinkaAPIServiceResponse> call, Response<LinkaAPIServiceResponse> response) {
+                    cancelThreeDotsDialog();
+                    if (LinkaAPIServiceImpl.check(response, false, null)) {
+                        getAppMainActivity().logout();
+//                        Linka.removeLinka(linka);
+                        getAppMainActivity().resetActivity();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<LinkaAPIServiceResponse> call, Throwable t) {
+                    cancelThreeDotsDialog();
+                }
+            });
+        } else {
+            LinkaAPIServiceImpl.hide_lock(getActivity(), linka.lock_mac_address, new Callback<LinkaAPIServiceResponse>() {
+                @Override
+                public void onResponse(Call<LinkaAPIServiceResponse> call, Response<LinkaAPIServiceResponse> response) {
+                    cancelThreeDotsDialog();
+                    if (LinkaAPIServiceImpl.check(response, false, null)) {
+                        getAppMainActivity().logout();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<LinkaAPIServiceResponse> call, Throwable t) {
+                    cancelThreeDotsDialog();
+                }
+            });
+        }
+    }
+
+    //    private void setRadiusLinearVisibility(boolean visibility) {
+//        if (visibility) {
+//            textRadiusSettings.setTextColor(getResources().getColor(R.color.linka_blue));
+//            rowRadiusSettings.setClickable(true);
+//        } else {
+//            textRadiusSettings.setTextColor(getResources().getColor(R.color.search_text));
+//            rowRadiusSettings.setClickable(false);
+//        }
+//    }
+
+//    private void setSwitchStallOverrideCheckedChangeListener(){
+    //        switchStallOverride.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener() {
 //            @Override
 //            public void onCheckedChanged(Switch view, boolean checked) {
 //                linka.settings_stall_override = checked;
@@ -432,230 +674,12 @@ public class SettingsPageFragment extends CoreFragment {
 //                }
 //            }
 //        });
-
-
-        LinkaAccessKey key = LinkaAccessKey.getKeyFromLinka(linka);
-        if (key != null && !key.access_key_admin.equals("")) {
-            isAdmin = true;
-        } else {
-            isAdmin = false;
-        }
-
-//        if (!isAdmin) {
-//            rowRemoveLock.setVisibility(View.GONE);
-//            removeTopDivider.setVisibility(View.GONE);
-//            removeBottomDivider.setVisibility(View.GONE);
-//            removeSpace.setVisibility(View.GONE);
-//        } else {
-//            rowRemoveLock.setVisibility(View.VISIBLE);
-//            removeTopDivider.setVisibility(View.VISIBLE);
-//            removeBottomDivider.setVisibility(View.VISIBLE);
-//            removeSpace.setVisibility(View.VISIBLE);
-//        }
-
-        LockController lockController = LocksController.getInstance().getLockController();
-        String ver = lockController.lockControllerBundle.getFwVersionNumber();
-        if (!ver.equals("")) {
-            if (ver.equals("0.76")) {
-                firmwareVersion.setText("1.0");
-            } else if (ver.equals("0.77")) {
-                firmwareVersion.setText("1.1");
-            } else if (ver.equals("0.83")) {
-                firmwareVersion.setText("1.2");
-            } else {
-                firmwareVersion.setText(ver);
-            }
-        } else {
-            firmwareVersion.setText("");
-        }
-
-//        macId.setText(linka.lock_mac_address);
-        if (linka.pacIsSet) {
-            passcode.setText(String.valueOf(linka.pac));
-        } else {
-            passcode.setText("");
-        }
-
-        if (linka.isLockSettled) {
-            //Set PAC values into settings page
-            if (linka.pac == 0 || linka.pac == 1234) {
-                if (!lockController.hasReadPac) {
-                    lockController.doReadPAC();
-                }
-            }
-        }
-
-        setBatteryPerformance();
-
-        if (linka != null && linka.isConnected && linka.isLockSettled) {
-            int color = getResources().getColor(R.color.linka_blue);
-
-            setTamperSensitivityVisibility(linka.settings_tamper_siren);
-
-            rowPhonelessPasscode.setClickable(true);
-            textPhonelessPasscode.setTextColor(color);
-
-            textQuickLock.setTextColor(color);
-            quickSwitchView.setVisibility(View.GONE);
-            switchQuickLock.setAlpha(1.0f);
-
-            editName.setAlpha(1.0f);
-            editName.setEnabled(true);
-
-            textAutoUnlock.setTextColor(color);
-            autoSwitchView.setVisibility(View.GONE);
-            switchAutoUnlocking.setAlpha(1.0f);
-
-            textTamperSiren.setTextColor(color);
-            tamperSwitchView.setVisibility(View.GONE);
-            switchTamperSiren.setAlpha(1.0f);
-
-            textAudibleLockingUnlocking.setTextColor(color);
-            toneSwitchView.setVisibility(View.GONE);
-            switchAudibleLockingUnlocking.setAlpha(1.0f);
-
-            textBatterySettings.setTextColor(color);
-            rowBatterySettings.setClickable(true);
-
-            textResetToFactorySettings.setTextColor(color);
-            rowResetToFactorySettings.setClickable(true);
-
-            removeLock.setTextColor(getResources().getColor(R.color.red));
-            rowRemoveLock.setClickable(true);
-            removeInfo.setClickable(true);
-
-            checkUpdates();
-
-//            if (AppDelegate.shouldAlwaysEnableFwUpgradeButton) {
-//                firmwareText.setText(getString(R.string.firmware_update_available));
-//                firmwareText.setTextColor(getResources().getColor(R.color.red));
-//                rowFirmwareVersion.setClickable(true);
-//            }
-
-        } else {
-            int color = getResources().getColor(R.color.search_text);
-
-            setTamperSensitivityVisibility(false);
-
-            rowPhonelessPasscode.setClickable(false);
-            textPhonelessPasscode.setTextColor(color);
-
-            textQuickLock.setTextColor(color);
-            switchQuickLock.setVisibility(View.VISIBLE);
-            switchQuickLock.setAlpha(0.4f);
-
-            editName.setAlpha(1.0f);
-            editName.setEnabled(false);
-
-            textAutoUnlock.setTextColor(color);
-            autoSwitchView.setVisibility(View.VISIBLE);
-            switchAutoUnlocking.setAlpha(0.4f);
-
-            textTamperSiren.setTextColor(color);
-            tamperSwitchView.setVisibility(View.VISIBLE);
-            switchTamperSiren.setAlpha(0.4f);
-
-            textAudibleLockingUnlocking.setTextColor(color);
-            toneSwitchView.setVisibility(View.VISIBLE);
-            switchAudibleLockingUnlocking.setAlpha(0.4f);
-
-            textBatterySettings.setTextColor(color);
-            rowBatterySettings.setClickable(false);
-
-            textResetToFactorySettings.setTextColor(color);
-            rowResetToFactorySettings.setClickable(false);
-
-            removeLock.setTextColor(color);
-            rowRemoveLock.setClickable(false);
-            removeInfo.setClickable(false);
-
-            firmwareText.setText(getString(R.string.firmware_version));
-            firmwareText.setTextColor(getResources().getColor(R.color.search_text));
-            firmwareVersion.setTextColor(getResources().getColor(R.color.search_text));
-            rowFirmwareVersion.setClickable(false);
-        }
-
-//        switchAudibleLockingUnlocking.setChecked(linka.settings_audible_locking_unlocking);
-//        switchTamperSiren.setChecked(linka.settings_tamper_siren);
-//        switchAutoUnlocking.setChecked(linka.settings_auto_unlocking);
-//        setRadiusLinearVisibility(linka.settings_auto_unlocking);
-
-
-        if (linka != null && !linka.isUnlocked()) {
-            removeLock.setClickable(false);
-            rowResetToFactorySettings.setClickable(false);
-            rowFirmwareVersion.setClickable(false);
-        }
-    }
-
-    private void checkUpdates() {
-        LockController lockController = LocksController.getInstance().getLockController();
-        if (linka != null && lockController != null &&
-                linka.isLockSettled && linka.pacIsSet) {
-            if (lockController.lockControllerBundle != null) {
-                String ver = lockController.lockControllerBundle.getFwVersionNumber();
-                if (!ver.equals("")) {
-//                    if (!ver.equals(AppDelegate.linkaMinRequiredFirmwareVersion) && !ver.equals("1.5.9") && AppDelegate.linkaMinRequiredFirmwareVersionIsCriticalUpdate) {
-                    if (!ver.equals("2.0")) {
-                        LogHelper.e("MainTabBarPageFrag", "FW version of " + ver + " does not equal " + AppDelegate.linkaMinRequiredFirmwareVersion);
-                        LinkaAccessKey accessKey = LinkaAccessKey.getKeyFromLinka(linka);
-                        if (accessKey != null && accessKey.isAdmin()) {
-                            firmwareText.setText(getString(R.string.firmware_update_available));
-                            firmwareText.setTextColor(getResources().getColor(R.color.red));
-                            firmwareVersion.setTextColor(getResources().getColor(R.color.red));
-                            rowFirmwareVersion.setClickable(true);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-        firmwareText.setText(getString(R.string.firmware_version));
-        firmwareText.setTextColor(getResources().getColor(R.color.search_text));
-        firmwareVersion.setTextColor(getResources().getColor(R.color.search_text));
-        rowFirmwareVersion.setClickable(false);
-    }
-
-    private void setBatteryPerformance() {
-        if (linka.settingsSleepPerformance == 1800) {
-            linka.settingsSleepPerformance = Linka.NORMAL_PERFORMANCE;
-            linka.save();
-        }
-
-        switch (linka.settingsSleepPerformance) {
-            case Linka.LOW_PERFORMANCE:
-                batteryPerformance.setText("Low");
-                break;
-            case Linka.NORMAL_PERFORMANCE:
-                batteryPerformance.setText("Normal");
-                break;
-            case Linka.HIGH_PERFORMANCE:
-                batteryPerformance.setText("High");
-                break;
-        }
-    }
-
-
-//    @OnClick(R.id.row_audible_locking_unlocking)
-//    void onClick_row_audible_locking_unlocking() {
-//        switchAudibleLockingUnlocking.toggle();
 //    }
-
-    @OnClick(R.id.row_auto_unlocking)
-    void onClick_row_auto_unlocking() {
-//        switchAutoUnlocking.toggle();
-    }
 
     @OnClick(R.id.row_phoneless_passcode)
     void onClick_row_phoneless_passcode() {
         getAppMainActivity().pushFragmentWithoutAnimation(SetPac3.newInstance(LinkaNotificationSettings.get_latest_linka(), SetPac3.SETTINGS));
     }
-
-//    @OnClick(R.id.row_edit_name)
-//    void onClick_row_edit_name() {
-//        getAppMainActivity().pushFragment(SetupLinka3.newInstance(SetupLinka3.SETTINGS));
-//    }
-//    777777777777777
 
     @OnClick(R.id.row_tamper_sensitivity)
     void OnClick_row_tamper_sensitivity() {
@@ -670,11 +694,6 @@ public class SettingsPageFragment extends CoreFragment {
     void OnClick_row_battery_settings() {
         getAppMainActivity().pushFragmentWithoutAnimation(SettingsBatteryFragment.newInstance(linka));
     }
-
-//    @OnClick(R.id.row_tamper_siren)
-//    void onClick_row_tamper_siren() {
-//        switchTamperSiren.toggle();
-//    }
 
     @OnClick(R.id.row_reset_to_factory_settings)
     void onClick_row_reset_to_factory_settings() {
@@ -743,118 +762,16 @@ public class SettingsPageFragment extends CoreFragment {
                 .commit();
     }
 
-    private void removeLock() {
-        if (!isAdmin) {
-            LinkaAPIServiceImpl.revoke_access(getActivity(), linka, LinkaAPIServiceImpl.getUserID(), new Callback<LinkaAPIServiceResponse>() {
-                @Override
-                public void onResponse(Call<LinkaAPIServiceResponse> call, Response<LinkaAPIServiceResponse> response) {
-                    if (LinkaAPIServiceImpl.check(response, false, null)) {
-                        getAppMainActivity().logout();
-//                        Linka.removeLinka(linka);
-                        if (threeDotsDialogFragment != null) {
-                            threeDotsDialogFragment.dismiss();
-                            threeDotsDialogFragment = null;
-                        }
-                        getAppMainActivity().resetActivity();
-                    } else {
-                        if (threeDotsDialogFragment != null) {
-                            threeDotsDialogFragment.dismiss();
-                            threeDotsDialogFragment = null;
-                        }
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<LinkaAPIServiceResponse> call, Throwable t) {
-                    if (threeDotsDialogFragment != null) {
-                        threeDotsDialogFragment.dismiss();
-                        threeDotsDialogFragment = null;
-                    }
-                }
-            });
-        } else {
-            LinkaAPIServiceImpl.hide_lock(getActivity(), linka.lock_mac_address, new Callback<LinkaAPIServiceResponse>() {
-                @Override
-                public void onResponse(Call<LinkaAPIServiceResponse> call, Response<LinkaAPIServiceResponse> response) {
-                    if (threeDotsDialogFragment != null) {
-                        threeDotsDialogFragment.dismiss();
-                        threeDotsDialogFragment = null;
-                    }
-                    if (LinkaAPIServiceImpl.check(response, false, null)) {
-                        getAppMainActivity().logout();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<LinkaAPIServiceResponse> call, Throwable t) {
-                    if (threeDotsDialogFragment != null) {
-                        threeDotsDialogFragment.dismiss();
-                        threeDotsDialogFragment = null;
-                    }
-                }
-            });
-        }
-    }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (editName != null) {
-            linka.saveName(editName.getText().toString());
-            linka.save();
-        }
-        EventBus.getDefault().unregister(this);
-    }
-
     @Subscribe
     public void onEvent(Object object) {
         if (!isAdded()) return;
-        if (object instanceof String && ((String) object).equals(LOCKSCONTROLLER_NOTIFY_REFRESHED_SETTINGS)) {
-
-            linka = Linka.getLinkaFromLockController();
-
-            refreshDisplay();
-
-        } else if (object != null && object.equals(LinkaActivity.LINKA_ACTIVITY_ON_CHANGE)) {
-
-            linka = Linka.getLinkaFromLockController();
-
-            refreshDisplay();
-        } else if (object != null && object instanceof String && object.equals(FRAGMENT_ADDED)) {
-            rootFrame.setBackgroundColor(getResources().getColor(R.color.linka_transparent));
-        }
-//        else if (object instanceof String && ((String) object).substring(0,8).equals("Selected")) {
-//            if (object.equals("Selected-" + String.valueOf(MainTabBarPageFragment.SETTING_SCREEN))) {
-//                init();
-//            }
-//        }
-    }
-
-//    private void setRadiusLinearVisibility(boolean visibility) {
-//        if (visibility) {
-//            textRadiusSettings.setTextColor(getResources().getColor(R.color.linka_blue));
-//            rowRadiusSettings.setClickable(true);
-//        } else {
-//            textRadiusSettings.setTextColor(getResources().getColor(R.color.search_text));
-//            rowRadiusSettings.setClickable(false);
-//        }
-//    }
-
-    private void setTamperSensitivityVisibility(boolean visibility) {
-        if (visibility) {
-            textTamperSensitivity.setTextColor(getResources().getColor(R.color.linka_blue));
-            rowTamperSensitivity.setClickable(true);
-        } else {
-            textTamperSensitivity.setTextColor(getResources().getColor(R.color.search_text));
-            rowTamperSensitivity.setClickable(false);
+        if (object != null && object instanceof String) {
+            if (object.equals(LOCKSCONTROLLER_NOTIFY_REFRESHED_SETTINGS) || object.equals(LinkaActivity.LINKA_ACTIVITY_ON_CHANGE)) {
+                linka = Linka.getLinkaFromLockController();
+                refreshDisplay();
+            } else if (object.equals(FRAGMENT_ADDED)) {
+                rootFrame.setBackgroundColor(getResources().getColor(R.color.linka_transparent));
+            }
         }
     }
-
 }
