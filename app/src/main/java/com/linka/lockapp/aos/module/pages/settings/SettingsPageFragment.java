@@ -30,6 +30,7 @@ import com.linka.lockapp.aos.module.model.LinkaAccessKey;
 import com.linka.lockapp.aos.module.model.LinkaActivity;
 import com.linka.lockapp.aos.module.model.LinkaNotificationSettings;
 import com.linka.lockapp.aos.module.pages.dialogs.ThreeDotsDialogFragment;
+import com.linka.lockapp.aos.module.pages.home.MainTabBarPageFragment;
 import com.linka.lockapp.aos.module.pages.pac.SetPac3;
 import com.linka.lockapp.aos.module.pages.update.FirmwareUpdateActivity;
 import com.linka.lockapp.aos.module.widget.LockController;
@@ -227,9 +228,11 @@ public class SettingsPageFragment extends CoreFragment {
     @Override
     public void onPause() {
         super.onPause();
-        if (editName != null) {
-            linka.saveName(editName.getText().toString());
-            linka.save();
+        if (editName != null && linka.isLockSettled) {
+            if(!linka.getName().equals(editName.getText().toString())) {
+                linka.saveName(editName.getText().toString());
+                linka.save();
+            }
         }
         EventBus.getDefault().unregister(this);
     }
@@ -266,9 +269,11 @@ public class SettingsPageFragment extends CoreFragment {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    if (editName != null) {
-                        linka.saveName(editName.getText().toString());
-                        linka.save();
+                    if (editName != null && linka.isLockSettled) {
+                        if(!linka.getName().equals(editName.getText().toString())) {
+                            linka.saveName(editName.getText().toString());
+                            linka.save();
+                        }
                     }
                 }
             }
@@ -278,7 +283,7 @@ public class SettingsPageFragment extends CoreFragment {
 
         editName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE) && linka.isLockSettled) {
                     linka.saveName(editName.getText().toString());
                     linka.save();
                 }
@@ -771,6 +776,10 @@ public class SettingsPageFragment extends CoreFragment {
                 refreshDisplay();
             } else if (object.equals(FRAGMENT_ADDED)) {
                 rootFrame.setBackgroundColor(getResources().getColor(R.color.linka_transparent));
+            } else if (((String) object).substring(0,9).equals(MainTabBarPageFragment.SELECTED_SCREEN)) {
+                if (object.equals(MainTabBarPageFragment.SELECTED_SCREEN + String.valueOf(MainTabBarPageFragment.SETTING_SCREEN))) {
+                    editName.setText(linka.getName());
+                }
             }
         }
     }
