@@ -109,22 +109,31 @@ public class AppMainActivity extends CoreActivity {
 
     @BindView(R.id.title)
     TextView title;
+
     @BindView(R.id.menu)
     BadgeIconView menu;
+
     @BindView(R.id.back)
     BadgeIconView back;
+
     @BindView(R.id.nav_bar_left_icons)
     FrameLayout navBarLeftIcons;
+
     @BindView(R.id.nav_bar_right_icons)
     LinearLayout navBarRightIcons;
+
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+
     @BindView(R.id.fragment_container)
     FrameLayout fragmentContainer;
+
     @BindView(R.id.drawer)
     RelativeLayout drawer;
+
     @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
+
     @BindView(R.id.toolbar_space)
     View toolbarSpace;
 
@@ -132,32 +141,6 @@ public class AppMainActivity extends CoreActivity {
     /* MENU */
     @BindView(R.id.r1)
     TextView r1;
-
-
-//    @BindView(R.id.row_profile)
-//    LinkaTouchableLinearLayout rowProfile;
-//    @BindView(R.id.sidebar_lock)
-//    LinkaTouchableLinearLayout sidebarLock;
-//    @BindView(R.id.sidebar_managedevices)
-//    LinkaTouchableLinearLayout sidebarManagedevices;
-//    @BindView(R.id.sidebar_notifications)
-//    LinkaTouchableLinearLayout sidebarNotifications;
-//    @BindView(R.id.sidebar_icon_faq)
-//    LinkaTouchableLinearLayout sidebarIconFaq;
-//    @BindView(R.id.sidebar_icon_chat)
-//    LinkaTouchableLinearLayout sidebarIconChat;
-//    @BindView(R.id.sidebar_icon_reportbug)
-//    LinkaTouchableLinearLayout sidebarIconReportbug;
-//    @BindView(R.id.sidebar_icon_tc)
-//    LinkaTouchableLinearLayout sidebarIconTc;
-//    @BindView(R.id.sidebar_icon_privacy)
-//    LinkaTouchableLinearLayout sidebarIconPrivacy;
-//    @BindView(R.id.sidebar_icon_check_app_updates)
-//    LinkaTouchableLinearLayout sidebarIconCheckAppUpdates;
-//    @BindView(R.id.sidebar_icon_select_language)
-//    LinkaTouchableLinearLayout sidebarIconSelectLanguage;
-//    @BindView(R.id.sidebar_icon_user_email)
-//    LinkaTouchableLinearLayout sidebarIconUserEmail;
     /*
     @InjectView(R.id.item_1_text)
     LinkaTextView item1Text;
@@ -197,46 +180,15 @@ public class AppMainActivity extends CoreActivity {
     @BindView(R.id.log)
     TextView log;
 
-/*
-    @InjectView(R.id.item_1_delete)
-    ImageView item1Delete;
-    @InjectView(R.id.item_2_delete)
-    ImageView item2Delete;
-    @InjectView(R.id.item_3_delete)
-    ImageView item3Delete;
-    @InjectView(R.id.item_4_delete)
-    ImageView item4Delete;*/
-
-//    @BindView(R.id.sidebar_text_lock)
-//    LinkaTextView sidebarTextLock;
-//    @BindView(R.id.sidebar_text_managedevices)
-//    LinkaTextView sidebarTextManagedevices;
-//    @BindView(R.id.item_text_add)
-//    LinkaTextView itemTextAdd;
-//    @BindView(R.id.sidebar_text_notifications)
-//    LinkaTextView sidebarTextNotifications;
-//    @BindView(R.id.sidebar_text_faq)
-//    LinkaTextView sidebarTextFaq;
-//    @BindView(R.id.sidebar_text_chat)
-//    LinkaTextView sidebarTextChat;
-//    @BindView(R.id.sidebar_text_reportbug)
-//    LinkaTextView sidebarTextReportbug;
-//    @BindView(R.id.sidebar_text_tc)
-//    LinkaTextView sidebarTextTc;
-//    @BindView(R.id.sidebar_text_privacy)
-//    LinkaTextView sidebarTextPrivacy;
-//    @BindView(R.id.sidebar_text_check_app_updates)
-//    LinkaTextView sidebarTextCheckAppUpdates;
-//    @BindView(R.id.sidebar_text_select_language)
-//    LinkaTextView sidebarTextSelectLanguage;
-//    @BindView(R.id.sidebar_text_user_email)
-//    LinkaTextView sidebarTextUserEmail;
-//    @BindView(R.id.sidebar_text_logout)
-//    LinkaTextView sidebarTextLogout;
-//    @BindView(R.id.sidebar_app_version)
-//    LinkaTextView sidebarTextAppVersion;
-//    @BindView(R.id.sidebar_icon_testing)
-//    LinearLayout testing;
+    /*
+        @InjectView(R.id.item_1_delete)
+        ImageView item1Delete;
+        @InjectView(R.id.item_2_delete)
+        ImageView item2Delete;
+        @InjectView(R.id.item_3_delete)
+        ImageView item3Delete;
+        @InjectView(R.id.item_4_delete)
+        ImageView item4Delete;*/
     @BindView(R.id.main_root)
     RelativeLayout root;
 
@@ -275,7 +227,7 @@ public class AppMainActivity extends CoreActivity {
 
         @Override
         public void onDrawerClosed(View drawerView) {
-            if(drawerFragment != null) {
+            if (drawerFragment != null) {
                 setFragment(drawerFragment);
                 drawerFragment = null;
             }
@@ -305,11 +257,11 @@ public class AppMainActivity extends CoreActivity {
         Linka linka = new Linka();
         Linka linka1 = new Linka();
         Linka linka2 = linka;
-        Log.d("linka_code",String.valueOf(linka.hashCode()));
-        Log.d("linka_code",String.valueOf(linka1.hashCode()));
-        Log.d("linka_code",String.valueOf(linka2.hashCode()));
+        Log.d("linka_code", String.valueOf(linka.hashCode()));
+        Log.d("linka_code", String.valueOf(linka1.hashCode()));
+        Log.d("linka_code", String.valueOf(linka2.hashCode()));
         linka2 = linka1;
-        Log.d("linka_code",String.valueOf(linka2.hashCode()));
+        Log.d("linka_code", String.valueOf(linka2.hashCode()));
 
         setFragment(decide(getIntent()));
 
@@ -427,14 +379,14 @@ public class AppMainActivity extends CoreActivity {
                 }
                 Fragment fragment = null;
 
-                if(intent.getBooleanExtra(Constants.IS_IT_OPEN_FROM_NOTIFICATION,false)){
-                    fragment = MainTabBarPageFragment.newInstance(LinkaNotificationSettings.get_latest_linka(),MainTabBarPageFragment.LOCK_SCREEN);
-                }else if(intent.getBooleanExtra(Constants.OPEN_SETTINGS,false)){
-                    fragment = MainTabBarPageFragment.newInstance(LinkaNotificationSettings.get_latest_linka(),MainTabBarPageFragment.SETTING_SCREEN);
+                if (intent.getBooleanExtra(Constants.IS_IT_OPEN_FROM_NOTIFICATION, false)) {
+                    fragment = MainTabBarPageFragment.newInstance(LinkaNotificationSettings.get_latest_linka(), MainTabBarPageFragment.LOCK_SCREEN);
+                } else if (intent.getBooleanExtra(Constants.OPEN_SETTINGS, false)) {
+                    fragment = MainTabBarPageFragment.newInstance(LinkaNotificationSettings.get_latest_linka(), MainTabBarPageFragment.SETTING_SCREEN);
                 } else {
                     switch (Prefs.getInt(Constants.SHOWING_FRAGMENT, Constants.LAUNCHER_FRAGMENT)) {
                         case Constants.LAUNCHER_FRAGMENT:
-                            fragment = MainTabBarPageFragment.newInstance(LinkaNotificationSettings.get_latest_linka(),MainTabBarPageFragment.LOCK_SCREEN);
+                            fragment = MainTabBarPageFragment.newInstance(LinkaNotificationSettings.get_latest_linka(), MainTabBarPageFragment.LOCK_SCREEN);
                             break;
                         case Constants.SET_NAME_FRAGMENT:
                             fragment = SetupLinka3.newInstance(SetupLinka3.WALKTHROUGH);
@@ -530,7 +482,7 @@ public class AppMainActivity extends CoreActivity {
 
     public void gotoLinka(Linka linka) {
         saveLatestLinka(linka);
-        drawerFragment = MainTabBarPageFragment.newInstance(linka,MainTabBarPageFragment.LOCK_SCREEN);
+        drawerFragment = MainTabBarPageFragment.newInstance(linka, MainTabBarPageFragment.LOCK_SCREEN);
         drawerLayout.closeDrawers();
 //        setFragment(fragment);
     }
@@ -601,8 +553,8 @@ public class AppMainActivity extends CoreActivity {
 
     private boolean isOtherBackListener = false;
 
-    public void setOnBackListener(View.OnClickListener clickListener){
-        if(clickListener != null) {
+    public void setOnBackListener(View.OnClickListener clickListener) {
+        if (clickListener != null) {
             menu.setVisibility(View.GONE);
             back.setVisibility(View.VISIBLE);
             isOtherBackListener = true;
@@ -610,7 +562,7 @@ public class AppMainActivity extends CoreActivity {
         }
     }
 
-    public void removeBackListener(){
+    public void removeBackListener() {
         back.setVisibility(View.GONE);
         menu.setVisibility(View.VISIBLE);
         isOtherBackListener = false;
@@ -618,22 +570,8 @@ public class AppMainActivity extends CoreActivity {
     }
 
     public void setDrawer() {
-
-//        sidebarTextLock.setText(R.string.my_linkas);
-//        sidebarTextManagedevices.setText(R.string.managedevices);
-//        itemTextAdd.setText(R.string.new_linka_cap);
-//        sidebarTextNotifications.setText(R.string.notifications);
-//        sidebarTextFaq.setText(R.string.faqs);
-//        sidebarTextChat.setText(R.string.chat_support);
-//        sidebarTextReportbug.setText(R.string.report_a_bug);
-//        sidebarTextTc.setText(R.string.terms_and_conditions);
-//        sidebarTextPrivacy.setText(R.string.privacy_policy);
-//        sidebarTextCheckAppUpdates.setText(R.string.check_app_updates);
-//        sidebarTextSelectLanguage.setText(R.string.select_language);
-//        sidebarTextLogout.setText(R.string.logout);
-
         if (LinkaAPIServiceImpl.isLoggedIn()) {
-            userName.setText(Prefs.getString("user-name",""));
+            userName.setText(Prefs.getString("user-name", ""));
 
         }
     }
@@ -685,11 +623,11 @@ public class AppMainActivity extends CoreActivity {
 
     @Override
     public void onBackPressed() {
-        if(isOtherBackListener){
+        if (isOtherBackListener) {
             back.callOnClick();
             return;
         }
-        if(drawerLayout.isDrawerOpen(drawer)){
+        if (drawerLayout.isDrawerOpen(drawer)) {
             drawerLayout.closeDrawer(drawer);
             return;
         }
@@ -774,14 +712,14 @@ public class AppMainActivity extends CoreActivity {
             toolbarSpace.setVisibility(View.GONE);
             title.setTextColor(getResources().getColor(R.color.linka_white));
             disableDrawer();
-        }else if(fragment instanceof ForgotPasswordPage1
-                || fragment instanceof ForgotPasswordPage2){
-            if(!LinkaAPIServiceImpl.isLoggedIn()){
+        } else if (fragment instanceof ForgotPasswordPage1
+                || fragment instanceof ForgotPasswordPage2) {
+            if (!LinkaAPIServiceImpl.isLoggedIn()) {
                 toolbar.setVisibility(View.GONE);
                 toolbarSpace.setVisibility(View.GONE);
                 title.setTextColor(getResources().getColor(R.color.linka_white));
                 disableDrawer();
-            }else {
+            } else {
                 toolbar.setVisibility(View.VISIBLE);
                 toolbarSpace.setVisibility(View.VISIBLE);
                 toolbar.setBackgroundColor(getResources().getColor(R.color.linka_blue_tabbar));
@@ -813,23 +751,16 @@ public class AppMainActivity extends CoreActivity {
             title.setTextColor(getResources().getColor(R.color.linka_white));
             disableDrawer();
         }
-//        else if (fragment instanceof SetupLinka1) {
-//            toolbar.setVisibility(View.GONE);
-//            toolbarSpace.setVisibility(View.GONE);
-//            title.setTextColor(getResources().getColor(R.color.linka_white));
-//            enableDrawer();
-//        }
-
 
         if (fragment instanceof WelcomePage) {
-            setTitle(_.i( R.string.sign_in));
+            setTitle(_.i(R.string.sign_in));
         } else if (fragment instanceof SignUpPage) {
             setTitle(_.i(R.string.sign_up));
         } else if (fragment instanceof SetupLinka1) {
             setTitle(_.i(R.string.setup_linka));
         } else if (fragment instanceof SetupLinka2) {
             setTitle(_.i(R.string.setup_linka));
-        } else if(fragment instanceof CircleView){
+        } else if (fragment instanceof CircleView) {
             setTitle(LinkaNotificationSettings.get_latest_linka().getName());
         } else if (fragment instanceof SettingsPageFragment) {
             setTitle(_.i(R.string.settings));
@@ -864,11 +795,11 @@ public class AppMainActivity extends CoreActivity {
         }
     }
 
-    public void setBackIconVisible(boolean visible){
-        if(visible){
+    public void setBackIconVisible(boolean visible) {
+        if (visible) {
             menu.setVisibility(View.GONE);
             back.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             back.setVisibility(View.GONE);
             menu.setVisibility(View.VISIBLE);
         }
@@ -877,26 +808,26 @@ public class AppMainActivity extends CoreActivity {
 
     /* MENU */
 
-//    @OnClick(R.id.sidebar_lock)
+    //    @OnClick(R.id.sidebar_lock)
     void onClick_sidebar_lock() {
 
         if (Linka.getLinkas().size() == 0) {
             drawerFragment = SetupLinka1.newInstance();
 //            pushFragment(fragment);
         } else {
-            drawerFragment = MainTabBarPageFragment.newInstance(LinkaNotificationSettings.get_latest_linka(),MainTabBarPageFragment.LOCK_SCREEN);
+            drawerFragment = MainTabBarPageFragment.newInstance(LinkaNotificationSettings.get_latest_linka(), MainTabBarPageFragment.LOCK_SCREEN);
         }
         drawerLayout.closeDrawers();
     }
 
-//    @OnClick(R.id.sidebar_available_devices)
-    void onClick_sidebar_available_devices(){
+    //    @OnClick(R.id.sidebar_available_devices)
+    void onClick_sidebar_available_devices() {
         drawerFragment = AvailableDevicesFragment.newInstance();
 
         drawerLayout.closeDrawers();
     }
 
-//    @OnClick(R.id.sidebar_notifications)
+    //    @OnClick(R.id.sidebar_notifications)
     void onClick_sidebar_notifications() {
         drawerFragment = NotificationSettingsPageFragment.newInstance();
 
@@ -905,7 +836,7 @@ public class AppMainActivity extends CoreActivity {
 
     private int firmwareMode = 0;
 
-//    @OnClick(R.id.sidebar_icon_user_email)
+    //    @OnClick(R.id.sidebar_icon_user_email)
     void onClick_sidebar_email() {
 
         //Enable firmware recovery mode if it is pressed 10 times
@@ -926,7 +857,7 @@ public class AppMainActivity extends CoreActivity {
 
                             //Start DFU fragment, make LINKA parameter null because we don't initialize it
 //                            DfuManagerPageFragment fragment = DfuManagerPageFragment.newInstance(null);
-                            AutoUpdateFragment fragment = AutoUpdateFragment.newInstance(null,AutoUpdateFragment.SETTINGS);
+                            AutoUpdateFragment fragment = AutoUpdateFragment.newInstance(null, AutoUpdateFragment.SETTINGS);
                             fragment.blod_firmware_mode = true;
                             pushFragment(fragment);
 
@@ -938,31 +869,31 @@ public class AppMainActivity extends CoreActivity {
         }
     }
 
-//    @OnClick(R.id.sidebar_icon_reportbug)
+    //    @OnClick(R.id.sidebar_icon_reportbug)
     void onClick_sidebar_bug() {
         drawerLayout.closeDrawers();
         Helpers.sendEmail(this, _.i(R.string.report_a_bug_url), _.i(R.string.report_a_bug));
     }
 
-//    @OnClick(R.id.sidebar_icon_tc)
+    //    @OnClick(R.id.sidebar_icon_tc)
     void onClick_sidebar_terms_conditions() {
         drawerFragment = WebPageFragment.newInstance(_.i(R.string.terms_and_conditions), _.i(R.string.terms_url));
         drawerLayout.closeDrawers();
     }
 
-//    @OnClick(R.id.sidebar_icon_privacy)
+    //    @OnClick(R.id.sidebar_icon_privacy)
     void onClick_sidebar_privacy() {
         drawerFragment = WebPageFragment.newInstance(_.i(R.string.privacy_policy), _.i(R.string.privacy_url));
         drawerLayout.closeDrawers();
     }
 
-//    @OnClick(R.id.sidebar_icon_faq)
+    //    @OnClick(R.id.sidebar_icon_faq)
     void onClick_sidebar_faq() {
         drawerFragment = WebPageFragment.newInstance(_.i(R.string.faqs), _.i(R.string.faq_url));
         drawerLayout.closeDrawers();
     }
 
-//    @OnClick(R.id.sidebar_icon_check_app_updates)
+    //    @OnClick(R.id.sidebar_icon_check_app_updates)
     void onClick_sidebar_check_app_updates() {
 
         double latitude = AppLocationService.getInstance().latitude;
@@ -997,25 +928,25 @@ public class AppMainActivity extends CoreActivity {
     }
 
 
-//    @OnClick(R.id.sidebar_icon_select_language)
+    //    @OnClick(R.id.sidebar_icon_select_language)
     void onClick_sidebar_icon_select_language() {
         AppLanguagePickerActivity.createNewInstance(this, false);
     }
 
-//    @OnClick(R.id.sidebar_icon_testing)
-    void onClick_sidebar_icon_testing(){
+    //    @OnClick(R.id.sidebar_icon_testing)
+    void onClick_sidebar_icon_testing() {
         drawerFragment = TestingFragment.newInstance();
         drawerLayout.closeDrawers();
     }
 
     @OnClick(R.id.sidebar_icon_help)
-    void onHelpItemClicked(){
+    void onHelpItemClicked() {
         drawerFragment = HelpFragment.newInstance();
         drawerLayout.closeDrawers();
     }
 
     @OnClick(R.id.sidebar_icon_settings)
-    void onSettingsItemClicked(){
+    void onSettingsItemClicked() {
         drawerFragment = AppSettingsFragment.newInstance();
         drawerLayout.closeDrawers();
     }
@@ -1035,14 +966,14 @@ public class AppMainActivity extends CoreActivity {
                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Utils.showLoading(AppMainActivity.this,root);
+                        Utils.showLoading(AppMainActivity.this, root);
                         logout();
                     }
                 })
                 .show();
     }
 
-    public void logout(){
+    public void logout() {
         LinkaNotificationSettings.disconnect_all_linka();
         LinkaAPIServiceImpl.logout(AppMainActivity.this, new Callback<LinkaAPIServiceResponse>() {
             @Override
@@ -1069,7 +1000,7 @@ public class AppMainActivity extends CoreActivity {
 
     @OnClick(R.id.item_add)
     void onClick_item_add() {
-        if(!(getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof SetupLinka1)) {
+        if (!(getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof SetupLinka1)) {
             drawerFragment = SetupLinka1.newInstance();
 //            setFragment(fragment);
         }
