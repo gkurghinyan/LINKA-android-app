@@ -359,7 +359,7 @@ public class LockBLEServiceProxy {
     public boolean doAction_siren(LockControllerBundle bundle) {
         LogHelper.i("LockBLEServiceProxy", "doAction_siren... ");
         LogHelper.i("With mLINKA_BLE_Service", mLINKA_BLE_Service.toString() + " ");
-        return doAction_WriteCommandPacket("LockBLEServiceProxy->doAction_siren", LockCommand.VCMD_ACTIVATE_SIREN, 0, bundle);
+        return doAction_WriteCommandPacket("LockBLEServiceProxy->doAction_siren", LockCommand.VCMD_ACTIVATE_SIREN, 3, bundle);
     }
 
     public boolean doAction_stop_siren(LockControllerBundle bundle){
@@ -474,7 +474,7 @@ public class LockBLEServiceProxy {
     public boolean doAction_SetQuickLock(int enable,LockControllerBundle bundle){
         LogHelper.i("LockBLEServiceProxy", "doAction_SetQuickLock... ");
         LogHelper.i("With mLINKA_BLE_Service", mLINKA_BLE_Service.toString() + " ");
-        return doAction_WriteSetting("doAction_SetLockSleep", LockSettingPacket.VLSO_SETTING_LOCKED_SLEEP_S, enable, bundle);
+        return doAction_WriteCommandPacket("doAction_SetLockSleep", LockCommand.VLSO_SETTING_ALLOW_UNCONN_LOCK, enable, bundle);
     }
 
 

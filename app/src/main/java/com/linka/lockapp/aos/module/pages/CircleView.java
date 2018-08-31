@@ -261,6 +261,7 @@ public class CircleView extends CoreFragment {
         ((TextView) internetPage.findViewById(R.id.title)).setText(R.string.network_required_to_connect);
 
         lockController = LocksController.getInstance().getLockController();
+        isPanicEnabled = linka.tamperStatus;
 
         final MainTabBarPageFragment tabBarPageFragment = (MainTabBarPageFragment) getParentFragment();
 
@@ -472,6 +473,13 @@ public class CircleView extends CoreFragment {
             gifImageView.setVisibility(View.GONE);
             isLockConnected = true;
         }
+        if(linka.tamperStatus){
+            if(!isPanicEnabled){
+                panicStarted();
+            }
+        }else if(isPanicEnabled){
+            panicEnded();
+        }
         if (linka.isLocked) {
             swipeText.setText(getString(R.string.press_to_unlock));
             swipeButton.setCurrentState(Circle.LOCKED_STATE);
@@ -603,6 +611,22 @@ public class CircleView extends CoreFragment {
         }
     }
 
+    private void panicStarted(){
+        isPanicEnabled = true;
+        panicButton.setBackground(getResources().getDrawable(R.drawable.panic_red_button));
+        panicButton.setColorFilter(getActivity().getResources().getColor(R.color.linka_white), PorterDuff.Mode.SRC_IN);
+        animation.setDuration(700);
+        animation.setRepeatCount(Animation.INFINITE);
+        animation.setRepeatMode(Animation.REVERSE);
+        panicButton.startAnimation(animation);
+    }
+
+    private void panicEnded(){
+        isPanicEnabled = false;
+        panicButton.clearAnimation();
+        panicButton.setBackground(getResources().getDrawable(R.drawable.panic_blue_button));
+    }
+
     @OnTouch(R.id.panic_button)
     boolean onPanicTouch(MotionEvent ev) {
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
@@ -613,17 +637,8 @@ public class CircleView extends CoreFragment {
         if (ev.getAction() == MotionEvent.ACTION_UP) {
             if (!isPanicEnabled) {
                 lockController.doActionSiren();
-                isPanicEnabled = true;
-                panicButton.setBackground(getResources().getDrawable(R.drawable.panic_red_button));
                 panicButton.setColorFilter(getActivity().getResources().getColor(R.color.linka_white), PorterDuff.Mode.SRC_IN);
-                animation.setDuration(700);
-                animation.setRepeatCount(Animation.INFINITE);
-                animation.setRepeatMode(Animation.REVERSE);
-                panicButton.startAnimation(animation);
             } else {
-                isPanicEnabled = false;
-                panicButton.clearAnimation();
-                panicButton.setBackground(getResources().getDrawable(R.drawable.panic_blue_button));
                 lockController.doStopActionSiren();
             }
         }
