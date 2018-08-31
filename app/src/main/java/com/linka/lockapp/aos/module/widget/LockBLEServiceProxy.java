@@ -474,7 +474,7 @@ public class LockBLEServiceProxy {
     public boolean doAction_SetQuickLock(int enable,LockControllerBundle bundle){
         LogHelper.i("LockBLEServiceProxy", "doAction_SetQuickLock... ");
         LogHelper.i("With mLINKA_BLE_Service", mLINKA_BLE_Service.toString() + " ");
-        return doAction_WriteCommandPacket("doAction_SetLockSleep", LockCommand.VLSO_SETTING_ALLOW_UNCONN_LOCK, enable, bundle);
+        return doAction_WriteSetting("doAction_SetQuickLock", LockSettingPacket.VLSO_SETTING_ALLOW_UNCONN_LOCK, enable, bundle);
     }
 
 

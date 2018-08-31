@@ -85,7 +85,7 @@ public class SwipeButton extends RelativeLayout {
     private ImageView bottomImageView;
 
     private boolean isCircleEnable = true;
-    private boolean isCircleClickable = true;
+    private boolean isCircleClickable = false;
 
     Context context;
     OnSwipeCompleteListener swipeListener;

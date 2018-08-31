@@ -61,7 +61,7 @@ public class LockSettingPacket extends LockDataPacket {
     public static final int VLSO_SETTING_MOTOR_SPD_INITIAL = 52; 		///< Speed (actually voltage) setpoint for the motor when locking/unlocking initially
     public static final int VLSO_SETTING_MOTOR_SPD_SLOW = 53; 		///< Speed (actually voltage) setpoint for the motor when locking/unlocking after VLSO_SETTING_SLOW_DELAY_100MS elapsed
     public static final int VLSO_SETTING_MOTOR_LOCK_CODE = 54;		///< Non-defaultable code set at the factory to indicate the lock version/batch
-    public static final int VLSO_SETTING_MAX = 55;
+    public static final int VLSO_SETTING_ALLOW_UNCONN_LOCK = 55;
 
 
     static final String[] VLSO_SETTINGS_DESCR = { "ID", "PAC", "ACTUATIONS", "ERRORS", "MODE", "STALL", "ACCEL lock th", "Alm delay s",         // 0-7
@@ -268,8 +268,8 @@ public class LockSettingPacket extends LockDataPacket {
             case VLSO_SETTING_MOTOR_LOCK_CODE:
                 return "VLSO_SETTING_MOTOR_LOCK_CODE";
 
-            case VLSO_SETTING_MAX:
-                return "VLSO_SETTING_MAX";
+            case VLSO_SETTING_ALLOW_UNCONN_LOCK:
+                return "VLSO_SETTING_ALLOW_UNCONN_LOCK";
             default:
                 return "[UNKNOWN SETTING INDEX]";
         }

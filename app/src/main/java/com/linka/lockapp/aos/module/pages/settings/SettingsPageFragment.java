@@ -163,7 +163,7 @@ public class SettingsPageFragment extends CoreFragment {
     private boolean isAdmin = false;
     private Unbinder unbinder;
     private int[] array = null;
-    private boolean doNotSendWrite = false;
+    //    private boolean doNotSendWrite = false;
     private LockController lockController;
 
     public static SettingsPageFragment newInstance(Linka linka) {
@@ -229,7 +229,7 @@ public class SettingsPageFragment extends CoreFragment {
     public void onPause() {
         super.onPause();
         if (editName != null && linka.isLockSettled) {
-            if(!linka.getName().equals(editName.getText().toString())) {
+            if (!linka.getName().equals(editName.getText().toString())) {
                 linka.saveName(editName.getText().toString());
                 linka.save();
             }
@@ -270,7 +270,7 @@ public class SettingsPageFragment extends CoreFragment {
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
                     if (editName != null && linka.isLockSettled) {
-                        if(!linka.getName().equals(editName.getText().toString())) {
+                        if (!linka.getName().equals(editName.getText().toString())) {
                             linka.saveName(editName.getText().toString());
                             linka.save();
                         }
@@ -299,24 +299,14 @@ public class SettingsPageFragment extends CoreFragment {
             public void onCheckedChanged(Switch view, boolean checked) {
                 switch (view.getId()) {
                     case R.id.settings_audible_locking_unlocking:
-                        if (!doNotSendWrite) {
-                            linka.settings_audible_locking_unlocking = checked;
-                            if (lockController.doSetAudibility(checked)) {
-                                linka.saveSettings();
-                            }
-                        } else {
+                        if (lockController.doSetAudibility(checked)) {
                             linka.settings_audible_locking_unlocking = checked;
                             linka.saveSettings();
                         }
                         break;
 
                     case R.id.settings_tamper_siren:
-                        if (!doNotSendWrite) {
-                            linka.settings_tamper_siren = checked;
-                            if (lockController.doSetTamperAlert(checked)) {
-                                linka.saveSettings();
-                            }
-                        } else {
+                        if (lockController.doSetTamperAlert(checked)) {
                             linka.settings_tamper_siren = checked;
                             linka.saveSettings();
                         }
@@ -367,12 +357,15 @@ public class SettingsPageFragment extends CoreFragment {
     }
 
     void refreshDisplay() {
-        doNotSendWrite = true;
         switchAudibleLockingUnlocking.setChecked(linka.settings_audible_locking_unlocking);
         switchTamperSiren.setChecked(linka.settings_tamper_siren);
         switchAutoUnlocking.setChecked(linka.settings_auto_unlocking);
+        if (linka.settings_quick_lock == 1) {
+            switchQuickLock.setChecked(true);
+        } else if (linka.settings_quick_lock == 0) {
+            switchQuickLock.setChecked(false);
+        }
 //        setRadiusLinearVisibility(linka.settings_auto_unlocking);
-        doNotSendWrite = false;
 
         LinkaAccessKey key = LinkaAccessKey.getKeyFromLinka(linka);
         if (key != null && !key.access_key_admin.equals("")) {
@@ -565,12 +558,7 @@ public class SettingsPageFragment extends CoreFragment {
     }
 
     private void setQuickLockChecked(int isChecked) {
-        if (!doNotSendWrite) {
-            linka.settings_quick_lock = isChecked;
-            if (lockController.doAction_SetQuickLock(isChecked)) {
-                linka.saveSettings();
-            }
-        } else {
+        if (lockController.doAction_SetQuickLock(isChecked)) {
             linka.settings_quick_lock = isChecked;
             linka.saveSettings();
         }
@@ -776,7 +764,7 @@ public class SettingsPageFragment extends CoreFragment {
                 refreshDisplay();
             } else if (object.equals(FRAGMENT_ADDED)) {
                 rootFrame.setBackgroundColor(getResources().getColor(R.color.linka_transparent));
-            } else if (((String) object).substring(0,9).equals(MainTabBarPageFragment.SELECTED_SCREEN)) {
+            } else if (((String) object).substring(0, 9).equals(MainTabBarPageFragment.SELECTED_SCREEN)) {
                 if (object.equals(MainTabBarPageFragment.SELECTED_SCREEN + String.valueOf(MainTabBarPageFragment.SETTING_SCREEN))) {
                     editName.setText(linka.getName());
                 }
