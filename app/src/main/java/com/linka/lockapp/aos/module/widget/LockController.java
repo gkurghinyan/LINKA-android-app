@@ -14,7 +14,6 @@ import android.util.Log;
 import com.linka.Lock.BLE.BluetoothLeQueuedService;
 import com.linka.Lock.FirmwareAPI.Comms.LINKAGattAttributes;
 import com.linka.Lock.FirmwareAPI.Comms.LockAckNakPacket;
-import com.linka.Lock.FirmwareAPI.Comms.LockCommand;
 import com.linka.Lock.FirmwareAPI.Comms.LockContextPacket;
 import com.linka.Lock.FirmwareAPI.Comms.LockEncV1;
 import com.linka.Lock.FirmwareAPI.Comms.LockInfoPacket;
@@ -528,7 +527,7 @@ public class LockController implements Serializable {
 
         //Read audio to set into settings page
         lockBLEServiceProxy.doAction_ReadSetting("LockController->doActivate", LockSettingPacket.VLSO_SETTING_AUDIO, lockControllerBundle);
-        lockBLEServiceProxy.doAction_ReadSetting("LockController->doActivate",LockCommand.VLSO_SETTING_ALLOW_UNCONN_LOCK,lockControllerBundle);
+        lockBLEServiceProxy.doAction_ReadSetting("LockController->doActivate",LockSettingPacket.VLSO_SETTING_ALLOW_UNCONN_LOCK,lockControllerBundle);
 
         // Useful for testing the queue by initiating multiple sequential reads
 /*
@@ -1019,7 +1018,7 @@ public class LockController implements Serializable {
                         EventBus.getDefault().post(LinkaActivity.LINKA_ACTIVITY_ON_CHANGE);
                     }
 
-                    if(index == LockCommand.VLSO_SETTING_ALLOW_UNCONN_LOCK){
+                    if(index == LockSettingPacket.VLSO_SETTING_ALLOW_UNCONN_LOCK){
                         linka.settings_quick_lock = value;
                         linka.saveSettings();
                     }
