@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gif_blue"
+    android:background="@color/gif_second_blue"
     tools:context=".module.pages.walkthrough.TutorialShareFragment">
 
     <android.support.constraint.Guideline
@@ -34,7 +34,7 @@
         android:layout_height="match_parent"
         android:src="@drawable/share_your_bike"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="@dimen/margin_xl"/>
+        android:layout_marginBottom="@dimen/logo_height"/>
 
     <TextView
         android:layout_width="wrap_content"

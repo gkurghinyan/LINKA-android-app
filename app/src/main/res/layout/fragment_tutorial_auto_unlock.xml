@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/gif_blue"
+    android:background="@color/gif_second_blue"
     tools:context=".module.pages.walkthrough.TutorialAutoUnlockFragment">
 
     <android.support.constraint.Guideline
@@ -32,9 +32,9 @@
         android:id="@+id/gif_tutorial"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/alarm_tamper_alert"
+        android:src="@drawable/auto_unlock"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="@dimen/margin_xl"/>
+        android:layout_marginBottom="@dimen/logo_height"/>
 
     <TextView
         android:id="@+id/header"
