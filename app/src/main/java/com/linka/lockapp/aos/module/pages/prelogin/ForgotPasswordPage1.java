@@ -8,12 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceImpl;
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceResponse;
 import com.linka.lockapp.aos.module.core.CoreFragment;
 import com.linka.lockapp.aos.module.helpers.FontHelpers;
+import com.linka.lockapp.aos.module.other.Utils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -93,6 +95,10 @@ public class ForgotPasswordPage1 extends CoreFragment {
     @OnClick(R.id.ok)
     void onOk() {
         getAppMainActivity().hideKeyboard();
+        if (!Utils.isEmailValid(email.getText().toString())){
+            Toast.makeText(getActivity(), getString(R.string.invalid_email_massage), Toast.LENGTH_SHORT).show();
+            return;
+        }
         showLoading(root);
 
         final String _email = email.getText().toString();

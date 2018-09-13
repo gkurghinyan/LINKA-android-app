@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceImpl;
@@ -20,6 +21,7 @@ import com.linka.lockapp.aos.module.core.CoreFragment;
 import com.linka.lockapp.aos.module.eventbus.WrongCredentialsBusEventMessage;
 import com.linka.lockapp.aos.module.gcm.MyFirebaseInstanceIdService;
 import com.linka.lockapp.aos.module.helpers.FontHelpers;
+import com.linka.lockapp.aos.module.other.Utils;
 import com.linka.lockapp.aos.module.pages.dialogs.WrongCredentialsDialogFragment;
 
 import org.greenrobot.eventbus.EventBus;
@@ -114,6 +116,10 @@ public class SignInPage extends CoreFragment {
 
     @OnClick(R.id.sign_in)
     void onSignIn() {
+        if (!Utils.isEmailValid(username.getText().toString())) {
+            Toast.makeText(getActivity(), getString(R.string.invalid_email_massage), Toast.LENGTH_SHORT).show();
+            return;
+        }
         Blurry.with(getActivity()).radius(25).sampling(2).onto(constraintLayout);
 
         getAppMainActivity().hideKeyboard();

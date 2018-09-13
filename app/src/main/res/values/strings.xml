@@ -183,6 +183,7 @@
     <string name="confirm_password">CONFIRM PASSWORD</string>
     <string name="please_check_tos">Please check \'I\'ve read the terms and agreement\' box.</string>
     <string name="password_not_match">Your password and confirmation password do not match.</string>
+    <string name="invalid_email_massage">Please enter a valid email.</string>
     <string name="creating_account">Creating Account</string>
     <string name="logging_in">Logging In</string>
 

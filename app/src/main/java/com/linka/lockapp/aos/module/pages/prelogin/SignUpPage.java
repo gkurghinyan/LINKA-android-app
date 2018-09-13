@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceImpl;
@@ -20,6 +21,7 @@ import com.linka.lockapp.aos.module.eventbus.WrongCredentialsBusEventMessage;
 import com.linka.lockapp.aos.module.gcm.MyFirebaseInstanceIdService;
 import com.linka.lockapp.aos.module.helpers.FontHelpers;
 import com.linka.lockapp.aos.module.helpers.Helpers;
+import com.linka.lockapp.aos.module.other.Utils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -126,11 +128,12 @@ public class SignUpPage extends CoreFragment {
     void onCreateAccount() {
         getAppMainActivity().hideKeyboard();
 
+        if (!Utils.isEmailValid(username.getText().toString())) {
+            Toast.makeText(getActivity(), getString(R.string.invalid_email_massage), Toast.LENGTH_SHORT).show();
+            return;
+        }
         if (!password.getText().toString().equals(reenterPassword.getText().toString())) {
-            new AlertDialog.Builder(getAppMainActivity())
-                    .setMessage(R.string.password_not_match)
-                    .setNegativeButton(R.string.ok, null)
-                    .show();
+            Toast.makeText(getActivity(), getString(R.string.password_not_match), Toast.LENGTH_SHORT).show();
             return;
         }
 
