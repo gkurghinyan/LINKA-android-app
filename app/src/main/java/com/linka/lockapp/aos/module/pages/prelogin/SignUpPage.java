@@ -156,7 +156,15 @@ public class SignUpPage extends CoreFragment {
                     public void onResponse(Call<LinkaAPIServiceResponse.RegisterResponse> call, Response<LinkaAPIServiceResponse.RegisterResponse> response) {
                         cancelLoading();
                         if (LinkaAPIServiceImpl.check(response, false, getAppMainActivity())) {
-                            login();
+                            if(response.body().message.equals("Verification Email Sent")){
+                                new AlertDialog.Builder(getActivity())
+                                        .setMessage(response.body().message)
+                                        .setPositiveButton(R.string.ok,null)
+                                        .setCancelable(true)
+                                        .create().show();
+                            }else {
+                                login();
+                            }
                         }
 
                         //Now that we've signed in, we should send the push token immediately
