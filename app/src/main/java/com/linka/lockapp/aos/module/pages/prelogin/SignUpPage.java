@@ -159,14 +159,22 @@ public class SignUpPage extends CoreFragment {
                     public void onResponse(Call<LinkaAPIServiceResponse.RegisterResponse> call, Response<LinkaAPIServiceResponse.RegisterResponse> response) {
                         cancelLoading();
                         if (LinkaAPIServiceImpl.check(response, false, getAppMainActivity())) {
-                            if(response.body().message.equals("Verification Email Sent")){
+                            if(response.body() != null && response.body().message != null) {
+                                if (response.body().message.equals("Verification Email Sent")) {
+                                    new AlertDialog.Builder(getActivity())
+                                            .setMessage(response.body().message)
+                                            .setPositiveButton(R.string.ok, null)
+                                            .setCancelable(true)
+                                            .create().show();
+                                } else {
+                                    login();
+                                }
+                            }else {
                                 new AlertDialog.Builder(getActivity())
-                                        .setMessage(response.body().message)
-                                        .setPositiveButton(R.string.ok,null)
+                                        .setMessage("This is an invalid email")
+                                        .setPositiveButton(R.string.ok, null)
                                         .setCancelable(true)
                                         .create().show();
-                            }else {
-                                login();
                             }
                         }
 
