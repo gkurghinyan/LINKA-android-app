@@ -4,8 +4,8 @@
     <!-- Linka Colors -->
     <color name="linka_transparent">#00000000</color>
     <color name="linka__semi_transparent">#13000000</color>
-    <color name="linka_blue">#00AEEF</color>
-    <color name="linka_blue_tabbar">#23AEE3</color>
+    <color name="linka_blue">#1BA5E5</color>
+    <color name="linka_blue_tabbar">#1BA5E3</color>
     <color name="linka_blue_tabbar_transparent">#AA1276D8</color>
     <color name="linka_black_transparent">#BB000000</color>
     <color name="linka_light_bg">#FAFAFA</color>
