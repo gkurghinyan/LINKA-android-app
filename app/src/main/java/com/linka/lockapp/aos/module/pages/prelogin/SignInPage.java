@@ -123,6 +123,10 @@ public class SignInPage extends CoreFragment {
             Toast.makeText(getActivity(), getString(R.string.invalid_email_massage), Toast.LENGTH_SHORT).show();
             return;
         }
+        if (password.getText().toString().length()<6){
+            Toast.makeText(getActivity(), getString(R.string.password_min_length_massage), Toast.LENGTH_SHORT).show();
+            return;
+        }
         Blurry.with(getActivity()).radius(25).sampling(2).onto(constraintLayout);
 
         getAppMainActivity().hideKeyboard();
