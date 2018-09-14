@@ -131,11 +131,16 @@ public class LinkaAPIServiceImpl {
                 if (responseData.message.equals("Wrong username or password.")) {
                     EventBus.getDefault().post(new WrongCredentialsBusEventMessage(WrongCredentialsBusEventMessage.SHOW));
                 } else {
-                    new AlertDialog.Builder(context)
-                            .setTitle(R.string.error)
-                            .setMessage(responseData.message)
-                            .setNegativeButton(R.string.ok, null)
-                            .show();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setTitle(R.string.error)
+                            .setNegativeButton(R.string.ok, null);
+                    if (responseData.message.equals("Email address not verified")) {
+                        builder.setMessage("This email address is not valid")
+                                .show();
+                    } else {
+                        builder.setMessage(responseData.message)
+                                .show();
+                    }
                 }
             } else {
                 new AlertDialog.Builder(context)
@@ -1256,7 +1261,7 @@ public class LinkaAPIServiceImpl {
         call.enqueue(new Callback<LinkaAPIServiceResponse>() {
             @Override
             public void onResponse(Call<LinkaAPIServiceResponse> call, Response<LinkaAPIServiceResponse> response) {
-                if(check(response,true,context)){
+                if (check(response, true, context)) {
                     callback.onResponse(call, response);
                 } else {
                     callback.onResponse(call, response);
