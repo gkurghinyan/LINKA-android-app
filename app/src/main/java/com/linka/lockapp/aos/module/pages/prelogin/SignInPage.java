@@ -4,9 +4,12 @@ package com.linka.lockapp.aos.module.pages.prelogin;
  * Created by kyle on 3/7/18.
  */
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -105,13 +108,13 @@ public class SignInPage extends CoreFragment {
     @Override
     public void onStart() {
         super.onStart();
-        EventBus.getDefault().register(this);
+      //  EventBus.getDefault().register(this);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        EventBus.getDefault().unregister(this);
+       // EventBus.getDefault().unregister(this);
     }
 
     @OnClick(R.id.sign_in)
@@ -146,15 +149,15 @@ public class SignInPage extends CoreFragment {
         });
     }
 
-    @Subscribe
-    public void onWrongCredentialsDialog(WrongCredentialsBusEventMessage eventMessage){
-        if(eventMessage.getAction() == WrongCredentialsBusEventMessage.SHOW) {
-            Blurry.with(getActivity()).radius(25).sampling(2).onto(constraintLayout);
-            WrongCredentialsDialogFragment.newInstance().show(getActivity().getFragmentManager(), null);
-        }else if(eventMessage.getAction() == WrongCredentialsBusEventMessage.CLOSE){
-            Blurry.delete(constraintLayout);
-        }
-    }
+//    @Subscribe
+//    public void onWrongCredentialsDialog(WrongCredentialsBusEventMessage eventMessage){
+//        if(eventMessage.getAction() == WrongCredentialsBusEventMessage.SHOW) {
+//            Blurry.with(getActivity()).radius(25).sampling(2).onto(constraintLayout);
+//           WrongCredentialsDialogFragment.newInstance().show(getActivity().getFragmentManager(), null);
+//        }else if(eventMessage.getAction() == WrongCredentialsBusEventMessage.CLOSE){
+//            Blurry.delete(constraintLayout);
+//        }
+//    }
 
 
     @OnClick(R.id.forgot_password)

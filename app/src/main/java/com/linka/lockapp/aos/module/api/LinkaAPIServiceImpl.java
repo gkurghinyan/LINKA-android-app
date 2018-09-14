@@ -118,10 +118,10 @@ public class LinkaAPIServiceImpl {
             return false;
         }
         try {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
             if (responseData == null) {
                 LogHelper.e("Error:", "Network Error Popup");
-                new AlertDialog.Builder(context)
-                        .setTitle(R.string.network_error)
+                builder.setTitle(R.string.network_error)
                         .setMessage(R.string.please_check_network)
                         .setNegativeButton(R.string.ok, null)
                         .show();
@@ -129,9 +129,13 @@ public class LinkaAPIServiceImpl {
 
             if (responseData.message != null) {
                 if (responseData.message.equals("Wrong username or password.")) {
-                    EventBus.getDefault().post(new WrongCredentialsBusEventMessage(WrongCredentialsBusEventMessage.SHOW));
+                   // EventBus.getDefault().post(new WrongCredentialsBusEventMessage(WrongCredentialsBusEventMessage.SHOW));
+                    builder.setMessage(responseData.message)
+                            .setPositiveButton(R.string.ok, null)
+                            .setCancelable(true)
+                            .create().show();
                 } else {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
                     builder.setTitle(R.string.error)
                             .setNegativeButton(R.string.ok, null);
                     if (responseData.message.equals("Email address not verified")) {
@@ -143,8 +147,7 @@ public class LinkaAPIServiceImpl {
                     }
                 }
             } else {
-                new AlertDialog.Builder(context)
-                        .setTitle(R.string.error)
+                builder.setTitle(R.string.error)
                         .setMessage(R.string.error_invalid)
                         .setNegativeButton(R.string.ok, null)
                         .show();
