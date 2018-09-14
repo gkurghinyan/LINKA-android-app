@@ -5,7 +5,7 @@
     <color name="linka_transparent">#00000000</color>
     <color name="linka__semi_transparent">#13000000</color>
     <color name="linka_blue">#00AEEF</color>
-    <color name="linka_blue_tabbar">#1BA5E3</color>
+    <color name="linka_blue_tabbar">#23AEE3</color>
     <color name="linka_blue_tabbar_transparent">#AA1276D8</color>
     <color name="linka_black_transparent">#BB000000</color>
     <color name="linka_light_bg">#FAFAFA</color>
@@ -81,7 +81,7 @@
     <color name="switch_back_middle_color">#D9D9D9</color>
     <color name="switch_back_end_color">#B4B4B4</color>
     <color name="bottom_image_color">#CDCDCD</color>
-    <color name="navigation_color">#009FDF</color>
+    <color name="navigation_color">#1BA5E6</color>
     <color name="gray_text">#666666</color>
     <color name="dark_gray_text">#565656</color>
     <color name="gif_blue">#2EB7F1</color>

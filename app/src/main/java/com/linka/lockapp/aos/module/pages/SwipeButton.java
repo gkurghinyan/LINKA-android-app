@@ -73,7 +73,7 @@ public class SwipeButton extends RelativeLayout {
     private LinearLayout layer;
     private boolean hasActivationState = false;
 
-    private static final int MIN_CLICK_DURATION = 2800;
+    private static final int MIN_CLICK_DURATION = 3200;
     private long startClickTime;
     private boolean longClickActive = false;
 
@@ -214,7 +214,7 @@ public class SwipeButton extends RelativeLayout {
 //        circleViewBackground.setId(R.id.circle_background);
 
         animation = new CircleAngleAnimation(circleView, 358); //Full circle = 360 degrees
-        animation.setDuration(2800);
+        animation.setDuration(3200);
 
 
         if (attrs != null && defStyleAttr == -1 && defStyleRes == -1) {
@@ -601,7 +601,6 @@ public class SwipeButton extends RelativeLayout {
     }
 
     public void setCircleClickable(boolean clickable){
-        Log.d("CircleClick",String.valueOf(clickable));
         isCircleClickable = clickable;
     }
 
