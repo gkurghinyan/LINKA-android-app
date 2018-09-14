@@ -311,6 +311,11 @@ public class CircleView extends CoreFragment {
                 if (tabBarPageFragment != null) {
                     tabBarPageFragment.showTabBar();
                 }
+                isRefreshAvailable = false;
+                if (refreshHandler == null) {
+                    refreshHandler = new Handler();
+                }
+                refreshHandler.postDelayed(refreshRunnable, 1000);
 
                 if (lockController.getLinka().isUnlocked()) {
                     lockController.doLock();

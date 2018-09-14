@@ -16,6 +16,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -409,11 +410,8 @@ public class SwipeButton extends RelativeLayout {
                                     setBackground(AppMainActivity.instance.getResources().getDrawable(R.color.linka_transparent));
                                     handler.removeCallbacks(setColor);
 
-//                                    circleView.clearAnimation();
                                     cancelCircleAnimation();
 
-//                                    circleView.setAngle(5);
-//                                    circleView.requestLayout();
 
                                     if (swipeListener != null) {
                                         swipeListener.clickCancelled();
@@ -432,24 +430,13 @@ public class SwipeButton extends RelativeLayout {
                         setBackground(AppMainActivity.instance.getResources().getDrawable(R.color.linka_transparent));
                         handler.removeCallbacks(setColor);
 
-//                        circleView.clearAnimation();
                         long clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
-//                        if(clickDuration < MIN_CLICK_DURATION) {
-//                            cancelCircleAnimation();
-//                        }
-
-//                        circleView.setAngle(5);
-//                        circleView.requestLayout();
 
                         if (circleView.getY() + circleView.getHeight() > getHeight() * 0.95) {
                             if (hasActivationState) {
                                 //expandButton();
                                 if (swipeListener != null) {
-//                                    if(circleView.getCurrentState() == Circle.LOCKING_STATE){
-//                                        circleView.drawState(Circle.LOCKED_STATE);
-//                                    }else if(circleView.getCurrentState() == Circle.UNLOCKING_STATE){
-//                                        circleView.drawState(Circle.UNLOCKED_STATE);
-//                                    }
+                                    setCircleClickable(false);
                                     swipeListener.onSwipeComplete(true);
                                 }
 
@@ -594,7 +581,7 @@ public class SwipeButton extends RelativeLayout {
     }
 
     public void setCurrentState(int state){
-        if(state == Circle.LOCKING_STATE || state == Circle.UNLOCKING_STATE){
+        if(isCircleEnable && state == Circle.LOCKING_STATE || state == Circle.UNLOCKING_STATE){
             if(state == Circle.LOCKING_STATE){
                 if(circleView.getCurrentState() == Circle.UNLOCKED_STATE) {
                     circleView.drawState(Circle.LOCKED_STATE);
@@ -614,6 +601,7 @@ public class SwipeButton extends RelativeLayout {
     }
 
     public void setCircleClickable(boolean clickable){
+        Log.d("CircleClick",String.valueOf(clickable));
         isCircleClickable = clickable;
     }
 
