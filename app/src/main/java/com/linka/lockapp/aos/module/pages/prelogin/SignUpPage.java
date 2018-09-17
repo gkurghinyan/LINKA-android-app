@@ -38,6 +38,7 @@ import retrofit2.Response;
  * Created by Vanson on 11/7/2016.
  */
 public class SignUpPage extends CoreFragment {
+    public static final int PASSWORD_MIN_LENGTH = 6;
 
 
     @BindView(R.id.first_name)
@@ -73,7 +74,7 @@ public class SignUpPage extends CoreFragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_prelogin_v2_signup_page, container, false);
         unbinder = ButterKnife.bind(this, rootView);
-        Log.d("ActivityNameLog",getActivity().getLocalClassName());
+        Log.d("ActivityNameLog", getActivity().getLocalClassName());
 
         return rootView;
     }
@@ -132,11 +133,11 @@ public class SignUpPage extends CoreFragment {
             Toast.makeText(getActivity(), getString(R.string.invalid_email_massage), Toast.LENGTH_SHORT).show();
             return;
         }
-        if (password.getText().toString().length()<6){
+        if (password.getText().toString().length() < PASSWORD_MIN_LENGTH) {
             Toast.makeText(getActivity(), getString(R.string.password_min_length_massage), Toast.LENGTH_SHORT).show();
             return;
         }
-        if (!password.getText().toString().equals(reenterPassword.getText().toString())) {
+        if ( password.getText().toString()!=null && !password.getText().toString().equals(reenterPassword.getText().toString())) {
             Toast.makeText(getActivity(), getString(R.string.password_not_match), Toast.LENGTH_SHORT).show();
             return;
         }
@@ -163,7 +164,7 @@ public class SignUpPage extends CoreFragment {
                     public void onResponse(Call<LinkaAPIServiceResponse.RegisterResponse> call, Response<LinkaAPIServiceResponse.RegisterResponse> response) {
                         cancelLoading();
                         if (LinkaAPIServiceImpl.signUpCheck(response, false, getAppMainActivity())) {
-                            if(response.body() != null && response.body().message != null) {
+                            if (response.body() != null && response.body().message != null) {
                                 if (response.body().message.equals("Verification Email Sent")) {
                                     new AlertDialog.Builder(getActivity())
                                             .setMessage(response.body().message)
@@ -171,17 +172,17 @@ public class SignUpPage extends CoreFragment {
                                             .setCancelable(true)
                                             .create().show();
                                 } else {
-                                  //  signUp();
+                                    //  signUp();
                                 }
-                            }else {
-                                if (response.body()!=null && response.body().status!=null && response.body().status.equals("success")){
-                                            new AlertDialog.Builder(getActivity())
-                                                    .setMessage("This email address already exists. Please sign in.")
-                                                    .setPositiveButton(R.string.ok, null)
-                                                    .setCancelable(true)
-                                                    .create().show();
+                            } else {
+                                if (response.body() != null && response.body().status != null && response.body().status.equals("success")) {
+                                    new AlertDialog.Builder(getActivity())
+                                            .setMessage("This email address already exists. Please sign in.")
+                                            .setPositiveButton(R.string.ok, null)
+                                            .setCancelable(true)
+                                            .create().show();
 
-                                }else {
+                                } else {
                                     new AlertDialog.Builder(getActivity())
                                             .setMessage("This is an invalid email")
                                             .setPositiveButton(R.string.ok, null)
@@ -205,8 +206,8 @@ public class SignUpPage extends CoreFragment {
 
 
     @Subscribe
-    public void onWrongCredentialsDialog(WrongCredentialsBusEventMessage eventMessage){
-        if(eventMessage.getAction() == WrongCredentialsBusEventMessage.SHOW) {
+    public void onWrongCredentialsDialog(WrongCredentialsBusEventMessage eventMessage) {
+        if (eventMessage.getAction() == WrongCredentialsBusEventMessage.SHOW) {
             new AlertDialog.Builder(getActivity())
                     .setTitle(R.string.error)
                     .setMessage("Wrong username or password.")
