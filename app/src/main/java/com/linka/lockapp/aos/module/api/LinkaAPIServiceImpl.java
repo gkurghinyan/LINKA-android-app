@@ -139,7 +139,7 @@ public class LinkaAPIServiceImpl {
                     builder.setTitle(R.string.error)
                             .setNegativeButton(R.string.ok, null);
                     if (responseData.message.equals("Email address not verified")) {
-                        builder.setMessage("Email address not verified")
+                        builder.setMessage("This email address is not valid.")
                                 .show();
                     } else {
                         builder.setMessage(responseData.message)
@@ -192,7 +192,11 @@ public class LinkaAPIServiceImpl {
                     if (responseData.message.equals("Email address not verified")) {
                         builder.setMessage("This email address already exists. Please sign in.")
                                 .show();
-                    } else {
+                    } else
+                        if (responseData.message.equals("Device not verified")){
+                            builder.setMessage("This email address already exists. Please sign in.")
+                                    .show();
+                    }else {
                         builder.setMessage(responseData.message)
                                 .show();
                     }

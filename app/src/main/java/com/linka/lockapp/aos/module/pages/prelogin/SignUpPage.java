@@ -171,10 +171,10 @@ public class SignUpPage extends CoreFragment {
                                             .setCancelable(true)
                                             .create().show();
                                 } else {
-                                    signUp();
+                                  //  signUp();
                                 }
                             }else {
-                                if (response.body()!=null && response.body().status.equals("success")){
+                                if (response.body()!=null && response.body().status!=null && response.body().status.equals("success")){
                                             new AlertDialog.Builder(getActivity())
                                                     .setMessage("This email address already exists. Please sign in.")
                                                     .setPositiveButton(R.string.ok, null)
@@ -192,7 +192,7 @@ public class SignUpPage extends CoreFragment {
                         }
 
                         //Now that we've signed in, we should send the push token immediately
-                        MyFirebaseInstanceIdService.getFcmToken();
+                        //MyFirebaseInstanceIdService.getFcmToken();
                     }
 
                     @Override
@@ -216,7 +216,7 @@ public class SignUpPage extends CoreFragment {
     }
 
 
-    void signUp() {
+    /*void signUp() {
         getAppMainActivity().hideKeyboard();
         showLoading(root);
 
@@ -234,6 +234,6 @@ public class SignUpPage extends CoreFragment {
                 cancelLoading();
             }
         });
-    }
+    }*/
 
 }
