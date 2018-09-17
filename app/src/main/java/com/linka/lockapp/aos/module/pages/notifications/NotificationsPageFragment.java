@@ -129,7 +129,7 @@ public class NotificationsPageFragment extends CoreFragment {
         adapter = new NotificationListAdapter(getActivity());
 
         if (savedInstanceState != null) {
-            if (recyclerView != null) {
+            if (recyclerView != null && recyclerView.getRecyclerView()!=null && recyclerView.getRecyclerView().getLayoutManager()!=null) {
                 Parcelable ss = savedInstanceState.getParcelable("ss");
                 recyclerView.getRecyclerView().getLayoutManager().onRestoreInstanceState(ss);
             }
