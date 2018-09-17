@@ -108,7 +108,9 @@ public class NotificationsPageFragment extends CoreFragment {
             }
             adapter.context = null;
         }
-        unbinder.unbind();
+        if (unbinder!=null){
+            unbinder.unbind();
+        }
     }
 
     @Override
