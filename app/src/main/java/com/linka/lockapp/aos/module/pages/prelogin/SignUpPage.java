@@ -162,7 +162,7 @@ public class SignUpPage extends CoreFragment {
                     @Override
                     public void onResponse(Call<LinkaAPIServiceResponse.RegisterResponse> call, Response<LinkaAPIServiceResponse.RegisterResponse> response) {
                         cancelLoading();
-                        if (LinkaAPIServiceImpl.check(response, false, getAppMainActivity())) {
+                        if (LinkaAPIServiceImpl.signUpCheck(response, false, getAppMainActivity())) {
                             if(response.body() != null && response.body().message != null) {
                                 if (response.body().message.equals("Verification Email Sent")) {
                                     new AlertDialog.Builder(getActivity())
@@ -171,14 +171,23 @@ public class SignUpPage extends CoreFragment {
                                             .setCancelable(true)
                                             .create().show();
                                 } else {
-                                    login();
+                                    signUp();
                                 }
                             }else {
-                                new AlertDialog.Builder(getActivity())
-                                        .setMessage("This is an invalid email")
-                                        .setPositiveButton(R.string.ok, null)
-                                        .setCancelable(true)
-                                        .create().show();
+                                if (response.body()!=null && response.body().status.equals("success")){
+                                            new AlertDialog.Builder(getActivity())
+                                                    .setMessage("This email address already exists. Please sign in.")
+                                                    .setPositiveButton(R.string.ok, null)
+                                                    .setCancelable(true)
+                                                    .create().show();
+
+                                }else {
+                                    new AlertDialog.Builder(getActivity())
+                                            .setMessage("This is an invalid email")
+                                            .setPositiveButton(R.string.ok, null)
+                                            .setCancelable(true)
+                                            .create().show();
+                                }
                             }
                         }
 
@@ -207,15 +216,15 @@ public class SignUpPage extends CoreFragment {
     }
 
 
-    void login() {
+    void signUp() {
         getAppMainActivity().hideKeyboard();
         showLoading(root);
 
-        LinkaAPIServiceImpl.login(getAppMainActivity(), username.getText().toString(), password.getText().toString(), new Callback<LinkaAPIServiceResponse.LoginResponse>() {
+        LinkaAPIServiceImpl.signUp(getAppMainActivity(), username.getText().toString(), password.getText().toString(), new Callback<LinkaAPIServiceResponse.LoginResponse>() {
             @Override
             public void onResponse(Call<LinkaAPIServiceResponse.LoginResponse> call, Response<LinkaAPIServiceResponse.LoginResponse> response) {
                 cancelLoading();
-                if (LinkaAPIServiceImpl.check(response, false, getAppMainActivity())) {
+                if (LinkaAPIServiceImpl.signUpCheck(response, false, getAppMainActivity())) {
                     getAppMainActivity().didSignIn();
                 }
             }

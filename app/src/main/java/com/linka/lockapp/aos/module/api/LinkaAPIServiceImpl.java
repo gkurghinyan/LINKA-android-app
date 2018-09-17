@@ -129,7 +129,7 @@ public class LinkaAPIServiceImpl {
 
             if (responseData.message != null) {
                 if (responseData.message.equals("Wrong username or password.")) {
-                   // EventBus.getDefault().post(new WrongCredentialsBusEventMessage(WrongCredentialsBusEventMessage.SHOW));
+                    // EventBus.getDefault().post(new WrongCredentialsBusEventMessage(WrongCredentialsBusEventMessage.SHOW));
                     builder.setMessage(responseData.message)
                             .setPositiveButton(R.string.ok, null)
                             .setCancelable(true)
@@ -139,7 +139,58 @@ public class LinkaAPIServiceImpl {
                     builder.setTitle(R.string.error)
                             .setNegativeButton(R.string.ok, null);
                     if (responseData.message.equals("Email address not verified")) {
-                        builder.setMessage("This email address is not valid")
+                        builder.setMessage("Email address not verified")
+                                .show();
+                    } else {
+                        builder.setMessage(responseData.message)
+                                .show();
+                    }
+                }
+            } else {
+                builder.setTitle(R.string.error)
+                        .setMessage(R.string.error_invalid)
+                        .setNegativeButton(R.string.ok, null)
+                        .show();
+            }
+        } catch (Exception ex) {
+            // Bug https://bugzilla.linkalock.com/bugzilla/show_bug.cgi?id=158
+            // Very rarely this AlertDialog will crash the app, because of the following error:
+            // Unable to add window -- token android.os.BinderProxy@36e850c is not valid; is your activity running?
+            // This network error message is important, but not enough to wreck the app
+            // So for now we catch the exception and do nothing
+        }
+        return true;
+    }
+
+
+    public static boolean signUpDoErrors(LinkaAPIServiceResponse responseData, Context context) {
+        if (context == null) {
+            return false;
+        }
+        try {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            if (responseData == null) {
+                LogHelper.e("Error:", "Network Error Popup");
+                builder.setTitle(R.string.network_error)
+                        .setMessage(R.string.please_check_network)
+                        .setNegativeButton(R.string.ok, null)
+                        .show();
+            }
+            if (responseData.message != null) {
+                if (responseData.message.equals("Wrong username or password.")) {
+                    // EventBus.getDefault().post(new WrongCredentialsBusEventMessage(WrongCredentialsBusEventMessage.SHOW));
+
+                    builder.setMessage("This email address already exists. Please sign in.")
+                            .setPositiveButton(R.string.ok, null)
+                            .setCancelable(true)
+                            .create().show();
+
+                } else {
+
+                    builder.setTitle(R.string.error)
+                            .setNegativeButton(R.string.ok, null);
+                    if (responseData.message.equals("Email address not verified")) {
+                        builder.setMessage("This email address already exists. Please sign in.")
                                 .show();
                     } else {
                         builder.setMessage(responseData.message)
@@ -197,6 +248,40 @@ public class LinkaAPIServiceImpl {
     }
 
 
+    public static boolean signUpCheck(Response response, boolean shouldShowError, Context context) {
+
+        LinkaAPIServiceResponse responseData = null;
+        Object data = response.body();
+        if (data instanceof LinkaAPIServiceResponse) {
+            responseData = (LinkaAPIServiceResponse) data;
+        }
+        LinkaAPIServiceResponse errorData = LinkaAPIServiceManager.extractErrorFromResponse(response);
+
+
+        if (LinkaAPIServiceResponse.isSuccess(responseData)) {
+
+            return true;
+        }
+
+        if (LinkaAPIServiceResponse.isError(errorData)) {
+            if (shouldShowError) {
+                signUpDoErrors(errorData, context);
+            }
+            return false;
+        }
+
+        if (LinkaAPIServiceResponse.isNetworkError(responseData)
+                && LinkaAPIServiceResponse.isNetworkError(errorData)) {
+            if (shouldShowError) {
+                signUpDoErrors(responseData, context);
+            }
+            return false;
+        }
+
+        return true;
+    }
+
+
 
 
 
@@ -240,7 +325,7 @@ public class LinkaAPIServiceImpl {
         call.enqueue(new Callback<LinkaAPIServiceResponse.RegisterResponse>() {
             @Override
             public void onResponse(Call<LinkaAPIServiceResponse.RegisterResponse> call, Response<LinkaAPIServiceResponse.RegisterResponse> response) {
-                if (check(response, true, context)) {
+                if (signUpCheck(response, true, context)) {
                     callback.onResponse(call, response);
                 } else {
                     callback.onResponse(call, response);
@@ -249,7 +334,7 @@ public class LinkaAPIServiceImpl {
 
             @Override
             public void onFailure(Call<LinkaAPIServiceResponse.RegisterResponse> call, Throwable t) {
-                doErrors(null, context);
+                signUpDoErrors(null, context);
                 callback.onFailure(call, t);
             }
         });
@@ -297,6 +382,48 @@ public class LinkaAPIServiceImpl {
         });
         return call;
     }
+
+    public static Call<LoginResponse> signUp(
+            final Context context,
+            String email,
+            String password,
+            final Callback<LoginResponse> callback
+    ) {
+        LinkaAPIServiceConfig.log("login: " + email + "  " + password);
+        Call<LoginResponse> call = LinkaAPIServiceManager.getInstance().login(
+                email,
+                password,
+                Helpers.device_token,
+                Helpers.platform,
+                Helpers.device_name,
+                Helpers.os_version
+        );
+        call.enqueue(new Callback<LoginResponse>() {
+            @Override
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                if (signUpCheck(response, true, context)) {
+                    saveAuth(response.body().data.authToken,
+                            response.body().data.userId,
+                            response.body().data.userEmail,
+                            response.body().data.first_name,
+                            response.body().data.last_name,
+                            response.body().data.name,
+                            response.body().data.showWalkthrough);
+                    callback.onResponse(call, response);
+                } else {
+                    callback.onResponse(call, response);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
+                signUpDoErrors(null, context);
+                callback.onFailure(call, t);
+            }
+        });
+        return call;
+    }
+
 
     public static Call<LoginResponse> login_facebook(
             final Context context,
