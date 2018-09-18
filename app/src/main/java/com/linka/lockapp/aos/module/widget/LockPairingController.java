@@ -325,7 +325,9 @@ public class LockPairingController {
                 }
 
                 LogHelper.e("PAIRING Nak", "Counter: " + nak.getCounter() + ", Can Respond: " + (is_device_is_just_auth_complete_can_respond ? "true" : "false"));
-                LogHelper.e("PAIRING Nak", "Counter Updated: " + (isUpdated ? "true" : "false") + " " + getBluetoothGatt().getDevice().getBondState());
+                if (getBluetoothGatt()!=null && getBluetoothGatt().getDevice()!=null) {
+                    LogHelper.e("PAIRING Nak", "Counter Updated: " + (isUpdated ? "true" : "false") + " " + getBluetoothGatt().getDevice().getBondState());
+                }
 
                 lockControllerSetEncryptionKeyLogic.tryAction_SetEncryptionKeyRunCallback(false);
             }
