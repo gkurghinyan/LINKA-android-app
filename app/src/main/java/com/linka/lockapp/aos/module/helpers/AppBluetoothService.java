@@ -229,7 +229,9 @@ public class AppBluetoothService extends Service {
                         //First, flush current results
                         scanner.flushPendingScanResults(scanCallback);
                         try {
-                            scanner.stopScan(scanCallback);
+                            if (bluetoothAdapter.isEnabled()) {
+                                scanner.stopScan(scanCallback);
+                            }
                         }catch (NullPointerException e){
                             e.printStackTrace();
                         }
@@ -301,7 +303,9 @@ public class AppBluetoothService extends Service {
                     initScanCallback();
                     if (scanner != null) {
                         try {
-                            scanner.stopScan(scanCallback);
+                            if (bluetoothAdapter.isEnabled()) {
+                                scanner.stopScan(scanCallback);
+                            }
                         }catch (NullPointerException e){
                             e.printStackTrace();
                         }
