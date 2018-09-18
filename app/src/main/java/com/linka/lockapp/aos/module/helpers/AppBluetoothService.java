@@ -228,8 +228,11 @@ public class AppBluetoothService extends Service {
                     if (scanner != null && scanCallback != null) {
                         //First, flush current results
                         scanner.flushPendingScanResults(scanCallback);
-
-                        scanner.stopScan(scanCallback);
+                        try {
+                            scanner.stopScan(scanCallback);
+                        }catch (NullPointerException e){
+                            e.printStackTrace();
+                        }
                     }
                 }
             } else {
@@ -297,7 +300,11 @@ public class AppBluetoothService extends Service {
                     BluetoothLeScanner scanner = bluetoothAdapter.getBluetoothLeScanner();
                     initScanCallback();
                     if (scanner != null) {
-                        scanner.stopScan(scanCallback);
+                        try {
+                            scanner.stopScan(scanCallback);
+                        }catch (NullPointerException e){
+                            e.printStackTrace();
+                        }
                     }
                 } else {
                     bluetoothAdapter.stopLeScan(scanCallbackDeprecated);
