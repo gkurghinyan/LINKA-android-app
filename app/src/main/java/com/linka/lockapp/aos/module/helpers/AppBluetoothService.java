@@ -153,7 +153,9 @@ public class AppBluetoothService extends Service {
                     if (getContext() != null) {
                         if (!getContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) { return; }
                         bluetoothManager = (BluetoothManager) getContext().getSystemService(Context.BLUETOOTH_SERVICE);
-                        bluetoothAdapter = bluetoothManager.getAdapter();
+                        if (bluetoothManager != null) {
+                            bluetoothAdapter = bluetoothManager.getAdapter();
+                        }
                     }
 
                     if (bluetoothAdapter == null) { return; }
@@ -186,7 +188,9 @@ public class AppBluetoothService extends Service {
                         // Need to scan, because android requires a scan in order for connection to take place
                         if(connectOneOutofTen > 10) {
                             LogHelper.e("SCAN", "SCANNING TO CONNECT");
-                            scanner.startScan(scanFilters, scanSettings, scanCallback);
+                            if (scanner!=null) {
+                                scanner.startScan(scanFilters, scanSettings, scanCallback);
+                            }
                             connectOneOutofTen = 0;
                         }
                         connectOneOutofTen ++ ;
