@@ -192,11 +192,10 @@ public class LinkaAPIServiceImpl {
                     if (responseData.message.equals("Email address not verified")) {
                         builder.setMessage("This email address already exists. Please sign in.")
                                 .show();
-                    } else
-                        if (responseData.message.equals("Device not verified")){
-                            builder.setMessage("This email address already exists. Please sign in.")
-                                    .show();
-                    }else {
+                    } else if (responseData.message.equals("Device not verified")) {
+                        builder.setMessage("This email address already exists. Please sign in.")
+                                .show();
+                    } else {
                         builder.setMessage(responseData.message)
                                 .show();
                     }
@@ -365,13 +364,15 @@ public class LinkaAPIServiceImpl {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if (check(response, true, context)) {
-                    saveAuth(response.body().data.authToken,
-                            response.body().data.userId,
-                            response.body().data.userEmail,
-                            response.body().data.first_name,
-                            response.body().data.last_name,
-                            response.body().data.name,
-                            response.body().data.showWalkthrough);
+                    if (response.body() != null && response.body().data != null) {
+                        saveAuth(response.body().data.authToken,
+                                response.body().data.userId,
+                                response.body().data.userEmail,
+                                response.body().data.first_name,
+                                response.body().data.last_name,
+                                response.body().data.name,
+                                response.body().data.showWalkthrough);
+                    }
                     callback.onResponse(call, response);
                 } else {
                     callback.onResponse(call, response);
@@ -446,13 +447,15 @@ public class LinkaAPIServiceImpl {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if (check(response, true, context)) {
-                    saveAuth(response.body().data.authToken,
-                            response.body().data.userId,
-                            response.body().data.userEmail,
-                            response.body().data.first_name,
-                            response.body().data.last_name,
-                            response.body().data.name,
-                            response.body().data.showWalkthrough);
+                    if (response.body()!=null && response.body().data!=null) {
+                        saveAuth(response.body().data.authToken,
+                                response.body().data.userId,
+                                response.body().data.userEmail,
+                                response.body().data.first_name,
+                                response.body().data.last_name,
+                                response.body().data.name,
+                                response.body().data.showWalkthrough);
+                    }
                     callback.onResponse(call, response);
                 } else {
                     callback.onResponse(call, response);
