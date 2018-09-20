@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
-import android.support.v4.app.DialogFragment;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +20,7 @@ import com.linka.lockapp.aos.module.eventbus.SuccessConnectBusEventMessage;
 
 import org.greenrobot.eventbus.EventBus;
 
-public class SuccessConnectionDialogFragment extends DialogFragment {
+public class SuccessConnectionDialogFragment extends BaseDialogFragment {
     private static final String DIALOG_MESSAGE = "DialogMessage";
     private Handler handler;
     private Runnable runnable = new Runnable() {

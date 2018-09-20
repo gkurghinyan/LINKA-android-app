@@ -53,7 +53,7 @@ import retrofit2.Response;
 public class SetupLinka2 extends WalkthroughFragment {
 
     RecyclerView recyclerView;
-//    private static final int NO_BLUETOOTH = 0;
+    //    private static final int NO_BLUETOOTH = 0;
     private static final int SEARCH_WITH_BLUETOOTH = 1;
     private static final int SCAN_RESULT = 2;
     private static final int TURN_ON_LINKA = 3;
@@ -65,6 +65,9 @@ public class SetupLinka2 extends WalkthroughFragment {
     private int currentFragment;
     private boolean isInternet = false;
     private Linka currentLinka;
+    private boolean isFragmentVisible;
+    private boolean isContecting = false;
+    private boolean isConnectEnded = false;
 
     BluetoothAdapter bluetoothAdapter;
     List<BluetoothLEDevice> devices = new ArrayList<>();
@@ -103,7 +106,8 @@ public class SetupLinka2 extends WalkthroughFragment {
         @Override
         public void run() {
             closeLoadingHandler = null;
-            setBlur(false, null);
+            if (isFragmentVisible)
+                setBlur(false, null);
 //            threeDotsDialogFragment.dismiss();
             LinkaAPIServiceManager.getClient().dispatcher().cancelAll();
             String message = getString(R.string.fail_pairing) + " " + currentLinka.getName();
@@ -125,7 +129,7 @@ public class SetupLinka2 extends WalkthroughFragment {
             } else {
                 isInternet = false;
                 currentFragment = NO_INTERNET;
-                updateLayouts(R.layout.fragment_no_internet_connectivity,1);
+                updateLayouts(R.layout.fragment_no_internet_connectivity, 1);
             }
             Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
         }
@@ -159,7 +163,8 @@ public class SetupLinka2 extends WalkthroughFragment {
                         AppBluetoothService.getInstance().enableFixedTimeScanning(false);
                         break;
                     case BluetoothAdapter.STATE_ON:
-                        setBlur(false,null);
+                        if (isFragmentVisible)
+                            setBlur(false, null);
                         if (getInternetConnectivity()) {
                             currentFragment = SEARCH_WITH_BLUETOOTH;
                             updateLayouts(R.layout.fragment_searching_linka_with_bluetooth, 1);
@@ -178,7 +183,8 @@ public class SetupLinka2 extends WalkthroughFragment {
         public void onReceive(Context context, Intent intent) {
             if (getInternetConnectivity()) {
                 if (!isInternet) {
-                    setBlur(false, null);
+                    if (isFragmentVisible)
+                        setBlur(false, null);
                     isInternet = true;
                     currentFragment = SEARCH_WITH_BLUETOOTH;
                     bluetoothAdapter = BLEHelpers.checkBLESupportForAdapter(getContext());
@@ -198,16 +204,17 @@ public class SetupLinka2 extends WalkthroughFragment {
                 if (isInternet) {
                     isInternet = false;
                     currentFragment = NO_INTERNET;
-                    updateLayouts(R.layout.fragment_no_internet_connectivity,1);
+                    updateLayouts(R.layout.fragment_no_internet_connectivity, 1);
                 }
             }
         }
     };
 
-    private void turnOnBluetooth(){
+    private void turnOnBluetooth() {
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (!mBluetoothAdapter.isEnabled()) {
-            setBlur(true,getString(R.string.enabling_bluetooth));
+            if (isFragmentVisible)
+                setBlur(true, getString(R.string.enabling_bluetooth));
             mBluetoothAdapter.enable();
         }
     }
@@ -250,7 +257,7 @@ public class SetupLinka2 extends WalkthroughFragment {
             registerReceivers(true);
             if (!getInternetConnectivity()) {
                 currentFragment = NO_INTERNET;
-                updateLayouts(R.layout.fragment_no_internet_connectivity,1);
+                updateLayouts(R.layout.fragment_no_internet_connectivity, 1);
             } else {
                 bluetoothAdapter = BLEHelpers.checkBLESupportForAdapter(getContext());
                 if (bluetoothAdapter != null) {
@@ -328,6 +335,16 @@ public class SetupLinka2 extends WalkthroughFragment {
         if (currentFragment != TURN_ON_LINKA) {
             setPages(1);
         }
+        isFragmentVisible = true;
+        if (isConnectEnded) {
+            setBlur(false, null);
+            setSimpleBlur();
+            SuccessConnectionDialogFragment.newInstance(getString(R.string.connected_lower)).show(getFragmentManager(), null);
+        } else if (isContecting) {
+            setBlur(true, "Connecting");
+        } else {
+            setBlur(false, null);
+        }
     }
 
     @Override
@@ -345,6 +362,7 @@ public class SetupLinka2 extends WalkthroughFragment {
             closeLoadingHandler.removeCallbacks(closeLoadingRunnable);
         }
         EventBus.getDefault().unregister(this);
+        isFragmentVisible = false;
     }
 
     @Override
@@ -355,7 +373,8 @@ public class SetupLinka2 extends WalkthroughFragment {
 
     @Subscribe
     public void dialogClosed(SuccessConnectBusEventMessage connectBusEventMessage) {
-        setBlur(false, null);
+        if (isFragmentVisible)
+            setBlur(false, null);
         getAppMainActivity().pushFragment(AutoUpdateFragment.newInstance(Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()), AutoUpdateFragment.WALKTHROUGH));
     }
 
@@ -482,7 +501,10 @@ public class SetupLinka2 extends WalkthroughFragment {
     void tryPreparePairingUp(final BluetoothLEDevice item) {
         closeLoadingHandler = new Handler();
         closeLoadingHandler.postDelayed(closeLoadingRunnable, 30000);
-        setBlur(true, getString(R.string.connecting));
+        if (isFragmentVisible) {
+            setBlur(true, getString(R.string.connecting));
+        }
+        isContecting = true;
         final Linka linka = Linka.makeLinka(item);
         LinkaAccessKey.tryRegisterLock(getAppMainActivity(), linka, new LinkaAccessKey.LinkaAccessKeyDetailedErrorCallback() {
             @Override
@@ -500,7 +522,9 @@ public class SetupLinka2 extends WalkthroughFragment {
                     );
 
                     showAlert("", error);
-                    setBlur(false, null);
+                    if (isFragmentVisible)
+                        setBlur(false, null);
+                    isContecting = false;
 //                    threeDotsDialogFragment.dismiss();
                     if (closeLoadingHandler != null) {
                         closeLoadingHandler.removeCallbacks(closeLoadingRunnable);
@@ -516,7 +540,9 @@ public class SetupLinka2 extends WalkthroughFragment {
                 if (!isValid) {
                     if (!isAdded()) return;
                     if (accessKey.access_key_admin.equals("")) {
-                        setBlur(false, null);
+                        if (isFragmentVisible)
+                            setBlur(false, null);
+                        isContecting = false;
 //                        threeDotsDialogFragment.dismiss();
                         if (closeLoadingHandler != null) {
                             closeLoadingHandler.removeCallbacks(closeLoadingRunnable);
@@ -526,7 +552,9 @@ public class SetupLinka2 extends WalkthroughFragment {
 
                         return;
                     } else {
-                        setBlur(false, null);
+                        if (isFragmentVisible)
+                            setBlur(false, null);
+                        isContecting = false;
 //                        threeDotsDialogFragment.dismiss();
                         if (closeLoadingHandler != null) {
                             closeLoadingHandler.removeCallbacks(closeLoadingRunnable);
@@ -555,11 +583,13 @@ public class SetupLinka2 extends WalkthroughFragment {
 
 
     void trySendAdminPermissionRequest(Linka linka) {
-        setBlur(true, getString(R.string.connecting));
+        if (isFragmentVisible)
+            setBlur(true, getString(R.string.connecting));
         LinkaAPIServiceImpl.send_request_for_user_permission(getActivity(), linka, new Callback<LinkaAPIServiceResponse>() {
             @Override
             public void onResponse(Call<LinkaAPIServiceResponse> call, Response<LinkaAPIServiceResponse> response) {
-                setBlur(false, null);
+                if (isFragmentVisible)
+                    setBlur(false, null);
                 if (!isAdded()) return;
                 if (LinkaAPIServiceImpl.check(response, false, getActivity())) {
                     showAlert(_.i(R.string.almost_done), _.i(R.string.permission_being_processed));
@@ -569,7 +599,8 @@ public class SetupLinka2 extends WalkthroughFragment {
 
             @Override
             public void onFailure(Call<LinkaAPIServiceResponse> call, Throwable t) {
-                setBlur(false, null);
+                if (isFragmentVisible)
+                    setBlur(false, null);
             }
         });
     }
@@ -591,7 +622,11 @@ public class SetupLinka2 extends WalkthroughFragment {
                     closeLoadingHandler.removeCallbacks(closeLoadingRunnable);
                     closeLoadingHandler = null;
                 }
-                SuccessConnectionDialogFragment.newInstance(getString(R.string.connected_lower)).show(getFragmentManager(), null);
+                if (isFragmentVisible) {
+                    SuccessConnectionDialogFragment.newInstance(getString(R.string.connected_lower)).show(getFragmentManager(), null);
+                } else {
+                    isConnectEnded = true;
+                }
 
             }
         }, 500);

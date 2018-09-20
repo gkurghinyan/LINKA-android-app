@@ -18,8 +18,8 @@ import okhttp3.OkHttpClient;
  */
 public class LinkaAPIServiceConfig {
     //TODO: Change back to production server before publishing
+    //public static final String URL = "https://app.linkalock.com";
     public static final String URL = "https://test.linkalock.com";
-    //public static final String URL = "https://test.linkalock.com";
     public static final boolean isDebug = true;
     public static void log(String log) {
         if (isDebug) {

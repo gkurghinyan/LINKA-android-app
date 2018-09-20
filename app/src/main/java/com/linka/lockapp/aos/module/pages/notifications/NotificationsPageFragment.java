@@ -129,8 +129,12 @@ public class NotificationsPageFragment extends CoreFragment {
         adapter = new NotificationListAdapter(getActivity());
 
         if (savedInstanceState != null) {
-            if (recyclerView != null && recyclerView.getRecyclerView()!=null && recyclerView.getRecyclerView().getLayoutManager()!=null) {
+            if (recyclerView != null && recyclerView.getRecyclerView()!=null ) {
                 Parcelable ss = savedInstanceState.getParcelable("ss");
+                if (recyclerView.getRecyclerView().getLayoutManager()==null) {
+                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+                    recyclerView.setLayoutManager(layoutManager);
+                }
                 recyclerView.getRecyclerView().getLayoutManager().onRestoreInstanceState(ss);
             }
         }

@@ -20,6 +20,7 @@ import com.linka.lockapp.aos.module.pages.walkthrough.WalkthroughActivity;
  * Created by van on 13/7/15.
  */
 public class CoreFragment extends Fragment {
+    private boolean isFragmentStop = false;
 
     protected CoreActivity getCoreActivity()
     {
@@ -54,7 +55,17 @@ public class CoreFragment extends Fragment {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        isFragmentStop = false;
+    }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        isFragmentStop = true;
+    }
 
     /* ASYNC ON START BOOTSTRAP - HANDLER + RUNNABLE */
 
@@ -132,11 +143,13 @@ public class CoreFragment extends Fragment {
 
 
     public void showAlert(String title, String message) {
-        new AlertDialog.Builder(getActivity())
-                .setTitle(title)
-                .setMessage(message)
-                .setNegativeButton(R.string.ok, null)
-                .show();
+        if(!isFragmentStop) {
+            new AlertDialog.Builder(getActivity())
+                    .setTitle(title)
+                    .setMessage(message)
+                    .setNegativeButton(R.string.ok, null)
+                    .show();
+        }
     }
 
 

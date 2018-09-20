@@ -6,7 +6,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
-import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class ThreeDotsDialogFragment extends DialogFragment {
+public class ThreeDotsDialogFragment extends BaseDialogFragment {
     private boolean isSetConnecting = false;
     private String text;
     @BindView(R.id.connecting_text)

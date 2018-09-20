@@ -7,6 +7,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -98,9 +99,11 @@ public class WalkthroughFragment extends CoreFragment {
     ThreeDotsDialogFragment threeDotsDialogFragment;
     public void setBlur(boolean isBlur,String text) {
         if (isBlur) {
-            Blurry.with(getContext()).radius(25).sampling(2).onto(relativeLayout);
-            threeDotsDialogFragment = ThreeDotsDialogFragment.newInstance().setConnectingText(true,text);
-            threeDotsDialogFragment.show(getFragmentManager(), null);
+            if(threeDotsDialogFragment == null) {
+                Blurry.with(getContext()).radius(25).sampling(2).onto(relativeLayout);
+                threeDotsDialogFragment = ThreeDotsDialogFragment.newInstance().setConnectingText(true, text);
+                threeDotsDialogFragment.show(getFragmentManager(), null);
+            }
         } else {
             Blurry.delete(relativeLayout);
             if(threeDotsDialogFragment != null) {
@@ -108,6 +111,16 @@ public class WalkthroughFragment extends CoreFragment {
                 threeDotsDialogFragment = null;
             }
         }
+    }
+
+    public void setSimpleBlur(){
+        relativeLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                relativeLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                Blurry.with(getActivity()).radius(25).sampling(2).onto(relativeLayout);
+            }
+        });
     }
 
     public void removeDialog(){
