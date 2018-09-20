@@ -34,6 +34,7 @@ import com.linka.lockapp.aos.module.helpers.SleepNotificationService;
 import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.model.LinkaAccessKey;
 import com.linka.lockapp.aos.module.model.LinkaActivity;
+import com.linka.lockapp.aos.module.pages.settings.RevocationController;
 import com.linka.lockapp.aos.module.pages.settings.RevocationControllerV2;
 import com.pixplicity.easyprefs.library.Prefs;
 
@@ -82,6 +83,16 @@ public class LockController implements Serializable {
 
     //If this is true, then we will display a BLOD popup
     public boolean shouldDisplayBLODPopup = false;
+
+    private short D1_V2_CRC = 28185;
+    private short D2_V2_CRC = 20662;
+
+    private boolean shouldCheckIfFactoryCRC = false;
+    private boolean isCRCFactoryReset = false;
+    public boolean shouldSendCRCFactoryResetNotifacation = false;
+
+
+    RevocationControllerV2.CheckIfFactoryReset checkIfFactoryResetCallback;
 
     //boolean receivedStallDelay = false;
     public boolean hasReadPac = false;
@@ -252,6 +263,8 @@ public class LockController implements Serializable {
         is_device_connecting = false;
         linka.isLockSettled = false;
         is_device_disconnecting = false;
+
+        isCRCFactoryReset = false;
         //linka.updateFromStatusData(false, null); //This will be run in doDisconnectDevice() below, so no need to run twice
 
         //Immediatly set as disconnected - when we turn off bluetooth, this is how it becomes disconnected
@@ -466,6 +479,12 @@ public class LockController implements Serializable {
         LogHelper.e("QUICK LOCK: ","Quick Lock Enabled = " + Integer.toString(enable));
         return isOK;
     }
+
+    public void checkIfFactoryReset(RevocationControllerV2.CheckIfFactoryReset callback){
+        shouldCheckIfFactoryCRC = true;
+        this.checkIfFactoryResetCallback = callback;
+    }
+
 
     public boolean doFwUpg() {
         return lockBLEServiceProxy.doAction_FwUpg(lockControllerBundle);
@@ -1158,6 +1177,53 @@ public class LockController implements Serializable {
                 @Override
                 public void onGattUpdateContextPacketUpdated(LockGattUpdateReceiver lockGattUpdateReceiver, LockContextPacket lockContextPacket) {
 
+
+                    /* ============================================================================= */
+                    /*
+                    Check factory reset section
+                     */
+                    if (lockContextPacket != null && lockContextPacket.getMk1CRC() == D1_V2_CRC && lockContextPacket.getMk2CRC() == D2_V2_CRC) {
+                        if(!isCRCFactoryReset){
+                            shouldSendCRCFactoryResetNotifacation = true;
+                        }
+                        LogHelper.e("Lock Controller", "Lock is Factory reset ERROR!!!");
+                        isCRCFactoryReset = true;
+                    }else{
+                        isCRCFactoryReset = false;
+                        shouldSendCRCFactoryResetNotifacation = false;
+                    }
+
+                    // If this lock is using the factory keys
+                    // If it does, then we may need to factory reset the keys on the server
+                    if (shouldCheckIfFactoryCRC){
+                        LogHelper.e("Lock Controller", "Checking if lock is factory reset ... " + lockControllerBundle.mLockEnc.priv_level);
+                        shouldCheckIfFactoryCRC = false;
+
+                        if( lockControllerBundle.mLockEnc.priv_level == LockEncV1.PRIV_LEVEL.PRIV_ADMIN) { //Only check for admins, not user
+
+                            LogHelper.e("Lock Controller", "Checking if lock is factory reset 2...");
+
+                            //The lock has factory keys!!! Callback to let parent know
+                            if (isCRCFactoryReset) {
+                                LogHelper.e("Lock Controller", "Lock is Factory Reset!!");
+                                if (checkIfFactoryResetCallback != null) {
+                                    checkIfFactoryResetCallback.onResult(true);
+                                }
+                                checkIfFactoryResetCallback = null;
+
+                            } else {
+                                LogHelper.i("Lock Controller", "Lock has keys, and is not factory reset");
+
+                                if (checkIfFactoryResetCallback != null) {
+                                    checkIfFactoryResetCallback.onResult(false);
+                                }
+                                checkIfFactoryResetCallback = null;
+                            }
+                        }else {
+                            checkIfFactoryResetCallback.onResult(false);
+                        }
+                    }
+
                     // Support for v2 Lock
                     // The Master Keys have changed
                     // And Bonding is now optional
@@ -1269,8 +1335,12 @@ public class LockController implements Serializable {
                         SleepNotificationService.getInstance().stopTimer();
 
                         should_send_connected_notification = false;
-                        //Now, read settings so that it can enter settled state:
-                        doActivate();
+
+                        if(!isCRCFactoryReset) {
+
+                            //Now, read settings so that it can enter settled state:
+                            doActivate();
+                        }
                     }
                     else
                     {

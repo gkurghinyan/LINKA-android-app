@@ -37,6 +37,8 @@ import com.linka.lockapp.aos.module.model.Notification;
 import com.linka.lockapp.aos.module.pages.CircleView;
 import com.linka.lockapp.aos.module.pages.notifications.NotificationsPageFragment;
 import com.linka.lockapp.aos.module.pages.pac.SetPac3;
+import com.linka.lockapp.aos.module.pages.settings.RevocationController;
+import com.linka.lockapp.aos.module.pages.settings.RevocationControllerV2;
 import com.linka.lockapp.aos.module.pages.settings.SettingsPageFragment;
 import com.linka.lockapp.aos.module.pages.setup.AutoUpdateFragment;
 import com.linka.lockapp.aos.module.pages.users.SharingPageFragment;
@@ -421,10 +423,40 @@ public class MainTabBarPageFragment extends CoreFragment {
         tabBar.setVisibility(View.VISIBLE);
     }
 
+    private void checkLockIsFactoryResetError(){
+        final Linka _linka = Linka.getLinkaFromLockController();
+        if (_linka == null) return;
+        linka = _linka;
+
+        //If the factory reset has an error, where the lock is factory reset, but the keys are still on the server, then popup a notification!!!
+        if(_linka.isConnected && lockController.shouldSendCRCFactoryResetNotifacation){
+
+            LogHelper.e("Lock Controller", "Sending Factory Reset notification!!!");
+            lockController.shouldSendCRCFactoryResetNotifacation = false;
+
+            final RevocationControllerV2 revocationController = new RevocationControllerV2();
+            revocationController.implement(getAppMainActivity(), linka, lockController);
+            new AlertDialog.Builder(getAppMainActivity())
+                    .setTitle("Lock is Factory Reset!")
+                    .setMessage("Would you like to factory reset the lock on the server?")
+                    .setNegativeButton("Cancel", null)
+                    .setPositiveButton("Yes, do Factory Reset", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            revocationController.doForceFactoryResetServer();
+                        }
+                    })
+                    .show();
+
+        }
+
+    }
     private void checkPacIsExisting() {
         final Linka _linka = Linka.getLinkaFromLockController();
         if (_linka == null) return;
         linka = _linka;
+
+        LogHelper.e("Lock Controller", "Sending Factory Reset notification!!!");
 
         if (_linka.isConnected && !linka.pacIsSet && lockController.hasReadPac) {
             if (awaitsForLinkaSetPasscode) {
@@ -597,6 +629,7 @@ public class MainTabBarPageFragment extends CoreFragment {
                 notificationsUpdate.setVisibility(View.GONE);
             }
             if (object.equals(LocksController.LOCKSCONTROLLER_NOTIFY_REFRESHED)) {
+                checkLockIsFactoryResetError();
                 if (linka.isLockSettled) {
                     checkPacIsExisting();
                     checkFirmwareUpdates();

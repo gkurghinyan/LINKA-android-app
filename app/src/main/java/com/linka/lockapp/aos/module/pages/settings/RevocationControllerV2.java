@@ -213,4 +213,66 @@ public class RevocationControllerV2 extends RevocationController {
         }
     }
 
+
+
+    /* ==================================================================================================================================*/
+
+    /*  Occasionally the factory reset will go wrong, and the lock will be factory reset, but the keys will still be on the server
+        If this happens, we will show a popup and inform the user that they need to do a factory reset.
+     */
+
+    public void doForceFactoryResetServer(){
+        showLoading("", _.i(R.string.resetting_factory));
+        checkIfCRCAlreadyFactoryReset();
+    }
+
+
+    public interface CheckIfFactoryReset {
+        void onResult(boolean isFactoryReset);
+    }
+
+    boolean shouldCheckCRCAlreadyFactoryReset = false;
+
+    //Checks if the lock is already factory reset by looking at the CRC of the keys
+    private void checkIfCRCAlreadyFactoryReset(){
+        startCheckCRCTimeout();
+        shouldCheckCRCAlreadyFactoryReset = true;
+        lockController.checkIfFactoryReset(new CheckIfFactoryReset() {
+            @Override
+            public void onResult(boolean isFactoryReset) {
+
+                revocationTimeoutHandler.removeCallbacks(checkCRCTimeout);
+
+                if(isFactoryReset && shouldCheckCRCAlreadyFactoryReset){
+                    shouldCheckCRCAlreadyFactoryReset = false;
+                    startResetMasterCallback(); //Do a factory reset immediately!!
+                }
+            }
+        });
+    }
+
+    void startCheckCRCTimeout(){
+        revocationTimeoutHandler.postDelayed(checkCRCTimeout, 3000);
+    }
+
+    Runnable checkCRCTimeout = new Runnable() {
+        @Override
+        public void run() {
+
+            hideLoading();
+
+            showAlert(
+                    _.i("Not Connected"),
+                    _.i("Please connect to LINKA and Try Again"),
+                    _.i(R.string.ok),
+                    null);
+
+
+            shouldCheckCRCAlreadyFactoryReset = false;
+            canStartFactoryReset = false;
+            canClearKeysFromServer = false;
+            lockController.clearSettingsQueue();
+        }
+    };
+
 }

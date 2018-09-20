@@ -52,6 +52,14 @@ public class LockContextPacket extends LockDataPacket {
         return isChanged;
     };
 
+    public short getMk1CRC(){
+        return mk1CRC;
+    }
+
+    public short getMk2CRC(){
+        return mk2CRC;
+    }
+
     public int getEncVer() { return (mEncVer); }      // NOTE: LSB indicated bonding requirement, so V1 encryption is 0x00, V2 is 0x02, etc.
     public boolean getBondingRequired() { return ((mEncVer&0x01) == 0x01); }
     public int getCounter() { return mCounter; };
