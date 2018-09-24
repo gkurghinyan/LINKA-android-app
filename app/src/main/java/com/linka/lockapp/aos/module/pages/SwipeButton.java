@@ -185,6 +185,7 @@ public class SwipeButton extends RelativeLayout {
         bottomImageView = new ImageView(context);
         bottomImageView.setId(R.id.bottom_image);
         bottomImageView.setColorFilter(getResources().getColor(R.color.bottom_image_color), PorterDuff.Mode.MULTIPLY);
+        bottomImageView.setPadding(20,20,20,20);
 
         LayoutParams imageLayoutParams = new LayoutParams((int) DimensionUtils.convertDpToPixel(Circle.CIRCLE_SIZE_DP, context) - 120,
                 (int) DimensionUtils.convertDpToPixel(Circle.CIRCLE_SIZE_DP, context) - 80);
@@ -482,7 +483,7 @@ public class SwipeButton extends RelativeLayout {
         bottomImageView.setVisibility(VISIBLE);
         if(circleView.getCurrentState() == Circle.LOCKING_STATE){
             bottomImageView.setImageDrawable(getResources().getDrawable(R.drawable.close_white_linka));
-        }else if(circleView.getCurrentState() == Circle.UNLOCKING_STATE){
+        }else if(circleView.getCurrentState() == Circle.LOCKED_STATE){
             bottomImageView.setImageDrawable(getResources().getDrawable(R.drawable.open_white_linka));
         }
 

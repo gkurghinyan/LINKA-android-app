@@ -80,7 +80,7 @@
     <color name="switch_back_start_color">#FEFEFE</color>
     <color name="switch_back_middle_color">#D9D9D9</color>
     <color name="switch_back_end_color">#B4B4B4</color>
-    <color name="bottom_image_color">#CDCDCD</color>
+    <color name="bottom_image_color">#ffffff</color>
     <color name="navigation_color">#1BA5E6</color>
     <color name="gray_text">#666666</color>
     <color name="dark_gray_text">#565656</color>

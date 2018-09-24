@@ -542,7 +542,7 @@
     <string name="swipe_to_confirm_lock">swipe to confirm lock</string>
     <string name="asleep_or_out">Lock is asleep or out of range</string>
     <string name="press_to_lock">Press &amp; hold to lock</string>
-    <string name="press_to_unlock">Tap to Unlock</string>
+    <string name="press_to_unlock">Press &amp; slide to unlock</string>
     <string name="battery">Battery</string>
     <string name="battery_settings_description">Your battery settings controls how long your lock stays awake. Keeping your lock awake longer will improve feature performance but require more frequent recharging. Auto-unlock will only work while the lock is awake.</string>
     <string name="make_sure_device_unlocked">Please make sure your LINKA is unlocked and connected. Your LINKA device LED indicator should be blinking green.</string>
