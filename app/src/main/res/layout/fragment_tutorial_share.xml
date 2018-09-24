@@ -32,9 +32,23 @@
         android:id="@+id/gif_tutorial"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/gif_margin_top"
+        android:layout_marginBottom="@dimen/gif_margin_bottom"
         android:src="@drawable/share_your_bike"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="@dimen/logo_height"/>
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SHARING YOUR BIKE"
+        android:textAllCaps="true"
+        android:textColor="@color/linka_white"
+        android:textSize="@dimen/text_size_l"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/guideline" />
 
     <TextView
         android:layout_width="wrap_content"
