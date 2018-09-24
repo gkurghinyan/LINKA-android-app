@@ -405,7 +405,7 @@ public class SetPac3 extends CoreFragment {
                         || pinValue_enter.equals("9999")
                         ) {
                     init();
-                    Toast.makeText(getActivity(), getString(R.string.passcode_format), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getString(R.string.passcode_format), Toast.LENGTH_LONG).show();
 
                     return;
                 }
