@@ -142,7 +142,8 @@
         android:clickable="true"
         android:layout_marginStart="@dimen/margin_x"
         android:padding="@dimen/margin_15"
-        android:src="@drawable/power_icon"
+        android:tint="@android:color/white"
+        android:src="@drawable/sleep_ic"
         app:layout_constraintBottom_toBottomOf="@id/guideline1"
         app:layout_constraintStart_toStartOf="@id/guideline2" />
 
