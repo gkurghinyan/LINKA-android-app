@@ -53,6 +53,7 @@ public class SwipeButton extends RelativeLayout {
     private float initialX;
     private boolean active;
     private TextView centerText;
+    private TextView massageText;
     public ViewGroup background;
 
     private Drawable disabledDrawable;
@@ -200,9 +201,8 @@ public class SwipeButton extends RelativeLayout {
         LayoutParams layoutParams = new LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
-
-        layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-
+        layoutParams.setLayoutDirection(Gravity.CENTER_HORIZONTAL);
+        //layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
         //background.addView(centerText, layoutParams);
 
         circleView = new Circle(context, null);
@@ -276,7 +276,13 @@ public class SwipeButton extends RelativeLayout {
             addView(circleView, layoutParamsButton);
 
             active = false;
-
+            massageText = new TextView(context);
+            massageText.setText(context.getString(R.string.asleep_or_out));
+            massageText.setTextAppearance(context, R.style.fontForTextViewInSwipeButton);
+            massageText.setGravity(Gravity.CENTER);
+            layoutParams.addRule(RelativeLayout.BELOW, R.id.circle);
+            layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
+            addView(massageText, layoutParams);
 
             centerText.setPadding((int) innerTextLeftPadding,
                     (int) innerTextTopPadding,
@@ -603,6 +609,18 @@ public class SwipeButton extends RelativeLayout {
 
     public void setCircleClickable(boolean clickable){
         isCircleClickable = clickable;
+    }
+
+    public void setMassageText(String text){
+        if (massageText!=null){
+            massageText.setText(text);
+        }
+    }
+
+    public void setMassageTextVisibility(int visibility){
+        if (massageText!=null) {
+            massageText.setVisibility(visibility);
+        }
     }
 
 }

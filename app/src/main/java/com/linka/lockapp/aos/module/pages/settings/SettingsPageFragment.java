@@ -291,8 +291,10 @@ public class SettingsPageFragment extends CoreFragment {
                 .subscribe(new Consumer<CharSequence>() {
                     @Override
                     public void accept(CharSequence charSequence) {
-                        linka.saveName(editName.getText().toString());
-                        linka.save();
+                        if (editName!=null && editName.getText()!=null) {
+                            linka.saveName(editName.getText().toString());
+                            linka.save();
+                        }
                     }
                 });
         editName.setOnEditorActionListener(new TextView.OnEditorActionListener() {

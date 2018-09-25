@@ -431,7 +431,8 @@ public class CircleView extends CoreFragment {
         if (batteryImage != null) {
             batteryImage.setColorFilter(getActivity().getResources().getColor(R.color.linka_gray), PorterDuff.Mode.SRC_IN);
             batteryPercent.setText("");
-            swipeText.setText(getString(R.string.asleep_or_out));
+           // swipeText.setText(getString(R.string.asleep_or_out));
+            swipeButton.setMassageText(getString(R.string.asleep_or_out));
             gifImageView.setVisibility(View.GONE);
             swipeButton.setCurrentState(Circle.NO_CONNECTION_STATE);
             swipeButton.setCircleClickable(false);
@@ -486,26 +487,31 @@ public class CircleView extends CoreFragment {
             panicEnded();
         }
         if (linka.isLocked) {
-            swipeText.setText(getString(R.string.press_to_unlock));
+            //swipeText.setText(getString(R.string.press_to_unlock));
+            swipeButton.setMassageText(getString(R.string.press_to_unlock));
             swipeButton.setCurrentState(Circle.LOCKED_STATE);
             swipeButton.setCircleClickable(true);
         } else if (linka.isUnlocked) {
-            swipeText.setText(getString(R.string.press_to_lock));
+           // swipeText.setText(getString(R.string.press_to_lock));
+            swipeButton.setMassageText(getString(R.string.press_to_lock));
             swipeButton.setCurrentState(Circle.UNLOCKED_STATE);
             swipeButton.setCircleClickable(true);
         } else if (linka.isLocking) {
-            swipeText.setText(getString(R.string.locking));
+           // swipeText.setText(getString(R.string.locking));
+            swipeButton.setMassageText(getString(R.string.locking));
             swipeButton.setCurrentState(Circle.LOCKING_STATE);
             swipeButton.setCircleClickable(false);
         } else if (linka.isUnlocking) {
-            swipeText.setText(getString(R.string.unlocking));
+           // swipeText.setText(getString(R.string.unlocking));
+            swipeButton.setMassageText(getString(R.string.unlocking));
             swipeButton.setCurrentState(Circle.UNLOCKING_STATE);
             swipeButton.setCircleClickable(false);
         }
     }
 
     private void setDeviceNotLockedSuccessState() {
-        swipeText.setText(getString(R.string.press_to_lock));
+        //swipeText.setText(getString(R.string.press_to_lock));
+        swipeButton.setMassageText(getString(R.string.press_to_lock));
         isWarningShow = true;
         swipeButton.setCircleClickable(false);
         setPanicAndSleepButtonsVisibility(View.GONE);
@@ -523,9 +529,10 @@ public class CircleView extends CoreFragment {
             panicButton.clearAnimation();
             panicButton.setBackground(getResources().getDrawable(R.drawable.panic_blue_button));
         }
-        swipeText.setVisibility(visibility);
+        //swipeText.setVisibility(visibility);
         panicButton.setVisibility(visibility);
         sleepButton.setVisibility(visibility);
+        swipeButton.setMassageTextVisibility(visibility);
     }
 
     private void setPanicAndSleepButtonsState(boolean enable) {

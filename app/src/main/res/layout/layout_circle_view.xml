@@ -117,6 +117,7 @@
         android:textAllCaps="true"
         android:textColor="@color/linka_blue"
         android:textSize="@dimen/text_size_normal"
+        android:visibility="invisible"
         android:layout_marginBottom="@dimen/margin_xm"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="parent"
