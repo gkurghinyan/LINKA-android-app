@@ -141,6 +141,9 @@ public class LinkaAPIServiceImpl {
                     if (responseData.message.equals("Email address not verified")) {
                         builder.setMessage("This email address is not valid.")
                                 .show();
+                    }else if (responseData.message.equals("Device not verified")) {
+                        builder.setMessage("Check your email to verify this device")
+                                .show();
                     } else {
                         builder.setMessage(responseData.message)
                                 .show();
