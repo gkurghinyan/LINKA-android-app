@@ -19,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.linka.lockapp.aos.AppDelegate;
 import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceImpl;
@@ -40,10 +41,14 @@ import com.rey.material.widget.Switch;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.concurrent.TimeUnit;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -165,6 +170,7 @@ public class SettingsPageFragment extends CoreFragment {
     private int[] array = null;
     //    private boolean doNotSendWrite = false;
     private LockController lockController;
+    private Disposable disposable;
 
     public static SettingsPageFragment newInstance(Linka linka) {
         Bundle bundle = new Bundle();
@@ -280,7 +286,15 @@ public class SettingsPageFragment extends CoreFragment {
         });
 
         editName.setText(linka.getName());
-
+        disposable = RxTextView.textChanges(editName)
+                .debounce(3, TimeUnit.SECONDS)
+                .subscribe(new Consumer<CharSequence>() {
+                    @Override
+                    public void accept(CharSequence charSequence) {
+                        linka.saveName(editName.getText().toString());
+                        linka.save();
+                    }
+                });
         editName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE) && linka.isLockSettled) {
