@@ -557,4 +557,7 @@
     <string name="update_is_done_successfully">Update is done successfully</string>
     <string name="update_is_not_done">Update is not done</string>
     <string name="password_min_length_massage">The password must be of minimum length 6 characters</string>
+    <string name="setting_footer_phonless_acsess_code">A phoneless access code (PAC) lets you unlock your lock without your phone.</string>
+    <string name="settings_footer_autounlock">LINKA will unlock automatically once you are within Bluetooth range and have the LINKA app running.</string>
+    <string name="settings_footer_quicklock">Lock LINKA without your phone by pressing the POWER button twice.</string>
 </resources>

@@ -120,7 +120,7 @@
                     android:paddingEnd="@dimen/margin_x"
                     android:paddingStart="@dimen/margin_x"
                     android:paddingTop="@dimen/margin_mm"
-                    android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce orci quam, viverra sit amet sagittis eu, scelerisque non eros. Curabitur a pretium purus. Praesent congue id dolor ut pretium. Sed sit amet dolor nec quam euismod fringilla. Pellentesque laoreet aliquam arcu ac molestie. In facilisis eget lorem sed auctor. Ut ac sagittis tellus."
+                    android:text="@string/setting_footer_phonless_acsess_code"
                     android:textColor="@color/search_text"
                     android:textSize="@dimen/text_size_xm" />
 
@@ -182,7 +182,7 @@
                     android:paddingEnd="@dimen/margin_x"
                     android:paddingStart="@dimen/margin_x"
                     android:paddingTop="@dimen/margin_mm"
-                    android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce orci quam, viverra sit amet sagittis eu, scelerisque non eros. Curabitur a pretium purus. Praesent congue id dolor ut pretium. Sed sit amet dolor nec quam euismod fringilla. Pellentesque laoreet aliquam arcu ac molestie. In facilisis eget lorem sed auctor. Ut ac sagittis tellus."
+                    android:text="@string/settings_footer_autounlock"
                     android:textColor="@color/search_text"
                     android:textSize="@dimen/text_size_xm" />
 
@@ -243,7 +243,7 @@
                     android:paddingEnd="@dimen/margin_x"
                     android:paddingStart="@dimen/margin_x"
                     android:paddingTop="@dimen/margin_mm"
-                    android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce orci quam, viverra sit amet sagittis eu, scelerisque non eros. Curabitur a pretium purus. Praesent congue id dolor ut pretium. Sed sit amet dolor nec quam euismod fringilla. Pellentesque laoreet aliquam arcu ac molestie. In facilisis eget lorem sed auctor. Ut ac sagittis tellus."
+                    android:text="@string/settings_footer_quicklock"
                     android:textColor="@color/search_text"
                     android:textSize="@dimen/text_size_xm" />
 
