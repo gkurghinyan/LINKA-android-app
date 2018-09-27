@@ -56,7 +56,7 @@ public class Circle extends View {
         unlockedLinka = BitmapFactory.decodeResource(getResources(),R.drawable.open_white_linka);
         bitmapProp = ((float) lockedLinka.getHeight()) / ((float) lockedLinka.getWidth());
 
-        animator = ObjectAnimator.ofFloat(this, "angle", 360).setDuration(3200);
+        animator = ObjectAnimator.ofFloat(this, "angle", 360).setDuration(2000);
         animator.setRepeatCount(0);
         animator.setInterpolator(null);
     }
