@@ -25,6 +25,7 @@ import java.util.ArrayList;
 public class LockBLEServiceProxy {
 
     private final static String TAG = LockBLEServiceProxy.class.getSimpleName();
+    private static final int SIREN_TIME_IN_SECONDS = 60;
 
     public LINKA_BLE_Service mLINKA_BLE_Service;
     Context context;
@@ -359,7 +360,7 @@ public class LockBLEServiceProxy {
     public boolean doAction_siren(LockControllerBundle bundle) {
         LogHelper.i("LockBLEServiceProxy", "doAction_siren... ");
         LogHelper.i("With mLINKA_BLE_Service", mLINKA_BLE_Service.toString() + " ");
-        return doAction_WriteCommandPacket("LockBLEServiceProxy->doAction_siren", LockCommand.VCMD_ACTIVATE_SIREN, 3, bundle);
+        return doAction_WriteCommandPacket("LockBLEServiceProxy->doAction_siren", LockCommand.VCMD_ACTIVATE_SIREN, SIREN_TIME_IN_SECONDS, bundle);
     }
 
     public boolean doAction_stop_siren(LockControllerBundle bundle){
