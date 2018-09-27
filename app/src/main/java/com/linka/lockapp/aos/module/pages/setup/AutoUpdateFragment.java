@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.linka.lockapp.aos.AppMainActivity;
 import com.linka.lockapp.aos.R;
+import com.linka.lockapp.aos.module.api.LinkaAPIServiceImpl;
 import com.linka.lockapp.aos.module.core.CoreFragment;
 import com.linka.lockapp.aos.module.helpers.AppBluetoothService;
 import com.linka.lockapp.aos.module.helpers.BLEHelpers;
@@ -27,6 +28,7 @@ import com.linka.lockapp.aos.module.helpers.Constants;
 import com.linka.lockapp.aos.module.helpers.LogHelper;
 import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.model.LinkaNotificationSettings;
+import com.linka.lockapp.aos.module.model.User;
 import com.linka.lockapp.aos.module.pages.dfu.DfuManager;
 import com.linka.lockapp.aos.module.pages.home.MainTabBarPageFragment;
 import com.linka.lockapp.aos.module.pages.walkthrough.WalkthroughActivity;
@@ -590,8 +592,8 @@ public class AutoUpdateFragment extends CoreFragment {
         if (Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).getName() != null &&
                 !Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).getName().equals("") && !Prefs.getBoolean(Constants.SHOW_SETUP_NAME, false)) {
             SharedPreferences.Editor editor = Prefs.edit();
-            if ((!Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).pacIsSet && Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).pac == 0) ||
-                    Prefs.getBoolean(Constants.SHOW_SETUP_PAC, false)) {
+            if (((!Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).pacIsSet && Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).pac == 0) ||
+                    Prefs.getBoolean(Constants.SHOW_SETUP_PAC, false)) && User.getUserForEmail(LinkaAPIServiceImpl.getUserEmail()).isOwner) {
                 editor.putInt(Constants.SHOWING_FRAGMENT, Constants.SET_PAC_FRAGMENT);
                 editor.apply();
                 getActivity().finish();

@@ -14,10 +14,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.linka.lockapp.aos.R;
+import com.linka.lockapp.aos.module.api.LinkaAPIServiceImpl;
 import com.linka.lockapp.aos.module.core.CoreFragment;
 import com.linka.lockapp.aos.module.helpers.Constants;
 import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.model.LinkaNotificationSettings;
+import com.linka.lockapp.aos.module.model.User;
 import com.linka.lockapp.aos.module.pages.walkthrough.WalkthroughActivity;
 import com.pixplicity.easyprefs.library.Prefs;
 
@@ -91,8 +93,8 @@ public class SetupLinka3 extends CoreFragment {
                 getAppMainActivity().popFragment();
                 return;
             }
-            if ((!Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).pacIsSet && Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).pac == 0) ||
-                    Prefs.getBoolean(Constants.SHOW_SETUP_PAC,false)) {
+            if (((!Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).pacIsSet && Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).pac == 0) ||
+                    Prefs.getBoolean(Constants.SHOW_SETUP_PAC,false)) && User.getUserForEmail(LinkaAPIServiceImpl.getUserEmail()).isOwner) {
                 getActivity().finish();
                 startActivity(new Intent(getActivity(), WalkthroughActivity.class));
             }else {
