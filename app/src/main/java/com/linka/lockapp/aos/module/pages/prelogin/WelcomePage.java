@@ -112,7 +112,7 @@ public class WelcomePage extends CoreFragment {
                     @Override
                     public void onResponse(Call<LinkaAPIServiceResponse.LoginResponse> call, Response<LinkaAPIServiceResponse.LoginResponse> response) {
                         cancelLoading();
-                        if (LinkaAPIServiceImpl.check(response, false, getAppMainActivity())) {
+                        if (LinkaAPIServiceImpl.signinFbcheck(response, false, getAppMainActivity())) {
                             getAppMainActivity().didSignIn();
                         }
 
