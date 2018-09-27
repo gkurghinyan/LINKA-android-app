@@ -404,6 +404,14 @@ public class MainTabBarPageFragment extends CoreFragment {
         currentPosition = 2;
         viewPager.setCurrentItem(2, true);
         changeButtonsState(currentPosition);
+        if (getActivity() != null) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                        notificationsUpdate.setVisibility(View.GONE);
+                }
+            });
+        }
     }
 
     @OnClick(R.id.t4)
