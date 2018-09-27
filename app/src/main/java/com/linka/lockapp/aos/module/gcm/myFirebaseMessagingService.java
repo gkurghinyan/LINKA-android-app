@@ -31,7 +31,7 @@ public class myFirebaseMessagingService extends com.google.firebase.messaging.Fi
         }
 
         String title = "Request For Permission";
-        String text = remoteMessage.getData().get("message");
+        String text = "Connect to your friend's LINKA";
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
             LogHelper.e("Firebase", "Message Notification Title: " + title);
