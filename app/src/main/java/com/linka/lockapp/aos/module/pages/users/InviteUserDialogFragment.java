@@ -101,7 +101,7 @@ public class InviteUserDialogFragment extends Fragment {
             }else {
                 invite.setClickable(true);
                 cancel.setClickable(true);
-                Toast.makeText(getActivity(), getString(R.string.user_exist), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getString(R.string.user_exist), Toast.LENGTH_LONG).show();
             }
         }else {
             invite.setClickable(true);
