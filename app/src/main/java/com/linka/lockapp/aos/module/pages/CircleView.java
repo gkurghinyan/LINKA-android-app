@@ -471,8 +471,13 @@ public class CircleView extends CoreFragment {
     private void setLockSettledState() {
         if (!isPanicAndSleepEnabled) {
             setPanicAndSleepButtonsState(true);
-            batteryImage.setColorFilter(null);
             batteryPercent.setText(linka.batteryPercent + "%");
+            if (linka.batteryPercent > 30) {
+                batteryImage.setColorFilter(null);
+            } else {
+                batteryImage.setColorFilter(getActivity().getResources().getColor(R.color.linka_red), PorterDuff.Mode.SRC_IN);
+                LinkaActivity.saveLinkaActivity(linka, LinkaActivity.LinkaActivityType.isBatteryLow);
+            }
         }
         if (!isLockConnected) {
             root.removeView(internetPage);

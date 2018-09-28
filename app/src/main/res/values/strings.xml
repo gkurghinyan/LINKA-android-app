@@ -545,6 +545,8 @@
     <string name="press_to_lock">Press &amp; hold to lock</string>
     <string name="press_to_unlock">Press &amp; slide to unlock</string>
     <string name="battery">Battery</string>
+    <string name="battery_low_notification_massage_part1">You are almost out of battery.</string>
+    <string name="battery_low_notification_massage_part2">Don\'t forget to charge your Linka</string>
     <string name="battery_settings_description">Your battery settings controls how long your lock stays awake. Keeping your lock awake longer will improve feature performance but require more frequent recharging. Auto-unlock will only work while the lock is awake.</string>
     <string name="make_sure_device_unlocked">Please make sure your LINKA is unlocked and connected. Your LINKA device LED indicator should be blinking green.</string>
     <string name="i_don_t_see_my_device_connected"><u>I don\'t see my device connected</u></string>

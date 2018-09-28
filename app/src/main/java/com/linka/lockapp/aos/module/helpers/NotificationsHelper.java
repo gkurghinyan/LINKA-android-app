@@ -55,7 +55,7 @@ public class NotificationsHelper {
         if (activity.linka_activity_status == LinkaActivityType.isBatteryLow.getValue()
                 && settings.settings_linka_battery_low_alert) {
             title = _.i(R.string.notif_battery_low);
-            message = _.i(R.string.notif_below) + " " + activity.batteryPercent + "% "+_.i(R.string.notif_battery_remaining)+" "+_.i(R.string.notif_please_charge_soon)+"";
+            message = _.i(R.string.battery_low_notification_massage_part1) + " " +_.i(R.string.battery_low_notification_massage_part2);
             audio = AUDIO_BATTERYLOW;
         }
         else if (activity.linka_activity_status == LinkaActivityType.isBatteryCriticallyLow.getValue()

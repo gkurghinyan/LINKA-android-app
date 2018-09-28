@@ -86,10 +86,13 @@ public class NotificationListAdapter extends GenericLoadMoreAdapter<Notification
             holder.notificationIcon.setColorFilter(context.getResources().getColor(R.color.linka_blue), android.graphics.PorterDuff.Mode.MULTIPLY);
             icon = R.drawable.panic_icon;
         } else if (item.type == LinkaActivityType.isBatteryLow) {
-            icon = R.drawable.danger_icon;
+            holder.notificationIcon.setColorFilter(null);
+            icon = R.drawable.battery1;
         } else if (item.type == LinkaActivityType.isBatteryCriticallyLow) {
+            holder.notificationIcon.setColorFilter(null);
             icon = R.drawable.danger_icon;
         } else if (item.type == LinkaActivityType.isAutoUnlockEnabled) {
+            holder.notificationIcon.setColorFilter(null);
             icon = R.drawable.danger_icon;
         }
         holder.container.setTag(item);

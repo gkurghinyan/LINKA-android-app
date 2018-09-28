@@ -133,7 +133,7 @@ public class Notification implements Serializable {
 
             } else if (type == LinkaActivityType.isBatteryLow) {
 
-                notification.body = _.i(R.string.act_battery_low) + " " + activity.batteryPercent + "%";
+                notification.body = _.i(R.string.battery_low_notification_massage_part1) + "\n" +_.i(R.string.battery_low_notification_massage_part2);
 
             } else if (type == LinkaActivityType.isBatteryCriticallyLow) {
 
