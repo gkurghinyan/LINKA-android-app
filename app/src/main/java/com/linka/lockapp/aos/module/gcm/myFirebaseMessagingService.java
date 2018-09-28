@@ -20,7 +20,13 @@ public class myFirebaseMessagingService extends com.google.firebase.messaging.Fi
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         // ...
+        String title = "Request For Permission";
 
+        String text = remoteMessage.getData().get("message");
+        if (remoteMessage.getData().get("message").equals("Permission granted to use LINKA granted")){
+             title = "Permission Granted";
+             text = "Connect to your friend's LINKA";
+        }
         // TODO(developer): Handle FCM messages here.
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
         LogHelper.e("Firebase", "From: " + remoteMessage.getFrom());
@@ -30,8 +36,6 @@ public class myFirebaseMessagingService extends com.google.firebase.messaging.Fi
             LogHelper.e("Firebase", "Message data payload: " + remoteMessage.getData());
         }
 
-        String title = "Permission Granted";
-        String text = "Connect to your friend's LINKA";
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
             LogHelper.e("Firebase", "Message Notification Title: " + title);
