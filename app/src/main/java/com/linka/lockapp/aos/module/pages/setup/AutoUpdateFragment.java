@@ -21,12 +21,14 @@ import android.widget.Toast;
 import com.linka.lockapp.aos.AppMainActivity;
 import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceImpl;
+import com.linka.lockapp.aos.module.api.LinkaAPIServiceResponse;
 import com.linka.lockapp.aos.module.core.CoreFragment;
 import com.linka.lockapp.aos.module.helpers.AppBluetoothService;
 import com.linka.lockapp.aos.module.helpers.BLEHelpers;
 import com.linka.lockapp.aos.module.helpers.Constants;
 import com.linka.lockapp.aos.module.helpers.LogHelper;
 import com.linka.lockapp.aos.module.model.Linka;
+import com.linka.lockapp.aos.module.model.LinkaAccessKey;
 import com.linka.lockapp.aos.module.model.LinkaNotificationSettings;
 import com.linka.lockapp.aos.module.model.User;
 import com.linka.lockapp.aos.module.pages.dfu.DfuManager;
@@ -40,6 +42,9 @@ import java.util.Date;
 import java.util.List;
 
 import no.nordicsemi.android.dfu.DfuProgressListener;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.content.Context.ACTIVITY_SERVICE;
 
@@ -92,8 +97,8 @@ public class AutoUpdateFragment extends CoreFragment {
         super.onViewCreated(view, savedInstanceState);
         if (getArguments() != null) {
             Bundle bundle = getArguments();
-            if (bundle.get("linka") != null) {
-                linka = (Linka) bundle.getSerializable("linka");
+            if (bundle.get(LINKA_ARGUMENT) != null) {
+                linka = (Linka) bundle.getSerializable(LINKA_ARGUMENT);
             }
 //            init();
             if(getArguments().getInt(CURRENT_FRAGMENT) == WALKTHROUGH) {
@@ -592,8 +597,15 @@ public class AutoUpdateFragment extends CoreFragment {
         if (Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).getName() != null &&
                 !Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).getName().equals("") && !Prefs.getBoolean(Constants.SHOW_SETUP_NAME, false)) {
             SharedPreferences.Editor editor = Prefs.edit();
+            LinkaAccessKey key = LinkaAccessKey.getKeyFromLinka(LocksController.getInstance().getLockController().getLinka());
+            boolean isAdmin = false;
+            if (key != null && !key.access_key_admin.equals("")) {
+                isAdmin = true;
+            } else {
+                isAdmin = false;
+            }
             if (((!Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).pacIsSet && Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).pac == 0) ||
-                    Prefs.getBoolean(Constants.SHOW_SETUP_PAC, false)) && User.getUserForEmail(LinkaAPIServiceImpl.getUserEmail()).isOwner) {
+                    Prefs.getBoolean(Constants.SHOW_SETUP_PAC, false)) && isAdmin) {
                 editor.putInt(Constants.SHOWING_FRAGMENT, Constants.SET_PAC_FRAGMENT);
                 editor.apply();
                 getActivity().finish();

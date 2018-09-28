@@ -402,6 +402,15 @@ public class LinkaAccessKey extends Model implements Serializable {
                                         true,
                                         10200
                                 );
+                                if (response.body() != null) {
+                                    if (response.body().data != null) {
+
+                                        LinkaAccessKey.createNewOrReplaceKey(
+                                                linka,
+                                                response.body().data.key,
+                                                null);
+                                    }
+                                }
                                 return;
                             }
                             else
