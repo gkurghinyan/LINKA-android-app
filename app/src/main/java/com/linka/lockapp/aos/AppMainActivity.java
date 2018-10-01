@@ -278,12 +278,13 @@ public class AppMainActivity extends CoreActivity {
 //            sidebarTextSelectLanguage.setVisibility(View.GONE);
 //        }
 
-        if (AppLanguagePickerActivity.shouldStartLanguageSelect()) {
+        /*if (AppLanguagePickerActivity.shouldStartLanguageSelect()) {
             AppLanguagePickerActivity.createNewInstance(this, true);
         } else {
             LinkaAPIServiceImpl.get_app_version(this, false, null);
-        }
+        }*/
 
+        LinkaAPIServiceImpl.get_app_version(this, false, null);
         // Listen to bluetooth to detect state changes
 
         startService(new Intent(this, AppBluetoothService.class));
