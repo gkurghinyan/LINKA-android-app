@@ -155,6 +155,9 @@ public class MainTabBarPageFragment extends CoreFragment {
                 if (getArguments().getInt(SCREEN_ARGUMENT) != -1) {
                     currentPosition = getArguments().getInt(SCREEN_ARGUMENT);
                     getArguments().putInt(SCREEN_ARGUMENT, -1);
+                    if (currentPosition == NOTIFICATION_SCREEN){
+                        notificationsUpdate.setVisibility(View.GONE);
+                    }
                 }
                 if (linka.getId() != null) {
                     linka = Linka.getLinkaById(linka.getId());

@@ -2,6 +2,8 @@ package com.linka.lockapp.aos.module.helpers;
 
 import android.app.Activity;
 import android.app.Notification;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 
@@ -23,6 +25,7 @@ import br.com.goncalves.pugnotification.notification.PugNotification;
  */
 public class NotificationsHelper {
     public static final String LINKA_NOT_LOCKED = "LinkaNotLocked";
+    public static final String LINKA_NOTIFICATION_ACTION = "Linka Notification";
 
     private MediaPlayer mediaPlayer;
 
@@ -134,25 +137,27 @@ public class NotificationsHelper {
 //
 //        } else {
             // create notification
+        Intent intent = new Intent(context, AppMainActivity.class);
+        intent.setAction(LINKA_NOTIFICATION_ACTION);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Load load = PugNotification.with(AppDelegate.getInstance())
+                .load()
+                .autoCancel(true)
+                .identifier(linkaActivity.linka_activity_status)
+                .title(title)
+                .message(message)
+                .smallIcon(R.drawable.ic_action_name)
+                .largeIcon(R.mipmap.ic_launcher)
+                .flags(Notification.DEFAULT_ALL)
+                .click(pendingIntent);
 
-            Load load = PugNotification.with(AppDelegate.getInstance())
-                    .load()
-                    .autoCancel(true)
-                    .identifier(linkaActivity.linka_activity_status)
-                    .title(title)
-                    .message(message)
-                    .smallIcon(R.drawable.ic_action_name)
-                    .largeIcon(R.mipmap.ic_launcher)
-                    .flags(Notification.DEFAULT_ALL)
-                    .click(AppMainActivity.class);
-
-            if (linkaActivity.alarm) {
-                if (audio != 0) {
-                    load = load.sound(Uri.parse("android.resource://com.linka.lockapp.aos/" + audio));
-                }
+        if (linkaActivity.alarm) {
+            if (audio != 0) {
+                load = load.sound(Uri.parse("android.resource://com.linka.lockapp.aos/" + audio));
             }
+        }
 
-            load.simple().build();
+        load.simple().build();
 
 
         return true;

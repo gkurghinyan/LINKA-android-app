@@ -45,6 +45,7 @@ import com.linka.lockapp.aos.module.helpers.GeofencingService;
 import com.linka.lockapp.aos.module.helpers.Helpers;
 import com.linka.lockapp.aos.module.helpers.LocksHelper;
 import com.linka.lockapp.aos.module.helpers.LogHelper;
+import com.linka.lockapp.aos.module.helpers.NotificationsHelper;
 import com.linka.lockapp.aos.module.i18n._;
 import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.model.LinkaAccessKey;
@@ -263,7 +264,11 @@ public class AppMainActivity extends CoreActivity {
         linka2 = linka1;
         Log.d("linka_code", String.valueOf(linka2.hashCode()));
 
-        setFragment(decide(getIntent()));
+        if (getIntent()!=null && getIntent().getAction()!=null && getIntent().getAction().equals(NotificationsHelper.LINKA_NOTIFICATION_ACTION)){
+            setFragment(MainTabBarPageFragment.newInstance(LinkaNotificationSettings.get_latest_linka(), MainTabBarPageFragment.NOTIFICATION_SCREEN));
+        }else {
+            setFragment(decide(getIntent()));
+        }
 
         MyFirebaseInstanceIdService.getFcmToken();
 
