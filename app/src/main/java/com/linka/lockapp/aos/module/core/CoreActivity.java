@@ -17,6 +17,8 @@ import android.view.inputmethod.InputMethodManager;
 import com.linka.lockapp.aos.AppMainActivity;
 import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.i18n._;
+import com.linka.lockapp.aos.module.model.LinkaNotificationSettings;
+import com.linka.lockapp.aos.module.pages.home.MainTabBarPageFragment;
 
 
 /**
@@ -181,11 +183,12 @@ public class CoreActivity extends AppCompatActivity implements FragmentManager.O
         }
         else
         {
-            new AlertDialog.Builder(this)
-                    .setIcon(R.mipmap.ic_launcher)
-                    .setTitle(R.string.app_name)
-                    .setMessage(_.i(R.string.exit_app))
-                    .setPositiveButton(_.i(R.string.yes), new DialogInterface.OnClickListener() {
+            if (MainTabBarPageFragment.currentPosition == MainTabBarPageFragment.LOCK_SCREEN) {
+                new AlertDialog.Builder(this)
+                        .setIcon(R.mipmap.ic_launcher)
+                        .setTitle(R.string.app_name)
+                        .setMessage(_.i(R.string.exit_app))
+                        .setPositiveButton(_.i(R.string.yes), new DialogInterface.OnClickListener() {
 
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -193,9 +196,12 @@ public class CoreActivity extends AppCompatActivity implements FragmentManager.O
                             CoreActivity.this.finish();
                         }
 
-                    })
-                    .setNegativeButton(_.i(R.string.no), null)
-                    .show();
+                        })
+                        .setNegativeButton(_.i(R.string.no), null)
+                        .show();
+            }else {
+                setFragment(MainTabBarPageFragment.newInstance(LinkaNotificationSettings.get_latest_linka(),MainTabBarPageFragment.LOCK_SCREEN));
+            }
         }
     }
 

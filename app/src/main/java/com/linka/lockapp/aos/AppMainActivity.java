@@ -659,8 +659,13 @@ public class AppMainActivity extends CoreActivity {
 
                 return;
                 //}
+            }else if (!(fragment instanceof MainTabBarPageFragment)){
+                setFragment(MainTabBarPageFragment.newInstance(LinkaNotificationSettings.get_latest_linka(),MainTabBarPageFragment.LOCK_SCREEN));
+                return;
+            }else {
+                super.onBackPressed();
             }
-            if (curFragmentCount <= 0) {
+         /*   if (curFragmentCount <= 0) {
                 super.onBackPressed();
 //            if (fragment instanceof StartupFragment) {
 //            } else {
@@ -668,7 +673,7 @@ public class AppMainActivity extends CoreActivity {
 //            }
             } else {
                 super.onBackPressed();
-            }
+            }*/
             setBackIconVisible(false);
         }
     }
