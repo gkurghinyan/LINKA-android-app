@@ -65,6 +65,10 @@ public class LocksHelper {
                         for(LinkaAPIServiceResponse.AssociatedLocksResponse.Data lock_data : response.body().data) {
                             if(lock_data.lock_serial_no.equals(linka.lock_mac_address)){
                                 exists = true;
+
+                                //Now that we've confirmed that this lock exists,
+                                // remove this lock from the response, to avoid duplicates
+                                response.body().data.remove(lock_data); 
                             }
                         }
 
@@ -72,7 +76,6 @@ public class LocksHelper {
                             LinkaAccessKey.deleteAllKeysFromLinka(linka);
                             linka.delete();
                         }
-
                     }
 
                     for(LinkaAPIServiceResponse.AssociatedLocksResponse.Data lock_data : response.body().data){
