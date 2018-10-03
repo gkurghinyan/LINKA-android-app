@@ -144,7 +144,7 @@ public class LocksHelper {
 
                     Linka existingLinka = Linka.getLinkaByAddress(lock_mac_address);
                     if(existingLinka == null) {
-                        Linka linka = Linka.makeLinka(lock_mac_address, lock_mac_address, lock_mac_address);
+                        Linka linka = Linka.makeLinka(lock_mac_address, lock_mac_address, lock_name);
                         LinkaAccessKey accessKey = LinkaAccessKey.createNewOrReplaceKey(linka, response.body().data.key, linka.lock_mac_address);
                         linka.saveSettings();
                     }else{
