@@ -661,8 +661,12 @@ public class AppMainActivity extends CoreActivity {
                 return;
                 //}
             }else if (!(fragment instanceof MainTabBarPageFragment)){
-                setFragment(MainTabBarPageFragment.newInstance(LinkaNotificationSettings.get_latest_linka(),MainTabBarPageFragment.LOCK_SCREEN));
-                return;
+                if (LinkaNotificationSettings.get_latest_linka()!=null && LinkaNotificationSettings.get_latest_linka().isConnected) {
+                    setFragment(MainTabBarPageFragment.newInstance(LinkaNotificationSettings.get_latest_linka(), MainTabBarPageFragment.LOCK_SCREEN));
+                    return;
+                }else {
+                    super.onBackPressed();
+                }
             }else {
                 super.onBackPressed();
             }
