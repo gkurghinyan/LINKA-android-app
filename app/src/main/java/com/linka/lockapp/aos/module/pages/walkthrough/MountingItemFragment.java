@@ -14,6 +14,7 @@ import com.linka.lockapp.aos.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 /**
@@ -64,5 +65,10 @@ public class MountingItemFragment extends Fragment {
         }
         mountingImage.setImageResource(getArguments().getInt(DRAWABLE_ID));
         ((AnimationDrawable)mountingImage.getDrawable()).start();
+    }
+
+    @OnClick(R.id.mounting_image)
+    void onclickMountin(){
+        init();
     }
 }
