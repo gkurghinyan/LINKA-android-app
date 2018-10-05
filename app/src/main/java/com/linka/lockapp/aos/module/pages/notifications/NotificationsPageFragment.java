@@ -169,7 +169,8 @@ public class NotificationsPageFragment extends CoreFragment {
 
         adapter.setLoadMore(false);
 
-//        fetch_activities();
+        refresh();
+      //  fetch_activities();
     }
 
     private void onItemClick(Notification notification) {

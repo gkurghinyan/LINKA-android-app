@@ -13,6 +13,7 @@ import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.api.LinkaAPIServiceImpl;
 import com.linka.lockapp.aos.module.core.CoreFragment;
 import com.linka.lockapp.aos.module.helpers.Constants;
+import com.linka.lockapp.aos.module.model.LinkaNotificationSettings;
 import com.linka.lockapp.aos.module.pages.prelogin.ForgotPasswordPage1;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.rey.material.widget.Switch;
@@ -91,27 +92,58 @@ public class AppSettingsFragment extends CoreFragment {
         batteryLowSwitch.setChecked(Prefs.getBoolean(Constants.SHOW_BATTERY_LOW_NOTIFICATION,false));
         batteryCriticLowSwitch.setChecked(Prefs.getBoolean(Constants.SHOW_BATTERY_CRITICALLY_LOW_NOTIFICATION,false));
         sleepSwitch.setChecked(Prefs.getBoolean(Constants.SHOW_SLEEP_NOTIFICATION,false));
+        LinkaNotificationSettings settings = LinkaNotificationSettings.getSettings();
+        if (settings != null) {
+            settings.settings_out_of_range_alert = Prefs.getBoolean(Constants.SHOW_OUT_OF_RANGE_NOTIFICATION, false);
+            settings.settings_back_in_range_alert = Prefs.getBoolean(Constants.SHOW_BACK_IN_RANGE_NOTIFICATION,false);
+            settings.settings_linka_battery_low_alert = Prefs.getBoolean(Constants.SHOW_BATTERY_LOW_NOTIFICATION,false);
+            settings.settings_linka_battery_critically_low_alert = Prefs.getBoolean(Constants.SHOW_BATTERY_CRITICALLY_LOW_NOTIFICATION,false);
+            settings.settings_sleep_notification = Prefs.getBoolean(Constants.SHOW_SLEEP_NOTIFICATION,false);
+            settings.saveSettings();
+        }
+
     }
 
     private void setListeners(){
+        final LinkaNotificationSettings settings = LinkaNotificationSettings.getSettings();
         Switch.OnCheckedChangeListener onCheckedChangeListener = new Switch.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(Switch view, boolean checked) {
                 switch (view.getId()){
                     case R.id.switch_out_of_range:
                         Prefs.edit().putBoolean(Constants.SHOW_OUT_OF_RANGE_NOTIFICATION,checked).apply();
+                        if (settings != null) {
+                            settings.settings_out_of_range_alert = checked;
+                            settings.saveSettings();
+                        }
                         break;
                     case R.id.switch_back_in_range:
                         Prefs.edit().putBoolean(Constants.SHOW_BACK_IN_RANGE_NOTIFICATION,checked).apply();
+                        if (settings != null) {
+                            settings.settings_back_in_range_alert = checked;
+                            settings.saveSettings();
+                        }
                         break;
                     case R.id.switch_battery_low:
                         Prefs.edit().putBoolean(Constants.SHOW_BATTERY_LOW_NOTIFICATION,checked).apply();
+                        if (settings != null) {
+                            settings.settings_linka_battery_low_alert = checked;
+                            settings.saveSettings();
+                        }
                         break;
                     case R.id.switch_battery_critically_low:
                         Prefs.edit().putBoolean(Constants.SHOW_BATTERY_CRITICALLY_LOW_NOTIFICATION,checked).apply();
+                        if (settings != null) {
+                            settings.settings_linka_battery_critically_low_alert = checked;
+                            settings.saveSettings();
+                        }
                         break;
                     case R.id.switch_sleep_notification:
                         Prefs.edit().putBoolean(Constants.SHOW_SLEEP_NOTIFICATION,checked).apply();
+                        if (settings != null) {
+                            settings.settings_sleep_notification = checked;
+                            settings.saveSettings();
+                        }
                         break;
                 }
             }

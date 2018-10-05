@@ -47,6 +47,7 @@ public class NotificationListAdapter extends GenericLoadMoreAdapter<Notification
         for (Notification item : models) {
             this.mItems.add(item);
         }
+        notifyDataSetChanged();
 
 
         // SEARCH FILTER / SORT
@@ -92,6 +93,9 @@ public class NotificationListAdapter extends GenericLoadMoreAdapter<Notification
             holder.notificationIcon.setColorFilter(null);
             icon = R.drawable.danger_icon;
         } else if (item.type == LinkaActivityType.isAutoUnlockEnabled) {
+            holder.notificationIcon.setColorFilter(null);
+            icon = R.drawable.danger_icon;
+        }else {
             holder.notificationIcon.setColorFilter(null);
             icon = R.drawable.danger_icon;
         }

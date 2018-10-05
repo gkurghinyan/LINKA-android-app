@@ -264,11 +264,7 @@ public class AppMainActivity extends CoreActivity {
         linka2 = linka1;
         Log.d("linka_code", String.valueOf(linka2.hashCode()));
 
-        if (getIntent()!=null && getIntent().getAction()!=null && getIntent().getAction().equals(NotificationsHelper.LINKA_NOTIFICATION_ACTION)){
-            setFragment(MainTabBarPageFragment.newInstance(LinkaNotificationSettings.get_latest_linka(), MainTabBarPageFragment.NOTIFICATION_SCREEN));
-        }else {
-            setFragment(decide(getIntent()));
-        }
+
 
         MyFirebaseInstanceIdService.getFcmToken();
 
@@ -284,6 +280,11 @@ public class AppMainActivity extends CoreActivity {
             LinkaAPIServiceImpl.get_app_version(this, false, null);
         }*/
 
+        if (getIntent()!=null && getIntent().getAction()!=null && getIntent().getAction().equals(NotificationsHelper.LINKA_NOTIFICATION_ACTION)){
+            setFragment(MainTabBarPageFragment.newInstance(LinkaNotificationSettings.get_latest_linka(), MainTabBarPageFragment.NOTIFICATION_SCREEN));
+        }else {
+            setFragment(decide(getIntent()));
+        }
         LinkaAPIServiceImpl.get_app_version(this, false, null);
         // Listen to bluetooth to detect state changes
 

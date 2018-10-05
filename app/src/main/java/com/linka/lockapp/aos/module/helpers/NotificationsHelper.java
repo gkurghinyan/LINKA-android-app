@@ -73,6 +73,16 @@ public class NotificationsHelper {
             audio = AUDIO_TAMPERALERT;
             loop = true;
         }
+        else if (activity.linka_activity_status == LinkaActivityType.isAutoUnlocked.getValue()){
+            title = _.i(R.string.auto_unlock_notif_title);
+            message = _.i(R.string.auto_unlock_notif_message);
+            audio = AUDIO_BACKINRANGE;
+        }
+        else if (activity.linka_activity_status == LinkaActivityType.isSleep.getValue()){
+            title = _.i(R.string.sleep_notification);
+            message = _.i(R.string.sleep_notification_desc);
+            audio = AUDIO_BACKINRANGE;
+        }
         else if (activity.linka_activity_status == LinkaActivityType.isOutOfRange.getValue()
                 && settings.settings_out_of_range_alert && SleepNotificationService.getInstance().lastSleepTime != 0) {
             title = _.i(R.string.out_of_range_alert);

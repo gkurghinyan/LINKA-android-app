@@ -58,18 +58,7 @@ public class GeofenceTransitionsIntentService extends IntentService {
                 },TIME_FOR_LINKA_LOCKING_PROCESS);
 
                 if(Prefs.getBoolean(Constants.SHOW_BACK_IN_RANGE_NOTIFICATION,false)) {
-                    PugNotification.with(AppDelegate.getInstance())
-                            .load()
-                            .autoCancel(true)
-                            .identifier(LinkaActivity.LinkaActivityType.isBackInRange.getValue())
-                            .title(getString(R.string.back_in_range_notif_title))
-                            .message(getString(R.string.back_in_range_notif_message))
-                            .smallIcon(R.drawable.ic_action_name)
-                            .largeIcon(R.mipmap.ic_launcher)
-                            .flags(Notification.DEFAULT_ALL)
-                            .click(AppMainActivity.class)
-                            .simple()
-                            .build();
+                    LinkaActivity.saveLinkaActivity(Linka.getLinkaByAddress(linkaAddress), LinkaActivity.LinkaActivityType.isBackInRange);
                 }
             }
 
@@ -78,18 +67,7 @@ public class GeofenceTransitionsIntentService extends IntentService {
             args.putBoolean(Constants.LINKA_ADDRESS_FOR_AUTO_UNLOCK,true);
 
             if(Prefs.getBoolean(Constants.SHOW_OUT_OF_RANGE_NOTIFICATION,false)) {
-                PugNotification.with(AppDelegate.getInstance())
-                        .load()
-                        .autoCancel(true)
-                        .identifier(LinkaActivity.LinkaActivityType.isOutOfRange.getValue())
-                        .title(getString(R.string.out_of_range_notif_title))
-                        .message(getString(R.string.out_of_range_notif_message))
-                        .smallIcon(R.drawable.ic_action_name)
-                        .largeIcon(R.mipmap.ic_launcher)
-                        .flags(Notification.DEFAULT_ALL)
-                        .click(AppMainActivity.class, args)
-                        .simple()
-                        .build();
+                LinkaActivity.saveLinkaActivity(Linka.getLinkaByAddress(linkaAddress), LinkaActivity.LinkaActivityType.isOutOfRange);
             }
 
             LinkaActivity.saveLinkaActivity(Linka.getLinkaByAddress(linkaAddress), LinkaActivity.LinkaActivityType.isAutoUnlockEnabled);

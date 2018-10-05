@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -33,30 +34,33 @@
         android:id="@+id/notification"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:maxLines="3"
-        android:text="Kyle Zhang now has access to your bike"
         android:layout_marginStart="@dimen/margin"
+        android:ellipsize="end"
+        android:maxLines="4"
+        android:text="Kyle Zhang now has access to your bike"
         android:textColor="@color/linka_blue"
         android:textSize="@dimen/text_size_xxm"
-        app:layout_constraintTop_toTopOf="@id/notification_icon"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/notification_icon"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toTopOf="@id/notification_icon" />
 
     <TextView
         android:id="@+id/time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin"
+        android:layout_marginTop="8dp"
         android:text="14:24 pm October 2"
         android:textColor="@color/bright_gray_text"
-        android:layout_marginStart="@dimen/margin"
         android:textSize="@dimen/text_size_mm"
-        app:layout_constraintTop_toBottomOf="@id/notification_icon"
-        app:layout_constraintStart_toEndOf="@id/notification_icon"/>
+        app:layout_constraintStart_toEndOf="@id/notification_icon"
+        app:layout_constraintTop_toBottomOf="@+id/notification" />
 
     <View
+        android:id="@+id/view2"
         style="@style/menu_divider"
-        app:layout_constraintTop_toBottomOf="@id/time"
-        android:layout_marginTop="@dimen/margin"/>
+        android:layout_marginTop="@dimen/margin"
+        app:layout_constraintTop_toBottomOf="@id/time" />
 
 
     <!--<LinearLayout-->

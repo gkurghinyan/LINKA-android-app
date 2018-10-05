@@ -209,8 +209,9 @@ public void stopTimer(){
 //            return;
 //        }
 //
-        NotificationsHelper.getInstance().CreateLinkaNotificationMessage(getContext().getString(R.string.tabbar_icon_text_home),
-                getContext().getString(R.string.sleep_notification_desc), R.raw.audio_out_of_range, false, LinkaActivity.getLinkaActivitiesByLinka(targetLinka).get(0), AppMainActivity.getInstance());
+        LinkaActivity.saveLinkaActivity(LinkaNotificationSettings.get_latest_linka(), LinkaActivity.LinkaActivityType.isSleep);
+        // NotificationsHelper.getInstance().CreateLinkaNotificationMessage(getContext().getString(R.string.tabbar_icon_text_home),
+        // getContext().getString(R.string.sleep_notification_desc), R.raw.audio_out_of_range, false, LinkaActivity.getLinkaActivitiesByLinka(targetLinka).get(0), AppMainActivity.getInstance());
 
 //        PugNotification.with(AppDelegate.getInstance())
 //                .load()

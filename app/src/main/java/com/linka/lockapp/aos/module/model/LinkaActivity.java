@@ -299,6 +299,9 @@ public class LinkaActivity extends Model implements Serializable {
         if (linkaActivityType == LinkaActivityType.isAutoUnlockEnabled) {
             activity.alarm = true;
         }
+        if (linkaActivityType == LinkaActivityType.isSleep){
+            activity.alarm = true;
+        }
 
         activity.save();
 

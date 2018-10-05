@@ -748,8 +748,10 @@ public class LinkaAPIServiceImpl {
             should_update = true;
             body = "Lock renamed from [" + activity.old_lock_name + "] to [" + activity.new_lock_name + "]";
         } else if (type == LinkaActivity.LinkaActivityType.isBackInRange.getValue()) {
+            should_update = true;
             body = "Back in Range";
         } else if (type == LinkaActivity.LinkaActivityType.isOutOfRange.getValue()) {
+            should_update = true;
             body = "Out of Range";
         } else if (type == LinkaActivity.LinkaActivityType.isAutoUnlocked.getValue()) {
             should_update = true;

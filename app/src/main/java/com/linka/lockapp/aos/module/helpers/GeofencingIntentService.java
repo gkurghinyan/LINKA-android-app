@@ -13,6 +13,7 @@ import com.linka.lockapp.aos.AppDelegate;
 import com.linka.lockapp.aos.AppMainActivity;
 import com.linka.lockapp.aos.R;
 import com.linka.lockapp.aos.module.model.LinkaActivity;
+import com.linka.lockapp.aos.module.model.LinkaNotificationSettings;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,36 +77,11 @@ public class GeofencingIntentService extends IntentService {
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER){
             LogHelper.e("GEOFENCE", "Geofence Entered !");
 
-            PugNotification.with(AppDelegate.getInstance())
-                    .load()
-                    .autoCancel(true)
-                    .identifier(LinkaActivity.LinkaActivityType.isBackInRange.getValue())
-                    .title("Enter Geofence")
-                    .message("If you're seeing this, it means that geofencing is working!")
-                    .smallIcon(R.drawable.ic_action_name)
-                    .largeIcon(R.mipmap.ic_launcher)
-                    .flags(Notification.DEFAULT_ALL)
-                    .click(AppMainActivity.class)
-                    .simple()
-                    .build();
-
-
+            LinkaActivity.saveLinkaActivity(LinkaNotificationSettings.get_latest_linka(), LinkaActivity.LinkaActivityType.isBackInRange);
         } else if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
             LogHelper.e("GEOFENCE", "Geofence Exited!");
 
-            PugNotification.with(AppDelegate.getInstance())
-                    .load()
-                    .autoCancel(true)
-                    .identifier(LinkaActivity.LinkaActivityType.isOutOfRange.getValue())
-                    .title("Autounlocking Enabled")
-                    .message("You have exited the LINKA Geofence, and your LINKA will autounlock when you return")
-                    .smallIcon(R.drawable.ic_action_name)
-                    .largeIcon(R.mipmap.ic_launcher)
-                    .flags(Notification.DEFAULT_ALL)
-                    .click(AppMainActivity.class)
-                    .simple()
-                    .build();
-
+            LinkaActivity.saveLinkaActivity(LinkaNotificationSettings.get_latest_linka(), LinkaActivity.LinkaActivityType.isOutOfRange);
             // Get the geofences that were triggered. A single event can trigger
             // multiple geofences.
             List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();

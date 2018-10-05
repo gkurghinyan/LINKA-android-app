@@ -993,18 +993,8 @@ public class Linka extends Model implements Serializable {
 
                 Bundle args = new Bundle();
                 args.putBoolean(Constants.LINKA_ADDRESS_FOR_AUTO_UNLOCK, true);
-                PugNotification.with(AppDelegate.getInstance())
-                        .load()
-                        .autoCancel(true)
-                        .identifier(LinkaActivity.LinkaActivityType.isOutOfRange.getValue())
-                        .title(AppDelegate.getInstance().getString(R.string.auto_unlock_notif_title))
-                        .message(AppDelegate.getInstance().getString(R.string.auto_unlock_notif_message))
-                        .smallIcon(R.drawable.ic_action_name)
-                        .largeIcon(R.mipmap.ic_launcher)
-                        .flags(Notification.DEFAULT_ALL)
-                        .click(AppMainActivity.class, args)
-                        .simple()
-                        .build();
+
+
                 LinkaActivity.saveLinkaActivity(this, LinkaActivity.LinkaActivityType.isAutoUnlocked);
                 awaitsForAutoUnlocking = false;
                 waitingUntilSettledtoAutoUnlock = false;

@@ -78,7 +78,7 @@ public class Notification implements Serializable {
             } else if (type == LinkaActivityType.isUnlocked || type == LinkaActivityType.isAutoUnlocked) {
 
                 if(type == LinkaActivityType.isAutoUnlocked) {
-                    notification.body = "Your bike is being auto-unlocked";
+                    notification.body = _.i(R.string.auto_unlock_notif_title)+"\n"+_.i(R.string.auto_unlock_notif_message);
                 }else {
                     notification.body = _.i(R.string.act_unlocked);
                 }
@@ -133,15 +133,15 @@ public class Notification implements Serializable {
 
             } else if (type == LinkaActivityType.isBatteryLow) {
 
-                notification.body = _.i(R.string.battery_low_notification_massage_part1) + "\n" +_.i(R.string.battery_low_notification_massage_part2);
+                notification.body =_.i(R.string.notif_battery_low)+ _.i(R.string.battery_low_notification_massage_part1) + "\n" +_.i(R.string.battery_low_notification_massage_part2);
 
             } else if (type == LinkaActivityType.isBatteryCriticallyLow) {
 
-                notification.body = _.i(R.string.act_battery_low_critical) + " " + activity.batteryPercent + "%";
+                notification.body = _.i(R.string.notif_battery_low)+_.i(R.string.notif_below) + " " + activity.batteryPercent + "% "+_.i(R.string.notif_battery_remaining)+" "+_.i(R.string.notif_please_charge_soon)+"";
 
             } else if (type == LinkaActivityType.isTamperAlert) {
 
-                notification.body = _.i(R.string.act_tamper_alert);
+                notification.body = _.i(R.string.act_tamper_alert)+"\n"+_.i(R.string.notif_check_your_bike);;
 
             } else if (type == LinkaActivityType.isRenamed) {
 
@@ -149,20 +149,22 @@ public class Notification implements Serializable {
 
             } else if (type == LinkaActivityType.isBackInRange) {
 
-                notification.body = _.i(R.string.back_in_range_alert);
+                notification.body = _.i(R.string.back_in_range_alert)+"\n"+_.i(R.string.your_lock_is) + " " + _.i(R.string.back_in_range_alert);
 
             } else if (type == LinkaActivityType.isOutOfRange) {
 
-                notification.body = _.i(R.string.out_of_range_alert);
+                notification.body = _.i(R.string.out_of_range_alert)+"\n"+_.i(R.string.your_lock_is) + " " + _.i(R.string.out_of_range_alert);
 
             }else if(type == LinkaActivityType.isAutoUnlockEnabled){
                 notification.body = "Auto-unlocking is now enabled";
+            }else if (type == LinkaActivityType.isSleep){
+                notification.body = _.i(R.string.sleep_notification)+"\n"+ _.i(R.string.sleep_notification_desc);
             }
 
 
             if (type != LinkaActivityType.isUnknown
-                    && type != LinkaActivityType.isBackInRange
-                    && type != LinkaActivityType.isOutOfRange
+                    // && type != LinkaActivityType.isBackInRange
+                    //&& type != LinkaActivityType.isOutOfRange
                     && type != LinkaActivityType.isRenamed
                     && type != LinkaActivityType.isStalled
                     ) {
