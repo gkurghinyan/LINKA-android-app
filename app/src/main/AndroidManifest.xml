@@ -178,6 +178,15 @@
             android:exported="false" />
 
         <activity android:name=".module.pages.update.FirmwareUpdateActivity"></activity>
+        <receiver
+            android:name=".module.helpers.BluetoothStateReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:label="BluetoothStateReceiver">
+            <intent-filter>
+                <action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
