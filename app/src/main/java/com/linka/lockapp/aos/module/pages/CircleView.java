@@ -173,6 +173,7 @@ public class CircleView extends CoreFragment {
                         }
                         break;
                     case BluetoothAdapter.STATE_ON:
+                        swipeButton.setMassageText(getString(R.string.asleep_or_out));
                         lockController.doConnectDevice();
                         refreshDisplay();
                         break;
@@ -397,7 +398,23 @@ public class CircleView extends CoreFragment {
     private void turnOnBluetooth() {
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (!mBluetoothAdapter.isEnabled()) {
-            mBluetoothAdapter.enable();
+            new AlertDialog.Builder(getActivity())
+                    .setMessage("Bluetooth is off. Turn bluetooth on.")
+                    .setCancelable(true)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            BluetoothAdapter.getDefaultAdapter().enable();
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            swipeButton.setMassageText("Turn Bluetooth on");
+                        }
+                    })
+                    .show();
+
         }
     }
 
