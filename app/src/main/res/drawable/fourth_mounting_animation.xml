@@ -4,9 +4,9 @@
 
     <item
         android:drawable="@drawable/fourth_mounting_1"
-        android:duration="1500"/>
+        android:duration="500"/>
 
     <item
         android:drawable="@drawable/fourth_mounting_2"
-        android:duration="1500"/>
+        android:duration="500"/>
 </animation-list>

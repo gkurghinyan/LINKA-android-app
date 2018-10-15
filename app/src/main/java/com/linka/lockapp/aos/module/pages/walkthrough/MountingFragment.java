@@ -55,9 +55,6 @@ public class MountingFragment extends Fragment {
     @BindView(R.id.mounting_text)
     TextView mountingText;
 
-    @BindView(R.id.dot1_text)
-    TextView dot1Text;
-
     private Unbinder unbinder;
 
     public static MountingFragment newInstance() {
@@ -128,25 +125,21 @@ public class MountingFragment extends Fragment {
             case 1:
                 dot1.setVisibility(View.GONE);
                 dot1selected.setVisibility(View.VISIBLE);
-                dot1Text.setVisibility(View.VISIBLE);
                 mountingText.setText(R.string.mounting_text_dot1);
                 break;
             case 2:
                 dot2.setVisibility(View.GONE);
                 dot2selected.setVisibility(View.VISIBLE);
-                dot1Text.setVisibility(View.GONE);
                 mountingText.setText(R.string.mounting_text_dot2);
                 break;
             case 3:
                 dot3.setVisibility(View.GONE);
                 dot3selected.setVisibility(View.VISIBLE);
-                dot1Text.setVisibility(View.GONE);
                 mountingText.setText(R.string.mounting_text_dot3);
                 break;
             case 4:
                 dot4.setVisibility(View.GONE);
                 dot4selected.setVisibility(View.VISIBLE);
-                dot1Text.setVisibility(View.GONE);
                 mountingText.setText(R.string.mounting_text_dot4);
                 break;
         }
