@@ -38,10 +38,11 @@ public class BluetoothLeQueuedService extends Service {
     private BluetoothManager mBluetoothManager;
     protected BluetoothAdapter mBluetoothAdapter;
     private int mConnectionState = STATE_DISCONNECTED;
-
+    private BluetoothGatt bluetoothGatt;
     public static String BLE_DFU_FW_CHARACTERISTIC = "00001530-1212-efde-1523-785feabcd123";
 
     public boolean allowReconnect = false;
+    private GenericBluetoothGattCallback gattCallback;
 
     private static final int STATE_DISCONNECTED = 0;
     private static final int STATE_CONNECTING = 1;
@@ -344,16 +345,16 @@ public class BluetoothLeQueuedService extends Service {
                 Log.w(TAG, "BluetoothAdapter not initialized or unspecified address.");
                 return null;
             }
-
+            bluetoothGatt = gatt;
             // Previously connected device.  Try to reconnect.
             if (allowReconnect) {
-                if (gatt != null && gatt.getDevice() != null
-                        && gatt.getDevice().getAddress() != null
-                        && address.equals(gatt.getDevice().getAddress())) {
+                if (bluetoothGatt != null && bluetoothGatt.getDevice() != null
+                        && bluetoothGatt.getDevice().getAddress() != null
+                        && address.equals(bluetoothGatt.getDevice().getAddress())) {
                     Log.d(TAG, "Trying to use an existing mBluetoothGatt for connection.");
-                    if (gatt.connect()) {
+                    if (bluetoothGatt.connect()) {
                         mConnectionState = STATE_CONNECTING;
-                        return gatt;
+                        return bluetoothGatt;
                     } else
                     {
                         Log.e(TAG, "Connect() failed.");
@@ -368,7 +369,7 @@ public class BluetoothLeQueuedService extends Service {
                 return null;
             }
 
-            GenericBluetoothGattCallback gattCallback = new GenericBluetoothGattCallback();
+            gattCallback = new GenericBluetoothGattCallback();
             gattCallback.actions = actions;
 
 
@@ -380,17 +381,18 @@ public class BluetoothLeQueuedService extends Service {
                 {
                     if (_device.getAddress().equals(device.getAddress()))
                     {
-                        gatt = _device.connectGatt(this, false, gattCallback);
+                        bluetoothGatt = _device.connectGatt(this, false, gattCallback);
                         Log.e(TAG, "Trying to create a new connection. (BONDED)");
                         mConnectionState = STATE_CONNECTING;
-                        return gatt;
+                        return bluetoothGatt;
                     }
                 }
             }
-            gatt = device.connectGatt(this, false, gattCallback);
+          //  Log.w("BluetoothG",gattCallback!=null?"gattCallback not null":"getcallback null");
+            bluetoothGatt = device.connectGatt(this, false, gattCallback);
             Log.e(TAG, "Trying to create a new connection. (UNBONDED)");
             mConnectionState = STATE_CONNECTING;
-            return gatt;
+            return bluetoothGatt;
         }
 
         /**

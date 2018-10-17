@@ -146,6 +146,9 @@ public class LockController implements Serializable {
         @Override
         public void run() {
             doDisconnectDevice();
+            if (!getIsDeviceConnected(bluetoothManager)){
+                doConnectDevice();
+            }
         }
     };
 
@@ -189,7 +192,7 @@ public class LockController implements Serializable {
                                 actions = new BluetoothLeQueuedService.BluetoothGattQueuedActions();
                                 if (bluetoothManager != null) {
                                     handler.removeCallbacks(runnable);
-                                    handler.postDelayed(runnable, 20000);
+                                    handler.postDelayed(runnable, 5000);
                                     is_device_connecting = true;
                                     bluetoothGatt = lockBLEServiceProxy.connect(linka.lock_address, null, actions);
                                 }
@@ -220,7 +223,7 @@ public class LockController implements Serializable {
                     actions = new BluetoothLeQueuedService.BluetoothGattQueuedActions();
                     if (bluetoothManager != null) {
                         handler.removeCallbacks(runnable);
-                        handler.postDelayed(runnable, 20000); //Stop connection attempt after 20 seconds
+                        handler.postDelayed(runnable, 5000); //Stop connection attempt after 20 seconds
                         is_device_connecting = true;
                         bluetoothGatt = lockBLEServiceProxy.connect(linka.lock_address, null, actions);
                     }
@@ -636,6 +639,25 @@ public class LockController implements Serializable {
         is_device_connecting = false;
         return true;
     }
+    public boolean getIsDeviceConnected(BluetoothManager bluetoothManager) {
+        if (this.bluetoothManager == null)
+        {
+            this.bluetoothManager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
+        }
+        if (bluetoothManager == null)
+        {
+            bluetoothManager = this.bluetoothManager;
+        }
+        if (bluetoothManager == null)
+        {
+            return false;
+        }
+        BluetoothGatt gatt = getBluetoothGatt();
+        if (gatt != null) {
+            return bluetoothManager.getConnectionState(gatt.getDevice(), BluetoothProfile.GATT) == BluetoothProfile.STATE_CONNECTED;
+        }
+        return false;
+    }
 
     public boolean getIsDeviceDisconnected(BluetoothManager bluetoothManager, BluetoothDevice device) {
         if (this.bluetoothManager == null)
@@ -750,7 +772,7 @@ public class LockController implements Serializable {
                     //If the status is 22 or 133, it means that our connection was unsuccessful, so we must try to reconnect immediately
                     //Repeat this for 30 seconds, or until we get a successful connection
                     //LogHelper.e("CONNECT","status = " + status + ", repeatUntilSuccessful = " + repeatConnectionUntilSuccessful);
-                    if(status == 22 || status == 133){
+                    if(status != 0){
                         if(repeatConnectionUntilSuccessful) {
                             LogHelper.e("CONNECT", "Failure to connect, trying again");
                             doConnectDevice();
@@ -1454,10 +1476,10 @@ public class LockController implements Serializable {
             lockGattUpdateReceiver.onResume();
         }
 
-        if (autoconnect) {
+        /*if (autoconnect) {
             Log.e("LockController", "DoConnectDevice");
             doConnectDevice();
-        }
+        }*/
     }
 
     public void clearSettingsQueue(){

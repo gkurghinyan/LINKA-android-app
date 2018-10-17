@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -140,9 +141,10 @@ public class CircleView extends CoreFragment {
     private Runnable scanRunnable = new Runnable() {
         @Override
         public void run() {
-            lockController.doConnectDevice();
-            scanLeDevice();
-            scanHandler.postDelayed(scanRunnable, 15 * 1000);
+            if (!linka.isConnected) {
+                lockController.doConnectDevice();
+            }
+            scanHandler.postDelayed(scanRunnable, 5 * 1000);
         }
     };
 
@@ -461,14 +463,14 @@ public class CircleView extends CoreFragment {
     }
 
     private void setLockConnect() {
-        if (scanCallback != null) {
+        /*if (scanCallback != null) {
             bluetoothAdapter.stopLeScan(scanCallback);
             scanCallback = null;
         }
         if (scanHandler != null) {
             scanHandler.removeCallbacks(scanRunnable);
             scanHandler = null;
-        }
+        }*/
         if (linka.isLockSettled) {
             setLockSettledState();
         } else {
@@ -581,7 +583,7 @@ public class CircleView extends CoreFragment {
     private List<Linka> linkaList = new ArrayList<>();
     private List<BluetoothLEDevice> devices = new ArrayList<>();
 
-    private void initializeScanCallback() {
+/*    private void initializeScanCallback() {
         scanCallback = new BluetoothAdapter.LeScanCallback() {
 
             @Override
@@ -627,9 +629,9 @@ public class CircleView extends CoreFragment {
                 }
             }
         };
-    }
+    }*/
 
-    private void scanLeDevice() {
+ /*   private void scanLeDevice() {
         if (bluetoothAdapter == null) return;
 
         if (scanCallback != null) {
@@ -644,7 +646,7 @@ public class CircleView extends CoreFragment {
             }
         }
     }
-
+*/
     private void panicStarted(){
         isPanicEnabled = true;
         panicButton.setBackground(getResources().getDrawable(R.drawable.panic_red_button));

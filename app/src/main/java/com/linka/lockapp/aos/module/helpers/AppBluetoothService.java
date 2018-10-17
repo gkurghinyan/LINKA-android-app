@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.IBinder;
+import android.util.Log;
 
 import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.model.LinkaNotificationSettings;
@@ -74,6 +75,7 @@ public class AppBluetoothService extends Service {
             this.context = context;
         }
         LocksController.init(context);
+        LocksController.getInstance().refresh();
     }
 
 
@@ -157,18 +159,27 @@ public class AppBluetoothService extends Service {
                             bluetoothAdapter = bluetoothManager.getAdapter();
                         }
                     }
+                    Linka targetLinka = LinkaNotificationSettings.get_latest_linka();
+                    LockController targetLockController;
+                    if (targetLinka != null) {
+                        targetLockController = LocksController.getInstance().getLockController(); //Get the Latest LINKA (the linka that is displayed)
+                        if(targetLockController != null && !targetLockController.getIsDeviceConnected(bluetoothManager)){
+                            Log.w("BluetoothGatt","call doConnectDevice in AppBluetooth Service line 168");
+                            targetLockController.doConnectDevice();
+                        }
+                    }
 
                     if (bluetoothAdapter == null) { return; }
                     if (!bluetoothAdapter.isEnabled()) { return; }
 
-                    if (android.os.Build.VERSION.SDK_INT >= 21) {
+                   /* if (android.os.Build.VERSION.SDK_INT >= 21) {
                         //LogHelper.e("AppBluetoothService","API VERSION >= 21, Using Scanner");
                         final BluetoothLeScanner scanner = bluetoothAdapter.getBluetoothLeScanner();
                         ScanSettings scanSettings = new ScanSettings.Builder().setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY) //Use low power mode of bluetooth scanning
                                 .build();
                         initScanCallback();
 
-                        /*---------------------------------------------------*/
+                        *//*---------------------------------------------------*//*
                         //Get LINKA's mac address, and filter scan accordingly
                         //i.e. only return linkas from bluetooth scan
                         List<ScanFilter> scanFilters = new ArrayList<ScanFilter>();
@@ -182,28 +193,21 @@ public class AppBluetoothService extends Service {
                             scanFilters.add(scanFilterMac);
                         }
 
-                        /*-----------------------------------------------------*/
+                        *//*-----------------------------------------------------*//*
 
                         //To save battery, we scan less frequently, and we can directly call doConnectDevice()
                         // Need to scan, because android requires a scan in order for connection to take place
-                        if(connectOneOutofTen > 10) {
+                      *//*  if(connectOneOutofTen > 10) {
                             LogHelper.e("SCAN", "SCANNING TO CONNECT");
-                            if (scanner!=null) {
-                                scanner.startScan(scanFilters, scanSettings, scanCallback);
-                            }
+
                             connectOneOutofTen = 0;
                         }
-                        connectOneOutofTen ++ ;
-
-                        Linka targetLinka = LinkaNotificationSettings.get_latest_linka();
-                        LockController targetLockController;
-                        if (targetLinka != null) {
-                            targetLockController = LocksController.getInstance().getLockController(); //Get the Latest LINKA (the linka that is displayed)
-
-                            if(targetLockController != null){
-                                targetLockController.doConnectDevice();
-                            }
+                        connectOneOutofTen ++ ;*//*
+                        if (scanner!=null) {
+                            Log.w("BluetoothG","start scan");
+                            scanner.startScan(scanFilters, scanSettings, scanCallback);
                         }
+
 
 
                     } else
@@ -211,13 +215,13 @@ public class AppBluetoothService extends Service {
                         bluetoothAdapter.startLeScan(scanCallbackDeprecated);
                     }
                     beginCollectScanResults();
-                    stopScanHandler.postDelayed(stopScanRunnable, 6000);
+                    stopScanHandler.postDelayed(stopScanRunnable, 2500);*/
                     //LogHelper.e("AppBluetoothService", "Scanning...");
 
                 }
 
             }
-        }, 0, 10000); //Has to be at least 2 seconds for the scan to process
+        }, 0, 3000); //Has to be at least 2 seconds for the scan to process
     }
 
     BluetoothAdapter bluetoothAdapter;
@@ -300,7 +304,7 @@ public class AppBluetoothService extends Service {
 
         //Stop scanning
         this.is_active = enabled;
-        if (!this.is_active) {
+      /*  if (!this.is_active) {
             if (bluetoothAdapter != null) {
                 if (android.os.Build.VERSION.SDK_INT >= 21) {
                     BluetoothLeScanner scanner = bluetoothAdapter.getBluetoothLeScanner();
@@ -319,7 +323,7 @@ public class AppBluetoothService extends Service {
                 }
                 //LogHelper.e("AppBluetoothService", "Stop...");
             }
-        }
+        }*/
     }
 
     public boolean shouldAllowFixedTimeScanning() {
