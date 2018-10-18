@@ -53,7 +53,7 @@ public class TutorialAccessCodeFragment extends Fragment {
     }
 
     private void init(){
-        ((GifDrawable) gifTutorial.getDrawable()).setLoopCount(1);
+        ((GifDrawable) gifTutorial.getDrawable()).start();
     }
 
     @OnClick(R.id.gif_tutorial)
