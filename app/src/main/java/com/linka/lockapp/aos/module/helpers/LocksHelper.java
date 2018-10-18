@@ -15,6 +15,7 @@ import com.linka.lockapp.aos.module.widget.LocksController;
 import com.pixplicity.easyprefs.library.Prefs;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import retrofit2.Call;
@@ -62,13 +63,21 @@ public class LocksHelper {
 
                         boolean exists = false;
                         //Check if this exists, and if not, then delete it from the list
-                        for(LinkaAPIServiceResponse.AssociatedLocksResponse.Data lock_data : response.body().data) {
+                      /*  for(LinkaAPIServiceResponse.AssociatedLocksResponse.Data lock_data : response.body().data) {
                             if(lock_data.lock_serial_no.equals(linka.lock_mac_address)){
                                 exists = true;
 
                                 //Now that we've confirmed that this lock exists,
                                 // remove this lock from the response, to avoid duplicates
                                 response.body().data.remove(lock_data); 
+                            }
+                        }*/
+                        Iterator<LinkaAPIServiceResponse.AssociatedLocksResponse.Data> iterator = response.body().data.iterator();
+                        while(iterator.hasNext()){
+                            LinkaAPIServiceResponse.AssociatedLocksResponse.Data lock_data = iterator.next();
+                            if(lock_data.lock_serial_no.equals(linka.lock_mac_address)){
+                                exists = true;
+                                iterator.remove();
                             }
                         }
 
