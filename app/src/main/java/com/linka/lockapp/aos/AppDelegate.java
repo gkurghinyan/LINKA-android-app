@@ -251,8 +251,6 @@ public class AppDelegate extends MultiDexApplication {
         createIfNeedColumn(Linka.class, "waiting_until_settled_to_auto_lock");
         createIfNeedColumn(Linka.class, "auto_unlock_radius");
         createIfNeedColumn(Linka.class, "rssi_out_bound");
-        createIfNeedColumn(LinkaActivity.class, "owner");
-        createIfNeedColumn(LinkaActivity.class, "isRead");
 
         createTable(User.class);
 
