@@ -25,6 +25,7 @@ import com.linka.lockapp.aos.module.helpers.LogHelper;
 import com.linka.lockapp.aos.module.helpers.SleepNotificationService;
 import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.model.LinkaAccessKey;
+import com.linka.lockapp.aos.module.model.LinkaActivity;
 import com.linka.lockapp.aos.module.model.LinkaNotificationSettings;
 import com.linka.lockapp.aos.module.model.User;
 import com.pixplicity.easyprefs.library.Prefs;
@@ -249,6 +250,9 @@ public class AppDelegate extends MultiDexApplication {
         createIfNeedColumn(Linka.class, "awaits_for_auto_unlock");
         createIfNeedColumn(Linka.class, "waiting_until_settled_to_auto_lock");
         createIfNeedColumn(Linka.class, "auto_unlock_radius");
+        createIfNeedColumn(Linka.class, "rssi_out_bound");
+        createIfNeedColumn(LinkaActivity.class, "owner");
+        createIfNeedColumn(LinkaActivity.class, "isRead");
 
         createTable(User.class);
 
