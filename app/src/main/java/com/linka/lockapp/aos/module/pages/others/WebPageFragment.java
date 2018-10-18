@@ -1,5 +1,6 @@
 package com.linka.lockapp.aos.module.pages.others;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
@@ -94,6 +95,7 @@ public class WebPageFragment extends CoreFragment {
     }
 
 
+    @SuppressLint("SetJavaScriptEnabled")
     void init() {
 
         getAppMainActivity().setTitle(title);
@@ -118,6 +120,7 @@ public class WebPageFragment extends CoreFragment {
 
 
             });
+            webView.getSettings().setJavaScriptEnabled(true);
             webView.loadUrl(url);
         }
 
