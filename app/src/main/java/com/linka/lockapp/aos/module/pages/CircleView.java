@@ -399,7 +399,7 @@ public class CircleView extends CoreFragment {
 
     private void turnOnBluetooth() {
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (!mBluetoothAdapter.isEnabled()) {
+        if (mBluetoothAdapter!=null && !mBluetoothAdapter.isEnabled()) {
             new AlertDialog.Builder(getActivity())
                     .setMessage("Bluetooth is off. Turn bluetooth on.")
                     .setCancelable(true)
