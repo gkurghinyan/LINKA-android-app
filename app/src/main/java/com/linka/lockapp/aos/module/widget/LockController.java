@@ -142,7 +142,7 @@ public class LockController implements Serializable {
     boolean should_send_connected_notification = false;
 
     Handler handler = new Handler();
-    Runnable runnable = new Runnable() {
+  /*  Runnable runnable = new Runnable() {
         @Override
         public void run() {
             doDisconnectDevice();
@@ -150,7 +150,7 @@ public class LockController implements Serializable {
                 doConnectDevice();
             }
         }
-    };
+    };*/
 
     LockBLEServiceProxy lockBLEServiceProxy;
     public LockControllerBundle lockControllerBundle = new LockControllerBundle();
@@ -166,7 +166,7 @@ public class LockController implements Serializable {
     //Call this function to connect to a LINKA
     //Note this function can be called at any time, whether the bluetooth scan has found a LINKA or not
 
-    public void doConnectDevice() {
+    public void doConnectDevice(Linka linka) {
 
         if(linka == null ){return;}
         // We seem to be getting MULTIPLE connect attempts
@@ -191,8 +191,8 @@ public class LockController implements Serializable {
 
                                 actions = new BluetoothLeQueuedService.BluetoothGattQueuedActions();
                                 if (bluetoothManager != null) {
-                                    handler.removeCallbacks(runnable);
-                                    handler.postDelayed(runnable, 5000);
+                                   /* handler.removeCallbacks(runnable);
+                                    handler.postDelayed(runnable, 5000);*/
                                     is_device_connecting = true;
                                     bluetoothGatt = lockBLEServiceProxy.connect(linka.lock_address, null, actions);
                                 }
@@ -222,8 +222,8 @@ public class LockController implements Serializable {
                 if (!getIsDeviceConnecting()) {
                     actions = new BluetoothLeQueuedService.BluetoothGattQueuedActions();
                     if (bluetoothManager != null) {
-                        handler.removeCallbacks(runnable);
-                        handler.postDelayed(runnable, 5000); //Stop connection attempt after 20 seconds
+//                        handler.removeCallbacks(runnable);
+//                        handler.postDelayed(runnable, 5000); //Stop connection attempt after 20 seconds
                         is_device_connecting = true;
                         bluetoothGatt = lockBLEServiceProxy.connect(linka.lock_address, null, actions);
                     }
@@ -253,7 +253,7 @@ public class LockController implements Serializable {
             if (onRefreshListener != null) {
                 onRefreshListener.onRefresh(LockController.this);
             }
-            handler.removeCallbacks(runnable);
+           // handler.removeCallbacks(runnable);
         }
 
         //Do a final RSSI Check so that out-of-range notification can be shown
@@ -736,7 +736,7 @@ public class LockController implements Serializable {
                     repeatConnectionUntilSuccessful = false;
                     linka.updateFromStatusData(true, null);
                     onRefreshListener.onRefresh(LockController.this);
-                    handler.removeCallbacks(runnable);
+                    //handler.removeCallbacks(runnable);
                     startUpdateRSSIRunnable();
                 }
 
@@ -757,7 +757,7 @@ public class LockController implements Serializable {
 
                     bluetoothGatt = null;
                     bundle = null;
-                    handler.removeCallbacks(runnable);
+                    //handler.removeCallbacks(runnable);
                     stopUpdateRSSIRunnable();
                     doDisconnectDevice(); // Force BTLE disconnection immediately
 
@@ -775,7 +775,7 @@ public class LockController implements Serializable {
                     if(status != 0){
                         if(repeatConnectionUntilSuccessful) {
                             LogHelper.e("CONNECT", "Failure to connect, trying again");
-                            doConnectDevice();
+                           // doConnectDevice();
                         }
 
                         Handler stopConnectingHandler = new Handler();

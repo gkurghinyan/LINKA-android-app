@@ -138,7 +138,7 @@ public class CircleView extends CoreFragment {
     };
 
     private Handler scanHandler = null;
-    private Runnable scanRunnable = new Runnable() {
+    /*private Runnable scanRunnable = new Runnable() {
         @Override
         public void run() {
             if (!linka.isConnected) {
@@ -146,7 +146,7 @@ public class CircleView extends CoreFragment {
             }
             scanHandler.postDelayed(scanRunnable, 5 * 1000);
         }
-    };
+    };*/
 
     private Handler refreshHandler;
     private Runnable refreshRunnable = new Runnable() {
@@ -176,7 +176,7 @@ public class CircleView extends CoreFragment {
                         break;
                     case BluetoothAdapter.STATE_ON:
                         swipeButton.setMassageText(getString(R.string.asleep_or_out));
-                        lockController.doConnectDevice();
+                       // lockController.doConnectDevice();
                         refreshDisplay();
                         break;
                 }
@@ -218,10 +218,10 @@ public class CircleView extends CoreFragment {
         getActivity().registerReceiver(blueToothReceiver, filter1);
         EventBus.getDefault().register(this);
         isRefreshAvailable = true;
-        if (!linka.isConnected) {
+       /* if (!linka.isConnected) {
             scanHandler = new Handler();
             scanHandler.postDelayed(scanRunnable, 3000);
-        }
+        }*/
     }
 
     @Override
@@ -426,7 +426,7 @@ public class CircleView extends CoreFragment {
             isRefreshAvailable = true;
         }
         if (scanHandler != null) {
-            scanHandler.removeCallbacks(scanRunnable);
+            //scanHandler.removeCallbacks(scanRunnable);
             scanHandler = null;
         }
         if (bluetoothHandler != null) {
@@ -439,7 +439,7 @@ public class CircleView extends CoreFragment {
         root.removeView(internetPage);
         if (scanHandler == null) {
             scanHandler = new Handler();
-            scanHandler.postDelayed(scanRunnable, 3000);
+            //scanHandler.postDelayed(scanRunnable, 3000);
         }
         if (isLockConnected || swipeButton.getCurrentState() != Circle.NO_CONNECTION_STATE) {
             setLockNotConnectedState();
@@ -729,11 +729,11 @@ public class CircleView extends CoreFragment {
                     refreshDisplay();
                     if (!linka.isConnected) {
                         if (scanHandler != null) {
-                            scanHandler.removeCallbacks(scanRunnable);
+                           // scanHandler.removeCallbacks(scanRunnable);
                             scanHandler = null;
                         }
                         scanHandler = new Handler();
-                        scanHandler.postDelayed(scanRunnable, 1500);
+                      //  scanHandler.postDelayed(scanRunnable, 1500);
                     }
                 }
             } else  if (object.equals(NotificationsHelper.LINKA_NOT_LOCKED)) {

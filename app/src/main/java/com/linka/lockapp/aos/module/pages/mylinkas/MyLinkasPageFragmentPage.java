@@ -281,7 +281,7 @@ public class MyLinkasPageFragmentPage extends CoreFragment {
                                     //When clicked, enable scanning to take place
                                     LockController targetLockController = LocksController.getInstance().getLockController();
                                     targetLockController.repeatConnectionUntilSuccessful = true;
-                                    targetLockController.doConnectDevice();
+                                  //  targetLockController.doConnectDevice();
                                 }
                             });
                         }else{

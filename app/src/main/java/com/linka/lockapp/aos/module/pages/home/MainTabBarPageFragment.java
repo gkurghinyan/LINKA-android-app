@@ -254,12 +254,12 @@ public class MainTabBarPageFragment extends CoreFragment {
         }
 
         // INIT LINKA CONNECTION
-        if (linka != null) {
+      /*  if (linka != null) {
             if (!lockController.getIsDeviceConnecting() && lockController.getIsDeviceDisconnected()) {
                 Log.e("MainTabBarPage", "DoConnectDevice");
                 lockController.doConnectDevice();
             }
-        }
+        }*/
 
         if (adapter != null) {
             viewPager.setAdapter(adapter);
