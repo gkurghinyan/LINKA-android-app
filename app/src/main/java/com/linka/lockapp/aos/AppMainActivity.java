@@ -291,12 +291,15 @@ public class AppMainActivity extends CoreActivity {
         startService(new Intent(this, AppBluetoothService.class));
 
         //Start Location Service
-        startService(new Intent(this, AppLocationService.class));
-
-        //Start Location Service
-        LogHelper.e("GEOFENCE", "Intent");
-        startService(new Intent(this, GeofencingService.class));
-        GeofencingService.init(AppMainActivity.this);
+        if (!Utils.isMyServiceRunning(AppLocationService.class,this)) {
+            startService(new Intent(this, AppLocationService.class));
+        }
+        if (!Utils.isMyServiceRunning(GeofencingService.class,this)) {
+            //Start Location Service
+            LogHelper.e("GEOFENCE", "Intent");
+            startService(new Intent(this, GeofencingService.class));
+            GeofencingService.init(AppMainActivity.this);
+        }
     }
 
     @Override

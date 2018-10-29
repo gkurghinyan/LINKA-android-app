@@ -1,5 +1,6 @@
 package com.linka.lockapp.aos.module.other;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
@@ -79,4 +80,18 @@ public class Utils {
         Matcher matcher = pattern.matcher(email);
         return matcher.find();
     }
+    public static boolean isMyServiceRunning(Class<?> serviceClass,Context context) {
+        if (context!=null) {
+            ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+            if (manager != null) {
+                for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+                    if (serviceClass.getName().equals(service.service.getClassName())) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
 }

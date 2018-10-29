@@ -2,6 +2,7 @@ package com.linka.lockapp.aos.module.model;
 
 import android.app.Notification;
 import android.bluetooth.BluetoothAdapter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.BaseColumns;
@@ -880,13 +881,13 @@ public class Linka extends Model implements Serializable {
 
         LogHelper.d("Linka Update RSSI - Name: ", this.lock_name + ", RSSI: " + rssi);
 
-        if (justInBounds) {
+        /*if (justInBounds) {
             LinkaActivity.saveLinkaActivity(this, LinkaActivity.LinkaActivityType.isBackInRange);
         }
 
         if (justOutOfBounds) {
             LinkaActivity.saveLinkaActivity(this, LinkaActivity.LinkaActivityType.isOutOfRange);
-        }
+        }*/
 
         this.rssi = rssi;
         this.save();
@@ -968,19 +969,40 @@ public class Linka extends Model implements Serializable {
             doAutounlock();
 
         } else if (shouldAutounlockAfterDelay && awaitsForAutoUnlocking) {
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    doAutounlock();
-                }
-            }, 2000); //Wait two seconds until the user can walk closer
+//            Handler handler = new Handler();
+//            handler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    doAutounlock();
+//                }
+//            }, 2000); //Wait two seconds until the user can walk closer
+            doAutounlock();
         }
 
         /* AUTO UNLOCK END */
     }
 
-
+    private transient  Handler  handler = new Handler();
+    private transient Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            Linka linka = LocksController.getInstance().getLockController().getLinka();
+            if (linka.isConnected && linka.isLockSettled && linka.isLocked && !linka.isLocking && !linka.isUnlocking){
+                LocksController.getInstance().getLockController().doAutoUnlock();
+                handler.postDelayed(runnable,200);
+            }else {
+                if (linka.isConnected && (linka.isUnlocked || linka.isUnlocking)) {
+                    handler.removeCallbacks(runnable);
+                    SharedPreferences.Editor editor = Prefs.edit();
+                    editor.putString(Constants.LINKA_ADDRESS_FOR_AUTO_UNLOCK, "");
+                    editor.apply();
+                    LinkaActivity.saveLinkaActivity(linka, LinkaActivity.LinkaActivityType.isAutoUnlocked);
+                }else {
+                    handler.postDelayed(runnable,200);
+                }
+            }
+        }
+    };
     private void doAutounlock() {
         if (Prefs.getString(Constants.LINKA_ADDRESS_FOR_AUTO_UNLOCK, "").equals(lock_mac_address)) {
             PugNotification.with(AppDelegate.getInstance()).cancel(LinkaActivity.LinkaActivityType.isOutOfRange.getValue());
@@ -989,13 +1011,18 @@ public class Linka extends Model implements Serializable {
                 LogHelper.e("RSSI", "Started Unlocking");
 
                 isAutoUnlocked = true;
-                LocksController.getInstance().getLockController().doUnlock();
-
+                LocksController.getInstance().getLockController().doAutoUnlock();
                 Bundle args = new Bundle();
                 args.putBoolean(Constants.LINKA_ADDRESS_FOR_AUTO_UNLOCK, true);
-
-
-                LinkaActivity.saveLinkaActivity(this, LinkaActivity.LinkaActivityType.isAutoUnlocked);
+                if (isConnected && (isUnlocked || isUnlocking)) {
+                    handler.removeCallbacks(runnable);
+                    SharedPreferences.Editor editor = Prefs.edit();
+                    editor.putString(Constants.LINKA_ADDRESS_FOR_AUTO_UNLOCK, "");
+                    editor.apply();
+                    LinkaActivity.saveLinkaActivity(LocksController.getInstance().getLockController().getLinka(), LinkaActivity.LinkaActivityType.isAutoUnlocked);
+                }else {
+                    handler.post(runnable);
+                }
                 awaitsForAutoUnlocking = false;
                 waitingUntilSettledtoAutoUnlock = false;
                 rssi_outOfBounds = false;

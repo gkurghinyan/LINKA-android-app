@@ -20,6 +20,7 @@ import android.util.Log;
 import com.linka.lockapp.aos.AppMainActivity;
 import com.linka.lockapp.aos.module.model.Linka;
 import com.linka.lockapp.aos.module.model.LinkaNotificationSettings;
+import com.linka.lockapp.aos.module.other.Utils;
 import com.linka.lockapp.aos.module.widget.LockController;
 import com.linka.lockapp.aos.module.widget.LocksController;
 
@@ -112,6 +113,15 @@ public class AppBluetoothService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         //Log.e(TAG, "onStartCommand");
         super.onStartCommand(intent, flags, startId);
+        if (!Utils.isMyServiceRunning(AppLocationService.class,this)) {
+            startService(new Intent(this, AppLocationService.class));
+        }
+        if (!Utils.isMyServiceRunning(GeofencingService.class,this)) {
+            //Start Location Service
+            LogHelper.e("GEOFENCE", "Intent");
+            startService(new Intent(this, GeofencingService.class));
+            GeofencingService.init(AppBluetoothService.this);
+        }
         return START_STICKY;
     }
 

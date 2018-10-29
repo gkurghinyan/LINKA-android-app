@@ -330,15 +330,25 @@ public class LockController implements Serializable {
     }
 
     public boolean doUnlock() {
+        if (linka.settings_auto_unlocking && Prefs.getString(Constants.LINKA_ADDRESS_FOR_AUTO_UNLOCK, "").equals("")) {
+            Intent intent = new Intent(AppDelegate.getInstance(), GeofenceService.class);
+            intent.putExtra(GeofenceService.GEOFENCE_ACTION, GeofenceService.GEOFENCE_REMOVE_ACTION);
+            AppDelegate.getInstance().startService(intent);
+        }
+//        PugNotification.with(AppDelegate.getInstance()).cancel(LinkaActivity.LinkaActivityType.isOutOfRange.getValue());
+        SharedPreferences.Editor editor = Prefs.edit();
+        editor.putString(Constants.LINKA_ADDRESS_FOR_AUTO_UNLOCK, "");
+        editor.apply();
+
+        return lockBLEServiceProxy.doAction_Unlock(lockControllerBundle);
+    }
+
+    public boolean doAutoUnlock() {
         if(linka.settings_auto_unlocking && Prefs.getString(Constants.LINKA_ADDRESS_FOR_AUTO_UNLOCK,"").equals("")){
             Intent intent = new Intent(AppDelegate.getInstance(),GeofenceService.class);
             intent.putExtra(GeofenceService.GEOFENCE_ACTION,GeofenceService.GEOFENCE_REMOVE_ACTION);
             AppDelegate.getInstance().startService(intent);
         }
-//        PugNotification.with(AppDelegate.getInstance()).cancel(LinkaActivity.LinkaActivityType.isOutOfRange.getValue());
-        SharedPreferences.Editor editor = Prefs.edit();
-        editor.putString(Constants.LINKA_ADDRESS_FOR_AUTO_UNLOCK,"");
-        editor.apply();
         return lockBLEServiceProxy.doAction_Unlock(lockControllerBundle);
     }
 

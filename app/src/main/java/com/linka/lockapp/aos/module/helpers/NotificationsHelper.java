@@ -49,10 +49,10 @@ public class NotificationsHelper {
     }
 
     public boolean CreateLinkaNotificationMessage(LinkaActivity activity) {
-        return CreateLinkaNotificationMessage(activity, AppMainActivity.getInstanceActivity());
+        return CreateLinkaNotificationMessage(activity, AppBluetoothService.getInstance().getContext());
     }
 
-    public boolean CreateLinkaNotificationMessage(LinkaActivity activity, Activity context) {
+    public boolean CreateLinkaNotificationMessage(LinkaActivity activity, Context context) {
         String title = "";
         String message = "";
         int audio = 0;
@@ -114,7 +114,7 @@ public class NotificationsHelper {
         return CreateLinkaNotificationMessage(title, message, audio, loop, activity, context);
     }
 
-    public boolean CreateLinkaNotificationMessage(final String title, final String message, final int audio, final boolean loop, LinkaActivity linkaActivity, final Activity context) {
+    public boolean CreateLinkaNotificationMessage(final String title, final String message, final int audio, final boolean loop, LinkaActivity linkaActivity, final Context context) {
 //        if (AppDelegate.isActivityVisible()) {
 //            // show alert
 //            if (linkaActivity.alarm) {
