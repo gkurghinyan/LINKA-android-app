@@ -564,9 +564,9 @@
     <string name="settings_footer_autounlock">LINKA will unlock automatically once you are within Bluetooth range and have the LINKA app running.</string>
     <string name="settings_footer_quicklock">Lock LINKA without your phone by pressing the POWER button twice.</string>
 
-    <string name="mounting_text_dot1">DETERMINE WHETHER YOUR LOCK WILL FIT WITHIN THE SEAT STAYS OFF YOUR BIKE</string>
-    <string name="mounting_text_dot2">YOU CAN ALSO MOUNT LINKA OUTSIDE THE SEAT STAYS</string>
-    <string name="mounting_text_dot3">USE THE PROVIDED SCREWS TO SECURE LINKS THROUGH THE HOLES IN YOUR BIKE\'S SEAT STAYS</string>
-    <string name="mounting_text_dot4">IF THERE ARE NO HOLES. USE THE PROVIDES UNIVERSAL MOUNTS (ZIP TIES) INSTEAD</string>
-    <string name="recommended_most_secure">RECOMMENDED(MOST SECURE)</string>
+    <string name="mounting_text_dot1">Determine whether your lock fits within the seat stays of your bike</string>
+    <string name="mounting_text_dot2">You can also mount LINKA outside the seat stays</string>
+    <string name="mounting_text_dot3">Use the provided screws to secure LINKA through the holes in your bike\'s seat stays</string>
+    <string name="mounting_text_dot4">If there are no holes, use the provided mounts or zip ties instead. Make sure to pull as tight as you can on the ties</string>
+    <string name="recommended_most_secure">RECOMMENDED (MOST SECURE)</string>
 </resources>
