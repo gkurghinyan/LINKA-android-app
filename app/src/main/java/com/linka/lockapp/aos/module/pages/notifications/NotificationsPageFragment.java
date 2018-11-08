@@ -192,6 +192,7 @@ public class NotificationsPageFragment extends CoreFragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                  if (linka != null && linka.getId() != null) {
                 List<LinkaActivity> activities = LinkaActivity.getLinkaActivitiesByLinka(linka);
                 notifications = Notification.fromLinkaActivities(activities);
 
@@ -224,6 +225,7 @@ public class NotificationsPageFragment extends CoreFragment {
                         }
                     }
                 });
+            }
             }
         }).start();
     }
