@@ -541,7 +541,7 @@
     <string name="remove_by_owner_text">If you remove a lock that you own, you will remain the owner but the lock will no longer appear in the app. To access it again, go to Add Lock in the side menu and re-connect to it. If you wish to clear ownership of the lock,do a factory reset on it.</string>
     <string name="remove_by_guest_text">If you remove a lock that you\'re a guest of, your access to it will be revoked and the lock will no longer appear in the app. To regain access to the lock, go to Add Lock and re-connect to it. The owner of the lock will have to grant access again before you can use it.</string>
     <string name="swipe_to_confirm_lock">swipe to confirm lock</string>
-    <string name="asleep_or_out">PRESS POWER BUTTON ON LOCK TO CONNECT.</string>
+    <string name="asleep_or_out">PRESS POWER BUTTON ON LOCK TO CONNECT</string>
     <!--<string name="asleep_or_out">Lock is asleep or out of range</string>-->
     <string name="press_to_lock">Press &amp; slide to lock</string>
     <string name="press_to_unlock">Press &amp; slide to unlock</string>
