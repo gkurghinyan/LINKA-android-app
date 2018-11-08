@@ -508,6 +508,7 @@
     <string name="live_chat">Live Chat</string>
     <string name="tamper_alerts">Tamper Alerts</string>
     <string name="quick_lock_and_unlock">Quick Lock and Unlock</string>
+    <string name="quick_lock">Quick Lock</string>
     <string name="mounting_guide">Lock Mounting Guide</string>
     <string name="phoneless_access_code">Phoneless Access Code</string>
     <string name="setting_tamper_sensitivity">setting tamper sensitivity</string>
@@ -517,7 +518,7 @@
     <string name="friends_can_also_request_access">Friends can also request access when they attempt to connect their LINKA app to your lock.</string>
     <string name="after_you_lock_up">After you lock up, you can remain within the Safe Zone without triggering Auto-Unlock.</string>
     <string name="once_you_leave_the_safe_zone">Once you leave the Safe Zone and return within Bluetooth range (~50m) of the bike, LINKA will unlock automatically.</string>
-    <string name="press_the_power_button">Press the POWER button twice to lock.</string>
+    <string name="press_the_power_button">Press POWER button twice to lock without using the app.</string>
     <string name="enable_quick_lock_in">Enable QUICK LOCK in Lock Settings.</string>
     <string name="using_auto_unlock">using auto-unlock</string>
     <string name="locking_without_your_phone">locking without your phone</string>
