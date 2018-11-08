@@ -21,11 +21,11 @@
         android:paddingEnd="10dp"
         android:gravity="center_horizontal">
         <TextView
-            android:layout_gravity="center"
-            android:gravity="center"
+            android:layout_gravity="top|center"
+            android:gravity="top|center"
             android:id="@+id/mounting_text"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="62sp"
             android:layout_marginBottom="8dp"
             android:text="@string/mounting_text_dot1"
             android:textColor="@color/linka_white"
