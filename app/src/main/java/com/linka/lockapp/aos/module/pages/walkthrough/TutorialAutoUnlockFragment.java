@@ -57,11 +57,11 @@ public class TutorialAutoUnlockFragment extends Fragment {
         ((GifDrawable) gifTutorial.getDrawable()).start();
     }
 
-    @OnClick(R.id.gif_tutorial)
+    /*@OnClick(R.id.gif_tutorial)
     void onGifTutorialClicked(){
         if(!((GifDrawable) gifTutorial.getDrawable()).isPlaying()) {
             ((GifDrawable) gifTutorial.getDrawable()).reset();
             ((GifDrawable) gifTutorial.getDrawable()).start();
         }
-    }
+    }*/
 }
