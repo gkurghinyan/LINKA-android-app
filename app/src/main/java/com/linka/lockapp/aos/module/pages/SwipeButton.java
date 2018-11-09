@@ -176,7 +176,7 @@ public class SwipeButton extends RelativeLayout {
 
 
         LayoutParams layoutParamsView = new LayoutParams(
-                (int) DimensionUtils.convertDpToPixel(context.getResources().getDimension(R.dimen.circle_px), context),
+                (int) context.getResources().getDimension(R.dimen.circle_dp),
                 ViewGroup.LayoutParams.MATCH_PARENT);
 
         layoutParamsView.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
@@ -187,8 +187,8 @@ public class SwipeButton extends RelativeLayout {
         bottomImageView.setColorFilter(getResources().getColor(R.color.bottom_image_color), PorterDuff.Mode.MULTIPLY);
         bottomImageView.setPadding(20,20,20,20);
 
-        LayoutParams imageLayoutParams = new LayoutParams((int) DimensionUtils.convertDpToPixel(context.getResources().getDimension(R.dimen.circle_px), context) - 120,
-                (int) DimensionUtils.convertDpToPixel(context.getResources().getDimension(R.dimen.circle_px), context) - 80);
+        LayoutParams imageLayoutParams = new LayoutParams((int) context.getResources().getDimension(R.dimen.circle_dp) - 120,
+                (int) context.getResources().getDimension(R.dimen.circle_dp) - 80);
         imageLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL,RelativeLayout.TRUE);
         imageLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM,RelativeLayout.TRUE);
         addView(bottomImageView,imageLayoutParams);

@@ -43,7 +43,7 @@ public class Circle extends View {
 
     public Circle(Context context, AttributeSet attrs) {
         super(context, attrs);
-        circleSize = (int) DimensionUtils.convertDpToPixel(context.getResources().getDimension(R.dimen.circle_px), context);
+        circleSize = (int) context.getResources().getDimension(R.dimen.circle_dp);
         paint = new Paint();
         paint.setAntiAlias(true);
         paint.setStyle(Paint.Style.FILL);
