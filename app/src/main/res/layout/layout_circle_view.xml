@@ -57,8 +57,8 @@
         android:visibility="visible"
         app:button_background="@color/linka_transparent"
         app:button_bottom_padding="15dp"
-        app:button_image_height="200dp"
-        app:button_image_width="200dp"
+        app:button_image_height="@dimen/circle_dp"
+        app:button_image_width="@dimen/circle_dp"
         app:button_top_padding="15dp"
         app:elevation="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -68,8 +68,8 @@
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/no_connection_img"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="@dimen/circle_dp"
+        android:layout_height="@dimen/circle_dp"
         android:layout_marginTop="@dimen/margin"
         android:background="@drawable/panic_button"
         android:padding="@dimen/margin_dx"
@@ -125,8 +125,8 @@
 
     <ImageView
         android:id="@+id/panic_button"
-        android:layout_width="@dimen/margin_xxl"
-        android:layout_height="@dimen/margin_xxl"
+        android:layout_width="@dimen/panic_and_sleep_width_and_height"
+        android:layout_height="@dimen/panic_and_sleep_width_and_height"
         android:background="@drawable/panic_button"
         android:clickable="true"
         android:layout_marginEnd="@dimen/margin_x"
@@ -137,8 +137,8 @@
 
     <ImageView
         android:id="@+id/sleep_button"
-        android:layout_width="@dimen/margin_xxl"
-        android:layout_height="@dimen/margin_xxl"
+        android:layout_width="@dimen/panic_and_sleep_width_and_height"
+        android:layout_height="@dimen/panic_and_sleep_width_and_height"
         android:background="@drawable/panic_button"
         android:clickable="true"
         android:layout_marginStart="@dimen/margin_x"

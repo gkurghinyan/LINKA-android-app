@@ -16,7 +16,6 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -177,7 +176,7 @@ public class SwipeButton extends RelativeLayout {
 
 
         LayoutParams layoutParamsView = new LayoutParams(
-                (int) DimensionUtils.convertDpToPixel(Circle.CIRCLE_SIZE_DP, context),
+                (int) DimensionUtils.convertDpToPixel(context.getResources().getDimension(R.dimen.circle_px), context),
                 ViewGroup.LayoutParams.MATCH_PARENT);
 
         layoutParamsView.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
@@ -188,8 +187,8 @@ public class SwipeButton extends RelativeLayout {
         bottomImageView.setColorFilter(getResources().getColor(R.color.bottom_image_color), PorterDuff.Mode.MULTIPLY);
         bottomImageView.setPadding(20,20,20,20);
 
-        LayoutParams imageLayoutParams = new LayoutParams((int) DimensionUtils.convertDpToPixel(Circle.CIRCLE_SIZE_DP, context) - 120,
-                (int) DimensionUtils.convertDpToPixel(Circle.CIRCLE_SIZE_DP, context) - 80);
+        LayoutParams imageLayoutParams = new LayoutParams((int) DimensionUtils.convertDpToPixel(context.getResources().getDimension(R.dimen.circle_px), context) - 120,
+                (int) DimensionUtils.convertDpToPixel(context.getResources().getDimension(R.dimen.circle_px), context) - 80);
         imageLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL,RelativeLayout.TRUE);
         imageLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM,RelativeLayout.TRUE);
         addView(bottomImageView,imageLayoutParams);
@@ -198,10 +197,6 @@ public class SwipeButton extends RelativeLayout {
         this.centerText = centerText;
         centerText.setGravity(Gravity.CENTER);
 
-        LayoutParams layoutParams = new LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.setLayoutDirection(Gravity.CENTER_HORIZONTAL);
         //layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
         //background.addView(centerText, layoutParams);
 
@@ -274,12 +269,17 @@ public class SwipeButton extends RelativeLayout {
 //            addView(circleViewInner, layoutParamsButton);
 //            addView(circleViewBackground, layoutParamsButton);
             addView(circleView, layoutParamsButton);
-
+            LayoutParams layoutParams = new LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
+            layoutParams.setLayoutDirection(Gravity.CENTER_HORIZONTAL);
+            int height = (int) context.getResources().getDimension(R.dimen.swipe_button_text_height);
+            layoutParams.setMargins(10,height,10,0);
             active = false;
             massageText = new TextView(context);
             massageText.setText(context.getString(R.string.asleep_or_out));
             massageText.setTextAppearance(context, R.style.fontForTextViewInSwipeButton);
-            massageText.setGravity(Gravity.CENTER);
+            massageText.setGravity(Gravity.BOTTOM|Gravity.CENTER);
             layoutParams.addRule(RelativeLayout.BELOW, R.id.circle);
             layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
             addView(massageText, layoutParams);

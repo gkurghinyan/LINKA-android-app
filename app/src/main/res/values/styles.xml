@@ -350,7 +350,6 @@
         <item name="android:textSize">@dimen/text_size_normal</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:textColor">@color/linka_blue</item>
-        <item name="android:layout_marginTop">4dp</item>
     </style>
 
     <!--Customize chat colors-->

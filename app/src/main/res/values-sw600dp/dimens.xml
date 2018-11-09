@@ -33,4 +33,8 @@
     <dimen name="battery_width">35dp</dimen>
     <dimen name="battery_height">42dp</dimen>
     <dimen name="panic_size">120dp</dimen>
+
+    <dimen name="circle_px">200px</dimen>
+    <dimen name="circle_dp">200dp</dimen>
+    <dimen name="panic_and_sleep_width_and_height">80dp</dimen>
 </resources>
