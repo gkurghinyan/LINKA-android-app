@@ -48,6 +48,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.linka.lockapp.aos.module.widget.LocksController.LOCKSCONTROLLER_NOTIFY_READ_SETTINGS;
+
 /**
  * Created by benedict on 6/2/17.
  */
@@ -535,6 +537,10 @@ public class LockController implements Serializable {
             return ret;
         }
         return false;
+    }
+
+    public void read_setting(){
+        lockBLEServiceProxy.doAction_ReadSetting("LockController->read_setting",LockSettingPacket.VLSO_SETTING_ALLOW_UNCONN_LOCK,lockControllerBundle);
     }
 
     //Do activate is called after connection to read
@@ -1072,6 +1078,7 @@ public class LockController implements Serializable {
                     if(index == LockSettingPacket.VLSO_SETTING_ALLOW_UNCONN_LOCK){
                         linka.settings_quick_lock = value;
                         linka.saveSettings();
+                        EventBus.getDefault().post(LOCKSCONTROLLER_NOTIFY_READ_SETTINGS);
                     }
 
                     //alarm delay

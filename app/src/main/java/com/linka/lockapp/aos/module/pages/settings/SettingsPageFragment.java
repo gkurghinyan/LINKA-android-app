@@ -53,6 +53,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.linka.lockapp.aos.module.widget.LocksController.LOCKSCONTROLLER_NOTIFY_READ_SETTINGS;
 import static com.linka.lockapp.aos.module.widget.LocksController.LOCKSCONTROLLER_NOTIFY_REFRESHED_SETTINGS;
 
 /**
@@ -306,6 +307,21 @@ public class SettingsPageFragment extends CoreFragment {
                 return false;
             }
         });
+        switchQuickLock.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int value;
+                if (switchQuickLock.isChecked()){
+                    switchQuickLock.setChecked(false);
+                    value = 1;
+                }else {
+                    switchQuickLock.setChecked(true);
+                    value = 0;
+                }
+                setQuickLockChecked(value);
+            }
+        });
+
         refreshDisplay();
     }
 
@@ -333,7 +349,6 @@ public class SettingsPageFragment extends CoreFragment {
                         linka.settings_auto_unlocking = checked;
                         linka.save();
                         if (checked && switchQuickLock.isChecked()) {
-                            switchQuickLock.setChecked(false);
                             setQuickLockChecked(0);
                             new AlertDialog.Builder(getActivity())
                                     .setTitle("Quick Lock has been disabled")
@@ -344,13 +359,6 @@ public class SettingsPageFragment extends CoreFragment {
                         break;
 
                     case R.id.switch_quick_lock:
-                        int value;
-                        if (checked) {
-                            value = 1;
-                        } else {
-                            value = 0;
-                        }
-                        setQuickLockChecked(value);
                         if (checked && switchAutoUnlocking.isChecked()) {
                             switchAutoUnlocking.setChecked(false);
                             linka.settings_auto_unlocking = false;
@@ -376,11 +384,6 @@ public class SettingsPageFragment extends CoreFragment {
         switchAudibleLockingUnlocking.setChecked(linka.settings_audible_locking_unlocking);
         switchTamperSiren.setChecked(linka.settings_tamper_siren);
         switchAutoUnlocking.setChecked(linka.settings_auto_unlocking);
-        if (linka.settings_quick_lock == 1) {
-            switchQuickLock.setChecked(true);
-        } else if (linka.settings_quick_lock == 0) {
-            switchQuickLock.setChecked(false);
-        }
 //        setRadiusLinearVisibility(linka.settings_auto_unlocking);
 
         LinkaAccessKey key = LinkaAccessKey.getKeyFromLinka(linka);
@@ -574,10 +577,8 @@ public class SettingsPageFragment extends CoreFragment {
     }
 
     private void setQuickLockChecked(int isChecked) {
-        if (lockController.doAction_SetQuickLock(isChecked)) {
-            linka.settings_quick_lock = isChecked;
-            linka.saveSettings();
-        }
+        lockController.doAction_SetQuickLock(isChecked);
+        lockController.read_setting();
     }
 
     private void setTamperSensitivityVisibility(boolean visibility) {
@@ -778,13 +779,23 @@ public class SettingsPageFragment extends CoreFragment {
             if (object.equals(LOCKSCONTROLLER_NOTIFY_REFRESHED_SETTINGS) || object.equals(LinkaActivity.LINKA_ACTIVITY_ON_CHANGE)) {
                 linka = Linka.getLinkaFromLockController();
                 refreshDisplay();
-            } else if (object.equals(FRAGMENT_ADDED)) {
+            }else if (object.equals(LOCKSCONTROLLER_NOTIFY_READ_SETTINGS)){
+                setQuickSwitchViewStatus();
+            }else if (object.equals(FRAGMENT_ADDED)) {
                 rootFrame.setBackgroundColor(getResources().getColor(R.color.linka_transparent));
             } else if (((String) object).substring(0, 9).equals(MainTabBarPageFragment.SELECTED_SCREEN)) {
                 if (object.equals(MainTabBarPageFragment.SELECTED_SCREEN + String.valueOf(MainTabBarPageFragment.SETTING_SCREEN))) {
                     editName.setText(linka.getName());
                 }
             }
+        }
+    }
+
+    private void setQuickSwitchViewStatus(){
+         if (linka.settings_quick_lock == 1) {
+            switchQuickLock.setChecked(true);
+        } else if (linka.settings_quick_lock == 0) {
+            switchQuickLock.setChecked(false);
         }
     }
 }

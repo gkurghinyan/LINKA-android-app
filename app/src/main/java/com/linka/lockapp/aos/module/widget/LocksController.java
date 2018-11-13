@@ -19,6 +19,7 @@ public class LocksController {
 
     public static final String LOCKSCONTROLLER_NOTIFY_REFRESHED = "[locks_controller_refresh]";
     public static final String LOCKSCONTROLLER_NOTIFY_REFRESHED_SETTINGS = "[locks_controller_refresh_settings]";
+    public static final String LOCKSCONTROLLER_NOTIFY_READ_SETTINGS = "[Quick Lock checked]";
 
     /*
     Locks Controller
