@@ -73,6 +73,7 @@ public class MainTabBarPageFragment extends CoreFragment {
     private static final String CURRENT_POSITION = "CurrentPosition";
     private static final String LINKA_ID = "LinkaId";
     public static final String CLOSE_PAGES_IN_USERS_SCREEN = "ClosePagesInUsersScreen";
+    public static final String CLOSE_PAGES_IN_SETTINGS_SCREEN = "ClosePagesInSettingsScreen";
     public static final String UPDATE_NOTIFICATIONS = "UpdateNotifications";
     public static final String SELECTED_SCREEN = "Selected-";
 
@@ -272,6 +273,7 @@ public class MainTabBarPageFragment extends CoreFragment {
                 @Override
                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                     EventBus.getDefault().post(CLOSE_PAGES_IN_USERS_SCREEN);
+                    EventBus.getDefault().post(CLOSE_PAGES_IN_SETTINGS_SCREEN);
                 }
 
                 @Override

@@ -779,6 +779,10 @@ public class SettingsPageFragment extends CoreFragment {
             if (object.equals(LOCKSCONTROLLER_NOTIFY_REFRESHED_SETTINGS) || object.equals(LinkaActivity.LINKA_ACTIVITY_ON_CHANGE)) {
                 linka = Linka.getLinkaFromLockController();
                 refreshDisplay();
+            }else if (object.equals(MainTabBarPageFragment.CLOSE_PAGES_IN_SETTINGS_SCREEN)){
+                if (getFragmentManager().findFragmentById(R.id.settings_page_root) != null) {
+                    getFragmentManager().popBackStack();
+                }
             }else if (object.equals(LOCKSCONTROLLER_NOTIFY_READ_SETTINGS)){
                 setQuickSwitchViewStatus();
             }else if (object.equals(FRAGMENT_ADDED)) {
