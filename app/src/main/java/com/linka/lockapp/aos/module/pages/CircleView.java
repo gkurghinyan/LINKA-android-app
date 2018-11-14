@@ -177,6 +177,7 @@ public class CircleView extends CoreFragment {
                     case BluetoothAdapter.STATE_ON:
                         swipeButton.setMassageText(getString(R.string.asleep_or_out));
                        // lockController.doConnectDevice();
+                        countOfAttemptTurnOnBluetooth = 0;
                         refreshDisplay();
                         break;
                 }
@@ -352,7 +353,8 @@ public class CircleView extends CoreFragment {
                                 setLockNotConnectedState();
                                 bluetoothHandler = new Handler();
                                 bluetoothHandler.postDelayed(bluetoothRunnable, 1000);
-                                lockController.doDisconnectDevice();
+                                //lockController.doDisconnectDevice();
+                                swipeButton.setMassageText("Turn Bluetooth on");
                             }
                         } else {
                             root.setBackgroundColor(getResources().getColor(R.color.linka_transparent));
@@ -397,9 +399,11 @@ public class CircleView extends CoreFragment {
         }
     }
 
+    private int countOfAttemptTurnOnBluetooth = 0;
     private void turnOnBluetooth() {
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (mBluetoothAdapter!=null && !mBluetoothAdapter.isEnabled()) {
+        if (mBluetoothAdapter!=null && !mBluetoothAdapter.isEnabled() && countOfAttemptTurnOnBluetooth ==0) {
+            countOfAttemptTurnOnBluetooth++;
             new AlertDialog.Builder(getActivity())
                     .setMessage("Bluetooth is off. Turn bluetooth on.")
                     .setCancelable(true)
