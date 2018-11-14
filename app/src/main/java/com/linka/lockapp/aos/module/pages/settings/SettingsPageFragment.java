@@ -321,7 +321,7 @@ public class SettingsPageFragment extends CoreFragment {
                 setQuickLockChecked(value);
             }
         });
-
+        removeLock.setTextColor(getResources().getColor(R.color.red));
         refreshDisplay();
     }
 
@@ -451,10 +451,10 @@ public class SettingsPageFragment extends CoreFragment {
         textResetToFactorySettings.setTextColor(color);
         rowResetToFactorySettings.setClickable(true);
 
-        removeLock.setTextColor(getResources().getColor(R.color.red));
+      /*  removeLock.setTextColor(getResources().getColor(R.color.red));
         rowRemoveLock.setClickable(true);
         removeInfo.setClickable(true);
-
+*/
         checkUpdates();
 
 //            if (AppDelegate.shouldAlwaysEnableFwUpgradeButton) {
@@ -503,9 +503,9 @@ public class SettingsPageFragment extends CoreFragment {
         textResetToFactorySettings.setTextColor(color);
         rowResetToFactorySettings.setClickable(false);
 
-        removeLock.setTextColor(color);
+        /*removeLock.setTextColor(color);
         rowRemoveLock.setClickable(false);
-        removeInfo.setClickable(false);
+        removeInfo.setClickable(false);*/
 
         firmwareText.setText(getString(R.string.firmware_version));
         firmwareText.setTextColor(getResources().getColor(R.color.search_text));
