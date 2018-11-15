@@ -93,8 +93,7 @@ public class SetupLinka3 extends CoreFragment {
                 getAppMainActivity().popFragment();
                 return;
             }
-            if (((!Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).pacIsSet && Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).pac == 0) ||
-                    Prefs.getBoolean(Constants.SHOW_SETUP_PAC,false)) && User.getUserForEmail(LinkaAPIServiceImpl.getUserEmail()).isOwner) {
+            if (!Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).pacIsSet && Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).pac == 0) {
                 getActivity().finish();
                 startActivity(new Intent(getActivity(), WalkthroughActivity.class));
             }else {

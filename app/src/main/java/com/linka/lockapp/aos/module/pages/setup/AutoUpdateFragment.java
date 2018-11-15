@@ -595,21 +595,19 @@ public class AutoUpdateFragment extends CoreFragment {
 
     private void openWalkthrough(){
         if (Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).getName() != null &&
-                !Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).getName().equals("") && !Prefs.getBoolean(Constants.SHOW_SETUP_NAME, false)) {
+                !Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).getName().equals("")) {
             SharedPreferences.Editor editor = Prefs.edit();
             LinkaAccessKey key = LinkaAccessKey.getKeyFromLinka(LocksController.getInstance().getLockController().getLinka());
             boolean isAdmin = false;
             if (key != null && !key.access_key_admin.equals("")) {
                 isAdmin = true;
-            } else {
-                isAdmin = false;
             }
-            if (((!Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).pacIsSet && Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).pac == 0) ||
-                    Prefs.getBoolean(Constants.SHOW_SETUP_PAC, false)) && isAdmin) {
-                editor.putInt(Constants.SHOWING_FRAGMENT, Constants.SET_PAC_FRAGMENT);
-                editor.apply();
-                getActivity().finish();
-                startActivity(new Intent(getActivity(), WalkthroughActivity.class));
+            if (isAdmin){
+                if (!Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).pacIsSet && Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).pac == 0) {
+                    editor.putInt(Constants.SHOWING_FRAGMENT, Constants.SET_PAC_FRAGMENT);
+                    editor.apply();
+                }
+                getAppMainActivity().pushFragment(SetupLinka3.newInstance(SetupLinka3.WALKTHROUGH));
             } else {
                 if (Prefs.getBoolean("show-walkthrough", false) || Prefs.getBoolean(Constants.SHOW_TUTORIAL_WALKTHROUGH, false)) {
                     editor.putInt(Constants.SHOWING_FRAGMENT, Constants.TUTORIAL_FRAGMENT);
