@@ -501,6 +501,7 @@ public class MainTabBarPageFragment extends CoreFragment {
                                         }
 
                                     } while (pin_value.equals("1234")
+                                            || pin_value.equals("0000")
                                             || pin_value.equals("1111")
                                             || pin_value.equals("2222")
                                             || pin_value.equals("3333")

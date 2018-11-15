@@ -394,6 +394,7 @@ public class SetPac3 extends CoreFragment {
 
                 // check if passcode not valid
                 if (pinValue_enter.equals("1234")
+                        || pinValue_enter.equals("0000")
                         || pinValue_enter.equals("1111")
                         || pinValue_enter.equals("2222")
                         || pinValue_enter.equals("3333")
