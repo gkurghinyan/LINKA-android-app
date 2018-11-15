@@ -132,9 +132,9 @@ public class NeedApprovalUserFragment extends Fragment {
             public void onResponse(Call<LinkaAPIServiceResponse> call, Response<LinkaAPIServiceResponse> response) {
                 if (LinkaAPIServiceImpl.check(response, false, null)) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setTitle("Access Denied").
-                            setMessage("The user has been notified.")
-                            .setNeutralButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                    builder.setTitle("Access Denied")
+                            .setCancelable(false)
+                            .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     getFragmentManager().popBackStack();
