@@ -69,6 +69,8 @@ public class SetupLinka3 extends CoreFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        String name = Linka.getLinkaById(LinkaNotificationSettings.get_latest_linka_id()).getName();
+        editName.setText(name);
         editName.getBackground().setColorFilter(getResources().getColor(R.color.linka_white), PorterDuff.Mode.SRC_IN);
     }
 
